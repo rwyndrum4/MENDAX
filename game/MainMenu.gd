@@ -29,8 +29,6 @@ func _on_Options_pressed():
 	# var options = load("path to .tscn")
 	# get_tree().current_scene.add_child(options)
 	pass # Replace with function body.
-	# My changes Demo
-
 
 func _on_Quit_pressed():
 	get_tree().quit()

@@ -10,7 +10,13 @@ config_version=4
 
 [application]
 
-config/name="placeholder name B)"
+config/name="MENDAX"
+config/description="EECS 581 Senior Design Project by:
+Will Wyndrum
+Freeman Spray
+Jason Truong
+Ben Moeller
+Mohit Garg"
 config/icon="res://icon.png"
 
 [gui]
