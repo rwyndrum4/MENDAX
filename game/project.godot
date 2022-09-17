@@ -17,8 +17,8 @@ Freeman Spray
 Jason Truong
 Ben Moeller
 Mohit Garg"
+run/main_scene="res://Scenes/Game.tscn"
 config/icon="res://Assets/icon.png"
-run/main_scene="res://Game.tscn"
 
 [display]
 

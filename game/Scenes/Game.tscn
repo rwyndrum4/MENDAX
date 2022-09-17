@@ -71,10 +71,10 @@ text = "Quit"
 [node name="joinCodeContainer" type="VBoxContainer" parent="."]
 anchor_top = 1.0
 anchor_bottom = 1.0
-margin_left = 807.0
-margin_top = -584.0
-margin_right = 994.0
-margin_bottom = -418.0
+margin_left = 1066.0
+margin_top = -679.0
+margin_right = 1253.0
+margin_bottom = -513.0
 rect_scale = Vector2( 0.889601, 0.796081 )
 
 [node name="getCode" type="Button" parent="joinCodeContainer"]
