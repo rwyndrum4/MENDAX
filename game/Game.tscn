@@ -1,7 +1,17 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Scripts/MainMenu.gd" type="Script" id=1]
 [ext_resource path="res://Assets/temp_bg.png" type="Texture" id=2]
+[ext_resource path="res://Assets/BAUHS93.TTF" type="DynamicFontData" id=3]
+
+[sub_resource type="DynamicFont" id=1]
+size = 38
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 88
+outline_color = Color( 0.0352941, 0.0784314, 0.0784314, 1 )
+font_data = ExtResource( 3 )
 
 [node name="MainMenu" type="Control"]
 anchor_right = 1.0
@@ -56,8 +66,35 @@ margin_bottom = 116.0
 focus_neighbour_bottom = NodePath("../Start")
 text = "Quit"
 
+[node name="VBoxContainer2" type="VBoxContainer" parent="."]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 807.0
+margin_top = -584.0
+margin_right = 870.0
+margin_bottom = -468.0
+rect_scale = Vector2( 0.889601, 0.796081 )
+
+[node name="GetCode" type="Button" parent="VBoxContainer2"]
+margin_right = 187.0
+margin_bottom = 50.0
+rect_pivot_offset = Vector2( -644, -266 )
+custom_fonts/font = SubResource( 1 )
+text = "GET CODE"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer2"]
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 54.0
+margin_right = 187.0
+margin_bottom = 54.0
+custom_colors/default_color = Color( 0, 0, 0, 1 )
+custom_fonts/normal_font = SubResource( 2 )
+text = "TEST"
+
 [connection signal="pressed" from="VBoxContainer/Start" to="." method="_on_Start_pressed"]
 [connection signal="pressed" from="VBoxContainer/Options" to="." method="_on_Options_pressed"]
 [connection signal="pressed" from="VBoxContainer/Market" to="." method="_on_Market_pressed"]
 [connection signal="pressed" from="VBoxContainer/Tests" to="." method="_on_Tests_pressed"]
 [connection signal="pressed" from="VBoxContainer/Quit" to="." method="_on_Quit_pressed"]
+[connection signal="pressed" from="VBoxContainer2/GetCode" to="." method="_on_Start_pressed"]
