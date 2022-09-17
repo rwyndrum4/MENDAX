@@ -37,4 +37,18 @@ func _on_Quit_pressed():
 
 
 func _on_GetCode_button_up():
-	$joinCodeContainer/code.set("text", "CODE")
+	var letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 
+				   'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 
+				   'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',]
+	var rng = RandomNumberGenerator.new()
+	var index1 = getRandAlphInd(rng)
+	var index2 = getRandAlphInd(rng)
+	var index3 = getRandAlphInd(rng)
+	var index4 = getRandAlphInd(rng)
+	var code = letters[index1] + letters[index2] + letters[index3] + letters[index4]
+	$joinCodeContainer/code.set("text", code)
+	
+func getRandAlphInd(rng):
+		rng.randomize()
+		var randomAlphabetIndex = rng.randi_range(0, 25)
+		return randomAlphabetIndex
