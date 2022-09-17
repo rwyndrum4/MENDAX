@@ -34,3 +34,7 @@ func _on_Tests_pressed():
 
 func _on_Quit_pressed():
 	get_tree().quit()
+
+
+func _on_GetCode_button_up():
+	$joinCodeContainer/code.set("text", "CODE")
