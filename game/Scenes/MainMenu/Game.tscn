@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://Scripts/MainMenu.gd" type="Script" id=1]
+[ext_resource path="res://Scenes/MainMenu/MainMenu.gd" type="Script" id=1]
 [ext_resource path="res://Assets/temp_bg.png" type="Texture" id=2]
 
 [node name="MainMenu" type="Control"]
@@ -56,6 +56,10 @@ margin_right = 120.0
 margin_bottom = 116.0
 focus_neighbour_bottom = NodePath("../Start")
 text = "Quit"
+
+[node name="Control" type="Control" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
 
 [connection signal="pressed" from="VBoxContainer/Start" to="." method="_on_Start_pressed"]
 [connection signal="pressed" from="VBoxContainer/Options" to="." method="_on_Options_pressed"]
