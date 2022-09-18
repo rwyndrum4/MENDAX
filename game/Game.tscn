@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://Scripts/MainMenu.gd" type="Script" id=1]
 [ext_resource path="res://Assets/temp_bg.png" type="Texture" id=2]
+[ext_resource path="res://Scripts/SettingsMenu/settingsMenu.tscn" type="PackedScene" id=3]
 
 [node name="MainMenu" type="Control"]
 anchor_right = 1.0
@@ -55,6 +56,8 @@ margin_right = 63.0
 margin_bottom = 116.0
 focus_neighbour_bottom = NodePath("../Start")
 text = "Quit"
+
+[node name="SettingsMenu" parent="." instance=ExtResource( 3 )]
 
 [connection signal="pressed" from="VBoxContainer/Start" to="." method="_on_Start_pressed"]
 [connection signal="pressed" from="VBoxContainer/Options" to="." method="_on_Options_pressed"]

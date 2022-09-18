@@ -11,7 +11,13 @@ config_version=4
 [application]
 
 config/name="placeholder name B)"
+run/main_scene="res://Game.tscn"
 config/icon="res://icon.png"
+
+[autoload]
+
+GlobalSettings="*res://Loader/globalSettings.gd"
+Save="*res://Loader/save.gd"
 
 [gui]
 
