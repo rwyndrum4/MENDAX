@@ -47,3 +47,4 @@ text = "Store"
 [connection signal="pressed" from="VBoxContainer/Leaderboards" to="." method="_on_Leaderboards_pressed"]
 [connection signal="pressed" from="VBoxContainer/Options" to="." method="_on_Options_pressed"]
 [connection signal="pressed" from="VBoxContainer/Quit" to="." method="_on_Quit_pressed"]
+[connection signal="pressed" from="Store" to="." method="_on_Store_pressed"]

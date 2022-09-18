@@ -13,6 +13,15 @@ config_version=4
 config/name="placeholder name B)"
 config/icon="res://icon.png"
 
+[autoload]
+
+Global="*res://Global.gd"
+SceneTrans="*res://Scene/SceneTrans.tscn"
+
+[global]
+
+Auto=false
+
 [gui]
 
 common/drop_mouse_on_gui_input_disabled=true

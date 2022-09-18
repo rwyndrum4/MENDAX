@@ -1,0 +1,77 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://StoreElements/StoreVars.gd" type="Script" id=1]
+[ext_resource path="res://StoreElements/BalanceText.gd" type="Script" id=2]
+[ext_resource path="res://Assets/ARIALBD.TTF" type="DynamicFontData" id=3]
+[ext_resource path="res://Assets/cash-register-purchase-87313.mp3" type="AudioStream" id=4]
+[ext_resource path="res://Assets/tavern.mp3" type="AudioStream" id=5]
+
+[sub_resource type="DynamicFont" id=1]
+size = 48
+outline_size = 1
+font_data = ExtResource( 3 )
+
+[node name="Node" type="Node"]
+script = ExtResource( 1 )
+
+[node name="Node2D" type="Node2D" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="Node2D"]
+margin_right = 1025.0
+margin_bottom = 601.0
+color = Color( 0.309804, 0.207843, 0.207843, 1 )
+
+[node name="BalanceText" type="RichTextLabel" parent="Node2D"]
+margin_left = 463.0
+margin_top = 72.0
+margin_right = 554.0
+margin_bottom = 111.0
+text = "asdf"
+script = ExtResource( 2 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Node2D"]
+margin_left = 39.0
+margin_top = 491.0
+margin_right = 130.0
+margin_bottom = 535.0
+
+[node name="addMoney" type="Button" parent="Node2D/VBoxContainer"]
+margin_right = 91.0
+margin_bottom = 20.0
+text = "Add 1 Dollar"
+
+[node name="subMoney" type="Button" parent="Node2D/VBoxContainer"]
+margin_top = 24.0
+margin_right = 91.0
+margin_bottom = 44.0
+text = "Sub 1 Dollar"
+
+[node name="Back2Menu" type="Button" parent="Node2D"]
+margin_left = 461.0
+margin_top = 541.0
+margin_right = 572.0
+margin_bottom = 561.0
+text = "<<"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+margin_left = 417.0
+margin_top = 20.0
+margin_right = 589.0
+margin_bottom = 84.0
+custom_fonts/normal_font = SubResource( 1 )
+text = "STORE"
+
+[node name="Kaching" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 4 )
+volume_db = -26.277
+
+[node name="tavernbg" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 5 )
+volume_db = -27.092
+
+[connection signal="pressed" from="Node2D/VBoxContainer/addMoney" to="." method="_on_Button_pressed"]
+[connection signal="pressed" from="Node2D/VBoxContainer/addMoney" to="." method="_on_addMoney_pressed"]
+[connection signal="pressed" from="Node2D/VBoxContainer/subMoney" to="." method="_on_Button_pressed"]
+[connection signal="pressed" from="Node2D/VBoxContainer/subMoney" to="." method="_on_subMoney_pressed"]
+[connection signal="pressed" from="Node2D/Back2Menu" to="." method="_on_Back2Menu_pressed"]
+[connection signal="script_changed" from="tavernbg" to="." method="_on_tavernbg_script_changed"]

@@ -35,3 +35,7 @@ func _on_Options_pressed():
 func _on_Quit_pressed():
 	get_tree().quit()
 	pass # Replace with function body.
+
+
+func _on_Store_pressed():
+	pass
