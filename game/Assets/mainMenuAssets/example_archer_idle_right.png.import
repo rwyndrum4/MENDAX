@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/temp_bg.png-b9966c315470d495ca1322217d1f7433.stex"
+path="res://.import/example_archer_idle_right.png-7d792cdf1a0ba6c265163bcfe32210f2.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/temp_bg.png"
-dest_files=[ "res://.import/temp_bg.png-b9966c315470d495ca1322217d1f7433.stex" ]
+source_file="res://Assets/mainMenuAssets/example_archer_idle_right.png"
+dest_files=[ "res://.import/example_archer_idle_right.png-7d792cdf1a0ba6c265163bcfe32210f2.stex" ]
 
 [params]
 
