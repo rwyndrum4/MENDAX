@@ -20,15 +20,15 @@ Mohit Garg"
 run/main_scene="res://Scenes/mainMenu/mainMenu.tscn"
 config/icon="res://Assets/mainMenuAssets/icon.png"
 
+[autoload]
+
+Global="*res://Global.gd"
+SceneTrans="*res://Scenes/sceneTrans/SceneTrans.tscn"
+
 [display]
 
 window/size/width=1280
 window/size/height=720
-
-[autoload]
-
-Global="*res://Global.gd"
-SceneTrans="*res://Scene/SceneTrans.tscn"
 
 [global]
 

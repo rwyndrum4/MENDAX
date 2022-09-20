@@ -14,7 +14,7 @@ func _on_subMoney_pressed():
 
 
 func _on_Back2Menu_pressed():
-	SceneTrans.change_scene("res://Game.tscn")
+	SceneTrans.change_scene("res://Scenes/mainMenu/mainMenu.tscn")
 	
 
 

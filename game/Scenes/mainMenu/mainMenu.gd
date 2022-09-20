@@ -25,7 +25,7 @@ func _on_Options_pressed():
 
 
 func _on_Market_pressed():
-	pass # Replace with function body.
+	SceneTrans.change_scene("res://StoreElements/StoreVars.tscn")
 
 
 func _on_Tests_pressed():
