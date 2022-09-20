@@ -2,8 +2,7 @@ extends Control
 
 
 # Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
+onready var settingsMenu = $SettingsMenu
 
 
 # Called when the node enters the scene tree for the first time.
@@ -21,8 +20,7 @@ func _on_Start_pressed():
 
 
 func _on_Options_pressed():
-	pass # Replace with function body.
-
+	settingsMenu.popup_centered()
 
 func _on_Market_pressed():
 	SceneTrans.change_scene("res://StoreElements/StoreVars.tscn")
