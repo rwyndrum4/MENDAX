@@ -22,11 +22,10 @@ config/icon="res://Assets/mainMenuAssets/icon.png"
 
 [autoload]
 
-
 SceneTrans="*res://Scenes/sceneTrans/SceneTrans.tscn"
 GlobalSettings="*res://Loader/globalSettings.gd"
 Save="*res://Loader/save.gd"
-
+Global="*res://Loader/Global.gd"
 
 [display]
 
