@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://Scenes/mainMenu/mainMenu.gd" type="Script" id=1]
 [ext_resource path="res://Assets/mainMenuAssets/LTYPEB.TTF" type="DynamicFontData" id=2]
 [ext_resource path="res://Assets/mainMenuAssets/BAUHS93.TTF" type="DynamicFontData" id=3]
 [ext_resource path="res://Assets/mainMenuAssets/temp_bg.png" type="Texture" id=4]
 [ext_resource path="res://Scenes/SettingsMenu/settingsMenu.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Assets/fire5.png" type="Texture" id=6]
 
 [sub_resource type="DynamicFont" id=1]
 size = 38
@@ -14,6 +15,33 @@ font_data = ExtResource( 3 )
 size = 77
 outline_color = Color( 0.0352941, 0.0784314, 0.0784314, 1 )
 font_data = ExtResource( 2 )
+
+[sub_resource type="Shader" id=4]
+resource_local_to_scene = true
+code = "shader_type canvas_item;
+
+uniform sampler2D noise;
+
+void fragment(){
+	vec4 base=texture(TEXTURE,UV);
+	vec4 n= texture(noise,vec2(UV.x,UV.y+TIME));//TIME part to read form higher value over time?
+	base.r += 0.4f - distance(vec2(0.5,UV.y),UV);//want to make center brighter so add small amount and subtract from center
+	base.r = (base.r*0.3) +(n.r *0.4); //adding noise can experiment with ratios
+	COLOR=vec4(float(base.r>0.4),float(base.r>0.5),float(base.r>0.6),float(base.r>0.4));
+	
+	//base.r is red channel
+}
+"
+
+[sub_resource type="OpenSimplexNoise" id=5]
+
+[sub_resource type="NoiseTexture" id=3]
+seamless = true
+noise = SubResource( 5 )
+
+[sub_resource type="ShaderMaterial" id=6]
+shader = SubResource( 4 )
+shader_param/noise = SubResource( 3 )
 
 [node name="MainMenu" type="Control"]
 anchor_right = 1.0
@@ -100,6 +128,12 @@ custom_fonts/normal_font = SubResource( 2 )
 text = "XXXX"
 
 [node name="SettingsMenu" parent="." instance=ExtResource( 5 )]
+
+[node name="Fire5" type="Sprite" parent="."]
+material = SubResource( 6 )
+position = Vector2( 807, 484 )
+scale = Vector2( 0.40332, 0.37793 )
+texture = ExtResource( 6 )
 
 [connection signal="pressed" from="VBoxContainer/Start" to="." method="_on_Start_pressed"]
 [connection signal="pressed" from="VBoxContainer/Options" to="." method="_on_Options_pressed"]
