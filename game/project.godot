@@ -20,6 +20,11 @@ Mohit Garg"
 run/main_scene="res://Scenes/mainMenu/mainMenu.tscn"
 config/icon="res://Assets/mainMenuAssets/icon.png"
 
+[autoload]
+
+GlobalSettings="*res://Loader/globalSettings.gd"
+Save="*res://Loader/save.gd"
+
 [display]
 
 window/size/width=1280

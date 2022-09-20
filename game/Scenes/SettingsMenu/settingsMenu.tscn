@@ -1,0 +1,310 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Scenes/SettingsMenu/settingsMenu.gd" type="Script" id=1]
+
+[node name="SettingsMenu" type="Popup"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+
+[node name="Background" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="SettingsTabs" type="TabContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+tab_align = 0
+
+[node name="Video" type="Tabs" parent="SettingsTabs"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+
+[node name="MarginContainer" type="MarginContainer" parent="SettingsTabs/Video"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_constants/margin_right = 25
+custom_constants/margin_top = 25
+custom_constants/margin_left = 25
+custom_constants/margin_bottom = 25
+
+[node name="videoSettings" type="GridContainer" parent="SettingsTabs/Video/MarginContainer"]
+margin_left = 25.0
+margin_top = 25.0
+margin_right = 1247.0
+margin_bottom = 659.0
+custom_constants/vseparation = 15
+columns = 2
+
+[node name="DisplayModeLabel" type="Label" parent="SettingsTabs/Video/MarginContainer/videoSettings"]
+margin_top = 3.0
+margin_right = 87.0
+margin_bottom = 17.0
+text = "Display Mode"
+
+[node name="DisplayOptionsButton" type="OptionButton" parent="SettingsTabs/Video/MarginContainer/videoSettings"]
+margin_left = 1126.0
+margin_right = 1222.0
+margin_bottom = 20.0
+size_flags_horizontal = 10
+text = "Windowed"
+items = [ "Windowed", null, false, 0, null, "Fullscreen", null, false, 1, null ]
+selected = 0
+
+[node name="VsyncLabel" type="Label" parent="SettingsTabs/Video/MarginContainer/videoSettings"]
+margin_top = 48.0
+margin_right = 87.0
+margin_bottom = 62.0
+text = "Vsync"
+
+[node name="VsyncButton" type="CheckButton" parent="SettingsTabs/Video/MarginContainer/videoSettings"]
+margin_left = 1146.0
+margin_top = 35.0
+margin_right = 1222.0
+margin_bottom = 75.0
+size_flags_horizontal = 10
+
+[node name="DisplayFpsLabel" type="Label" parent="SettingsTabs/Video/MarginContainer/videoSettings"]
+margin_top = 103.0
+margin_right = 87.0
+margin_bottom = 117.0
+text = "Display FPS"
+
+[node name="DisplayFpsButton" type="CheckButton" parent="SettingsTabs/Video/MarginContainer/videoSettings"]
+margin_left = 1146.0
+margin_top = 90.0
+margin_right = 1222.0
+margin_bottom = 130.0
+size_flags_horizontal = 10
+
+[node name="MaxFpsLabel" type="Label" parent="SettingsTabs/Video/MarginContainer/videoSettings"]
+margin_top = 146.0
+margin_right = 87.0
+margin_bottom = 160.0
+text = "Max FPS"
+
+[node name="FpsSlider" type="HBoxContainer" parent="SettingsTabs/Video/MarginContainer/videoSettings"]
+margin_left = 792.0
+margin_top = 145.0
+margin_right = 1222.0
+margin_bottom = 161.0
+size_flags_horizontal = 10
+
+[node name="MaxFpsVal" type="Label" parent="SettingsTabs/Video/MarginContainer/videoSettings/FpsSlider"]
+margin_top = 1.0
+margin_right = 26.0
+margin_bottom = 15.0
+text = "Max"
+
+[node name="MaxFpsSlider" type="HSlider" parent="SettingsTabs/Video/MarginContainer/videoSettings/FpsSlider"]
+margin_left = 30.0
+margin_right = 430.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 400, 0 )
+size_flags_horizontal = 10
+size_flags_vertical = 1
+min_value = 30.0
+max_value = 500.0
+value = 500.0
+
+[node name="BloomLabel" type="Label" parent="SettingsTabs/Video/MarginContainer/videoSettings"]
+margin_top = 189.0
+margin_right = 87.0
+margin_bottom = 203.0
+text = "Bloom"
+
+[node name="BloomButton" type="CheckButton" parent="SettingsTabs/Video/MarginContainer/videoSettings"]
+margin_left = 1146.0
+margin_top = 176.0
+margin_right = 1222.0
+margin_bottom = 216.0
+size_flags_horizontal = 10
+
+[node name="BrightnessLabel" type="Label" parent="SettingsTabs/Video/MarginContainer/videoSettings"]
+margin_top = 231.0
+margin_right = 87.0
+margin_bottom = 262.0
+text = "Brightness
+"
+
+[node name="Brightness" type="HBoxContainer" parent="SettingsTabs/Video/MarginContainer/videoSettings"]
+margin_left = 822.0
+margin_top = 231.0
+margin_right = 1222.0
+margin_bottom = 262.0
+size_flags_horizontal = 10
+
+[node name="BrightnessSlider" type="HSlider" parent="SettingsTabs/Video/MarginContainer/videoSettings/Brightness"]
+margin_right = 400.0
+margin_bottom = 31.0
+rect_min_size = Vector2( 400, 0 )
+size_flags_horizontal = 10
+size_flags_vertical = 1
+max_value = 2.0
+step = 0.1
+value = 1.0
+
+[node name="Audio" type="Tabs" parent="SettingsTabs"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+
+[node name="MarginContainer" type="MarginContainer" parent="SettingsTabs/Audio"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_constants/margin_right = 25
+custom_constants/margin_top = 25
+custom_constants/margin_left = 25
+custom_constants/margin_bottom = 25
+
+[node name="audioSettings" type="GridContainer" parent="SettingsTabs/Audio/MarginContainer"]
+margin_left = 25.0
+margin_top = 25.0
+margin_right = 1247.0
+margin_bottom = 659.0
+custom_constants/vseparation = 15
+columns = 2
+
+[node name="MasterVolLabel" type="Label" parent="SettingsTabs/Audio/MarginContainer/audioSettings"]
+margin_right = 97.0
+margin_bottom = 31.0
+text = "Master Volume
+"
+
+[node name="MasterVol" type="HBoxContainer" parent="SettingsTabs/Audio/MarginContainer/audioSettings"]
+margin_left = 566.0
+margin_right = 966.0
+margin_bottom = 31.0
+size_flags_horizontal = 10
+
+[node name="MasterVolSlider" type="HSlider" parent="SettingsTabs/Audio/MarginContainer/audioSettings/MasterVol"]
+margin_right = 400.0
+margin_bottom = 31.0
+rect_min_size = Vector2( 400, 0 )
+size_flags_horizontal = 10
+size_flags_vertical = 1
+min_value = -50.0
+max_value = 0.0
+value = -10.0
+
+[node name="MusicValLabel" type="Label" parent="SettingsTabs/Audio/MarginContainer/audioSettings"]
+margin_top = 47.0
+margin_right = 97.0
+margin_bottom = 61.0
+text = "Music Volume"
+
+[node name="MusicVal" type="HBoxContainer" parent="SettingsTabs/Audio/MarginContainer/audioSettings"]
+margin_left = 566.0
+margin_top = 46.0
+margin_right = 966.0
+margin_bottom = 62.0
+size_flags_horizontal = 10
+
+[node name="MusicVolSlider" type="HSlider" parent="SettingsTabs/Audio/MarginContainer/audioSettings/MusicVal"]
+margin_right = 400.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 400, 0 )
+size_flags_horizontal = 10
+size_flags_vertical = 1
+min_value = -50.0
+max_value = 0.0
+value = -10.0
+
+[node name="SfxVolLabel" type="Label" parent="SettingsTabs/Audio/MarginContainer/audioSettings"]
+margin_top = 77.0
+margin_right = 97.0
+margin_bottom = 108.0
+text = "SFX Volume
+"
+
+[node name="SfxVol" type="HBoxContainer" parent="SettingsTabs/Audio/MarginContainer/audioSettings"]
+margin_left = 566.0
+margin_top = 77.0
+margin_right = 966.0
+margin_bottom = 108.0
+size_flags_horizontal = 10
+
+[node name="SfxVolSlider" type="HSlider" parent="SettingsTabs/Audio/MarginContainer/audioSettings/SfxVol"]
+margin_right = 400.0
+margin_bottom = 31.0
+rect_min_size = Vector2( 400, 0 )
+size_flags_horizontal = 10
+size_flags_vertical = 1
+min_value = -50.0
+max_value = 0.0
+value = -10.0
+
+[node name="Gameplay" type="Tabs" parent="SettingsTabs"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+
+[node name="GameplaySettings" type="MarginContainer" parent="SettingsTabs/Gameplay"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_constants/margin_right = 25
+custom_constants/margin_top = 25
+custom_constants/margin_left = 25
+custom_constants/margin_bottom = 25
+
+[node name="audioSettings" type="GridContainer" parent="SettingsTabs/Gameplay/GameplaySettings"]
+margin_left = 25.0
+margin_top = 25.0
+margin_right = 1247.0
+margin_bottom = 659.0
+custom_constants/vseparation = 15
+columns = 2
+
+[node name="MouseSenseLabel" type="Label" parent="SettingsTabs/Gameplay/GameplaySettings/audioSettings"]
+margin_top = 47.0
+margin_right = 113.0
+margin_bottom = 61.0
+text = "Mouse Sensitivity"
+
+[node name="MouseSense" type="HBoxContainer" parent="SettingsTabs/Gameplay/GameplaySettings/audioSettings"]
+margin_left = 542.0
+margin_top = 46.0
+margin_right = 966.0
+margin_bottom = 62.0
+size_flags_horizontal = 10
+
+[node name="MouseVal" type="Label" parent="SettingsTabs/Gameplay/GameplaySettings/audioSettings/MouseSense"]
+margin_top = 1.0
+margin_right = 20.0
+margin_bottom = 15.0
+text = "0.1"
+
+[node name="MouseSensSlider" type="HSlider" parent="SettingsTabs/Gameplay/GameplaySettings/audioSettings/MouseSense"]
+margin_left = 24.0
+margin_right = 424.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 400, 0 )
+size_flags_horizontal = 10
+size_flags_vertical = 1
+min_value = 0.05
+max_value = 3.0
+step = 0.01
+value = 0.1
+
+[connection signal="item_selected" from="SettingsTabs/Video/MarginContainer/videoSettings/DisplayOptionsButton" to="." method="_on_DisplayOptionsButton_item_selected"]
+[connection signal="toggled" from="SettingsTabs/Video/MarginContainer/videoSettings/VsyncButton" to="." method="_on_VsyncButton_toggled"]
+[connection signal="toggled" from="SettingsTabs/Video/MarginContainer/videoSettings/DisplayFpsButton" to="." method="_on_DisplayFpsButton_toggled"]
+[connection signal="value_changed" from="SettingsTabs/Video/MarginContainer/videoSettings/FpsSlider/MaxFpsSlider" to="." method="_on_MaxFpsSlider_value_changed"]
+[connection signal="toggled" from="SettingsTabs/Video/MarginContainer/videoSettings/BloomButton" to="." method="_on_BloomButton_toggled"]
+[connection signal="value_changed" from="SettingsTabs/Video/MarginContainer/videoSettings/Brightness/BrightnessSlider" to="." method="_on_BrightnessSlider_value_changed"]
+[connection signal="value_changed" from="SettingsTabs/Audio/MarginContainer/audioSettings/MasterVol/MasterVolSlider" to="." method="_on_MasterVolSlider_value_changed"]
+[connection signal="value_changed" from="SettingsTabs/Audio/MarginContainer/audioSettings/MusicVal/MusicVolSlider" to="." method="_on_MusicValSlider_value_changed"]
+[connection signal="value_changed" from="SettingsTabs/Audio/MarginContainer/audioSettings/SfxVol/SfxVolSlider" to="." method="_on_SfxVolSlider_value_changed"]
+[connection signal="value_changed" from="SettingsTabs/Gameplay/GameplaySettings/audioSettings/MouseSense/MouseSensSlider" to="." method="_on_MouseSensSlider_value_changed"]
