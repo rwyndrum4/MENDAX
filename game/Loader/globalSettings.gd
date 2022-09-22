@@ -4,7 +4,6 @@ extends Node
 
 # Engine Signals - Most of these are just defined and not used as of yet
 signal fpsDisplayed(value)
-signal bloomToggled(value)
 signal brightnessUpdated(value)
 signal mouseSenseUpdated(value)
 
@@ -37,13 +36,6 @@ func toggle_fps_display(value):
 func set_max_fps(value):
 	Engine.target_fps = value if value < 500 else 0
 	Save.game_data.max_fps = Engine.target_fps if value < 500 else 500
-	Save.save_data()
-
-#function to toggle on bloom
-#not full implemented yet
-func toggle_bloom(value):
-	emit_signal("bloomToggled",value)
-	Save.game_data.bloom_on = value
 	Save.save_data()
 
 #function to change brigtness
