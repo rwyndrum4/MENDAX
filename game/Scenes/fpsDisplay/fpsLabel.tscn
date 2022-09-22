@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Scenes/fpsDisplay/fpsLabel.gd" type="Script" id=1]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.670588, 0.894118, 0.964706, 1 )
+
+[node name="Label" type="Label"]
+margin_right = 48.0
+margin_bottom = 15.0
+custom_styles/normal = SubResource( 1 )
+text = "FPS: 60"
+script = ExtResource( 1 )

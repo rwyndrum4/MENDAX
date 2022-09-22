@@ -3,11 +3,13 @@ extends Control
 
 # Declare member variables here. Examples:
 onready var settingsMenu = $SettingsMenu
+onready var fpsLabel = $fpsLabel
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	$VBoxContainer/Start.grab_focus()
+	fpsLabel._on_fps_displayed(Save.game_data.display_fps)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

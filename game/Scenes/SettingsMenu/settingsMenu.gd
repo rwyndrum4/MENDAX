@@ -8,7 +8,6 @@ onready var vsyncButton = $SettingsTabs/Video/MarginContainer/videoSettings/Vsyn
 onready var displayFpsButton = $SettingsTabs/Video/MarginContainer/videoSettings/DisplayFpsButton
 onready var maxFpsVal = $SettingsTabs/Video/MarginContainer/videoSettings/FpsSlider/MaxFpsVal
 onready var maxFpsSlider = $SettingsTabs/Video/MarginContainer/videoSettings/FpsSlider/MaxFpsSlider
-onready var bloomButton = $SettingsTabs/Video/MarginContainer/videoSettings/BloomButton
 onready var brightnessSlider = $SettingsTabs/Video/MarginContainer/videoSettings/Brightness/BrightnessSlider
 
 # Audio Settings
@@ -30,8 +29,6 @@ func _ready():
 	displayFpsButton.pressed = Save.game_data.display_fps
 	#instancing Fps slider 
 	maxFpsSlider.value = Save.game_data.max_fps
-	#instancing bloom
-	bloomButton.pressed = Save.game_data.bloom_on
 	#instancing brightness
 	brightnessSlider.value = Save.game_data.brightness
 	#instancing Master Volume
@@ -58,10 +55,6 @@ func _on_DisplayFpsButton_toggled(button_pressed):
 func _on_MaxFpsSlider_value_changed(value):
 	GlobalSettings.set_max_fps(value)
 	maxFpsVal.text = str(value) if value < maxFpsSlider.max_value else "Max"
-	
-#called when the bloom button is pressed
-func _on_BloomButton_toggled(button_pressed):
-	GlobalSettings.toggle_bloom(button_pressed)
 
 #called when the brightness slider is moved
 func _on_BrightnessSlider_value_changed(value):
