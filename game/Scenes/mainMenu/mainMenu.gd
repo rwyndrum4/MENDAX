@@ -24,6 +24,15 @@ func _on_Start_pressed():
 func _on_Options_pressed():
 	settingsMenu.popup_centered()
 
+"""
+/*
+* @pre Button is pressed
+* @post Scene change to store scene
+* @param None
+* @return None
+*/
+"""
+#When button pressed switches to Store scene
 func _on_Market_pressed():
 	SceneTrans.change_scene("res://StoreElements/StoreVars.tscn")
 
