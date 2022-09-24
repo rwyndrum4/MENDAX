@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/icon.png-cc426b4661c0a6d910682267eb967bbf.stex"
+path="res://.import/MendaxLogo.png-c4323a6a74ce45ecc56fbf713f11a34f.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/mainMenuAssets/icon.png"
-dest_files=[ "res://.import/icon.png-cc426b4661c0a6d910682267eb967bbf.stex" ]
+source_file="res://Assets/MendaxLogo.png"
+dest_files=[ "res://.import/MendaxLogo.png-c4323a6a74ce45ecc56fbf713f11a34f.stex" ]
 
 [params]
 

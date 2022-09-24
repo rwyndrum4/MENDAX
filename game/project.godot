@@ -18,7 +18,7 @@ Jason Truong
 Ben Moeller
 Mohit Garg"
 run/main_scene="res://Scenes/mainMenu/mainMenu.tscn"
-config/icon="res://Assets/mainMenuAssets/icon.png"
+config/icon="res://Assets/MendaxLogo.png"
 
 [autoload]
 
@@ -35,6 +35,7 @@ window/size/height=720
 [global]
 
 Auto=false
+icon=false
 
 [gui]
 
