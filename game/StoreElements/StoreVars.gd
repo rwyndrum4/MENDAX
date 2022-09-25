@@ -1,3 +1,10 @@
+"""
+* Programmer Name - Jason Truong
+* Description - File for the market where the player buy/sell/trade items
+* Date Created - 9/16/2022
+* Date Revisions:
+	9/17/2022 - Added soundeffects and bg music
+"""
 extends Node
 
 """
