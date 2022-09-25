@@ -11,12 +11,18 @@
 
 extends Popup
 
+# Member Variables
+var MASTER_VOLUME = 0 #corresponds to master volume bus
+var MUSIC_VOLUME = 1 #corresponds to music volume bus
+var SFX_VOLUME = 2 #corrsponds to sfx volume bus
+
 # Video Settings
 onready var displayOptions = $SettingsTabs/Video/MarginContainer/videoSettings/DisplayOptionsButton
 onready var vsyncButton = $SettingsTabs/Video/MarginContainer/videoSettings/VsyncButton
 onready var displayFpsButton = $SettingsTabs/Video/MarginContainer/videoSettings/DisplayFpsButton
 onready var maxFpsVal = $SettingsTabs/Video/MarginContainer/videoSettings/FpsSlider/MaxFpsVal
 onready var maxFpsSlider = $SettingsTabs/Video/MarginContainer/videoSettings/FpsSlider/MaxFpsSlider
+onready var bloomButton = $SettingsTabs/Video/MarginContainer/videoSettings/BloomButton
 onready var brightnessSlider = $SettingsTabs/Video/MarginContainer/videoSettings/Brightness/BrightnessSlider
 
 # Audio Settings
@@ -46,10 +52,14 @@ func _ready():
 	displayFpsButton.pressed = Save.game_data.display_fps
 	#instancing Fps slider 
 	maxFpsSlider.value = Save.game_data.max_fps
+	#instancing bloom
+	bloomButton.pressed = Save.game_data.bloom_on
 	#instancing brightness
 	brightnessSlider.value = Save.game_data.brightness
-	#instancing Master Volume
+	#instancing Volume sliders
 	masterVolSlider.value = Save.game_data.master_vol
+	musicVolSlider.value = Save.game_data.music_vol
+	sfxVolSlider.value = Save.game_data.sfx_vol
 	#instancing Mouse Sens
 	mouseSlider.value = Save.game_data.mouse_sens
 	
@@ -97,6 +107,18 @@ func _on_DisplayFpsButton_toggled(button_pressed):
 func _on_MaxFpsSlider_value_changed(value):
 	GlobalSettings.set_max_fps(value)
 	maxFpsVal.text = str(value) if value < maxFpsSlider.max_value else "Max"
+	
+"""
+/*
+* @pre called when the bloom button is pressed
+* @post calls toggle_bloom function in globalSettings.gd
+* @param button_pressed -> boolean
+
+* @return None
+*/
+"""
+func _on_BloomButton_toggled(button_pressed):
+	GlobalSettings.toggle_bloom(button_pressed)
 
 """
 /*
@@ -109,18 +131,6 @@ func _on_MaxFpsSlider_value_changed(value):
 func _on_BrightnessSlider_value_changed(value):
 	GlobalSettings.update_brightness(value)
 
-##called when the master volume slider is moved
-#func _on_MasterVolSlider_value_changed(value):
-#	pass
-#
-##called when the music volume slider is moved
-#func _on_MusicVolSlider_value_changed(value):
-#	pass # Replace with function body.
-#
-#
-#func _on_SfxVolSlider_value_changed(value):
-#	pass # Replace with function body.
-
 """
 /*
 * @pre called when the mouse sens slider is moved
@@ -132,3 +142,36 @@ func _on_BrightnessSlider_value_changed(value):
 func _on_MouseSensSlider_value_changed(value):
 	GlobalSettings.update_mouse_sens(value)
 	mouseVal.text = str(value)
+
+"""
+/*
+* @pre called when the master volume slider is moved
+* @post calls update_volume function in globalSettings.gd with master param
+* @param button_pressed -> integer
+* @return None
+*/
+"""
+func _on_MasterVolSlider_value_changed(value):
+	GlobalSettings.update_volume(MASTER_VOLUME,value)
+
+"""
+/*
+* @pre called when the master volume slider is moved
+* @post calls update_volume function in globalSettings.gd with music param
+* @param button_pressed -> integer
+* @return None
+*/
+"""
+func _on_MusicVolSlider_value_changed(value):
+	GlobalSettings.update_volume(MUSIC_VOLUME,value)
+
+"""
+/*
+* @pre called when the master volume slider is moved
+* @post calls update_volume function in globalSettings.gd with sfx param
+* @param button_pressed -> integer
+* @return None
+*/
+"""
+func _on_SfxVolSlider_value_changed(value):
+	GlobalSettings.update_volume(SFX_VOLUME,value)

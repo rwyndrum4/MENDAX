@@ -14,8 +14,12 @@ extends Node
 
 # Engine Signals - Most of these are just defined and not used as of yet
 signal fpsDisplayed(value)
+signal bloomToggled(value)
 signal brightnessUpdated(value)
 signal mouseSenseUpdated(value)
+
+# Member Variables
+var MIN_VOLUME = -20
 
 """
 /*
@@ -76,6 +80,19 @@ func set_max_fps(value):
 	Engine.target_fps = value if value < 500 else 0
 	Save.game_data.max_fps = Engine.target_fps if value < 500 else 500
 	Save.save_data()
+	
+"""
+/*
+* @pre Function is called from within settingsMenu.gd
+* @post function to toggle on bloom
+* @param value -> boolean
+* @return None
+*/
+"""
+func toggle_bloom(value):
+	emit_signal("bloomToggled",value)
+	Save.game_data.bloom_on = value
+	Save.save_data()
 
 """
 /*
@@ -103,4 +120,40 @@ func update_brightness(value):
 func update_mouse_sens(value):
 	emit_signal("mouseSenseUpdated",value)
 	Save.game_data.mouse_sens = value
+	Save.save_data()
+
+"""
+/*
+* @pre Function is called from within settingsMenu.gd
+* @post function sets volume of the corresponding bus index passed in
+* @param bus_idx -> integer, value -> integer
+* @return None
+*/
+"""
+func update_volume(bus_idx,value):
+	var was_mute = false #variable to tell if volume was muted and needs to be changed
+	###########################################################################
+	#Set audio bus and save data to file
+	AudioServer.set_bus_volume_db(bus_idx,value)
+	if bus_idx == 0:
+		if Save.game_data.master_vol == MIN_VOLUME:
+			was_mute = true
+		Save.game_data.master_vol = value
+	elif bus_idx == 1:
+		if Save.game_data.music_vol == MIN_VOLUME:
+			was_mute = true
+		Save.game_data.music_vol = value
+	elif bus_idx == 2:
+		if Save.game_data.sfx_vol == MIN_VOLUME:
+			was_mute = true
+		Save.game_data.sfx_vol = value
+	else:
+		print("ERROR: Non-identifiable bus index passed in")
+	###########################################################################
+	# if the value is a min, mute the bus
+	if value == MIN_VOLUME:
+		AudioServer.set_bus_mute(bus_idx, not AudioServer.is_bus_mute(bus_idx))
+	# if the previous value was a min and now isn't, unmute the bus
+	if was_mute and value != MIN_VOLUME:
+		AudioServer.set_bus_mute(bus_idx, false)
 	Save.save_data()

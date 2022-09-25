@@ -111,6 +111,19 @@ min_value = 30.0
 max_value = 500.0
 value = 500.0
 
+[node name="BloomLabel" type="Label" parent="SettingsTabs/Video/MarginContainer/videoSettings"]
+margin_top = 189.0
+margin_right = 87.0
+margin_bottom = 203.0
+text = "Bloom"
+
+[node name="BloomButton" type="CheckButton" parent="SettingsTabs/Video/MarginContainer/videoSettings"]
+margin_left = 1146.0
+margin_top = 176.0
+margin_right = 1222.0
+margin_bottom = 216.0
+size_flags_horizontal = 10
+
 [node name="BrightnessLabel" type="Label" parent="SettingsTabs/Video/MarginContainer/videoSettings"]
 margin_top = 231.0
 margin_right = 87.0
@@ -131,6 +144,7 @@ margin_bottom = 31.0
 rect_min_size = Vector2( 400, 0 )
 size_flags_horizontal = 10
 size_flags_vertical = 1
+min_value = 0.2
 max_value = 2.0
 step = 0.1
 value = 1.0
@@ -178,7 +192,7 @@ margin_bottom = 31.0
 rect_min_size = Vector2( 400, 0 )
 size_flags_horizontal = 10
 size_flags_vertical = 1
-min_value = -50.0
+min_value = -20.0
 max_value = 0.0
 value = -10.0
 
@@ -201,7 +215,7 @@ margin_bottom = 16.0
 rect_min_size = Vector2( 400, 0 )
 size_flags_horizontal = 10
 size_flags_vertical = 1
-min_value = -50.0
+min_value = -20.0
 max_value = 0.0
 value = -10.0
 
@@ -225,7 +239,7 @@ margin_bottom = 31.0
 rect_min_size = Vector2( 400, 0 )
 size_flags_horizontal = 10
 size_flags_vertical = 1
-min_value = -50.0
+min_value = -20.0
 max_value = 0.0
 value = -10.0
 
@@ -289,8 +303,9 @@ value = 0.1
 [connection signal="toggled" from="SettingsTabs/Video/MarginContainer/videoSettings/VsyncButton" to="." method="_on_VsyncButton_toggled"]
 [connection signal="toggled" from="SettingsTabs/Video/MarginContainer/videoSettings/DisplayFpsButton" to="." method="_on_DisplayFpsButton_toggled"]
 [connection signal="value_changed" from="SettingsTabs/Video/MarginContainer/videoSettings/FpsSlider/MaxFpsSlider" to="." method="_on_MaxFpsSlider_value_changed"]
+[connection signal="toggled" from="SettingsTabs/Video/MarginContainer/videoSettings/BloomButton" to="." method="_on_BloomButton_toggled"]
 [connection signal="value_changed" from="SettingsTabs/Video/MarginContainer/videoSettings/Brightness/BrightnessSlider" to="." method="_on_BrightnessSlider_value_changed"]
 [connection signal="value_changed" from="SettingsTabs/Audio/MarginContainer/audioSettings/MasterVol/MasterVolSlider" to="." method="_on_MasterVolSlider_value_changed"]
-[connection signal="value_changed" from="SettingsTabs/Audio/MarginContainer/audioSettings/MusicVal/MusicVolSlider" to="." method="_on_MusicValSlider_value_changed"]
+[connection signal="value_changed" from="SettingsTabs/Audio/MarginContainer/audioSettings/MusicVal/MusicVolSlider" to="." method="_on_MusicVolSlider_value_changed"]
 [connection signal="value_changed" from="SettingsTabs/Audio/MarginContainer/audioSettings/SfxVol/SfxVolSlider" to="." method="_on_SfxVolSlider_value_changed"]
 [connection signal="value_changed" from="SettingsTabs/Gameplay/GameplaySettings/audioSettings/MouseSense/MouseSensSlider" to="." method="_on_MouseSensSlider_value_changed"]

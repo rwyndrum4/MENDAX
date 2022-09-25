@@ -19,6 +19,7 @@ extends Label
 */
 """
 func _ready():
+	# warning-ignore:return_value_discarded
 	GlobalSettings.connect("fpsDisplayed", self, "_on_fps_displayed")
 
 """
@@ -29,7 +30,7 @@ func _ready():
 * @return None
 */
 """
-func _process(delta):
+func _process(_delta): # _delta means delta is not used, change to delta if not the case
 	text = "FPS: %s" % [Engine.get_frames_per_second()]
 
 """
