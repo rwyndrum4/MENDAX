@@ -1,3 +1,12 @@
+"""
+* Programmer Name - Ben Moeller, Freeman Spray, Jason Truong, Mohit Garg, Will Wyndrum
+* Description - File for controlling the what happens with actions within the main menu
+* Date Created - 9/16/2022
+* Date Revisions:
+	9/17/2022 - Added options menu functionality
+	9/21/2022 - Fixing issue with fps label not working correctly
+"""
+
 extends Control
 
 
@@ -6,7 +15,14 @@ onready var settingsMenu = $SettingsMenu
 onready var fpsLabel = $fpsLabel
 
 
-# Called when the node enters the scene tree for the first time.
+"""
+/*
+* @pre called when main menu is loaded in (run once)
+* @post runs preliminary code to help user functionality
+* @param None
+* @return None
+*/
+"""
 func _ready():
 	$VBoxContainer/Start.grab_focus()
 	fpsLabel._on_fps_displayed(Save.game_data.display_fps)
@@ -16,11 +32,25 @@ func _ready():
 #func _process(delta):
 #	pass
 
-
+"""
+/*
+* @pre Start Button is pressed
+* @post Scene change to start of game
+* @param None
+* @return None
+*/
+"""
 func _on_Start_pressed():
 	pass # Replace with function body.
 
-
+"""
+/*
+* @pre Options Button is pressed
+* @post Scene change to options menu
+* @param None
+* @return None
+*/
+"""
 func _on_Options_pressed():
 	settingsMenu.popup_centered()
 
@@ -40,7 +70,14 @@ func _on_Market_pressed():
 func _on_Tests_pressed():
 	pass # Replace with function body.
 
-
+"""
+/*
+* @pre Quit Button is pressed
+* @post Application is closed
+* @param None
+* @return None
+*/
+"""
 func _on_Quit_pressed():
 	get_tree().quit()
 

@@ -1,4 +1,12 @@
-#based on tutorial provided by https://www.youtube.com/watch?v=cQkEPej_gRU
+"""
+* Programmer Name - Ben Moeller
+* Description - File for controlling saving user settings to file on their computer
+* Date Created - 9/17/2022
+* Date Revisions:
+	9/18/2022 - Fixing issue with load_data function (indent was off)
+* Citations:
+	Based on tutorial from https://www.youtube.com/watch?v=cQkEPej_gRU
+"""
 
 extends Node
 
@@ -8,14 +16,25 @@ const SAVEFILE = "user://saveFile.save"
 #dictionary to store the user data
 var game_data = {}
 
-#function that is called when the game is turned on
-#loads user's already defined data OR created new data
+"""
+/*
+* @pre called when game is loaded (runs once)
+* @post reads user data or creates new data if first time playing
+* @param None
+* @return None
+*/
+"""
 func _ready():
 	load_data()
-	
-#loads the data currently in user's save file, or
-#creates a new one if first time playing and sets
-#default values
+
+"""
+/*
+* @pre called by _ready function
+* @post loads user's current data or creates new data if first time playing
+* @param None
+* @return None
+*/
+"""
 func load_data():
 	var file = File.new()
 	if not file.file_exists(SAVEFILE):
@@ -34,8 +53,15 @@ func load_data():
 	file.open(SAVEFILE, File.READ)
 	game_data = file.get_var()
 	file.close()
-		
-#saves data currently in game_data object to file
+
+"""
+/*
+* @pre called by functions that want to save data from game_data to file
+* @post saves data currently in game_data object to file
+* @param None
+* @return None
+*/
+"""
 func save_data():
 	var file = File.new()
 	file.open(SAVEFILE, File.WRITE)
