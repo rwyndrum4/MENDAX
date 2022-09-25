@@ -152,4 +152,3 @@ custom_fonts/font = SubResource( 7 )
 [connection signal="pressed" from="VBoxContainer/Tests" to="." method="_on_Tests_pressed"]
 [connection signal="pressed" from="VBoxContainer/Quit" to="." method="_on_Quit_pressed"]
 [connection signal="button_up" from="joinCodeContainer/getCode" to="." method="_on_GetCode_button_up"]
-[connection signal="pressed" from="joinCodeContainer/getCode" to="." method="_on_Start_pressed"]
