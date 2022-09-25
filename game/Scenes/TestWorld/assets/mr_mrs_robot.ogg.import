@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/mr_mrs_robot.ogg-c637a23d755597bb770a507b86f3600c.oggstr"
+
+[deps]
+
+source_file="res://Scenes/TestWorld/assets/mr_mrs_robot.ogg"
+dest_files=[ "res://.import/mr_mrs_robot.ogg-c637a23d755597bb770a507b86f3600c.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

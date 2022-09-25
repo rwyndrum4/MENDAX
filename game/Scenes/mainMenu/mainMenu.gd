@@ -42,7 +42,7 @@ func _ready():
 */
 """
 func _on_Start_pressed():
-	pass # Replace with function body.
+	SceneTrans.change_scene("res://Scenes/TestWorld/assets/TestWorld.tscn")
 
 """
 /*
