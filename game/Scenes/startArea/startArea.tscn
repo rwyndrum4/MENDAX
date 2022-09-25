@@ -2,12 +2,11 @@
 
 [ext_resource path="res://Assets/mainMenuAssets/menu_bg_empty.png" type="Texture" id=1]
 
-
 [node name="startArea" type="Node2D"]
 
 [node name="BackDrop" type="TextureRect" parent="."]
-margin_right = 40.0
-margin_bottom = 40.0
+margin_right = 1280.0
+margin_bottom = 720.0
 texture = ExtResource( 1 )
 expand = true
 stretch_mode = 1
