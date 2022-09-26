@@ -20,16 +20,31 @@ font_data = ExtResource( 2 )
 
 [sub_resource type="Shader" id=4]
 resource_local_to_scene = true
-code = "shader_type canvas_item;
+code = "/*Code created: 9/18/2022
+By:Mohit Garg
+Date Revised:Mohit Garg
 
-uniform sampler2D noise;
+//Description:Creates Fire Shader
 
+*/
+shader_type canvas_item;
+
+uniform sampler2D noise;//noise gives fire dynamical structure
+
+
+/*
+@pre None
+@post Ansimated Fire appears on the main menu
+@param none
+@return none
+*/
+//known bugs: currently fire is not anchored correctly in full screen
 void fragment(){
-	vec4 base=texture(TEXTURE,UV);
-	vec4 n= texture(noise,vec2(UV.x,UV.y+TIME));//TIME part to read form higher value over time?
+	vec4 base=texture(TEXTURE,UV);//creates base
+	vec4 n= texture(noise,vec2(UV.x,UV.y+TIME));//creates noise vector y+Time helps fire move vertically
 	base.r += 0.4f - distance(vec2(0.5,UV.y),UV);//want to make center brighter so add small amount and subtract from center
-	base.r = (base.r*0.3) +(n.r *0.4); //adding noise can experiment with ratios
-	COLOR=vec4(float(base.r>0.4),float(base.r>0.5),float(base.r>0.6),float(base.r>0.4));
+	base.r = (base.r*0.3) +(n.r *0.4); //adding noise can experiment with ratios to get appropriate base.r
+	COLOR=vec4(float(base.r>0.4),float(base.r>0.5),float(base.r>0.6),float(base.r>0.4));//color will change based on result of boolean expressiong give fire it's color
 	
 	//base.r is red channel
 }
@@ -58,8 +73,10 @@ script = ExtResource( 1 )
 [node name="TextureRect" type="TextureRect" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = -336.0
-margin_bottom = -85.0
+margin_left = 3.0
+margin_top = -3.0
+margin_right = -333.0
+margin_bottom = -88.0
 rect_scale = Vector2( 1.31642, 1.08664 )
 texture = ExtResource( 4 )
 stretch_mode = 1
@@ -136,8 +153,8 @@ text = "XXXX"
 
 [node name="Fire5" type="Sprite" parent="."]
 material = SubResource( 6 )
-position = Vector2( 807, 484 )
-scale = Vector2( 0.40332, 0.37793 )
+position = Vector2( 817, 476 )
+scale = Vector2( 0.40332, 0.425781 )
 texture = ExtResource( 6 )
 
 [node name="fpsLabel" parent="." instance=ExtResource( 7 )]
