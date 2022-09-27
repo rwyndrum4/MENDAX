@@ -151,9 +151,13 @@ text = "XXXX"
 
 [node name="SettingsMenu" parent="." instance=ExtResource( 5 )]
 
-[node name="Fire5" type="Sprite" parent="."]
+[node name="CenterContainer" type="CenterContainer" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="Fire5" type="Sprite" parent="CenterContainer"]
 material = SubResource( 6 )
-position = Vector2( 817, 476 )
+position = Vector2( 812, 474 )
 scale = Vector2( 0.40332, 0.425781 )
 texture = ExtResource( 6 )
 
