@@ -31,11 +31,13 @@ Global="*res://Loader/Global.gd"
 
 window/size/width=1280
 window/size/height=720
+window/stretch/mode="viewport"
 
 [global]
 
 Auto=false
 icon=false
+viewport=false
 
 [gui]
 
