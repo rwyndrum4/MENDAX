@@ -10,10 +10,11 @@
 
 extends Control
 
-
-# Declare member variables here. Examples:
+# Member Variables
+onready var startButton = $VBoxContainer/Start
 onready var settingsMenu = $SettingsMenu
 onready var fpsLabel = $fpsLabel
+onready var worldEnv = $WorldEnvironment
 
 
 """
@@ -25,8 +26,17 @@ onready var fpsLabel = $fpsLabel
 */
 """
 func _ready():
-	$VBoxContainer/Start.grab_focus()
+	#Grab focus on start button so keys can be used to navigate buttons
+	startButton.grab_focus()
+	#Call function to use user saved fps
 	fpsLabel._on_fps_displayed(Save.game_data.display_fps)
+	#Call functions to use user saved brightness and bloom values
+	worldEnv._on_brightness_toggled(Save.game_data.brightness)
+	worldEnv._on_bloom_toggled(Save.game_data.bloom_on)
+	#Call functions to sync audio settings with user save
+	settingsMenu._on_MasterVolSlider_value_changed(Save.game_data.master_vol)
+	settingsMenu._on_MusicVolSlider_value_changed(Save.game_data.music_vol)
+	settingsMenu._on_SfxVolSlider_value_changed(Save.game_data.sfx_vol)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -56,7 +66,7 @@ func _on_Start_pressed():
 */
 """
 func _on_Options_pressed():
-	settingsMenu.popup_centered()
+	settingsMenu.popup_centered_ratio()
 
 """
 /*

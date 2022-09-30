@@ -37,6 +37,7 @@ window/stretch/mode="viewport"
 
 Auto=false
 icon=false
+viewport=false
 
 [gui]
 
