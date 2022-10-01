@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=2]
 
-[ext_resource path="res://Scenes/SettingsMenu/settingsMenu.gd" type="Script" id=1]
+[ext_resource path="res://Scenes/settingsMenu/settingsMenu.gd" type="Script" id=1]
 
 [node name="SettingsMenu" type="Popup"]
 anchor_right = 1.0
@@ -181,8 +181,8 @@ text = "Master Volume
 "
 
 [node name="MasterVol" type="HBoxContainer" parent="SettingsTabs/Audio/MarginContainer/audioSettings"]
-margin_left = 566.0
-margin_right = 966.0
+margin_left = 822.0
+margin_right = 1222.0
 margin_bottom = 31.0
 size_flags_horizontal = 10
 
@@ -203,9 +203,9 @@ margin_bottom = 61.0
 text = "Music Volume"
 
 [node name="MusicVal" type="HBoxContainer" parent="SettingsTabs/Audio/MarginContainer/audioSettings"]
-margin_left = 566.0
+margin_left = 822.0
 margin_top = 46.0
-margin_right = 966.0
+margin_right = 1222.0
 margin_bottom = 62.0
 size_flags_horizontal = 10
 
@@ -227,9 +227,9 @@ text = "SFX Volume
 "
 
 [node name="SfxVol" type="HBoxContainer" parent="SettingsTabs/Audio/MarginContainer/audioSettings"]
-margin_left = 566.0
+margin_left = 822.0
 margin_top = 77.0
-margin_right = 966.0
+margin_right = 1222.0
 margin_bottom = 108.0
 size_flags_horizontal = 10
 
@@ -269,16 +269,15 @@ custom_constants/vseparation = 15
 columns = 2
 
 [node name="MouseSenseLabel" type="Label" parent="SettingsTabs/Gameplay/GameplaySettings/audioSettings"]
-margin_top = 47.0
+margin_top = 1.0
 margin_right = 113.0
-margin_bottom = 61.0
+margin_bottom = 15.0
 text = "Mouse Sensitivity"
 
 [node name="MouseSense" type="HBoxContainer" parent="SettingsTabs/Gameplay/GameplaySettings/audioSettings"]
-margin_left = 542.0
-margin_top = 46.0
-margin_right = 966.0
-margin_bottom = 62.0
+margin_left = 798.0
+margin_right = 1222.0
+margin_bottom = 16.0
 size_flags_horizontal = 10
 
 [node name="MouseVal" type="Label" parent="SettingsTabs/Gameplay/GameplaySettings/audioSettings/MouseSense"]
