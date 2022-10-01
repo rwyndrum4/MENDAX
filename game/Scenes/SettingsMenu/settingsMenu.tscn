@@ -42,7 +42,7 @@ columns = 2
 
 [node name="DisplayModeLabel" type="Label" parent="SettingsTabs/Video/MarginContainer/videoSettings"]
 margin_top = 3.0
-margin_right = 87.0
+margin_right = 206.0
 margin_bottom = 17.0
 text = "Display Mode"
 
@@ -57,7 +57,7 @@ selected = 0
 
 [node name="VsyncLabel" type="Label" parent="SettingsTabs/Video/MarginContainer/videoSettings"]
 margin_top = 48.0
-margin_right = 87.0
+margin_right = 206.0
 margin_bottom = 62.0
 text = "Vsync"
 
@@ -70,7 +70,7 @@ size_flags_horizontal = 10
 
 [node name="DisplayFpsLabel" type="Label" parent="SettingsTabs/Video/MarginContainer/videoSettings"]
 margin_top = 103.0
-margin_right = 87.0
+margin_right = 206.0
 margin_bottom = 117.0
 text = "Display FPS"
 
@@ -83,7 +83,7 @@ size_flags_horizontal = 10
 
 [node name="MaxFpsLabel" type="Label" parent="SettingsTabs/Video/MarginContainer/videoSettings"]
 margin_top = 146.0
-margin_right = 87.0
+margin_right = 206.0
 margin_bottom = 160.0
 text = "Max FPS"
 
@@ -113,7 +113,7 @@ value = 500.0
 
 [node name="BloomLabel" type="Label" parent="SettingsTabs/Video/MarginContainer/videoSettings"]
 margin_top = 189.0
-margin_right = 87.0
+margin_right = 206.0
 margin_bottom = 203.0
 text = "Bloom"
 
@@ -126,7 +126,7 @@ size_flags_horizontal = 10
 
 [node name="BrightnessLabel" type="Label" parent="SettingsTabs/Video/MarginContainer/videoSettings"]
 margin_top = 231.0
-margin_right = 87.0
+margin_right = 206.0
 margin_bottom = 262.0
 text = "Brightness
 "
@@ -175,7 +175,7 @@ custom_constants/vseparation = 15
 columns = 2
 
 [node name="MasterVolLabel" type="Label" parent="SettingsTabs/Audio/MarginContainer/audioSettings"]
-margin_right = 97.0
+margin_right = 206.0
 margin_bottom = 31.0
 text = "Master Volume
 "
@@ -198,7 +198,7 @@ value = -10.0
 
 [node name="MusicValLabel" type="Label" parent="SettingsTabs/Audio/MarginContainer/audioSettings"]
 margin_top = 47.0
-margin_right = 97.0
+margin_right = 206.0
 margin_bottom = 61.0
 text = "Music Volume"
 
@@ -221,7 +221,7 @@ value = -10.0
 
 [node name="SfxVolLabel" type="Label" parent="SettingsTabs/Audio/MarginContainer/audioSettings"]
 margin_top = 77.0
-margin_right = 97.0
+margin_right = 206.0
 margin_bottom = 108.0
 text = "SFX Volume
 "
