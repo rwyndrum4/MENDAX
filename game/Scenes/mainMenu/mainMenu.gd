@@ -90,7 +90,8 @@ func _on_Market_pressed():
 */
 """
 func _on_Tests_pressed():
-	pass # Replace with function body.
+	#pass # Replace with function body.
+	SceneTrans.change_scene("res://Scenes/testscene/test.tscn")
 
 """
 /*
