@@ -6,6 +6,7 @@
 	9/17/2022 - Added options menu functionality
 	9/18/2022 - Added join code functionality
 	9/21/2022 - Fixing issue with fps label not working correctly
+	10/1/2022 - Added the ability to move with keyboard in settings menu
 """
 
 extends Control
@@ -15,6 +16,7 @@ onready var startButton = $VBoxContainer/Start
 onready var settingsMenu = $SettingsMenu
 onready var fpsLabel = $fpsLabel
 onready var worldEnv = $WorldEnvironment
+var current_time = 0.0
 
 
 """
@@ -39,9 +41,17 @@ func _ready():
 	settingsMenu._on_SfxVolSlider_value_changed(Save.game_data.sfx_vol)
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
+"""
+/*
+* @pre called for every frame inside of the game
+* @post detects user input
+* @param delta -> float (time)
+* @return None
+*/
+"""
+func _process(_delta): #if you want to use delta, then change it to delta
+	if settingsMenu.is_visible_in_tree() and (OS.get_unix_time() - current_time > 0):
+		change_settings_tabs()
 
 """
 /*
@@ -135,3 +145,25 @@ func getRandAlphInd(rng):
 		rng.randomize()
 		var randomAlphabetIndex = rng.randi_range(0, 25)
 		return randomAlphabetIndex
+
+"""
+/*
+* @pre called when you someone changes settings tabs with keyboard
+* @post changes current tab
+* @param None
+* @return None
+*/
+"""
+func change_settings_tabs():
+	var tab: TabContainer = settingsMenu.get_node("SettingsTabs")
+	var current = tab.current_tab
+	#detecting right
+	if Input.is_action_pressed("ui_right"):
+		current_time = OS.get_unix_time()
+		if current < 2:
+			tab.current_tab += 1
+	#detecting left
+	if Input.is_action_pressed("ui_left"):
+		current_time = OS.get_unix_time()
+		if current > 0:
+			tab.current_tab -= 1
