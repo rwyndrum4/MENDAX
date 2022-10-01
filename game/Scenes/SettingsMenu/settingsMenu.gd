@@ -62,7 +62,7 @@ func _ready():
 	sfxVolSlider.value = Save.game_data.sfx_vol
 	#instancing Mouse Sens
 	mouseSlider.value = Save.game_data.mouse_sens
-	
+
 """
 /*
 * @pre called when the display options dropdown options are pressed
