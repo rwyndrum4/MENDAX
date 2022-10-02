@@ -6,6 +6,7 @@ const FRICTION = 500
 
 var velocity = Vector2.ZERO
 
+# Reference: https://www.youtube.com/watch?v=TQKXU7iSWUU
 func _physics_process(delta):
 	velocity = Vector2.ZERO
 	velocity.x = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
@@ -19,12 +20,6 @@ func _physics_process(delta):
 	
 	velocity = move_and_collide(velocity*delta)
 	
-	
-	#for i in get_slide_count():
-		#var collision = get_slide_collision(i)
-		#if collision.collider is RigidBody2D:
-			#velocity.x = 0
-			#velocity.y = 0
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
