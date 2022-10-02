@@ -16,7 +16,6 @@ onready var startButton = $VBoxContainer/Start
 onready var settingsMenu = $SettingsMenu
 onready var fpsLabel = $fpsLabel
 onready var worldEnv = $WorldEnvironment
-var current_time = 0.0
 
 
 """
@@ -50,7 +49,7 @@ func _ready():
 */
 """
 func _process(_delta): #if you want to use delta, then change it to delta
-	if settingsMenu.is_visible_in_tree() and (OS.get_unix_time() - current_time > 0):
+	if settingsMenu.is_visible_in_tree():
 		change_settings_tabs()
 
 """
@@ -158,12 +157,20 @@ func change_settings_tabs():
 	var tab: TabContainer = settingsMenu.get_node("SettingsTabs")
 	var current = tab.current_tab
 	#detecting right
-	if Input.is_action_pressed("ui_right"):
-		current_time = OS.get_unix_time()
+	if Input.is_action_just_released("ui_tab_right",false):
 		if current < 2:
 			tab.current_tab += 1
+			grab_button(tab.current_tab)
 	#detecting left
-	if Input.is_action_pressed("ui_left"):
-		current_time = OS.get_unix_time()
+	if Input.is_action_just_released("ui_tab_left",false):
 		if current > 0:
 			tab.current_tab -= 1
+			grab_button(tab.current_tab)
+
+func grab_button(current_tab):
+	if current_tab == 0:
+		settingsMenu.get_node("SettingsTabs/Video/MarginContainer/videoSettings/DisplayOptionsButton").grab_focus()
+	elif current_tab == 1:
+		settingsMenu.get_node("SettingsTabs/Audio/MarginContainer/audioSettings/MasterVol/MasterVolSlider").grab_focus()
+	elif current_tab == 2:
+		settingsMenu.get_node("SettingsTabs/Gameplay/GameplaySettings/audioSettings/MouseSense/MouseSensSlider").grab_focus()
