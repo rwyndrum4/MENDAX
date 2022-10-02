@@ -52,7 +52,8 @@ func _ready():
 */
 """
 func _on_Start_pressed():
-	SceneTrans.change_scene("res://Scenes/startArea/startArea.tscn")
+	$Enter.play()
+	CaveInTrans.change_scene("res://Scenes/startArea/startArea.tscn")
 
 """
 /*
