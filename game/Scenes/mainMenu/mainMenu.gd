@@ -7,6 +7,7 @@
 	9/18/2022 - Added join code functionality
 	9/21/2022 - Fixing issue with fps label not working correctly
 	10/1/2022 - Added the ability to move with keyboard in settings menu
+	10/1/2022 - Fixed options menu movment
 """
 
 extends Control
