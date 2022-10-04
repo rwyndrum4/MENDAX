@@ -62,7 +62,7 @@ func _process(_delta): #if you want to use delta, then change it to delta
 */
 """
 func _on_Start_pressed():
-	SceneTrans.change_scene("res://Scenes/startArea/EntrySpace.tscn")
+	SceneTrans.change_scene("res://Scenes/startArea/startArea.tscn")
 
 """
 /*
