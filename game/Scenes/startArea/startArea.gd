@@ -17,11 +17,11 @@ func _process(delta):
 			get_tree().change_scene("res://Scenes/startArea/EntrySpace.tscn")
 
 
-func _on_Area2D_body_entered(body: PhysicsBody2D):
+func _on_Area2D_body_entered(_body: PhysicsBody2D):
 	instructions.show()
 	in_cave = true
 
 
-func _on_Area2D_body_exited(body: PhysicsBody2D):
+func _on_Area2D_body_exited(_body: PhysicsBody2D):
 	in_cave = false
 	instructions.hide()
