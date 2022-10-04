@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/ben-test-background.png-19aec457194a555b6053f296a92a23cd.stex"
+path="res://.import/ben-test-bg.png-83a47c590c350de96095bca35bab7535.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/ben-test-background.png"
-dest_files=[ "res://.import/ben-test-background.png-19aec457194a555b6053f296a92a23cd.stex" ]
+source_file="res://Assets/ben-test-bg.png"
+dest_files=[ "res://.import/ben-test-bg.png-83a47c590c350de96095bca35bab7535.stex" ]
 
 [params]
 
