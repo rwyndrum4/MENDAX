@@ -21,16 +21,31 @@ font_data = ExtResource( 2 )
 
 [sub_resource type="Shader" id=4]
 resource_local_to_scene = true
-code = "shader_type canvas_item;
+code = "/*Code created: 9/18/2022
+By:Mohit Garg
+Date Revised:Mohit Garg
 
-uniform sampler2D noise;
+//Description:Creates Fire Shader
 
+*/
+shader_type canvas_item;
+
+uniform sampler2D noise;//noise gives fire dynamical structure
+
+
+/*
+@pre None
+@post Ansimated Fire appears on the main menu
+@param none
+@return none
+*/
+//known bugs: currently fire is not anchored correctly in full screen
 void fragment(){
-	vec4 base=texture(TEXTURE,UV);
-	vec4 n= texture(noise,vec2(UV.x,UV.y+TIME));//TIME part to read form higher value over time?
+	vec4 base=texture(TEXTURE,UV);//creates base
+	vec4 n= texture(noise,vec2(UV.x,UV.y+TIME));//creates noise vector y+Time helps fire move vertically
 	base.r += 0.4f - distance(vec2(0.5,UV.y),UV);//want to make center brighter so add small amount and subtract from center
-	base.r = (base.r*0.3) +(n.r *0.4); //adding noise can experiment with ratios
-	COLOR=vec4(float(base.r>0.4),float(base.r>0.5),float(base.r>0.6),float(base.r>0.4));
+	base.r = (base.r*0.3) +(n.r *0.4); //adding noise can experiment with ratios to get appropriate base.r
+	COLOR=vec4(float(base.r>0.4),float(base.r>0.5),float(base.r>0.6),float(base.r>0.4));//color will change based on result of boolean expressiong give fire it's color
 	
 	//base.r is red channel
 }
@@ -137,7 +152,11 @@ text = "XXXX"
 
 [node name="SettingsMenu" parent="." instance=ExtResource( 5 )]
 
-[node name="Fire5" type="Sprite" parent="."]
+[node name="CenterContainer" type="CenterContainer" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="Fire5" type="Sprite" parent="CenterContainer"]
 material = SubResource( 6 )
 position = Vector2( 899, 404 )
 scale = Vector2( 0.40332, 0.37793 )
