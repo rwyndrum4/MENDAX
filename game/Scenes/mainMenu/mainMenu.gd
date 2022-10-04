@@ -17,6 +17,10 @@ onready var settingsMenu = $SettingsMenu
 onready var fpsLabel = $fpsLabel
 onready var worldEnv = $WorldEnvironment
 
+onready var multiplayer_config_ui = $Multiplayer_Config
+onready var server_code = $Multiplayer_Config/ServerCode
+onready var device_ip_address = $CanvasLayer/IPAddress
+
 
 """
 /*
@@ -38,6 +42,13 @@ func _ready():
 	settingsMenu._on_MasterVolSlider_value_changed(Save.game_data.master_vol)
 	settingsMenu._on_MusicVolSlider_value_changed(Save.game_data.music_vol)
 	settingsMenu._on_SfxVolSlider_value_changed(Save.game_data.sfx_vol)
+	
+	#connect signals
+	get_tree().connect("network_peer_connected", self, "_player_connected")
+	get_tree().connect("network_peer_disconnected", self, "_player_disconnected")
+	get_tree().connect("connected_to_server", self, "_connected_to_server")
+	
+	device_ip_address.text = Network.ip_address
 
 
 """
@@ -174,3 +185,22 @@ func grab_button(current_tab):
 		settingsMenu.get_node("SettingsTabs/Audio/MarginContainer/audioSettings/MasterVol/MasterVolSlider").grab_focus()
 	elif current_tab == 2:
 		settingsMenu.get_node("SettingsTabs/Gameplay/GameplaySettings/audioSettings/MouseSense/MouseSensSlider").grab_focus()
+
+func _player_connected(id) -> void:
+	print("Player " + str(id) + " has connected")
+
+
+func _player_disconnected(id) -> void:
+	print("Player " + str(id) + " has disconnected")
+
+
+func _on_JoinServer_pressed():
+	if server_code.text != "":
+		multiplayer_config_ui.hide()
+		Network.ip_address = server_code.text
+		Network.join_server()
+
+
+func _on_CreateServer_pressed():
+	multiplayer_config_ui.hide()
+	Network.create_server()

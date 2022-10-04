@@ -22,6 +22,7 @@ config/icon="res://Assets/MendaxLogo.png"
 
 [autoload]
 
+Network="*res://Loader/Network.gd"
 SceneTrans="*res://Scenes/sceneTrans/SceneTrans.tscn"
 GlobalSettings="*res://Loader/globalSettings.gd"
 Save="*res://Loader/save.gd"
@@ -31,7 +32,10 @@ Global="*res://Loader/Global.gd"
 
 window/size/width=1280
 window/size/height=720
+window/size/test_width=1280
+window/size/test_height=720
 window/stretch/mode="viewport"
+window/stretch/aspect="keep"
 
 [global]
 
