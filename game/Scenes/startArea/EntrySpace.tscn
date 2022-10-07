@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Assets/EntryAreaBackground.png" type="Texture" id=1]
 [ext_resource path="res://Scenes/startArea/PlayerCursor.gd" type="Script" id=2]
 [ext_resource path="res://Assets/playerCursor.png" type="Texture" id=3]
+[ext_resource path="res://Scenes/startArea/light.png" type="Texture" id=4]
 
 [sub_resource type="RectangleShape2D" id=1]
 
@@ -27,7 +28,6 @@ __meta__ = {
 
 [node name="Camera2D" type="Camera2D" parent="PlayerCursor"]
 position = Vector2( 2.1297, 0 )
-scale = Vector2( 1, 1 )
 current = true
 
 [node name="Sprite" type="Sprite" parent="PlayerCursor"]
@@ -48,3 +48,9 @@ polygon = PoolVector2Array( 1872, 304, 1896, 304, 1896, 0, 616, 0, 624, 24, 704,
 
 [node name="CollisionPolygon2D3" type="CollisionPolygon2D" parent="StaticBody2D"]
 polygon = PoolVector2Array( 912, 1560, 912, 1488, 936, 1440, 984, 1408, 1136, 1360, 1312, 1304, 1304, 1256, 1240, 1256, 1224, 1224, 1248, 1200, 1328, 1160, 1512, 1104, 1640, 1056, 1656, 1000, 1744, 968, 1816, 960, 1888, 936, 1832, 840, 1832, 808, 1736, 744, 1736, 712, 1768, 680, 1824, 648, 1864, 600, 1856, 536, 1776, 504, 1752, 464, 1744, 440, 1744, 416, 1776, 408, 1824, 392, 1848, 368, 1848, 336, 1880, 304, 1896, 304, 1896, 1000, 1888, 1560 )
+
+[node name="Light2D" type="Light2D" parent="."]
+position = Vector2( 976, 1008 )
+rotation = -3.14159
+scale = Vector2( 0.2, 0.8 )
+texture = ExtResource( 4 )
