@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Assets/mainMenuBG.png" type="Texture" id=1]
 [ext_resource path="res://Scenes/startArea/startArea.gd" type="Script" id=2]
 [ext_resource path="res://Assets/playerCursor.png" type="Texture" id=3]
 [ext_resource path="res://Scenes/startArea/PlayerCursor.gd" type="Script" id=4]
+[ext_resource path="res://Scenes/settingsMenu/settingsMenu.tscn" type="PackedScene" id=5]
 
 [sub_resource type="RectangleShape2D" id=1]
 
@@ -56,11 +57,11 @@ polygon = PoolVector2Array( -52.1118, 0, -6.51397, 0, 0, 0, 0, 667.413, -52.1118
 position = Vector2( 0, 784 )
 polygon = PoolVector2Array( 0, 0, 0, -64, 1280, -64, 1280, -64, 1280, 0 )
 
-[node name="Area2D" type="Area2D" parent="."]
+[node name="enterCaveArea" type="Area2D" parent="."]
 position = Vector2( 1082, 590 )
 scale = Vector2( 0.939095, 1.00174 )
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="enterCaveArea"]
 position = Vector2( -833.764, -232.865 )
 rotation = -0.293881
 scale = Vector2( 18.0683, 5.04571 )
@@ -77,5 +78,7 @@ text = "Press Enter to
 go in cave"
 align = 1
 
-[connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]
-[connection signal="body_exited" from="Area2D" to="." method="_on_Area2D_body_exited"]
+[node name="SettingsMenu" parent="." instance=ExtResource( 5 )]
+
+[connection signal="body_entered" from="enterCaveArea" to="." method="_on_Area2D_body_entered"]
+[connection signal="body_exited" from="enterCaveArea" to="." method="_on_Area2D_body_exited"]

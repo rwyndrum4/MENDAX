@@ -3,7 +3,9 @@ extends Control
 
 # Member Variables:
 var in_cave = false
+var in_menu = false
 onready var instructions: Label = $enterDirections
+onready var settingsMenu = $SettingsMenu
 
 
 """
@@ -26,6 +28,7 @@ func _ready():
 */
 """
 func _process(_delta): #change to delta if using it
+	check_settings()
 	if in_cave:
 		if Input.is_action_just_pressed("ui_accept",false):
 			# warning-ignore:return_value_discarded
@@ -54,3 +57,19 @@ func _on_Area2D_body_entered(_body: PhysicsBody2D): #change to body if want to u
 func _on_Area2D_body_exited(_body: PhysicsBody2D): #change to body if want to use
 	in_cave = false
 	instructions.hide()
+
+"""
+/*
+* @pre Called for every frame inside process function
+* @post Opens and closes settings when escape is pressed
+* @param None
+* @return None
+*/
+"""
+func check_settings():
+	if Input.is_action_just_pressed("ui_cancel",false) and not in_menu:
+		settingsMenu.popup_centered()
+		in_menu = true
+	elif Input.is_action_just_pressed("ui_cancel",false) and in_menu:
+		settingsMenu.hide()
+		in_menu = false

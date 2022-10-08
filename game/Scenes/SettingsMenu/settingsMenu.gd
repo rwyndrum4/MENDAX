@@ -63,6 +63,9 @@ func _ready():
 	#instancing Mouse Sens
 	mouseSlider.value = Save.game_data.mouse_sens
 
+func _process(_delta): #change to delta if using
+	change_settings_tabs()
+
 """
 /*
 * @pre called when the display options dropdown options are pressed
@@ -175,3 +178,39 @@ func _on_MusicVolSlider_value_changed(value):
 """
 func _on_SfxVolSlider_value_changed(value):
 	GlobalSettings.update_volume(SFX_VOLUME,value)
+
+
+func _on_quitButton_pressed():
+	get_tree().quit()
+
+"""
+/*
+* @pre called when you someone changes settings tabs with keyboard
+* @post changes current tab
+* @param None
+* @return None
+*/
+"""
+func change_settings_tabs():
+	var tab: TabContainer = $SettingsTabs
+	var current = tab.current_tab
+	#detecting right
+	if Input.is_action_just_released("ui_tab_right",false):
+		if current < 3:
+			tab.current_tab += 1
+			grab_button(tab.current_tab)
+	#detecting left
+	if Input.is_action_just_released("ui_tab_left",false):
+		if current > 0:
+			tab.current_tab -= 1
+			grab_button(tab.current_tab)
+
+func grab_button(current_tab):
+	if current_tab == 0:
+		get_node("SettingsTabs/Video/MarginContainer/videoSettings/DisplayOptionsButton").grab_focus()
+	elif current_tab == 1:
+		get_node("SettingsTabs/Audio/MarginContainer/audioSettings/MasterVol/MasterVolSlider").grab_focus()
+	elif current_tab == 2:
+		get_node("SettingsTabs/Gameplay/GameplaySettings/audioSettings/MouseSense/MouseSensSlider").grab_focus()
+	elif current_tab == 3:
+		get_node("SettingsTabs/Exit/exitSettings/GridContainer/quitButton").grab_focus()
