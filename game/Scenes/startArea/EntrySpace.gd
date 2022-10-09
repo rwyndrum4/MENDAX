@@ -1,3 +1,10 @@
+"""
+* Programmer Name - Freeman Spray, Ben Moeller
+* Description - Code for controlling what happens in the entry space scene
+* Date Created - 10/3/2022
+* Date Revisions:
+	10/8/2022 - Added the ability to go into settings from scene with enter key
+"""
 extends Control
 
 # Member Variables

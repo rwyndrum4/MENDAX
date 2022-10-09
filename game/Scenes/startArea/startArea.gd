@@ -1,11 +1,20 @@
+"""
+* Programmer Name - Freeman Spray, Ben Moeller
+* Description - Code for controlling what happens in the start area scene
+* Date Created - 10/3/2022
+* Date Revisions:
+	10/4/2022 - Added ability to move into cave and exit scene
+	10/8/2022 - Added boundaries to cave, sky, and fire
+"""
 extends Control
 
 
 # Member Variables:
 var in_cave = false
 var in_menu = false
-onready var instructions: Label = $enterDirections
-onready var settingsMenu = $SettingsMenu
+onready var instructions: Label = $enterCaveArea/enterDirections
+onready var settingsMenu = $GUI/SettingsMenu
+onready var textBox = $GUI/textBox
 
 
 """
@@ -17,7 +26,8 @@ onready var settingsMenu = $SettingsMenu
 */
 """
 func _ready():
-	pass # Replace with function body.
+	#textBox.show()
+	textBox.queue_text("Welcome to Mendax, please move towoards the cave")
 
 """
 /*
@@ -68,7 +78,7 @@ func _on_Area2D_body_exited(_body: PhysicsBody2D): #change to body if want to us
 """
 func check_settings():
 	if Input.is_action_just_pressed("ui_cancel",false) and not in_menu:
-		settingsMenu.popup_centered()
+		settingsMenu.popup_centered_ratio()
 		in_menu = true
 	elif Input.is_action_just_pressed("ui_cancel",false) and in_menu:
 		settingsMenu.hide()

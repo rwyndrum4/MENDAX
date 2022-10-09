@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Assets/mainMenuBG.png" type="Texture" id=1]
 [ext_resource path="res://Scenes/startArea/startArea.gd" type="Script" id=2]
 [ext_resource path="res://Assets/playerCursor.png" type="Texture" id=3]
 [ext_resource path="res://Scenes/startArea/PlayerCursor.gd" type="Script" id=4]
 [ext_resource path="res://Scenes/settingsMenu/settingsMenu.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Scenes/textBox/textBox.tscn" type="PackedScene" id=6]
 
 [sub_resource type="RectangleShape2D" id=1]
 
@@ -27,6 +28,7 @@ stretch_mode = 1
 [node name="PlayerCursor" type="KinematicBody2D" parent="."]
 position = Vector2( 1082, 590 )
 scale = Vector2( 0.939095, 1.00174 )
+collision_layer = 3
 script = ExtResource( 4 )
 __meta__ = {
 "_edit_group_": true
@@ -39,46 +41,82 @@ texture = ExtResource( 3 )
 scale = Vector2( 5, 4.97178 )
 shape = SubResource( 1 )
 
-[node name="StaticBody2D" type="StaticBody2D" parent="."]
+[node name="Colliders" type="StaticBody2D" parent="."]
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]
+[node name="leftScreen" type="CollisionPolygon2D" parent="Colliders"]
 scale = Vector2( 1.22813, 1.11475 )
 polygon = PoolVector2Array( -52.1118, 0, -6.51397, 0, 0, 0, 0, 667.413, -52.1118, 667.413 )
 
-[node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="StaticBody2D"]
+[node name="topScreen" type="CollisionPolygon2D" parent="Colliders"]
 polygon = PoolVector2Array( 0, 0, 0, -64, 1280, -64, 1280, 0 )
 
-[node name="CollisionPolygon2D3" type="CollisionPolygon2D" parent="StaticBody2D"]
+[node name="rightScreen" type="CollisionPolygon2D" parent="Colliders"]
 position = Vector2( 1344, -24 )
 scale = Vector2( 1.22813, 1.11475 )
 polygon = PoolVector2Array( -52.1118, 0, -6.51397, 0, 0, 0, 0, 667.413, -52.1118, 667.413 )
 
-[node name="CollisionPolygon2D4" type="CollisionPolygon2D" parent="StaticBody2D"]
+[node name="bottomScreen" type="CollisionPolygon2D" parent="Colliders"]
 position = Vector2( 0, 784 )
 polygon = PoolVector2Array( 0, 0, 0, -64, 1280, -64, 1280, -64, 1280, 0 )
+
+[node name="leftOfCave" type="CollisionPolygon2D" parent="Colliders"]
+position = Vector2( -54, 496 )
+rotation = -0.354108
+scale = Vector2( 0.168949, 1 )
+polygon = PoolVector2Array( 352, -4, 476.302, -61.9396, 1280, -64, 1280, -64, 1273.83, -31.3175, 1231.34, -14.781, 1249.67, -2.97418 )
+
+[node name="rightOfCave" type="CollisionPolygon2D" parent="Colliders"]
+position = Vector2( 405, 373 )
+rotation = -0.637088
+scale = Vector2( 0.209934, 1 )
+polygon = PoolVector2Array( 340.783, -9.25909, 476.302, -61.9396, 1388.1, -92.8708, 1334.72, -62.5983, 1297.5, -33.5476 )
+
+[node name="aboveCaveEntrance" type="CollisionPolygon2D" parent="Colliders"]
+position = Vector2( 78, 439 )
+rotation = -0.637088
+scale = Vector2( 0.209934, 1 )
+polygon = PoolVector2Array( 353.418, -1.07584, 476.302, -61.9396, 1152.92, -26.1527, 1962.59, 63.5591, 1866.71, 105.889, 1661.63, 66.5643, 1398.74, 36.9176, 812.594, -1.89404, 574.276, -6.57327 )
+
+[node name="mountains" type="CollisionPolygon2D" parent="Colliders"]
+position = Vector2( 595, 178 )
+scale = Vector2( 0.531372, 1 )
+polygon = PoolVector2Array( 16.9375, 5.99998, -18.8192, -52, 1285.35, -50, 1283.47, 0 )
+
+[node name="fire" type="CollisionPolygon2D" parent="Colliders"]
+position = Vector2( 828, 495 )
+scale = Vector2( 0.114746, 1 )
+polygon = PoolVector2Array( -8.71484, 44, -43.5742, 6, -200.442, -16, -43.5742, -37, -8.71484, -81, 191.728, -132, 610.042, -178, 1028.36, -134, 1220.08, -87, 1202.66, -35, 1394.38, -11, 1237.51, 8, 1263.66, 45, 888.919, 33, 575.183, 5, 296.307, 34 )
 
 [node name="enterCaveArea" type="Area2D" parent="."]
 position = Vector2( 1082, 590 )
 scale = Vector2( 0.939095, 1.00174 )
+collision_layer = 2
+collision_mask = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="enterCaveArea"]
+[node name="caveEntranceOval" type="CollisionShape2D" parent="enterCaveArea"]
+light_mask = 2
 position = Vector2( -833.764, -232.865 )
 rotation = -0.293881
 scale = Vector2( 18.0683, 5.04571 )
 shape = SubResource( 2 )
 
-[node name="enterDirections" type="Label" parent="."]
+[node name="enterDirections" type="Label" parent="enterCaveArea"]
 visible = false
-margin_left = 212.0
-margin_top = 202.0
-margin_right = 305.0
-margin_bottom = 233.0
+margin_left = -926.424
+margin_top = -387.326
+margin_right = -833.424
+margin_bottom = -356.326
 rect_scale = Vector2( 1.63154, 1.63154 )
 text = "Press Enter to 
 go in cave"
 align = 1
 
-[node name="SettingsMenu" parent="." instance=ExtResource( 5 )]
+[node name="GUI" type="CanvasLayer" parent="."]
+
+[node name="SettingsMenu" parent="GUI" instance=ExtResource( 5 )]
+
+[node name="textBox" parent="GUI" instance=ExtResource( 6 )]
+visible = false
 
 [connection signal="body_entered" from="enterCaveArea" to="." method="_on_Area2D_body_entered"]
 [connection signal="body_exited" from="enterCaveArea" to="." method="_on_Area2D_body_exited"]
