@@ -78,9 +78,9 @@ scale = Vector2( 0.209934, 1 )
 polygon = PoolVector2Array( 353.418, -1.07584, 476.302, -61.9396, 1152.92, -26.1527, 1962.59, 63.5591, 1866.71, 105.889, 1661.63, 66.5643, 1398.74, 36.9176, 812.594, -1.89404, 574.276, -6.57327 )
 
 [node name="mountains" type="CollisionPolygon2D" parent="Colliders"]
-position = Vector2( 595, 178 )
+position = Vector2( 528, 56 )
 scale = Vector2( 0.531372, 1 )
-polygon = PoolVector2Array( 16.9375, 5.99998, -18.8192, -52, 1285.35, -50, 1283.47, 0 )
+polygon = PoolVector2Array( 60.2215, 32, -60.2214, -56, 1415.2, -56, 1415.2, 32 )
 
 [node name="fire" type="CollisionPolygon2D" parent="Colliders"]
 position = Vector2( 828, 495 )

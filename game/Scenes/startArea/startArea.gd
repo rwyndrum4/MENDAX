@@ -27,7 +27,7 @@ onready var textBox = $GUI/textBox
 """
 func _ready():
 	#textBox.show()
-	textBox.queue_text("Welcome to Mendax, please move towoards the cave")
+	textBox.queue_text("If you're ready to begin your challenge, press enter")
 
 """
 /*

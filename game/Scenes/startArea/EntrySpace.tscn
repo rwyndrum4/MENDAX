@@ -19,8 +19,10 @@ script = ExtResource( 4 )
 [node name="TextureRect" type="TextureRect" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = -286.0
-margin_bottom = -35.0
+margin_left = -856.0
+margin_top = -720.0
+margin_right = 2024.0
+margin_bottom = 2160.0
 rect_scale = Vector2( 1.31642, 1.08664 )
 texture = ExtResource( 1 )
 stretch_mode = 1
