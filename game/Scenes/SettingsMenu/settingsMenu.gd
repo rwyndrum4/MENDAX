@@ -179,9 +179,27 @@ func _on_MusicVolSlider_value_changed(value):
 func _on_SfxVolSlider_value_changed(value):
 	GlobalSettings.update_volume(SFX_VOLUME,value)
 
-
+"""
+/*
+* @pre called when the quit button is pressed
+* @post quits out of the game
+* @param None
+* @return None
+*/
+"""
 func _on_quitButton_pressed():
 	get_tree().quit()
+
+"""
+/*
+* @pre called when the main menu button is pressed
+* @post sends player to main menu
+* @param None
+* @return None
+*/
+"""
+func _on_mainMenuButton_pressed():
+	SceneTrans.change_scene("res://Scenes/mainMenu/mainMenu.tscn")
 
 """
 /*
@@ -205,6 +223,14 @@ func change_settings_tabs():
 			tab.current_tab -= 1
 			grab_button(tab.current_tab)
 
+"""
+/*
+* @pre called from the change_settins_tabs function
+* @post grabs the attention of the button/object at the top of the current tab
+* @param current_tab -> int (current tab that user is on)
+* @return None
+*/
+"""
 func grab_button(current_tab):
 	if current_tab == 0:
 		get_node("SettingsTabs/Video/MarginContainer/videoSettings/DisplayOptionsButton").grab_focus()

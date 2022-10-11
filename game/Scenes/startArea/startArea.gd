@@ -26,7 +26,7 @@ onready var textBox = $GUI/textBox
 */
 """
 func _ready():
-	#textBox.show()
+	#This is how you queue text to the textbox queue
 	textBox.queue_text("If you're ready to begin your challenge, press enter")
 
 """
