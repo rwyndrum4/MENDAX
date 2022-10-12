@@ -34,7 +34,7 @@ texture = ExtResource( 1 )
 stretch_mode = 1
 
 [node name="PlayerCursor" type="KinematicBody2D" parent="."]
-position = Vector2( 808, 424 )
+position = Vector2( 832, 1352 )
 scale = Vector2( 0.939095, 1.00174 )
 script = ExtResource( 2 )
 __meta__ = {
