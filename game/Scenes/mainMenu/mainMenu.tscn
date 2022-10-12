@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://Scenes/mainMenu/mainMenu.gd" type="Script" id=1]
 [ext_resource path="res://Assets/mainMenuAssets/LTYPEB.TTF" type="DynamicFontData" id=2]
@@ -9,7 +9,6 @@
 [ext_resource path="res://Scenes/fpsDisplay/fpsLabel.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Assets/ARIALBD.TTF" type="DynamicFontData" id=8]
 [ext_resource path="res://Scenes/worldEnvironment/worldEnv.tscn" type="PackedScene" id=9]
-[ext_resource path="res://Assets/SFX/wahh.wav" type="AudioStream" id=10]
 
 [sub_resource type="DynamicFont" id=1]
 size = 38
@@ -168,10 +167,6 @@ visible = false
 margin_right = 59.0
 margin_bottom = 24.0
 custom_fonts/font = SubResource( 7 )
-
-[node name="Enter" type="AudioStreamPlayer" parent="."]
-stream = ExtResource( 10 )
-bus = "SFX"
 
 [connection signal="pressed" from="VBoxContainer/Start" to="." method="_on_Start_pressed"]
 [connection signal="pressed" from="VBoxContainer/Options" to="." method="_on_Options_pressed"]

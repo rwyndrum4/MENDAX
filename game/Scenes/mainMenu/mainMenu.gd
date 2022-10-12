@@ -61,8 +61,7 @@ func _process(_delta): #if you want to use delta, then change it to delta
 */
 """
 func _on_Start_pressed():
-	$Enter.play()
-	CaveInTrans.change_scene("res://Scenes/startArea/startArea.tscn")
+	SceneTrans.change_scene("res://Scenes/startArea/startArea.tscn")
 
 """
 /*
