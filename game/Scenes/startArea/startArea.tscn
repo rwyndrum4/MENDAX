@@ -37,7 +37,7 @@ __meta__ = {
 [node name="Sprite" type="Sprite" parent="PlayerCursor"]
 texture = ExtResource( 3 )
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerCursor"]
+[node name="playerHitbox" type="CollisionShape2D" parent="PlayerCursor"]
 scale = Vector2( 5, 4.97178 )
 shape = SubResource( 1 )
 
