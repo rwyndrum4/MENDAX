@@ -43,6 +43,8 @@ func _process(_delta): #change to delta if using it
 		if Input.is_action_just_pressed("ui_accept",false):
 			# warning-ignore:return_value_discarded
 			get_tree().change_scene("res://Scenes/startArea/EntrySpace.tscn")
+	if Input.is_action_just_pressed("ui_open_inventory",false):
+		get_tree()
 
 """
 /*
