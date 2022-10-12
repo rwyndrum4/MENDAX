@@ -50,8 +50,7 @@ func _ready():
 */
 """
 func _process(_delta): #if you want to use delta, then change it to delta
-	if settingsMenu.is_visible_in_tree():
-		change_settings_tabs()
+	pass
 
 """
 /*
@@ -145,33 +144,3 @@ func getRandAlphInd(rng):
 		rng.randomize()
 		var randomAlphabetIndex = rng.randi_range(0, 25)
 		return randomAlphabetIndex
-
-"""
-/*
-* @pre called when you someone changes settings tabs with keyboard
-* @post changes current tab
-* @param None
-* @return None
-*/
-"""
-func change_settings_tabs():
-	var tab: TabContainer = settingsMenu.get_node("SettingsTabs")
-	var current = tab.current_tab
-	#detecting right
-	if Input.is_action_just_released("ui_tab_right",false):
-		if current < 2:
-			tab.current_tab += 1
-			grab_button(tab.current_tab)
-	#detecting left
-	if Input.is_action_just_released("ui_tab_left",false):
-		if current > 0:
-			tab.current_tab -= 1
-			grab_button(tab.current_tab)
-
-func grab_button(current_tab):
-	if current_tab == 0:
-		settingsMenu.get_node("SettingsTabs/Video/MarginContainer/videoSettings/DisplayOptionsButton").grab_focus()
-	elif current_tab == 1:
-		settingsMenu.get_node("SettingsTabs/Audio/MarginContainer/audioSettings/MasterVol/MasterVolSlider").grab_focus()
-	elif current_tab == 2:
-		settingsMenu.get_node("SettingsTabs/Gameplay/GameplaySettings/audioSettings/MouseSense/MouseSensSlider").grab_focus()
