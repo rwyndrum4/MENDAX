@@ -41,7 +41,8 @@ func _process(_delta): #change to delta if using it
 	check_settings()
 	if in_cave:
 		if Input.is_action_just_pressed("ui_accept",false):
-			# warning-ignore:return_value_discardedhttps://www.youtube.com/shorts/KXnD8aXnAvchttps://www.youtube.com/shorts/KXnD8aXnAvc
+			in_cave = false
+			# warning-ignore:return_value_discarded
 			$Enter.play()
 			CaveInTrans.change_scene("res://Scenes/startArea/EntrySpace.tscn")
 
