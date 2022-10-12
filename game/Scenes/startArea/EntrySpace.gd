@@ -34,7 +34,7 @@ func _process(_delta): #change to delta if used
 	if in_exit:
 		if Input.is_action_just_pressed("ui_accept",false):
 			# warning-ignore:return_value_discarded
-			get_tree().change_scene("res://Scenes/mainMenu/mainMenu.tscn")
+			SceneTrans.change_scene("res://Scenes/mainMenu/mainMenu.tscn")
 	
 """
 /*

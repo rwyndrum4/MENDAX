@@ -1,0 +1,23 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/wing.wav-ba314873ef816d609cf289d5f239c41d.sample"
+
+[deps]
+
+source_file="res://Assets/SFX/wing.wav"
+dest_files=[ "res://.import/wing.wav-ba314873ef816d609cf289d5f239c41d.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=1
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0
