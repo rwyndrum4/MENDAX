@@ -3,8 +3,8 @@
 [ext_resource path="res://Scenes/mainMenu/mainMenu.gd" type="Script" id=1]
 [ext_resource path="res://Assets/mainMenuAssets/LTYPEB.TTF" type="DynamicFontData" id=2]
 [ext_resource path="res://Assets/mainMenuAssets/BAUHS93.TTF" type="DynamicFontData" id=3]
-[ext_resource path="res://Assets/mainMenuAssets/temp_bg.png" type="Texture" id=4]
-[ext_resource path="res://Scenes/SettingsMenu/settingsMenu.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Assets/mainMenuBG.png" type="Texture" id=4]
+[ext_resource path="res://Scenes/settingsMenu/settingsMenu.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Assets/fire5.png" type="Texture" id=6]
 [ext_resource path="res://Scenes/fpsDisplay/fpsLabel.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Assets/ARIALBD.TTF" type="DynamicFontData" id=8]
@@ -77,11 +77,9 @@ script = ExtResource( 1 )
 [node name="TextureRect" type="TextureRect" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 3.0
-margin_top = -3.0
-margin_right = -333.0
-margin_bottom = -88.0
-rect_scale = Vector2( 1.31642, 1.08664 )
+margin_right = -46.0
+margin_bottom = -47.0
+rect_scale = Vector2( 0.997, 0.996 )
 texture = ExtResource( 4 )
 stretch_mode = 1
 
@@ -161,8 +159,8 @@ margin_bottom = 40.0
 
 [node name="Fire5" type="Sprite" parent="CenterContainer"]
 material = SubResource( 6 )
-position = Vector2( 812, 474 )
-scale = Vector2( 0.40332, 0.425781 )
+position = Vector2( 899, 404 )
+scale = Vector2( 0.40332, 0.37793 )
 texture = ExtResource( 6 )
 
 [node name="fpsLabel" parent="." instance=ExtResource( 7 )]

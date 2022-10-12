@@ -6,6 +6,8 @@
 	9/17/2022 - Added options menu functionality
 	9/18/2022 - Added join code functionality
 	9/21/2022 - Fixing issue with fps label not working correctly
+	10/1/2022 - Added the ability to move with keyboard in settings menu
+	10/1/2022 - Fixed options menu movment
 """
 
 extends Control
@@ -39,9 +41,16 @@ func _ready():
 	settingsMenu._on_SfxVolSlider_value_changed(Save.game_data.sfx_vol)
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
+"""
+/*
+* @pre called for every frame inside of the game
+* @post detects user input
+* @param delta -> float (time)
+* @return None
+*/
+"""
+func _process(_delta): #if you want to use delta, then change it to delta
+	pass
 
 """
 /*

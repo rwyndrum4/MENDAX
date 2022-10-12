@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=2]
 
-[ext_resource path="res://Scenes/SettingsMenu/settingsMenu.gd" type="Script" id=1]
+[ext_resource path="res://Scenes/settingsMenu/settingsMenu.gd" type="Script" id=1]
 
 [node name="SettingsMenu" type="Popup"]
 anchor_right = 1.0
@@ -17,6 +17,7 @@ anchor_bottom = 1.0
 tab_align = 0
 
 [node name="Video" type="Tabs" parent="SettingsTabs"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
@@ -181,8 +182,8 @@ text = "Master Volume
 "
 
 [node name="MasterVol" type="HBoxContainer" parent="SettingsTabs/Audio/MarginContainer/audioSettings"]
-margin_left = 566.0
-margin_right = 966.0
+margin_left = 822.0
+margin_right = 1222.0
 margin_bottom = 31.0
 size_flags_horizontal = 10
 
@@ -203,9 +204,9 @@ margin_bottom = 61.0
 text = "Music Volume"
 
 [node name="MusicVal" type="HBoxContainer" parent="SettingsTabs/Audio/MarginContainer/audioSettings"]
-margin_left = 566.0
+margin_left = 822.0
 margin_top = 46.0
-margin_right = 966.0
+margin_right = 1222.0
 margin_bottom = 62.0
 size_flags_horizontal = 10
 
@@ -227,9 +228,9 @@ text = "SFX Volume
 "
 
 [node name="SfxVol" type="HBoxContainer" parent="SettingsTabs/Audio/MarginContainer/audioSettings"]
-margin_left = 566.0
+margin_left = 822.0
 margin_top = 77.0
-margin_right = 966.0
+margin_right = 1222.0
 margin_bottom = 108.0
 size_flags_horizontal = 10
 
@@ -269,16 +270,15 @@ custom_constants/vseparation = 15
 columns = 2
 
 [node name="MouseSenseLabel" type="Label" parent="SettingsTabs/Gameplay/GameplaySettings/audioSettings"]
-margin_top = 47.0
+margin_top = 1.0
 margin_right = 113.0
-margin_bottom = 61.0
+margin_bottom = 15.0
 text = "Mouse Sensitivity"
 
 [node name="MouseSense" type="HBoxContainer" parent="SettingsTabs/Gameplay/GameplaySettings/audioSettings"]
-margin_left = 542.0
-margin_top = 46.0
-margin_right = 966.0
-margin_bottom = 62.0
+margin_left = 798.0
+margin_right = 1222.0
+margin_bottom = 16.0
 size_flags_horizontal = 10
 
 [node name="MouseVal" type="Label" parent="SettingsTabs/Gameplay/GameplaySettings/audioSettings/MouseSense"]
@@ -299,6 +299,33 @@ max_value = 3.0
 step = 0.01
 value = 0.1
 
+[node name="Exit" type="Tabs" parent="SettingsTabs"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+
+[node name="exitSettings" type="MarginContainer" parent="SettingsTabs/Exit"]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="GridContainer" type="GridContainer" parent="SettingsTabs/Exit/exitSettings"]
+margin_right = 83.0
+margin_bottom = 44.0
+
+[node name="quitButton" type="Button" parent="SettingsTabs/Exit/exitSettings/GridContainer"]
+margin_right = 83.0
+margin_bottom = 20.0
+text = "Quit Game"
+
+[node name="mainMenuButton" type="Button" parent="SettingsTabs/Exit/exitSettings/GridContainer"]
+margin_top = 24.0
+margin_right = 83.0
+margin_bottom = 44.0
+text = "Main Menu"
+
 [connection signal="item_selected" from="SettingsTabs/Video/MarginContainer/videoSettings/DisplayOptionsButton" to="." method="_on_DisplayOptionsButton_item_selected"]
 [connection signal="toggled" from="SettingsTabs/Video/MarginContainer/videoSettings/VsyncButton" to="." method="_on_VsyncButton_toggled"]
 [connection signal="toggled" from="SettingsTabs/Video/MarginContainer/videoSettings/DisplayFpsButton" to="." method="_on_DisplayFpsButton_toggled"]
@@ -309,3 +336,5 @@ value = 0.1
 [connection signal="value_changed" from="SettingsTabs/Audio/MarginContainer/audioSettings/MusicVal/MusicVolSlider" to="." method="_on_MusicVolSlider_value_changed"]
 [connection signal="value_changed" from="SettingsTabs/Audio/MarginContainer/audioSettings/SfxVol/SfxVolSlider" to="." method="_on_SfxVolSlider_value_changed"]
 [connection signal="value_changed" from="SettingsTabs/Gameplay/GameplaySettings/audioSettings/MouseSense/MouseSensSlider" to="." method="_on_MouseSensSlider_value_changed"]
+[connection signal="pressed" from="SettingsTabs/Exit/exitSettings/GridContainer/quitButton" to="." method="_on_quitButton_pressed"]
+[connection signal="pressed" from="SettingsTabs/Exit/exitSettings/GridContainer/mainMenuButton" to="." method="_on_mainMenuButton_pressed"]
