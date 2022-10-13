@@ -27,7 +27,7 @@ CaveInTrans="*res://Scenes/sceneTrans/CaveInTrans.tscn"
 GlobalSettings="*res://Loader/globalSettings.gd"
 Save="*res://Loader/save.gd"
 Global="*res://Loader/Global.gd"
-TextboxSignals="*res://Scenes/textBox/textbox_signals.gd"
+GlobalSignals="*res://Scenes/globalSignals.gd"
 
 [display]
 
@@ -98,6 +98,11 @@ ui_tab_left={
 "deadzone": 0.5,
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":0,"physical_scancode":81,"unicode":0,"echo":false,"script":null)
 , Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":0,"button_index":4,"pressure":0.0,"pressed":false,"script":null)
+ ]
+}
+debug_key={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":0,"physical_scancode":80,"unicode":0,"echo":false,"script":null)
  ]
 }
 

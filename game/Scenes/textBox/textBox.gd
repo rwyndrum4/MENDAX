@@ -55,7 +55,7 @@ func _process(_delta): #change to delta if used
 			#if in ready state and the queue is not empty, display the text
 			if !text_queue.empty():
 				display_text()
-				TextboxSignals.emit_signal("textbox_shift",true)
+				GlobalSignals.emit_signal("textbox_shift",true)
 		State.READING:
 			#if text is currently in process of being displayed and enter is
 			#pressed, display all text and move to finished state
@@ -70,7 +70,7 @@ func _process(_delta): #change to delta if used
 			if Input.is_action_just_pressed("ui_accept"):
 				change_state(State.READY)
 				hide_textbox()
-				TextboxSignals.emit_signal("textbox_shift",false)
+				GlobalSignals.emit_signal("textbox_shift",false)
 
 """
 /*

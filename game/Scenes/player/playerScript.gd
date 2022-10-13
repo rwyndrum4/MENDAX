@@ -30,7 +30,9 @@ var velocity = Vector2.ZERO
 func _ready():
 	#Connects singal to TextBoxSignals, will stop/unstop player when called from "textbBox.gd"
 	# warning-ignore:return_value_discarded
-	TextboxSignals.connect("textbox_shift",self,"stop_go_player")
+	GlobalSignals.connect("textbox_shift",self,"stop_go_player")
+	# warning-ignore:return_value_discarded
+	GlobalSignals.connect("openMenu",self,"stop_go_player")
 
 """
 /*

@@ -15,6 +15,7 @@ extends Popup
 var MASTER_VOLUME = 0 #corresponds to master volume bus
 var MUSIC_VOLUME = 1 #corresponds to music volume bus
 var SFX_VOLUME = 2 #corrsponds to sfx volume bus
+var just_in_menu = false
 
 # Video Settings
 onready var displayOptions = $SettingsTabs/Video/MarginContainer/videoSettings/DisplayOptionsButton
@@ -66,8 +67,14 @@ func _ready():
 func _process(_delta): #change to delta if using
 	#checks if settings menu is currently being used
 	if is_visible_in_tree():
+		#Emit signal to tell player to stop moving
+		GlobalSignals.emit_signal("openMenu",true)
 		change_settings_tabs()
-
+		just_in_menu = true
+	if not is_visible_in_tree() and just_in_menu:
+		#Emit signal to tell player to start moving again
+		GlobalSignals.emit_signal("openMenu",false)
+		just_in_menu = false
 """
 /*
 * @pre called when the display options dropdown options are pressed
