@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Assets/EntryAreaBackground.png" type="Texture" id=1]
 [ext_resource path="res://Scenes/player/player.tscn" type="PackedScene" id=2]
@@ -9,6 +9,9 @@
 [sub_resource type="StreamTexture" id=3]
 flags = 4
 load_path = "res://.import/light.png-9e6eff90e703f084db87a88d6ba8f890.stex"
+
+[sub_resource type="OccluderPolygon2D" id=6]
+polygon = PoolVector2Array( -48.9833, -45.9201, -50.0482, 47.9166, -50.0482, 47.9166, 50.0482, 46.9184, 50.0482, 46.9184, 48.9833, -48.9149, 47.9185, -50.9114 )
 
 [sub_resource type="DynamicFont" id=2]
 size = 40
@@ -40,6 +43,9 @@ stretch_mode = 1
 
 [node name="Player" parent="." instance=ExtResource( 2 )]
 position = Vector2( 832, 1344 )
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="Player"]
+occluder = SubResource( 6 )
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 current = true
