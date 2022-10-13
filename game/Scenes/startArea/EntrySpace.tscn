@@ -1,8 +1,7 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Assets/EntryAreaBackground.png" type="Texture" id=1]
-[ext_resource path="res://Scenes/startArea/PlayerCursor.gd" type="Script" id=2]
-[ext_resource path="res://Assets/playerCursor.png" type="Texture" id=3]
+[ext_resource path="res://Scenes/player/player.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Scenes/startArea/EntrySpace.gd" type="Script" id=4]
 [ext_resource path="res://Scenes/SettingsMenu/settingsMenu.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Assets/Teko-Light.ttf" type="DynamicFontData" id=6]
@@ -10,11 +9,6 @@
 [sub_resource type="StreamTexture" id=3]
 flags = 4
 load_path = "res://.import/light.png-9e6eff90e703f084db87a88d6ba8f890.stex"
-
-[sub_resource type="OccluderPolygon2D" id=4]
-polygon = PoolVector2Array( -48.9833, -45.9201, -50.0482, 47.9166, -50.0482, 47.9166, 50.0482, 46.9184, 50.0482, 46.9184, 48.9833, -48.9149, 47.9185, -50.9114 )
-
-[sub_resource type="RectangleShape2D" id=1]
 
 [sub_resource type="DynamicFont" id=2]
 size = 40
@@ -44,27 +38,11 @@ rect_scale = Vector2( 1.31642, 1.08664 )
 texture = ExtResource( 1 )
 stretch_mode = 1
 
-[node name="PlayerCursor" type="KinematicBody2D" parent="."]
-position = Vector2( 832, 1352 )
-scale = Vector2( 0.939095, 1.00174 )
-script = ExtResource( 2 )
-__meta__ = {
-"_edit_group_": true
-}
+[node name="Player" parent="." instance=ExtResource( 2 )]
+position = Vector2( 832, 1344 )
 
-[node name="Camera2D" type="Camera2D" parent="PlayerCursor"]
-position = Vector2( 2.1297, 0 )
+[node name="Camera2D" type="Camera2D" parent="Player"]
 current = true
-
-[node name="Sprite" type="Sprite" parent="PlayerCursor"]
-texture = ExtResource( 3 )
-
-[node name="LightOccluder2D" type="LightOccluder2D" parent="PlayerCursor/Sprite"]
-occluder = SubResource( 4 )
-
-[node name="playerHitbox" type="CollisionShape2D" parent="PlayerCursor"]
-scale = Vector2( 5, 4.97178 )
-shape = SubResource( 1 )
 
 [node name="colliders" type="StaticBody2D" parent="."]
 

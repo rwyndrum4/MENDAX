@@ -2,6 +2,7 @@
 * Programmer Name - Freeman Spray
 * Description - Code that designates player movement
 * Date Created - 10/1/2022
+* Citations - based on https://www.youtube.com/watch?v=TQKXU7iSWUU
 * Date Revisions:
 	10/2/2022 - Improved movement to feel more natural
 """
@@ -18,10 +19,19 @@ const FRICTION = 500
 # Global velocity
 var velocity = Vector2.ZERO
 
+"""
+/*
+* @pre Called once when player is initialized
+* @post Connects the "textbox_shift" signal to the player
+* @param None
+* @return None
+*/
+"""
 func _ready():
+	#Connects singal to TextBoxSignals, will stop/unstop player when called from "textbBox.gd"
+	# warning-ignore:return_value_discarded
 	TextboxSignals.connect("textbox_shift",self,"stop_go_player")
 
-# Reference: https://www.youtube.com/watch?v=TQKXU7iSWUU
 """
 /*
 * @pre Called every frame
@@ -57,5 +67,13 @@ func _physics_process(delta):
 	# Factor in collisions
 	velocity = move_and_slide(velocity)
 
+"""
+/*
+* @pre Called when signal is received from TextBoxSignals
+* @post updates is_stopped to whatever value is passed in (true = stopped, false = can move)
+* @param value -> boolean
+* @return None
+*/
+"""
 func stop_go_player(value:bool):
 	is_stopped = value

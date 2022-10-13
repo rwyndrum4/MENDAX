@@ -1,14 +1,11 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Assets/mainMenuBG.png" type="Texture" id=1]
 [ext_resource path="res://Scenes/startArea/startArea.gd" type="Script" id=2]
-[ext_resource path="res://Assets/playerCursor.png" type="Texture" id=3]
-[ext_resource path="res://Scenes/startArea/PlayerCursor.gd" type="Script" id=4]
+[ext_resource path="res://Scenes/player/player.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Scenes/settingsMenu/settingsMenu.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Scenes/textBox/textBox.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Assets/SFX/wahh.wav" type="AudioStream" id=7]
-
-[sub_resource type="RectangleShape2D" id=1]
 
 [sub_resource type="CircleShape2D" id=2]
 
@@ -26,21 +23,8 @@ rect_scale = Vector2( 0.997, 0.996 )
 texture = ExtResource( 1 )
 stretch_mode = 1
 
-[node name="PlayerCursor" type="KinematicBody2D" parent="."]
-position = Vector2( 1082, 590 )
-scale = Vector2( 0.939095, 1.00174 )
-collision_layer = 3
-script = ExtResource( 4 )
-__meta__ = {
-"_edit_group_": true
-}
-
-[node name="Sprite" type="Sprite" parent="PlayerCursor"]
-texture = ExtResource( 3 )
-
-[node name="playerHitbox" type="CollisionShape2D" parent="PlayerCursor"]
-scale = Vector2( 5, 4.97178 )
-shape = SubResource( 1 )
+[node name="Player" parent="." instance=ExtResource( 3 )]
+position = Vector2( 1082, 591 )
 
 [node name="Colliders" type="StaticBody2D" parent="."]
 

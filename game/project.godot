@@ -27,6 +27,7 @@ CaveInTrans="*res://Scenes/sceneTrans/CaveInTrans.tscn"
 GlobalSettings="*res://Loader/globalSettings.gd"
 Save="*res://Loader/save.gd"
 Global="*res://Loader/Global.gd"
+TextboxSignals="*res://Scenes/textBox/textbox_signals.gd"
 
 [display]
 

@@ -64,7 +64,9 @@ func _ready():
 	mouseSlider.value = Save.game_data.mouse_sens
 
 func _process(_delta): #change to delta if using
-	change_settings_tabs()
+	#checks if settings menu is currently being used
+	if is_visible_in_tree():
+		change_settings_tabs()
 
 """
 /*
