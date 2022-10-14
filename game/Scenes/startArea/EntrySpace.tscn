@@ -43,6 +43,8 @@ stretch_mode = 1
 
 [node name="Player" parent="." instance=ExtResource( 2 )]
 position = Vector2( 832, 1344 )
+collision_layer = 1
+collision_mask = 7
 
 [node name="LightOccluder2D" type="LightOccluder2D" parent="Player"]
 occluder = SubResource( 6 )
@@ -51,6 +53,7 @@ occluder = SubResource( 6 )
 current = true
 
 [node name="colliders" type="StaticBody2D" parent="."]
+collision_layer = 2
 
 [node name="WallA" type="CollisionPolygon2D" parent="colliders"]
 scale = Vector2( 1.22813, 1.11475 )
@@ -91,6 +94,7 @@ custom_fonts/font = SubResource( 2 )
 [node name="exitCaveArea" type="Area2D" parent="."]
 position = Vector2( 831, 1504 )
 scale = Vector2( 11.5835, 3.22615 )
+collision_layer = 4
 __meta__ = {
 "_edit_group_": true
 }

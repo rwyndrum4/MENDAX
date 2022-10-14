@@ -25,8 +25,10 @@ stretch_mode = 1
 
 [node name="Player" parent="." instance=ExtResource( 3 )]
 position = Vector2( 1082, 591 )
+collision_layer = 1
 
 [node name="Colliders" type="StaticBody2D" parent="."]
+collision_layer = 2
 
 [node name="leftScreen" type="CollisionPolygon2D" parent="Colliders"]
 scale = Vector2( 1.22813, 1.11475 )
@@ -75,8 +77,7 @@ polygon = PoolVector2Array( -8.71484, 44, -43.5742, 6, -200.442, -16, -43.5742, 
 [node name="enterCaveArea" type="Area2D" parent="."]
 position = Vector2( 1082, 590 )
 scale = Vector2( 0.939095, 1.00174 )
-collision_layer = 2
-collision_mask = 2
+collision_layer = 4
 
 [node name="caveEntranceOval" type="CollisionShape2D" parent="enterCaveArea"]
 light_mask = 2
