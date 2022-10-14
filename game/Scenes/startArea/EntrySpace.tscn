@@ -44,7 +44,6 @@ stretch_mode = 1
 [node name="Player" parent="." instance=ExtResource( 2 )]
 position = Vector2( 832, 1344 )
 collision_layer = 1
-collision_mask = 7
 
 [node name="LightOccluder2D" type="LightOccluder2D" parent="Player"]
 occluder = SubResource( 6 )
