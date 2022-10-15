@@ -50,7 +50,8 @@ func _ready():
 */
 """
 func _process(_delta): #if you want to use delta, then change it to delta
-	pass
+	if Input.is_action_just_pressed("ui_cancel"):
+		startButton.grab_focus()
 
 """
 /*

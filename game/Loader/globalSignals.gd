@@ -23,3 +23,11 @@ signal textbox_shift(value)
 """
 # warning-ignore:unused_signal
 signal openMenu(value)
+
+"""
+* Purpose - Send a signal when using chatbox in game scene
+* Used in - chatBox.gd, startArea.gd, and entryScene.gd
+* Parameter - value -> boolean (true if in chat)
+"""
+# warning-ignore:unused_signal
+signal openChatbox(value)

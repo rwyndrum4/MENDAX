@@ -39,6 +39,7 @@ func load_data():
 	var file = File.new()
 	if not file.file_exists(SAVEFILE):
 		game_data = {
+			"username" : "CHANGE-USERNAME-IN-SETTINGS",
 			"fullscreen_on": false,
 			"vsync_on": false,
 			"display_fps": false,

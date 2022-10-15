@@ -28,6 +28,8 @@ func _ready():
 	instructions.hide()
 	#start timer
 	myTimer.start(90)
+	# warning-ignore:return_value_discarded
+	GlobalSignals.connect("openChatbox", self, "chatbox_use")
 
 """
 /*
@@ -115,3 +117,7 @@ func convert_time(time_in:float) -> String:
 """
 func _on_Timer_timeout():
 	SceneTrans.change_scene("res://Scenes/minigames/riddler/riddleGame.tscn")
+
+func chatbox_use(value):
+	if value:
+		in_menu = true
