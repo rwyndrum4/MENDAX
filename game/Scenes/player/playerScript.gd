@@ -5,6 +5,7 @@
 * Citations - based on https://www.youtube.com/watch?v=TQKXU7iSWUU
 * Date Revisions:
 	10/2/2022 - Improved movement to feel more natural
+	10/14/2022 - Added signals to stop player when in options or textbox scene
 """
 extends KinematicBody2D
 
@@ -22,13 +23,13 @@ var velocity = Vector2.ZERO
 """
 /*
 * @pre Called once when player is initialized
-* @post Connects the "textbox_shift" signal to the player
+* @post Connects the "textbox_shift" and "openMnu" signals to the player
 * @param None
 * @return None
 */
 """
 func _ready():
-	#Connects singal to TextBoxSignals, will stop/unstop player when called from "textbBox.gd"
+	#Connects singal to GlobalSignals, will stop/unstop player when called from "textbBox.gd"
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("textbox_shift",self,"stop_go_player")
 	# warning-ignore:return_value_discarded
@@ -43,7 +44,7 @@ func _ready():
 */
 """
 func _physics_process(delta):
-	#don't move player if textbox is playing
+	#don't move player if textbox is playing or options are open
 	if is_stopped:
 		return
 	# Initialize input velocity
@@ -71,7 +72,7 @@ func _physics_process(delta):
 
 """
 /*
-* @pre Called when signal is received from TextBoxSignals
+* @pre Called when signal is received from GlobalSignals
 * @post updates is_stopped to whatever value is passed in (true = stopped, false = can move)
 * @param value -> boolean
 * @return None

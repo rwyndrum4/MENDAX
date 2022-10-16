@@ -157,3 +157,7 @@ func update_volume(bus_idx,value):
 	if was_mute and value != MIN_VOLUME:
 		AudioServer.set_bus_mute(bus_idx, false)
 	Save.save_data()
+
+func update_username(username:String):
+	Save.game_data.username = username
+	Save.save_data()

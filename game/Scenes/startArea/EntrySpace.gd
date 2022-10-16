@@ -24,7 +24,12 @@ onready var timerText: Label = $GUI/Timer/timerText
 */
 """
 func _ready():
+	#hide cave instructions at start
+	instructions.hide()
+	#start timer
 	myTimer.start(90)
+	# warning-ignore:return_value_discarded
+	GlobalSignals.connect("openChatbox", self, "chatbox_use")
 
 """
 /*
@@ -56,9 +61,9 @@ func _process(_delta): #change to delta if used
 */
 """
 func _on_exitCaveArea_body_entered(_body: PhysicsBody2D): #change to body if want to use
-	if myTimer.time_left < 300:
-		instructions.show()
-		in_exit = true
+	print("here")
+	instructions.show()
+	in_exit = true
 	
 """
 /*
@@ -112,3 +117,7 @@ func convert_time(time_in:float) -> String:
 """
 func _on_Timer_timeout():
 	SceneTrans.change_scene("res://Scenes/minigames/riddler/riddleGame.tscn")
+
+func chatbox_use(value):
+	if value:
+		in_menu = true
