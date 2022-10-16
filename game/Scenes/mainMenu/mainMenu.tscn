@@ -191,8 +191,8 @@ dialog_autowrap = true
 
 [node name="LineEdit" type="LineEdit" parent="askForUsername"]
 margin_left = 8.0
-margin_top = 73.0
-margin_right = 208.0
+margin_top = 56.0
+margin_right = 342.0
 margin_bottom = 108.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
