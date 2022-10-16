@@ -193,7 +193,7 @@ func _on_usernameInput_focus_exited():
 func _on_usernameInput_text_entered(new_text):
 	if " " in new_text:
 		var dialog = AcceptDialog.new()
-		dialog.dialog_text = "No spaces in username please"
+		dialog.dialog_text = "No spaces in username please, change again in settings"
 		dialog.window_title = "Invalid Username"
 		dialog.connect('modal_closed', dialog, 'queue_free')
 		add_child(dialog)
