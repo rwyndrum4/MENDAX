@@ -28,6 +28,7 @@ func _ready():
 	textBox.queue_text("What walks on four legs in the morning, two legs in the afternoon, and three in the evening?")
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("openChatbox", self, "chatbox_use")
+	GlobalSignals.connect("inputText", self, "chatbox_submit")
 
 """
 /*
@@ -90,3 +91,7 @@ func _on_Timer_timeout():
 func chatbox_use(value):
 	if value:
 		in_menu = true
+		
+func chatbox_submit(inText):
+	if inText == "person":
+		SceneTrans.change_scene("res://Scenes/startArea/EntrySpace.tscn")

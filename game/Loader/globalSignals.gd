@@ -1,9 +1,10 @@
 """
-* Programmer Name - Benjamin Moeller
+* Programmer Name - Benjamin Moeller & Freeman Spray
 * Description - Holds signals that need to be used globally (aka emitted in one file, connected in another)
 * Date Created - 10/12/2022
 * Date Revisions:
 	10/14/2022 - Added the openMenu signal
+	10/16/2022 - Added the inputText signal
 """
 
 extends Node
@@ -31,3 +32,11 @@ signal openMenu(value)
 """
 # warning-ignore:unused_signal
 signal openChatbox(value)
+
+"""
+* Purpose - Send a signal when a message is submitted to the chatbox
+* Used in - riddleGame.gd
+* Parameter - inText -> string (text of a message)
+"""
+# warning-ignore:unused_signal
+signal inputText(inText)
