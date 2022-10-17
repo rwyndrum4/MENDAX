@@ -1,5 +1,6 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
+[ext_resource path="res://Scenes/chatBox/chatBox.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Scenes/globalScope/ServerConnection.gd" type="Script" id=2]
 [ext_resource path="res://Scenes/globalScope/globalScope.gd" type="Script" id=3]
 
@@ -8,3 +9,7 @@ script = ExtResource( 3 )
 
 [node name="ServerConnection" type="Node" parent="."]
 script = ExtResource( 2 )
+
+[node name="chatbox" parent="." instance=ExtResource( 1 )]
+margin_top = 35.0
+margin_bottom = -442.0
