@@ -10,7 +10,7 @@ var _client := Nakama.create_client(KEY, "44.202.34.182", 7350, "http")
 func authenticate_async(email:String, password:String) -> int:
 	var result := OK
 	
-	var new_session: NakamaSession = yield(_client.authenticate_email_async(email,password), "completed")
+	var new_session: NakamaSession = yield(_client.authenticate_email_async(email,password,null,true), "completed")
 	
 	if not new_session.is_exception():
 		_session = new_session
