@@ -1,5 +1,7 @@
 extends Control
 
+signal message_sent(msg)
+
 # Member Variables
 onready var chatLog = $textHolder/pastText
 onready var playerName = $textHolder/inputField/playerName
@@ -119,6 +121,8 @@ func _on_playerInput_text_entered(new_text):
 			arr_of_str[0] = edit_whisper_str(arr_of_str[0]) #format who you're sending to
 			new_text = array_to_string(arr_of_str) #change new_text to edited message
 		add_message(Save.game_data.username,new_text, current_type)
+		emit_signal("message_sent",new_text)
+		
 	playerInput.text = ""
 
 """
