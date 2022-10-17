@@ -1,9 +1,9 @@
 """
-* Programmer Name - Freeman Spray, Ben Moeller
-* Description - Code for controlling what happens in the entry space scene
-* Date Created - 10/3/2022
+* Programmer Name - Freeman Spray
+* Description - Code for controlling the Riddle minigame
+* Date Created - 10/14/2022
 * Date Revisions:
-	10/8/2022 - Added the ability to go into settings from scene with enter key
+	10/16/2022 - 
 """
 extends Control
 
@@ -12,6 +12,7 @@ var in_menu = false
 onready var settingsMenu = $GUI/SettingsMenu
 onready var myTimer: Timer = $GUI/Timer
 onready var timerText: Label = $GUI/Timer/timerText
+onready var textBox = $GUI/textBox
 
 """
 /*
@@ -23,6 +24,10 @@ onready var timerText: Label = $GUI/Timer/timerText
 """
 func _ready():
 	myTimer.start(90)
+	#This is how you queue text to the textbox queue
+	textBox.queue_text("What walks on four legs in the morning, two legs in the afternoon, and three in the evening?")
+	# warning-ignore:return_value_discarded
+	GlobalSignals.connect("openChatbox", self, "chatbox_use")
 
 """
 /*
@@ -81,3 +86,7 @@ func convert_time(time_in:float) -> String:
 """
 func _on_Timer_timeout():
 	SceneTrans.change_scene("res://Scenes/startArea/EntrySpace.tscn")
+
+func chatbox_use(value):
+	if value:
+		in_menu = true
