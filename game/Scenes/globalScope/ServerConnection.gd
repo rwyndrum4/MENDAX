@@ -6,9 +6,9 @@ const KEY := "nakama_mendax"
 
 var _session: NakamaSession
 
-#my server: 3.16.23.239
+#my server: 3.143.142.232
 #jasons server: 44.202.34.182
-var _client := Nakama.create_client(KEY, "3.16.23.239", 7350, "http")
+var _client := Nakama.create_client(KEY, "3.143.142.232", 7350, "http")
 var _socket : NakamaSocket
 
 var _channel_id = ""
@@ -37,6 +37,7 @@ func connect_to_server_async() -> int:
 	return ERR_CANT_CONNECT
 
 func _on_NakamaSocket_closed() -> void:
+	print("Disconnected from socket")
 	_socket = null
 
 func join_chat_async() -> int:
@@ -68,4 +69,5 @@ func _on_Nakama_Socket_received_channel_message(message: NakamaAPI.ApiChannelMes
 		return
 	
 	var content: Dictionary = JSON.parse(message.content).result
+	print(message.username)
 	emit_signal("chat_message_received", message.username, content.msg)
