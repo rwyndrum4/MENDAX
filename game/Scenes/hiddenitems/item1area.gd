@@ -1,7 +1,6 @@
 extends Area2D
 
 #onready var itemnode = get_node("item1")
-onready var textBox = $GUI/textBox
 onready var hititem=false;
 func _ready():
 	pass
