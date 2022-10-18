@@ -92,9 +92,10 @@ func change_group():
 * @return None
 */
 """
-func add_message(username, text, group=0):
+func add_message(username:String, text:String, group=0):
 	if "_from_server" in username and Save.game_data.username == username.replace("_from_server",""):
 		return
+	username = username.replace("_from_server","")
 	chatLog.bbcode_text += '[color=' + types_colors[group]['color'] + ']'
 	chatLog.bbcode_text += username + ': '
 	chatLog.bbcode_text += text
