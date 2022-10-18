@@ -25,14 +25,7 @@ margin_top = 219.0
 margin_right = 400.0
 margin_bottom = 243.0
 
-[node name="playerName" type="Label" parent="textHolder/inputField"]
-margin_top = 5.0
-margin_right = 47.0
-margin_bottom = 19.0
-text = "[Player]"
-
 [node name="playerInput" type="LineEdit" parent="textHolder/inputField"]
-margin_left = 51.0
 margin_right = 400.0
 margin_bottom = 24.0
 size_flags_horizontal = 3

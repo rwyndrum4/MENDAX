@@ -4,14 +4,7 @@ signal message_sent(msg)
 
 # Member Variables
 onready var chatLog = $textHolder/pastText
-onready var playerName = $textHolder/inputField/playerName
 onready var playerInput = $textHolder/inputField/playerInput
-
-#The different types of chats
-enum chat_types {
-	GENERAL,
-	WHISPER
-}
 
 #The color codes that correspond to the chat types
 var types_colors = [
@@ -19,8 +12,6 @@ var types_colors = [
 	{'name' : 'Whisper', 'color' : '#9fd0fd'}
 ]
 
-#Current chat type user is using
-var current_type = chat_types.GENERAL
 #Boolean that says if user is using chatbox
 var in_chatbox = false
 #Modulate values
@@ -37,8 +28,7 @@ var CHARACTER_LIMIT = 40
 */
 """
 func _ready():
-	playerName.text = types_colors[current_type]['name']
-	playerName.set('custom_colors/font_color', Color(types_colors[current_type]['color']))
+	playerInput.placeholder_text = "SHIFT+ENTER to chat, Esc to exit"
 	modulate.a8 = MODULATE_MIN
 
 """
@@ -63,27 +53,6 @@ func _input(event):
 			in_chatbox = false
 			modulate.a8 = MODULATE_MIN
 			GlobalSignals.emit_signal("openChatbox",false)
-		if event.pressed and Input.is_action_just_pressed("ui_swap_chat_groups") and in_chatbox:
-			change_group()
-
-"""
-/*
-* @pre called in _input(event)
-* @post Changes the current type of the chat group and chagnes color and name of text
-* @param None
-* @return None
-*/
-"""
-func change_group():
-	current_type += 1
-	if current_type > chat_types.size() - 1:
-		current_type = 0
-	if current_type == chat_types.GENERAL:
-		playerInput.placeholder_text = "SHIFT+ENTER to chat, Esc to exit"
-	elif current_type == chat_types.WHISPER:
-		playerInput.placeholder_text = "to:Player message"
-	playerName.text = types_colors[current_type]['name']
-	playerName.set('custom_colors/font_color', Color(types_colors[current_type]['color']))
 
 """
 /*
@@ -118,8 +87,9 @@ func _on_playerInput_text_entered(new_text):
 		add_child(dialog)
 		dialog.popup_centered()
 	elif new_text != '':
-		if current_type == chat_types.WHISPER:
+		if "/whisper" in new_text:
 			var arr_of_str:Array = separate_string(new_text+"\n") #separate string into array
+			arr_of_str.pop_front()
 			arr_of_str[0] = edit_whisper_str(arr_of_str[0]) #format who you're sending to
 			new_text = array_to_string(arr_of_str) #change new_text to edited message
 		emit_signal("message_sent",new_text)
