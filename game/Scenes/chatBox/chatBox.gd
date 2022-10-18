@@ -26,6 +26,7 @@ var in_chatbox = false
 #Modulate values
 var MODULATE_MIN = 140
 var MODULATE_MAX = 255
+var CHARACTER_LIMIT = 40
 
 """
 /*
@@ -109,7 +110,7 @@ func add_message(username:String, text:String, group=0):
 */
 """
 func _on_playerInput_text_entered(new_text):
-	if new_text.length() > 40:
+	if new_text.length() > CHARACTER_LIMIT:
 		var dialog = AcceptDialog.new()
 		dialog.dialog_text = "Please keep messages <= 40 characters"
 		dialog.window_title = "Message is too large"
@@ -121,7 +122,6 @@ func _on_playerInput_text_entered(new_text):
 			var arr_of_str:Array = separate_string(new_text+"\n") #separate string into array
 			arr_of_str[0] = edit_whisper_str(arr_of_str[0]) #format who you're sending to
 			new_text = array_to_string(arr_of_str) #change new_text to edited message
-		#add_message(Save.game_data.username,new_text, current_type)
 		emit_signal("message_sent",new_text)
 		
 	playerInput.text = ""
