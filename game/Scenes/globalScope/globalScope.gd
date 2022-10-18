@@ -4,6 +4,7 @@ onready var server_connection := $ServerConnection
 onready var chat_box = $GUI/chatbox
 
 func _ready():
+	Global.chat_username = ""
 	yield(request_authentication(), "completed")
 	yield(connect_to_server(), "completed")
 	yield(server_connection.join_chat_async(), "completed")

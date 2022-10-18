@@ -69,5 +69,6 @@ func _on_Nakama_Socket_received_channel_message(message: NakamaAPI.ApiChannelMes
 		return
 	
 	var content: Dictionary = JSON.parse(message.content).result
-	Global.chat_username = message.sender_id
+	if Global.chat_username == "":
+		Global.chat_username = message.sender_id
 	emit_signal("chat_message_received", message.sender_id, content.msg)
