@@ -18,7 +18,10 @@ var velocity = Vector2.ZERO
 * @return None
 */
 """
+
+#self.visible=false //hides character
 func _physics_process(delta):
+
 	# Initialize input velocity
 	var input_velocity = Vector2.ZERO
 	input_velocity.x = Input.get_axis("ui_left", "ui_right")
