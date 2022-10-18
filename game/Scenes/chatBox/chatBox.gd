@@ -93,7 +93,7 @@ func change_group():
 */
 """
 func add_message(username, text, group=0):
-	if username == Global.chat_username:
+	if "_from_server" in username and Save.game_data.username == username.replace("_from_server",""):
 		return
 	chatLog.bbcode_text += '[color=' + types_colors[group]['color'] + ']'
 	chatLog.bbcode_text += username + ': '

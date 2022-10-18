@@ -9,6 +9,3 @@ extends Node
 
 # Player's balance
 var money = 0
-
-# Player's chat username given by Nakama
-var chat_username: String = ""

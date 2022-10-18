@@ -60,7 +60,7 @@ func send_text_async(text: String) -> int:
 		printerr("Can't send a message to chat: _channel_id is missing")
 	
 	var msg_result = yield(
-		_socket.write_chat_message_async(_channel_id, {"msg": text}), "completed"
+		_socket.write_chat_message_async(_channel_id, {"msg": text, "user": Save.game_data.username}), "completed"
 	)
 	return ERR_CONNECTION_ERROR if msg_result.is_exception() else OK
 
@@ -69,6 +69,4 @@ func _on_Nakama_Socket_received_channel_message(message: NakamaAPI.ApiChannelMes
 		return
 	
 	var content: Dictionary = JSON.parse(message.content).result
-	if Global.chat_username == "":
-		Global.chat_username = message.sender_id
-	emit_signal("chat_message_received", message.sender_id, content.msg)
+	emit_signal("chat_message_received", content.user+"_from_server", content.msg)
