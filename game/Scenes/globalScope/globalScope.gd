@@ -10,14 +10,12 @@ func _ready():
 
 func request_authentication():
 	var user: String = Save.game_data.username
-	var email: String = user + "@mendax.com"
-	var password: String = "something"
 	
-	var result: int = yield(server_connection.authenticate_async(email,password), "completed")
+	var result: int = yield(server_connection.authenticate_async(), "completed")
 	if result == OK:
-		print("Authenticated user %s successfully" % email)
+		print("Authenticated user %s successfully" % user)
 	else:
-		print("Could not authenticate user %s" % email)
+		print("Could not authenticate user %s" % user)
 
 func connect_to_server() -> void:
 	var result: int = yield(server_connection.connect_to_server_async(), "completed")

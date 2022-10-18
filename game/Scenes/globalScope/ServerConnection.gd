@@ -13,10 +13,11 @@ var _socket : NakamaSocket
 
 var _channel_id = ""
 
-func authenticate_async(email:String, password:String) -> int:
+func authenticate_async() -> int:
 	var result := OK
+	var deviceid = OS.get_unique_id()
 	
-	var new_session: NakamaSession = yield(_client.authenticate_email_async(email,password), "completed")
+	var new_session: NakamaSession = yield(_client.authenticate_device_async(deviceid), "completed")
 	
 	if not new_session.is_exception():
 		_session = new_session
