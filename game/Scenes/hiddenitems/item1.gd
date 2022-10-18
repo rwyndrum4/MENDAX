@@ -1,9 +1,9 @@
 extends Area2D
 
 
+onready var itemarea=get_parent().hititem
 
-func _ready():
-	self.hide()
 
 func _on_item1_body_entered(body:PhysicsBody2D)->void:
-	print("Hello") # Replace with function body.
+	itemarea=true;
+	print("Yes")
