@@ -1,18 +1,9 @@
-extends Sprite
-
-
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"\if Input.is_action_pressed("enter"):
+extends Area2D
 
 
 
-# Called when the node enters the scene tree for the first time.
 func _ready():
-	pass
-	#pass # Replace with function body.
+	self.hide()
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
+func _on_item1_body_entered(body:PhysicsBody2D)->void:
+	print("Hello") # Replace with function body.
