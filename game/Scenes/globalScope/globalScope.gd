@@ -9,7 +9,8 @@ func _ready():
 	yield(server_connection.join_chat_async(), "completed")
 
 func request_authentication():
-	var email: String = Save.game_data.username + "@mendax.com"
+	var user: String = Save.game_data.username
+	var email: String = user + "@mendax.com"
 	var password: String = "something"
 	
 	var result: int = yield(server_connection.authenticate_async(email,password), "completed")

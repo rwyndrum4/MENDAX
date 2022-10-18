@@ -93,6 +93,8 @@ func change_group():
 */
 """
 func add_message(username, text, group=0):
+	if username == Global.chat_username:
+		return
 	chatLog.bbcode_text += '[color=' + types_colors[group]['color'] + ']'
 	chatLog.bbcode_text += username + ': '
 	chatLog.bbcode_text += text
