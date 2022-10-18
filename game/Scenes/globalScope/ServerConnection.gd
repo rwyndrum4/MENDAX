@@ -70,4 +70,4 @@ func _on_Nakama_Socket_received_channel_message(message: NakamaAPI.ApiChannelMes
 		return
 	
 	var content: Dictionary = JSON.parse(message.content).result
-	emit_signal("chat_message_received", content.user+"_from_server", content.msg)
+	emit_signal("chat_message_received", content.user, content.msg)

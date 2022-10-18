@@ -93,8 +93,6 @@ func change_group():
 */
 """
 func add_message(username:String, text:String, group=0):
-	if "_from_server" in username and Save.game_data.username == username.replace("_from_server",""):
-		return
 	username = username.replace("_from_server","")
 	chatLog.bbcode_text += '[color=' + types_colors[group]['color'] + ']'
 	chatLog.bbcode_text += username + ': '
@@ -123,7 +121,7 @@ func _on_playerInput_text_entered(new_text):
 			var arr_of_str:Array = separate_string(new_text+"\n") #separate string into array
 			arr_of_str[0] = edit_whisper_str(arr_of_str[0]) #format who you're sending to
 			new_text = array_to_string(arr_of_str) #change new_text to edited message
-		add_message(Save.game_data.username,new_text, current_type)
+		#add_message(Save.game_data.username,new_text, current_type)
 		emit_signal("message_sent",new_text)
 		
 	playerInput.text = ""
