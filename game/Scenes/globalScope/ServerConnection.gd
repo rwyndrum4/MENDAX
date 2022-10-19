@@ -95,6 +95,7 @@ func join_chat_async_general() -> int:
 
 func join_chat_async_whisper(user_id:String) -> int:
 	user_id = get_player_from_list(user_id)
+	_current_whisper_id = user_id
 	if user_id == "ERROR":
 		return ERR_CONNECTION_ERROR
 	var type = NakamaSocket.ChannelType.DirectMessage
@@ -116,7 +117,7 @@ func join_chat_async_whisper(user_id:String) -> int:
 * @return None
 */
 """
-func send_text_async(text: String) -> int:
+func send_text_async_general(text: String) -> int:
 	if not _socket:
 		return ERR_UNAVAILABLE
 	
@@ -125,6 +126,18 @@ func send_text_async(text: String) -> int:
 	
 	var msg_result = yield(
 		_socket.write_chat_message_async(_general_chat_id, {"msg": text, "user": Save.game_data.username}), "completed"
+	)
+	return ERR_CONNECTION_ERROR if msg_result.is_exception() else OK
+
+func send_text_async_whisper(text: String) -> int:
+	if not _socket:
+		return ERR_UNAVAILABLE
+	
+	if _general_chat_id == "":
+		printerr("Can't send a message to chat: _channel_id is missing")
+	
+	var msg_result = yield(
+		_socket.write_chat_message_async(_current_whisper_id, {"msg": text, "user": Save.game_data.username}), "completed"
 	)
 	return ERR_CONNECTION_ERROR if msg_result.is_exception() else OK
 
