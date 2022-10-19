@@ -7,11 +7,14 @@ const KEY := "nakama_mendax"
 var _session: NakamaSession
 
 #my server: 3.143.142.232
-#jasons server: 44.202.34.182
-var _client := Nakama.create_client(KEY, "3.143.142.232", 7350, "http")
+#jasons server: 52.205.252.95
+var _client := Nakama.create_client(KEY, "52.205.252.95", 7350, "http")
 var _socket : NakamaSocket
 
-var _channel_id = ""
+var _general_chat_id = ""
+var _current_whisper_id = ""
+
+var room_players:Array = []
 
 """
 /*
@@ -50,6 +53,10 @@ func connect_to_server_async() -> int:
 		_socket.connect("closed", self, "_on_NakamaSocket_closed")
 		#connect 
 		_socket.connect("received_channel_message", self, "_on_Nakama_Socket_received_channel_message")
+		#get user who joins
+		_socket.connect("received_channel_presence", self, "_on_channel_presence")
+		#get a notification
+		_socket.connect("received_notification", self, "_on_notification")
 		return OK
 	return ERR_CANT_CONNECT
 
@@ -78,12 +85,28 @@ func join_chat_async_general() -> int:
 		_socket.join_chat_async("general", NakamaSocket.ChannelType.Room, false, false), "completed"
 	)
 	if not chat_join_result.is_exception():
-		_channel_id = chat_join_result.id
+		_general_chat_id = chat_join_result.id
 		print("Chat joined")
 		return OK
 	else:
 		print("Chat NOT joined")
 		return ERR_CONNECTION_ERROR
+
+
+func join_chat_async_whisper(user_id:String) -> int:
+	user_id = get_player_from_list(user_id)
+	if user_id == "ERROR":
+		return ERR_CONNECTION_ERROR
+	var type = NakamaSocket.ChannelType.DirectMessage
+	var persistence = true
+	var hidden = false
+	var channel : NakamaRTAPI.Channel = yield(_socket.join_chat_async(user_id, type, persistence, hidden), "completed")
+
+	if channel.is_exception():
+		return ERR_CONNECTION_ERROR
+	else:
+		return OK
+
 
 """
 /*
@@ -97,11 +120,11 @@ func send_text_async(text: String) -> int:
 	if not _socket:
 		return ERR_UNAVAILABLE
 	
-	if _channel_id == "":
+	if _general_chat_id == "":
 		printerr("Can't send a message to chat: _channel_id is missing")
 	
 	var msg_result = yield(
-		_socket.write_chat_message_async(_channel_id, {"msg": text, "user": Save.game_data.username}), "completed"
+		_socket.write_chat_message_async(_general_chat_id, {"msg": text, "user": Save.game_data.username}), "completed"
 	)
 	return ERR_CONNECTION_ERROR if msg_result.is_exception() else OK
 
@@ -118,4 +141,25 @@ func _on_Nakama_Socket_received_channel_message(message: NakamaAPI.ApiChannelMes
 		return
 	
 	var content: Dictionary = JSON.parse(message.content).result
+	if not {content.user : message._get_sender_id()} in room_players:
+		room_players.append({'user' : content.user, 'id' : message._get_sender_id()})
 	emit_signal("chat_message_received", content.user, content.msg)
+
+func _on_channel_presence(p_presence : NakamaRTAPI.ChannelPresenceEvent):
+#	for p in p_presence.joins:
+#		room_players[p.user_id] = p
+#
+#	for p in p_presence.leaves:
+#		room_players.erase(p.user_id)
+#
+#	print("Users in room: %s" % [room_players.keys()])
+	pass
+
+func get_player_from_list(user:String):
+	for dict in room_players:
+		if dict['user'] == user:
+			return dict['id']
+	return "ERROR"
+
+func _on_notification(p_notification : NakamaAPI.ApiNotification):
+	var x=0

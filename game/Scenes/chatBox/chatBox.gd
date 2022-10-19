@@ -1,6 +1,6 @@
 extends Control
 
-signal message_sent(msg)
+signal message_sent(msg,is_whisper,username)
 
 # Member Variables
 onready var chatLog = $textHolder/pastText
@@ -90,9 +90,12 @@ func _on_playerInput_text_entered(new_text):
 		if "/whisper" in new_text:
 			var arr_of_str:Array = separate_string(new_text+"\n") #separate string into array
 			arr_of_str.pop_front()
+			var user = arr_of_str.front()
 			arr_of_str[0] = edit_whisper_str(arr_of_str[0]) #format who you're sending to
 			new_text = array_to_string(arr_of_str) #change new_text to edited message
-		emit_signal("message_sent",new_text)
+			emit_signal("message_sent",new_text,true,user)
+		else:
+			emit_signal("message_sent",new_text,false,"")
 		
 	playerInput.text = ""
 
@@ -139,7 +142,6 @@ func array_to_string(arr_in:Array) -> String:
 """
 func edit_whisper_str(my_str:String) -> String:
 	var result = "[color=#D2042D]("
-	my_str = my_str.replace("to:","")
 	result += my_str + ")"
 	result += "[/color]"
 	return result

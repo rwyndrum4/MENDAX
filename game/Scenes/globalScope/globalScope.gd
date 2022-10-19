@@ -70,6 +70,10 @@ func _on_ServerConnection_chat_message_received(username, text):
 * @return None
 */
 """
-func _on_chatbox_message_sent(msg):
-	yield(server_connection.send_text_async(msg), "completed")
+func _on_chatbox_message_sent(msg,is_whisper,username):
+	if is_whisper:
+		yield(server_connection.join_chat_async_whisper(username), "completed")
+		yield(server_connection.send_text_async(msg), "completed")
+	else:
+		yield(server_connection.send_text_async(msg), "completed")
 	print("sent message to server")
