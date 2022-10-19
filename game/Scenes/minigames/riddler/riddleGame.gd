@@ -1,9 +1,12 @@
+
+
 """
-* Programmer Name - Freeman Spray
+* Programmer Name - Freeman Spray and Mohit Garg
 * Description - Code for controlling the Riddle minigame
 * Date Created - 10/14/2022
 * Date Revisions:
 	10/16/2022 - 
+	10/19/2022 -Added hidden item detector functionality -Mohit Garg
 """
 extends Control
 
@@ -13,6 +16,7 @@ onready var settingsMenu = $GUI/SettingsMenu
 onready var myTimer: Timer = $GUI/Timer
 onready var timerText: Label = $GUI/Timer/timerText
 onready var textBox = $GUI/textBox
+onready var itemfound=false #determines if item is found
 
 """
 /*
@@ -29,6 +33,11 @@ func _ready():
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("openChatbox", self, "chatbox_use")
 	GlobalSignals.connect("inputText", self, "chatbox_submit")
+
+
+
+
+
 
 """
 /*
@@ -95,3 +104,43 @@ func chatbox_use(value):
 func chatbox_submit(inText):
 	if inText == "person":
 		SceneTrans.change_scene("res://Scenes/startArea/EntrySpace.tscn")
+
+"""
+/*
+* @pre Called when player enters hidden item area
+* @post If item hasn't been found alerts player item is nearby
+* @param Player
+* @return None
+*/
+"""
+func _on_item1area_body_entered(body:PhysicsBody2D)->void:
+	if itemfound==false:
+		$Player/Labelarea.show()
+
+"""
+/*
+* @pre Called when player finds hidden item
+* @post Hides hidden item area label and shows hidden item along with alerting the player they have found the item
+* @param Player
+* @return None
+*/
+"""
+func _on_item1_body_entered(body:PhysicsBody2D)->void:
+	$Player/Labelarea.hide()
+	if itemfound==false:
+		$Player/Labelitem.show()
+		$item1/Sprite.show()
+		itemfound=true;
+	
+
+"""
+/*
+* @pre Called when player has found item and is leaving
+* @post Hides hidden item  and label so they aren't shown again
+* @param Player
+* @return None
+*/
+"""
+func _on_item1_body_exited(body:PhysicsBody2D)->void:
+	$item1/Sprite.hide()
+	$Player/Labelitem.hide()
