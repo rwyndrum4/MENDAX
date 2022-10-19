@@ -95,13 +95,13 @@ func join_chat_async_general() -> int:
 
 func join_chat_async_whisper(user_id:String) -> int:
 	user_id = get_player_from_list(user_id)
-	_current_whisper_id = user_id
 	if user_id == "ERROR":
 		return ERR_CONNECTION_ERROR
 	var type = NakamaSocket.ChannelType.DirectMessage
 	var persistence = true
 	var hidden = false
 	var channel : NakamaRTAPI.Channel = yield(_socket.join_chat_async(user_id, type, persistence, hidden), "completed")
+	_current_whisper_id = channel.id
 
 	if channel.is_exception():
 		return ERR_CONNECTION_ERROR
@@ -159,13 +159,13 @@ func _on_Nakama_Socket_received_channel_message(message: NakamaAPI.ApiChannelMes
 	emit_signal("chat_message_received", content.user, content.msg)
 
 func _on_channel_presence(p_presence : NakamaRTAPI.ChannelPresenceEvent):
+#	var x=0
 #	for p in p_presence.joins:
-#		room_players[p.user_id] = p
-#
-#	for p in p_presence.leaves:
-#		room_players.erase(p.user_id)
-#
-#	print("Users in room: %s" % [room_players.keys()])
+#		var user:String = get_player_using_id(p.user_id)
+#		if user != Save.game_data.username:
+#			print("user: ", user)
+#			print("players: ", room_players)
+#			join_chat_async_whisper(user)
 	pass
 
 func get_player_from_list(user:String):
@@ -173,6 +173,16 @@ func get_player_from_list(user:String):
 		if dict['user'] == user:
 			return dict['id']
 	return "ERROR"
+	
+func get_player_using_id(id:String):
+	for dict in room_players:
+		if dict['id'] == id:
+			return dict['user']
+	return "ERROR"
 
 func _on_notification(p_notification : NakamaAPI.ApiNotification):
-	var x=0
+	var user = get_player_using_id(p_notification._get_sender_id())
+	if user == "ERROR":
+		print("there was an error in the direct message")
+		return
+	join_chat_async_whisper(user)

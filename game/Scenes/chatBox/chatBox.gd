@@ -1,3 +1,10 @@
+"""
+* Programmer Name - Ben Moeller
+* Description - File for controlling the in game chatbox
+* Date Created - 10/12/2022
+* Date Revisions:
+"""
+
 extends Control
 
 signal message_sent(msg,is_whisper,username)
