@@ -1,16 +1,27 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://Scenes/hiddenitems/item1area.gd" type="Script" id=3]
+[sub_resource type="GDScript" id=2]
+script/source = "extends Area2D
+
+#onready var itemnode = get_node(\"item1\")
+func _ready():
+	pass
+	#self.hide()
+
+
+
+
+"
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 58, 55.5 )
+extents = Vector2( 104.25, 95.25 )
 
 [node name="item1area" type="Area2D"]
 collision_layer = 2
-script = ExtResource( 3 )
+script = SubResource( 2 )
 
 [node name="AreaCollision" type="CollisionShape2D" parent="."]
-position = Vector2( 0, -1.5 )
+position = Vector2( 0, 1 )
 shape = SubResource( 1 )
 
 [connection signal="body_entered" from="." to="." method="_on_item1_body_entered"]
