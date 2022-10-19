@@ -139,5 +139,6 @@ shape = SubResource( 3 )
 
 [connection signal="timeout" from="GUI/Timer" to="." method="_on_Timer_timeout"]
 [connection signal="body_entered" from="item1area" to="." method="_on_item1area_body_entered"]
+[connection signal="body_exited" from="item1area" to="." method="_on_item1area_body_exited"]
 [connection signal="body_entered" from="item1" to="." method="_on_item1_body_entered"]
 [connection signal="body_exited" from="item1" to="." method="_on_item1_body_exited"]

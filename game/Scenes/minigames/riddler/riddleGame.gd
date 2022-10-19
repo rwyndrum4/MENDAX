@@ -116,7 +116,16 @@ func chatbox_submit(inText):
 func _on_item1area_body_entered(body:PhysicsBody2D)->void:
 	if itemfound==false:
 		$Player/Labelarea.show()
-
+"""
+/*
+* @pre Called when player exits area near item
+* @post Hides message alerting player they are near item
+* @param Player
+* @return None
+*/
+"""
+func _on_item1area_body_exited(body):
+	$Player/Labelarea.hide()
 """
 /*
 * @pre Called when player finds hidden item
@@ -144,3 +153,6 @@ func _on_item1_body_entered(body:PhysicsBody2D)->void:
 func _on_item1_body_exited(body:PhysicsBody2D)->void:
 	$item1/Sprite.hide()
 	$Player/Labelitem.hide()
+
+
+
