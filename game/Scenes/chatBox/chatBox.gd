@@ -76,13 +76,15 @@ func _input(event):
 * @return None
 */
 """
-func add_message(username:String, text:String,type:String):
+func add_message(text:String,type:String,user_sent:String,user_received:String):
+	var user = user_sent
 	var color:String = get_chat_color(type)
-	print("username:",username)
-	if username == Save.game_data.username and type == "whisper":
-		username = "To [ "+username+" ]"
+	print("user_sent:",user_sent)
+	print("user_rcvd:",user_received)
+#	if username != Save.game_data.username and type == "whisper":
+#		username = "To [ "+username+" ]"
 	chatLog.bbcode_text += "[color=" + color + "]"
-	chatLog.bbcode_text += username + ': '
+	chatLog.bbcode_text += user + ': '
 	chatLog.bbcode_text += text
 	chatLog.bbcode_text += "[/color]"
 	chatLog.bbcode_text += '\n'
@@ -106,11 +108,11 @@ func _on_playerInput_text_entered(new_text):
 			new_text = array_to_string(arr_of_str) #change new_text to edited message
 			emit_signal("message_sent",new_text,true,receiving_user)
 			if DEBUG_ON:
-				add_message(receiving_user,new_text,"whisper")
+				add_message(new_text,"whisper",receiving_user,Save.game_data.username)
 		else:
 			emit_signal("message_sent",new_text,false,"")
 			if DEBUG_ON:
-				add_message(Save.game_data.username,new_text,"general")
+				add_message(new_text,"general","everyone",Save.game_data.username)
 		
 	playerInput.text = ""
 

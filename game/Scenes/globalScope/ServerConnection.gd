@@ -159,7 +159,8 @@ func send_text_async_whisper(text: String,user_sent_to:String) -> int:
 	var msg_result = yield(
 		_socket.write_chat_message_async(_current_whisper_id, 
 		{"msg": text, 
-		"user": user_sent_to,
+		"user_sent": user_sent_to,
+		"from_user": Save.game_data.username,
 		"type": "whisper"
 		}), "completed")
 	return ERR_CONNECTION_ERROR if msg_result.is_exception() else OK
@@ -177,7 +178,7 @@ func _on_Nakama_Socket_received_channel_message(message: NakamaAPI.ApiChannelMes
 		return
 
 	var content: Dictionary = JSON.parse(message.content).result
-	emit_signal("chat_message_received", content.user, content.msg,content.type)
+	emit_signal("chat_message_received",content.msg,content.type,content.user_sent,content.from_user)
 
 """
 /*
