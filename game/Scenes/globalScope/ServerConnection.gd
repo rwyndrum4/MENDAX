@@ -90,6 +90,8 @@ func join_chat_async_general() -> int:
 		_socket.join_chat_async("general", NakamaSocket.ChannelType.Room, false, false), "completed"
 	)
 	if not chat_join_result.is_exception():
+		for p in chat_join_result.presences:
+			room_users[p.username] = p
 		_general_chat_id = chat_join_result.id
 		print("Chat joined")
 		return OK
