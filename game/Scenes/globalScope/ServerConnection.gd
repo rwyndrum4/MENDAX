@@ -91,7 +91,7 @@ func join_chat_async_general() -> int:
 	)
 	if not chat_join_result.is_exception():
 		for p in chat_join_result.presences:
-			room_users[p.username] = p
+			room_users[p.username] = p.user_id
 		_general_chat_id = chat_join_result.id
 		print("Chat joined")
 		return OK
@@ -190,3 +190,5 @@ func _on_channel_presence(p_presence : NakamaRTAPI.ChannelPresenceEvent):
 
 func _on_notification(p_notification : NakamaAPI.ApiNotification):
 	join_chat_async_whisper(p_notification._get_sender_id(),true)
+	var result : NakamaAPI.ApiChannelMessageList = yield(_client.list_channel_messages_async(_session, _current_whisper_id, 10), "completed")
+
