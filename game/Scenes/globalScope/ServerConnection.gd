@@ -15,6 +15,7 @@ var _general_chat_id = ""
 var _current_whisper_id = ""
 
 var room_players:Array = []
+var room_users:Dictionary = {}
 
 """
 /*
@@ -97,8 +98,12 @@ func join_chat_async_general() -> int:
 		return ERR_CONNECTION_ERROR
 
 
-func join_chat_async_whisper(user_id:String) -> int:
-	user_id = get_player_from_list(user_id)
+func join_chat_async_whisper(input:String, has_id_already:bool) -> int:
+	var user_id:String
+	if has_id_already:
+		user_id = input
+	else:
+		user_id = room_users[input]
 	if user_id == "ERROR":
 		return ERR_CONNECTION_ERROR
 	var type = NakamaSocket.ChannelType.DirectMessage
@@ -158,35 +163,28 @@ func _on_Nakama_Socket_received_channel_message(message: NakamaAPI.ApiChannelMes
 		return
 	
 	var content: Dictionary = JSON.parse(message.content).result
-	if not {content.user : message._get_sender_id()} in room_players:
-		room_players.append({'user' : content.user, 'id' : message._get_sender_id()})
 	emit_signal("chat_message_received", content.user, content.msg)
 
 func _on_channel_presence(p_presence : NakamaRTAPI.ChannelPresenceEvent):
-#	var x=0
-#	for p in p_presence.joins:
-#		var user:String = get_player_using_id(p.user_id)
-#		if user != Save.game_data.username:
-#			print("user: ", user)
-#			print("players: ", room_players)
-#			join_chat_async_whisper(user)
-	pass
+	for p in p_presence.joins:
+		room_users[p.username] = p.user_id
 
-func get_player_from_list(user:String):
-	for dict in room_players:
-		if dict['user'] == user:
-			return dict['id']
-	return "ERROR"
+	for p in p_presence.leaves:
+		room_users.erase(p.username)
+	print("dict: ",room_users)
+
+
+#func get_player_from_list(user:String):
+#	for dict in room_players:
+#		if dict['user'] == user:
+#			return dict['id']
+#	return "ERROR"
 	
-func get_player_using_id(id:String):
-	for dict in room_players:
-		if dict['id'] == id:
-			return dict['user']
-	return "ERROR"
+#func get_player_using_id(id:String):
+#	for dict in room_players:
+#		if dict['id'] == id:
+#			return dict['user']
+#	return "ERROR"
 
 func _on_notification(p_notification : NakamaAPI.ApiNotification):
-	var user = get_player_using_id(p_notification._get_sender_id())
-	if user == "ERROR":
-		print("there was an error in the direct message")
-		return
-	join_chat_async_whisper(user)
+	join_chat_async_whisper(p_notification._get_sender_id(),true)
