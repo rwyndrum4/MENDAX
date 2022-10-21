@@ -74,7 +74,7 @@ func _on_chatbox_message_sent(msg,is_whisper,username):
 	if is_whisper:
 		yield(server_connection.join_chat_async_whisper(username,false), "completed")
 		var t = Timer.new()
-		t.set_wait_time(0.5)
+		t.set_wait_time(0.1)
 		t.set_one_shot(true)
 		self.add_child(t)
 		t.start()
