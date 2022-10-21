@@ -14,7 +14,6 @@ var _socket : NakamaSocket
 var _general_chat_id = ""
 var _current_whisper_id = ""
 
-var room_players:Array = []
 var room_users:Dictionary = {}
 
 """
@@ -99,7 +98,16 @@ func join_chat_async_general() -> int:
 		print("Chat NOT joined")
 		return ERR_CONNECTION_ERROR
 
-
+"""
+/*
+* @pre called when joining a whisper chat
+* @post sends whisper message corresponding to username
+* @param input -> String, has_id_already -> bool
+		 input can either be a user name or user id
+		 has_id_already lets the function know if input is an id
+* @return None
+*/
+"""
 func join_chat_async_whisper(input:String, has_id_already:bool) -> int:
 	var user_id:String
 	if has_id_already:
@@ -113,7 +121,6 @@ func join_chat_async_whisper(input:String, has_id_already:bool) -> int:
 	var hidden = false
 	var channel : NakamaRTAPI.Channel = yield(_socket.join_chat_async(user_id, type, persistence, hidden), "completed")
 	_current_whisper_id = channel.id
-
 	if channel.is_exception():
 		return ERR_CONNECTION_ERROR
 	else:
@@ -163,10 +170,18 @@ func send_text_async_whisper(text: String) -> int:
 func _on_Nakama_Socket_received_channel_message(message: NakamaAPI.ApiChannelMessage) -> void:
 	if message.code != 0:
 		return
-	
+
 	var content: Dictionary = JSON.parse(message.content).result
 	emit_signal("chat_message_received", content.user, content.msg)
 
+"""
+/*
+* @pre called when someone enters or leaves the server
+* @post adds/deletes person to room_users
+* @param p_presence -> NakamaRTAPI.ChannelPresenceEvent
+* @return None
+*/
+"""
 func _on_channel_presence(p_presence : NakamaRTAPI.ChannelPresenceEvent):
 	for p in p_presence.joins:
 		room_users[p.username] = p.user_id
@@ -175,20 +190,14 @@ func _on_channel_presence(p_presence : NakamaRTAPI.ChannelPresenceEvent):
 		room_users.erase(p.username)
 	print("dict: ",room_users)
 
-
-#func get_player_from_list(user:String):
-#	for dict in room_players:
-#		if dict['user'] == user:
-#			return dict['id']
-#	return "ERROR"
-	
-#func get_player_using_id(id:String):
-#	for dict in room_players:
-#		if dict['id'] == id:
-#			return dict['user']
-#	return "ERROR"
-
+"""
+/*
+* @pre called when someone makes a whisper
+* @post connects the whisper chat
+* @param p_notification -> NakamaAPI.ApiNotification
+* @return None
+*/
+"""
 func _on_notification(p_notification : NakamaAPI.ApiNotification):
 	join_chat_async_whisper(p_notification._get_sender_id(),true)
-	var result : NakamaAPI.ApiChannelMessageList = yield(_client.list_channel_messages_async(_session, _current_whisper_id, 10), "completed")
 

@@ -24,7 +24,7 @@ var in_chatbox = false
 #Modulate values
 var MODULATE_MIN = 140
 var MODULATE_MAX = 255
-var CHARACTER_LIMIT = 40
+var CHARACTER_LIMIT = 256
 
 """
 /*

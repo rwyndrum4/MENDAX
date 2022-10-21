@@ -73,6 +73,13 @@ func _on_ServerConnection_chat_message_received(username, text):
 func _on_chatbox_message_sent(msg,is_whisper,username):
 	if is_whisper:
 		yield(server_connection.join_chat_async_whisper(username,false), "completed")
+		var t = Timer.new()
+		t.set_wait_time(0.5)
+		t.set_one_shot(true)
+		self.add_child(t)
+		t.start()
+		yield(t, "timeout")
+		t.queue_free()
 		yield(server_connection.send_text_async_whisper(msg), "completed")
 	else:
 		yield(server_connection.send_text_async_general(msg), "completed")
