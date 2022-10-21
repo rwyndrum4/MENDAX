@@ -9,15 +9,16 @@ extends Control
 
 signal message_sent(msg,is_whisper,username)
 
+var DEBUG_ON = true # set to false if using server returned values
+
 # Member Variables
 onready var chatLog = $textHolder/pastText
 onready var playerInput = $textHolder/inputField/playerInput
 
-#The color codes that correspond to the chat types
-var types_colors = [
-	{'name' : 'General', 'color' : '#51f538'},
-	{'name' : 'Whisper', 'color' : '#9fd0fd'}
-]
+enum group_types {
+	GENERAL,
+	WHISPER
+}
 
 #Boolean that says if user is using chatbox
 var in_chatbox = false
@@ -69,12 +70,12 @@ func _input(event):
 * @return None
 */
 """
-func add_message(username:String, text:String, group=0):
-	username = username.replace("_from_server","")
-	chatLog.bbcode_text += '[color=' + types_colors[group]['color'] + ']'
+func add_message(username:String, text:String,type:String):
+	var color:String = get_chat_color(type)
+	chatLog.bbcode_text += "[color=" + color + "]"
 	chatLog.bbcode_text += username + ': '
 	chatLog.bbcode_text += text
-	chatLog.bbcode_text += '[/color]'
+	chatLog.bbcode_text += "[/color]"
 	chatLog.bbcode_text += '\n'
 
 """
@@ -87,22 +88,21 @@ func add_message(username:String, text:String, group=0):
 """
 func _on_playerInput_text_entered(new_text):
 	if new_text.length() > CHARACTER_LIMIT:
-		var dialog = AcceptDialog.new()
-		dialog.dialog_text = "Please keep messages <= 40 characters"
-		dialog.window_title = "Message is too large"
-		dialog.connect('modal_closed', dialog, 'queue_free')
-		add_child(dialog)
-		dialog.popup_centered()
+		text_overflow_warning()
 	elif new_text != '':
-		if "/whisper" in new_text:
-			var arr_of_str:Array = separate_string(new_text+"\n") #separate string into array
+		var arr_of_str:Array = separate_string(new_text+"\n") #separate string into array
+		if "/whisper" in arr_of_str[0]:
 			arr_of_str.pop_front()
 			var user = arr_of_str.front()
 			arr_of_str[0] = edit_whisper_str(arr_of_str[0]) #format who you're sending to
 			new_text = array_to_string(arr_of_str) #change new_text to edited message
 			emit_signal("message_sent",new_text,true,user)
+			if DEBUG_ON:
+				add_message(Save.game_data.username,new_text,"whisper")
 		else:
 			emit_signal("message_sent",new_text,false,"")
+			if DEBUG_ON:
+				add_message(Save.game_data.username,new_text,"general")
 		
 	playerInput.text = ""
 
@@ -152,3 +152,33 @@ func edit_whisper_str(my_str:String) -> String:
 	result += my_str + ")"
 	result += "[/color]"
 	return result
+
+"""
+/*
+* @pre None
+* @post change the general string color to green
+* @param my_str -> String
+* @return String 
+*/
+"""
+func edit_general_str(my_str:String) -> String:
+	var result = "[color=#51f538]"
+	result += my_str
+	result += "[/color]"
+	return result
+
+func get_chat_color(type:String) -> String:
+	if type == "general":
+		return "#51f538" #green
+	elif type == "whisper":
+		return "#6aeaff" #blue
+	else:
+		return "#ffffff" #white
+
+func text_overflow_warning():
+	var dialog = AcceptDialog.new()
+	dialog.dialog_text = "Please keep messages <= 256 characters"
+	dialog.window_title = "Message is too large"
+	dialog.connect('modal_closed', dialog, 'queue_free')
+	add_child(dialog)
+	dialog.popup_centered()

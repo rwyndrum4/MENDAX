@@ -58,9 +58,9 @@ func connect_to_server() -> void:
 * @return None
 */
 """
-func _on_ServerConnection_chat_message_received(username, text):
+func _on_ServerConnection_chat_message_received(username, text,type):
 	print("message received from %s" % username)
-	chat_box.add_message(username,text)
+	chat_box.add_message(username,text,type)
 
 """
 /*
