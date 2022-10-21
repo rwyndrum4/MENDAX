@@ -50,8 +50,6 @@ func connect_to_server_async() -> int:
 	var result: NakamaAsyncResult = yield(_socket.connect_async(_session), "completed")
 	var new_username = Save.game_data.username
 	yield(_client.update_account_async(_session, new_username), "completed")
-	var account = yield(_client.get_account_async(_session), "completed")
-	print("\nTest test: ", account.user.username)
 	if not result.is_exception():
 		#connect to closed signal, called when connection is closed to free memory
 		_socket.connect("closed", self, "_on_NakamaSocket_closed")
@@ -194,7 +192,7 @@ func _on_channel_presence(p_presence : NakamaRTAPI.ChannelPresenceEvent):
 
 	for p in p_presence.leaves:
 		room_users.erase(p.username)
-	print("dict: ",room_users)
+	print("users in room: ",room_users)
 
 """
 /*
