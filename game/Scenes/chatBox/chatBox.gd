@@ -77,7 +77,7 @@ func _input(event):
 */
 """
 func add_message(text:String,type:String,user_sent:String,from_user:String):
-	var user = user_sent
+	var user = from_user
 	var color:String = get_chat_color(type)
 	if from_user == Save.game_data.username and type == "whisper":
 		user = "To [ "+user_sent+" ]"
