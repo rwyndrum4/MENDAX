@@ -76,13 +76,13 @@ func _input(event):
 * @return None
 */
 """
-func add_message(text:String,type:String,user_sent:String,user_received:String):
+func add_message(text:String,type:String,user_sent:String,from_user:String):
 	var user = user_sent
 	var color:String = get_chat_color(type)
 	print("user_sent:",user_sent)
-	print("user_rcvd:",user_received)
-#	if username != Save.game_data.username and type == "whisper":
-#		username = "To [ "+username+" ]"
+	print("user_rcvd:",from_user)
+	if from_user == Save.game_data.username and type == "whisper":
+		user = "To [ "+user_sent+" ]"
 	chatLog.bbcode_text += "[color=" + color + "]"
 	chatLog.bbcode_text += user + ': '
 	chatLog.bbcode_text += text
