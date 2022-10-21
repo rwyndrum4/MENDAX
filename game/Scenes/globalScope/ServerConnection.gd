@@ -149,7 +149,7 @@ func send_text_async_general(text: String) -> int:
 		"type": "general"}), "completed")
 	return ERR_CONNECTION_ERROR if msg_result.is_exception() else OK
 
-func send_text_async_whisper(text: String) -> int:
+func send_text_async_whisper(text: String,user_sent_to:String) -> int:
 	if not _socket:
 		return ERR_UNAVAILABLE
 	
@@ -159,7 +159,7 @@ func send_text_async_whisper(text: String) -> int:
 	var msg_result = yield(
 		_socket.write_chat_message_async(_current_whisper_id, 
 		{"msg": text, 
-		"user": Save.game_data.username,
+		"user": user_sent_to,
 		"type": "whisper"
 		}), "completed")
 	return ERR_CONNECTION_ERROR if msg_result.is_exception() else OK

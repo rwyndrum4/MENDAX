@@ -80,7 +80,7 @@ func _on_chatbox_message_sent(msg,is_whisper,username_to_send_to):
 		t.start()
 		yield(t, "timeout")
 		t.queue_free()
-		yield(server_connection.send_text_async_whisper(msg), "completed")
+		yield(server_connection.send_text_async_whisper(msg,username_to_send_to), "completed")
 	else:
 		yield(server_connection.send_text_async_general(msg), "completed")
 	print("sent message to server")

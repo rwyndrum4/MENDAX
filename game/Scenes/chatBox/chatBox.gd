@@ -79,7 +79,7 @@ func _input(event):
 func add_message(username:String, text:String,type:String):
 	var color:String = get_chat_color(type)
 	print("username:",username)
-	if username != Save.game_data.username and type == "whisper":
+	if username == Save.game_data.username and type == "whisper":
 		username = "To [ "+username+" ]"
 	chatLog.bbcode_text += "[color=" + color + "]"
 	chatLog.bbcode_text += username + ': '
