@@ -9,7 +9,7 @@ extends Control
 
 signal message_sent(msg,is_whisper,username)
 
-var DEBUG_ON = true # set to false if using server returned values
+var DEBUG_ON = false # set to false if using server returned values
 
 # Member Variables
 onready var chatLog = $textHolder/pastText
@@ -26,6 +26,12 @@ var in_chatbox = false
 var MODULATE_MIN = 140
 var MODULATE_MAX = 255
 var CHARACTER_LIMIT = 256
+#Colors
+var channel_colors:Dictionary = {
+	"Green": "#51f538",
+	"Blue": "#6aeaff",
+	"White": "#ffffff"
+}
 
 """
 /*
@@ -72,6 +78,9 @@ func _input(event):
 """
 func add_message(username:String, text:String,type:String):
 	var color:String = get_chat_color(type)
+	print("username:",username)
+	if username != Save.game_data.username and type == "whisper":
+		username = "To [ "+username+" ]"
 	chatLog.bbcode_text += "[color=" + color + "]"
 	chatLog.bbcode_text += username + ': '
 	chatLog.bbcode_text += text
@@ -91,14 +100,13 @@ func _on_playerInput_text_entered(new_text):
 		text_overflow_warning()
 	elif new_text != '':
 		var arr_of_str:Array = separate_string(new_text+"\n") #separate string into array
-		if "/whisper" in arr_of_str[0]:
-			arr_of_str.pop_front()
-			var user = arr_of_str.front()
-			arr_of_str[0] = edit_whisper_str(arr_of_str[0]) #format who you're sending to
+		if "/whisper" == arr_of_str[0]:
+			arr_of_str.pop_front() #pop /whisper
+			var receiving_user = arr_of_str.pop_front() #get user to send to
 			new_text = array_to_string(arr_of_str) #change new_text to edited message
-			emit_signal("message_sent",new_text,true,user)
+			emit_signal("message_sent",new_text,true,receiving_user)
 			if DEBUG_ON:
-				add_message(Save.game_data.username,new_text,"whisper")
+				add_message(receiving_user,new_text,"whisper")
 		else:
 			emit_signal("message_sent",new_text,false,"")
 			if DEBUG_ON:
@@ -142,39 +150,27 @@ func array_to_string(arr_in:Array) -> String:
 """
 /*
 * @pre None
-* @post make it so beginning of whisper string changes color to show who you sent whisper to
-* @param my_str -> String
+* @post return the color corresponding to what chat channel was passed in
+* @param type -> String
 * @return String 
 */
 """
-func edit_whisper_str(my_str:String) -> String:
-	var result = "[color=#D2042D]("
-	result += my_str + ")"
-	result += "[/color]"
-	return result
+func get_chat_color(type:String) -> String:
+	if type == "general":
+		return channel_colors['Green']
+	elif type == "whisper":
+		return channel_colors['Blue']
+	else:
+		return channel_colors['White']
 
 """
 /*
-* @pre None
-* @post change the general string color to green
-* @param my_str -> String
-* @return String 
+* @pre Person submits message > CHARACTER_LIMIT
+* @post places a popup on the screen saying too many characters
+* @param None
+* @return None 
 */
 """
-func edit_general_str(my_str:String) -> String:
-	var result = "[color=#51f538]"
-	result += my_str
-	result += "[/color]"
-	return result
-
-func get_chat_color(type:String) -> String:
-	if type == "general":
-		return "#51f538" #green
-	elif type == "whisper":
-		return "#6aeaff" #blue
-	else:
-		return "#ffffff" #white
-
 func text_overflow_warning():
 	var dialog = AcceptDialog.new()
 	dialog.dialog_text = "Please keep messages <= 256 characters"

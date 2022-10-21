@@ -70,9 +70,9 @@ func _on_ServerConnection_chat_message_received(username, text,type):
 * @return None
 */
 """
-func _on_chatbox_message_sent(msg,is_whisper,username):
+func _on_chatbox_message_sent(msg,is_whisper,username_to_send_to):
 	if is_whisper:
-		yield(server_connection.join_chat_async_whisper(username,false), "completed")
+		yield(server_connection.join_chat_async_whisper(username_to_send_to,false), "completed")
 		var t = Timer.new()
 		t.set_wait_time(0.1)
 		t.set_one_shot(true)
