@@ -8,7 +8,7 @@ var _session: NakamaSession
 
 #my server: 3.143.142.232
 #jasons server: 52.205.252.95
-var _client := Nakama.create_client(KEY, "52.205.252.95", 7350, "http")
+var _client := Nakama.create_client(KEY, "3.143.142.232", 7350, "http")
 var _socket : NakamaSocket
 
 var _general_chat_id = ""
@@ -48,6 +48,10 @@ func authenticate_async() -> int:
 func connect_to_server_async() -> int:
 	_socket = Nakama.create_socket_from(_client)
 	var result: NakamaAsyncResult = yield(_socket.connect_async(_session), "completed")
+	var new_username = Save.game_data.username
+	yield(_client.update_account_async(_session, new_username), "completed")
+	var account = yield(_client.get_account_async(_session), "completed")
+	print("\nTest test: ", account.user.username)
 	if not result.is_exception():
 		#connect to closed signal, called when connection is closed to free memory
 		_socket.connect("closed", self, "_on_NakamaSocket_closed")
