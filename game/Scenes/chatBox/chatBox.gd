@@ -9,7 +9,8 @@ extends Control
 
 signal message_sent(msg,is_whisper,username)
 
-var DEBUG_ON = false # set to false if using server returned values
+# set to true if you want to test chatbox locally
+var DEBUG_ON = true
 
 # Member Variables
 onready var chatLog = $textHolder/pastText
@@ -32,6 +33,15 @@ var channel_colors:Dictionary = {
 	"Blue": "#6aeaff",
 	"White": "#ffffff"
 }
+#Placeholder texts
+var current_pt: int = 0
+var MAX_PT: int = 3
+var placeholder_texts = [
+	" SHIFT+ENTER to chat, Esc to exit",
+	" Press TAB to cycle messages",
+	" To send to everyone, input a message",
+	" /whisper player_name message"
+]
 
 """
 /*
@@ -61,13 +71,25 @@ func _input(event):
 			playerInput.grab_focus()
 			in_chatbox = true
 			modulate.a8 = MODULATE_MAX
+			current_pt = 1
+			playerInput.placeholder_text = placeholder_texts[current_pt]
 			GlobalSignals.emit_signal("openChatbox",true)
 		if event.pressed and Input.is_action_just_pressed("ui_cancel"):
 			playerInput.release_focus()
 			in_chatbox = false
 			modulate.a8 = MODULATE_MIN
+			current_pt = 0
+			playerInput.placeholder_text = placeholder_texts[current_pt]
 			GlobalSignals.emit_signal("openChatbox",false)
-
+		if event.pressed and Input.is_action_just_pressed("ui_swap_chat_groups") and in_chatbox:
+			if playerInput.text == "":
+				current_pt += 1
+				playerInput.placeholder_text = placeholder_texts[current_pt]
+				if current_pt == MAX_PT:
+					current_pt = 1
+			else:
+				if playerInput.text in "/whisper":
+					playerInput.text = "/whisper "
 """
 /*
 * @pre called when user enters message into the chatbox

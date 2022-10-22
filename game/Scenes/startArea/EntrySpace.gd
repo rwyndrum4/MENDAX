@@ -44,7 +44,7 @@ func _process(_delta): #change to delta if used
 	check_settings()
 	timerText.text = convert_time(myTimer.time_left)
 	if in_exit:
-		if Input.is_action_just_pressed("ui_accept",false):
+		if Input.is_action_just_pressed("ui_accept",false) and not Input.is_action_just_pressed("ui_enter_chat"):
 			# warning-ignore:return_value_discarded
 			SceneTrans.change_scene("res://Scenes/mainMenu/mainMenu.tscn")
 	#DEBUG PURPOSES - REMOVE FOR FINAL GAME!!!
