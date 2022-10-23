@@ -157,7 +157,7 @@ text = "Press Enter
 to exit cave"
 align = 1
 
-[node name="KinematicBody2D" parent="." instance=ExtResource( 8 )]
+[node name="riddler" parent="." instance=ExtResource( 8 )]
 
 [node name="Path2D" type="Path2D" parent="."]
 curve = SubResource( 7 )

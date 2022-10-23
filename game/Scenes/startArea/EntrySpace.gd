@@ -17,6 +17,7 @@ onready var timerText: Label = $GUI/Timer/timerText
 onready var textBox = $GUI/textBox
 onready var playerCam = $Player/Camera2D
 onready var transCam = $Path2D/PathFollow2D/camTrans
+onready var riddler = $riddler
 
 #signals
 signal textWait()
@@ -42,7 +43,6 @@ func _ready():
 		
 		Global.entry = 1
 		transCam.current = true
-		#get_tree().get_root().set_disable_input(true)
 		$Player.set_physics_process(false)
 		#Begin scene dialogue
 		textBox.queue_text("Oh who do we have here?")
@@ -67,14 +67,6 @@ func _ready():
 func _process(_delta): #change to delta if used
 	check_settings()
 	timerText.text = convert_time(myTimer.time_left)
-	if in_exit:
-		if Input.is_action_just_pressed("ui_accept",false) and not Input.is_action_just_pressed("ui_enter_chat"):
-			# warning-ignore:return_value_discarded
-			Global.state = Global.scenes.MAIN_MENU #change scene to main menu
-	#DEBUG PURPOSES - REMOVE FOR FINAL GAME!!!
-	#IF YOU PRESS P -> TIMER WILL REDUCE TO 3 SECONDS
-	if Input.is_action_just_pressed("debug_key",false):
-		myTimer.start(3)
 
 
 func _finish_anim():
@@ -95,16 +87,26 @@ func _finish_anim():
 	textBox.queue_text("Time starts now!")
 	myTimer.start(90)
 	
+	#remove jester
+	riddler.queue_free()
+	
 	t.queue_free()
 	$Player.set_physics_process(true)
 	playerCam.current = true
-	#get_tree().get_root().set_disable_input(false)
 
 func _input(ev):
 	if Input.is_key_pressed(KEY_ENTER) and not ev.echo:
 		if Global.in_anim == 1:
 			Global.in_anim = 0
 			emit_signal("textWait")
+	if in_exit:
+		if Input.is_action_just_pressed("ui_accept",false) and not Input.is_action_just_pressed("ui_enter_chat"):
+			# warning-ignore:return_value_discarded
+			Global.state = Global.scenes.MAIN_MENU #change scene to main menu
+	#DEBUG PURPOSES - REMOVE FOR FINAL GAME!!!
+	#IF YOU PRESS P -> TIMER WILL REDUCE TO 3 SECONDS
+	if Input.is_action_just_pressed("debug_key",false):
+		myTimer.start(3)
 """
 /*
 * @pre Ca	velocity = move_and_slide(velocity)lled when player enters the Area2D zone
