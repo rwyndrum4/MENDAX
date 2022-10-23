@@ -52,8 +52,8 @@ func _ready():
 		
 		connect("textWait", self, "_finish_anim")
 		Global.in_anim = 1;
-			
-		
+	else:
+		myTimer.start(90)
 
 """
 /*
