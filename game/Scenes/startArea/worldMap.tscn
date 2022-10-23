@@ -2012,9 +2012,9 @@ texture = ExtResource( 7 )
 
 [node name="Wall3x3_2" type="GridContainer" parent="."]
 margin_left = -2016.0
-margin_top = 2570.0
+margin_top = 2568.0
 margin_right = -1152.0
-margin_bottom = 3434.0
+margin_bottom = 3432.0
 custom_constants/vseparation = 0
 custom_constants/hseparation = 0
 columns = 3
