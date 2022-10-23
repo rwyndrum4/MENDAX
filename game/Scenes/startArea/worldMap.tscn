@@ -521,8 +521,9 @@ texture = ExtResource( 2 )
 
 [node name="CornerB3x3_1" type="GridContainer" parent="."]
 margin_left = 288.0
-margin_top = -864.0
+margin_top = -863.0
 margin_right = 1152.0
+margin_bottom = 1.0
 custom_constants/vseparation = 0
 custom_constants/hseparation = 0
 columns = 3
@@ -2615,4 +2616,18 @@ margin_left = 1729.0
 margin_top = 1422.0
 margin_right = 2017.0
 margin_bottom = 1710.0
+texture = ExtResource( 5 )
+
+[node name="Blank1x1_2" type="TextureRect" parent="."]
+margin_left = 3456.0
+margin_top = 3502.0
+margin_right = 3744.0
+margin_bottom = 3790.0
+texture = ExtResource( 5 )
+
+[node name="Blank1x1_3" type="TextureRect" parent="."]
+margin_left = 3531.0
+margin_top = 3431.0
+margin_right = 3819.0
+margin_bottom = 3719.0
 texture = ExtResource( 5 )
