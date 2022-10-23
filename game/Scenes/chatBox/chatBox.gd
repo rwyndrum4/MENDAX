@@ -242,3 +242,21 @@ func text_overflow_warning():
 	dialog.connect('modal_closed', dialog, 'queue_free')
 	add_child(dialog)
 	dialog.popup_centered()
+
+
+func _on_playerInput_focus_entered():
+	playerInput.grab_focus() #grab focus of chatbox
+	in_chatbox = true
+	modulate.a8 = MODULATE_MAX
+	current_pt = 1
+	playerInput.placeholder_text = placeholder_texts[current_pt]
+	GlobalSignals.emit_signal("openChatbox",true)
+
+
+func _on_playerInput_focus_exited():
+	playerInput.release_focus()
+	in_chatbox = false
+	modulate.a8 = MODULATE_MIN
+	current_pt = 0
+	playerInput.placeholder_text = placeholder_texts[current_pt]
+	GlobalSignals.emit_signal("openChatbox",false)
