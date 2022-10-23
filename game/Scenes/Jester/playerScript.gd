@@ -95,11 +95,7 @@ func stop_go_player(value:bool):
 func control_animations(vel):
 	if vel.x > 0:
 		char_pos.scale.x = 1
-		character.play("roll")
 	elif vel.x < 0:
 		char_pos.scale.x = -1
-		character.play("roll")
-	elif vel.y != 0:
-		character.play("roll")
 	else:
 		character.play("idle")

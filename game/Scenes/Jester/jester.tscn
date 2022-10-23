@@ -11,7 +11,7 @@
 [ext_resource path="res://Assets/riddle_jester/idle/jester_two_2.png" type="Texture" id=9]
 [ext_resource path="res://Assets/riddle_jester/idle/jester_two_7.png" type="Texture" id=10]
 [ext_resource path="res://Assets/riddle_jester/idle/jester_two_1.png" type="Texture" id=11]
-[ext_resource path="res://Scenes/player/playerScript.gd" type="Script" id=12]
+[ext_resource path="res://Scenes/Jester/playerScript.gd" type="Script" id=12]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 9, 9 )
