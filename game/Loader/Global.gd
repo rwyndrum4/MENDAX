@@ -9,3 +9,13 @@ extends Node
 
 # Player's balance
 var money = 0
+
+# Current scene
+var state = null
+enum scenes {
+	MAIN_MENU,
+	MARKET,
+	START_AREA,
+	CAVE,
+	RIDDLER_MINIGAME
+}

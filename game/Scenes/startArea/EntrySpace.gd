@@ -46,7 +46,7 @@ func _process(_delta): #change to delta if used
 	if in_exit:
 		if Input.is_action_just_pressed("ui_accept",false) and not Input.is_action_just_pressed("ui_enter_chat"):
 			# warning-ignore:return_value_discarded
-			SceneTrans.change_scene("res://Scenes/mainMenu/mainMenu.tscn")
+			Global.state = Global.scenes.MAIN_MENU #change scene to main menu
 	#DEBUG PURPOSES - REMOVE FOR FINAL GAME!!!
 	#IF YOU PRESS P -> TIMER WILL REDUCE TO 3 SECONDS
 	if Input.is_action_just_pressed("debug_key",false):
@@ -61,7 +61,6 @@ func _process(_delta): #change to delta if used
 */
 """
 func _on_exitCaveArea_body_entered(_body: PhysicsBody2D): #change to body if want to use
-	print("here")
 	instructions.show()
 	in_exit = true
 	
@@ -116,7 +115,8 @@ func convert_time(time_in:float) -> String:
 */
 """
 func _on_Timer_timeout():
-	SceneTrans.change_scene("res://Scenes/minigames/riddler/riddleGame.tscn")
+	#change scene to riddler minigame
+	Global.state = Global.scenes.RIDDLER_MINIGAME
 
 func chatbox_use(value):
 	if value:

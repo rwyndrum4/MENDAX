@@ -69,7 +69,8 @@ func _process(_delta): #if you want to use delta, then change it to delta
 */
 """
 func _on_Start_pressed():
-	SceneTrans.change_scene("res://Scenes/startArea/startArea.tscn")
+	#change scene to start area
+	SceneTrans.change_scene(Global.scenes.START_AREA)
 
 """
 /*
@@ -96,7 +97,7 @@ func _on_Options_pressed():
 """
 #When button pressed switches to Store scene
 func _on_Market_pressed():
-	SceneTrans.change_scene("res://StoreElements/StoreVars.tscn")
+	Global.state = Global.scenes.MARKET
 
 """
 /*

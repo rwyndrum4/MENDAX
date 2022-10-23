@@ -47,7 +47,8 @@ func _process(_delta): #change to delta if using it
 			in_cave = false
 			# warning-ignore:return_value_discarded
 			$Enter.play()
-			CaveInTrans.change_scene("res://Scenes/startArea/EntrySpace.tscn")
+			#change scene to cave area
+			CaveInTrans.change_scene(Global.scenes.CAVE)
 
 """
 /*

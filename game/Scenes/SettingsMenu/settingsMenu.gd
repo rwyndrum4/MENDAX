@@ -255,7 +255,7 @@ func _on_quitButton_pressed():
 */
 """
 func _on_mainMenuButton_pressed():
-	SceneTrans.change_scene("res://Scenes/mainMenu/mainMenu.tscn")
+	Global.state = Global.scenes.MAIN_MENU
 
 """
 /*

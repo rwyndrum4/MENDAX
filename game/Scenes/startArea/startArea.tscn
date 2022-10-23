@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Assets/mainMenuBG.png" type="Texture" id=1]
 [ext_resource path="res://Scenes/startArea/startArea.gd" type="Script" id=2]
@@ -7,7 +7,6 @@
 [ext_resource path="res://Scenes/settingsMenu/settingsMenu.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Scenes/textBox/textBox.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Assets/SFX/wahh.wav" type="AudioStream" id=7]
-[ext_resource path="res://Scenes/chatBox/chatBox.tscn" type="PackedScene" id=8]
 
 [sub_resource type="CircleShape2D" id=2]
 
@@ -107,10 +106,6 @@ align = 1
 
 [node name="textBox" parent="GUI" instance=ExtResource( 6 )]
 visible = false
-
-[node name="chatbox" parent="GUI" instance=ExtResource( 8 )]
-margin_top = 35.0
-margin_bottom = -442.0
 
 [node name="Enter" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 7 )

@@ -1,7 +1,20 @@
 extends Node
 
+#Member Variables
 onready var server_connection := $ServerConnection
 onready var chat_box = $GUI/chatbox
+
+#Scene Paths
+var main_menu = "res://Scenes/mainMenu/mainMenu.tscn"
+var market = "res://Scenes/StoreElements/StoreVars.tscn"
+var start_area = "res://Scenes/startArea/startArea.tscn"
+var cave = "res://Scenes/startArea/EntrySpace.tscn"
+var riddler_minigame = "res://Scenes/minigames/riddler/riddleGame.tscn"
+
+#Current scene running
+var current_scene = null
+#State to compare to the global state to see if anything changes
+var local_state = null
 
 """
 /*
@@ -12,9 +25,69 @@ onready var chat_box = $GUI/chatbox
 */
 """
 func _ready():
-	yield(request_authentication(), "completed")
-	yield(connect_to_server(), "completed")
-	yield(server_connection.join_chat_async_general(), "completed")
+	#Load initial scene (main menu)
+	current_scene = load(main_menu).instance()
+	add_child(current_scene)
+	Global.state = Global.scenes.MAIN_MENU
+	local_state = Global.scenes.MAIN_MENU
+	#Connect to Server
+	server_checks()
+
+"""
+/*
+* @pre called for every frame in the game
+* @post checks if state has changed, frees current scene and
+* 	calls function to switch scenes if so
+* @param _delta -> time thing
+* @return None
+*/
+"""
+func _process(_delta): #if you want to use _delta, remove _
+	if local_state != Global.state:
+		#free up memory
+		current_scene.queue_free()
+		#change the scene
+		_change_scene_to(Global.state)
+
+"""
+/*
+* @pre called when global wants to change scenes
+* @post changes scene and adds it as a child to global scene
+* @param state -> int
+* @return None
+*/
+"""
+func _change_scene_to(state):
+	#Load the correct scene
+	if state == Global.scenes.MAIN_MENU:
+		current_scene = load(main_menu).instance()
+	elif state == Global.scenes.MARKET:
+		current_scene = load(market).instance()
+	elif state == Global.scenes.START_AREA:
+		current_scene = load(start_area).instance()
+	elif state == Global.scenes.CAVE:
+		current_scene = load(cave).instance()
+	elif state == Global.scenes.RIDDLER_MINIGAME:
+		current_scene = load(riddler_minigame).instance()
+	#add scene to tree and revise local state
+	add_child(current_scene)
+	local_state = Global.state
+
+"""
+/*
+* @pre called once in _ready function
+* @post authenticates, connects to server, and joins general chat
+* 	if there were no errors along the way
+* @param None
+* @return None
+*/
+"""
+func server_checks():
+	var result = yield(request_authentication(), "completed")
+	if result == OK:
+		result = yield(connect_to_server(), "completed")
+		if result == OK:
+			yield(server_connection.join_chat_async_general(), "completed")
 
 """
 /*
@@ -24,7 +97,7 @@ func _ready():
 * @return None
 */
 """
-func request_authentication():
+func request_authentication() -> int:
 	var user: String = Save.game_data.username
 	
 	var result: int = yield(server_connection.authenticate_async(), "completed")
@@ -32,6 +105,7 @@ func request_authentication():
 		print("Authenticated user %s successfully" % user)
 	else:
 		print("Could not authenticate user %s" % user)
+	return result
 
 """
 /*
