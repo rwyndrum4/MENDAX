@@ -1,29 +1,31 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Inventory/Slot.gd" type="Script" id=1]
 [ext_resource path="res://Assets/2D Casual GUI/Usable/menu_gold_borders.png" type="Texture" id=2]
 [ext_resource path="res://Assets/2D Casual GUI/Usable/menu_tile.png" type="Texture" id=3]
+[ext_resource path="res://Inventory/Inventory.gd" type="Script" id=4]
 
 [sub_resource type="StyleBoxTexture" id=1]
 texture = ExtResource( 3 )
 region_rect = Rect2( 0, 0, 512, 512 )
 
 [node name="Inventory" type="Node2D"]
+script = ExtResource( 4 )
 
 [node name="TextureRect" type="TextureRect" parent="."]
-margin_left = 429.0
-margin_top = 203.0
-margin_right = 2932.0
-margin_bottom = 1778.0
+margin_left = 1.00003
+margin_top = 3.0
+margin_right = 2504.0
+margin_bottom = 1578.0
 rect_min_size = Vector2( 555, 350 )
 rect_scale = Vector2( 0.15, 0.15 )
 texture = ExtResource( 2 )
 
 [node name="GridContainer" type="GridContainer" parent="."]
-margin_left = 458.0
-margin_top = 241.0
-margin_right = 780.0
-margin_bottom = 424.0
+margin_left = 31.0
+margin_top = 41.0
+margin_right = 353.0
+margin_bottom = 224.0
 custom_constants/vseparation = 9
 custom_constants/hseparation = 32
 columns = 4

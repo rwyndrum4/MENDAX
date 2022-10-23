@@ -3,10 +3,12 @@
 [ext_resource path="res://Assets/coin.png" type="Texture" id=1]
 
 [node name="Item" type="Node2D"]
+z_index = 1
 
 [node name="TextureRect" type="TextureRect" parent="."]
 margin_right = 920.0
 margin_bottom = 610.0
 rect_scale = Vector2( 0.07, 0.07 )
+mouse_filter = 2
 input_pass_on_modal_close_click = false
 texture = ExtResource( 1 )
