@@ -153,6 +153,7 @@ func connect_to_server() -> int:
 func _on_ServerConnection_chat_message_received(text,type,user_sent_to,user_received_from):
 	print("message received from %s" % user_received_from)
 	chat_box.add_message(text,type,user_sent_to,user_received_from)
+	GlobalSignals.emit_signal("answer_received",text)
 
 """
 /*

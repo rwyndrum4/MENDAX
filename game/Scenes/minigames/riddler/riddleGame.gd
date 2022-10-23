@@ -30,13 +30,12 @@ onready var hintlength=0#keeps track of hintlength to give random letter clues
 */
 """
 func _ready():
+	GlobalSignals.connect("answer_received",self,"_check_answer")
 	myTimer.start(90)
 	#This is how you queue text to the textbox queue
 	textBox.queue_text("What walks on four legs in the morning, two legs in the afternoon, and three in the evening?")
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("openChatbox", self, "chatbox_use")
-	# warning-ignore:return_value_discarded
-	GlobalSignals.connect("inputText", self, "chatbox_submit")
 	init_hiddenitems() #initalizes hidden items array and other things needed
 	textBox.queue_text("Please enter the answer in the chat once you have it, there are hints hidden here if you need them (:")
 
@@ -52,10 +51,6 @@ func _ready():
 func _process(_delta): #change to delta if used
 	check_settings()
 	timerText.text = convert_time(myTimer.time_left)
-	#DEBUG PURPOSES - REMOVE FOR FINAL GAME!!!
-	#IF YOU PRESS P -> TIMER WILL REDUCE TO 3 SECONDS
-	if Input.is_action_just_pressed("debug_key",false):
-		myTimer.start(3)
 
 """
 /*
@@ -72,6 +67,18 @@ func check_settings():
 	elif Input.is_action_just_pressed("ui_cancel",false) and in_menu:
 		settingsMenu.hide()
 		in_menu = false
+
+"""
+/*
+* @pre Called when someone guesses an answer
+* @post Leaves scene if they guess right
+* @param answer -> String
+* @return None
+*/
+"""
+func _check_answer(answer:String):
+	if answer == hint:
+		Global.state = Global.scenes.CAVE
 
 """
 /*
@@ -101,10 +108,7 @@ func _on_Timer_timeout():
 func chatbox_use(value):
 	if value:
 		in_menu = true
-		
-func chatbox_submit(inText):
-	if inText == "person":
-		SceneTrans.change_scene("res://Scenes/startArea/EntrySpace.tscn")
+
 """
 /*
 * @pre Called in ready function before minigame
