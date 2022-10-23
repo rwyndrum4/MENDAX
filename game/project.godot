@@ -215,6 +215,16 @@ ui_swap_chat_groups={
  ]
 }
 
+[layer_names]
+
+2d_physics/layer_1="item1"
+2d_physics/layer_2="player"
+2d_physics/layer_3="item2"
+2d_physics/layer_4="item3"
+2d_physics/layer_5="item4"
+2d_physics/layer_6="item5"
+2d_physics/layer_7="item6"
+
 [physics]
 
 common/enable_pause_aware_picking=true
