@@ -39,7 +39,7 @@ func _ready():
 	GlobalSignals.connect("openChatbox", self, "chatbox_use")
 	GlobalSignals.connect("inputText", self, "chatbox_submit")
 	init_hiddenitems() #initalizes hidden items array and other things needed
-	$Player/Hints/currenthints.hide()#hides hints
+	
 
 
 
@@ -125,14 +125,14 @@ func init_hiddenitems():
 		itemarray.append(0)
 """
 /*
-* @pre Called when player enters hidden item area
-* @post If item hasn't been found alerts player item is nearby
+* @pre Called when player clicks to view current letters found
+* @post Displays current letters found for riddle
 * @param Player
 * @return None
 */
 """
 func _on_Hints_pressed():
-	SceneTrans.change_scene("res://Scenes/minigames/riddler/currenthints.tscn")
+	$GUI/hintspopup.popup()
 	
 	
 	
@@ -152,12 +152,14 @@ func enterarea(spritepath,itemnumber):
 		var index=rng.randi_range(0, hintlength-1)
 		var letter=hint[index];
 		currenthints=str(currenthints)+letter;
-		$Player/Hints/currenthints.text=str(currenthints);
-		hintbox.window_title=str(letter)+" is in the word"; #sets hint to letter given
+		$GUI/hintspopup.window_title=str(currenthints);
+		if hintlength==1:
+			hintbox.window_title=str(letter)+" is in the word. All hints have been found."; #all hints found
+		else:
+			hintbox.window_title=str(letter)+" is in the word"; #sets hint to letter given
 		hintbox.popup()
 		#erases letter from hint so it cannot be given again
 		hint.erase(index,1)
-		#print(hint)
 		if hintlength!=0:
 			hintlength=hintlength-1;#hintlength decreased as one letter given as hint
 		itemarray[itemnumber-1]=1; #item has been found

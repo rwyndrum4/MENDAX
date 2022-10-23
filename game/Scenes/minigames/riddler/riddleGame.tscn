@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://Assets/Teko-Light.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://Scenes/minigames/riddler/riddleGame.gd" type="Script" id=2]
@@ -9,7 +9,6 @@
 [ext_resource path="res://Scenes/chatBox/chatBox.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Assets/35189.png" type="Texture" id=8]
 [ext_resource path="res://Assets/ARIALBD.TTF" type="DynamicFontData" id=9]
-[ext_resource path="res://Scenes/minigames/riddler/currenthints.tscn" type="PackedScene" id=10]
 
 [sub_resource type="OccluderPolygon2D" id=1]
 polygon = PoolVector2Array( -48.9833, -45.9201, -50.0482, 47.9166, -50.0482, 47.9166, 50.0482, 46.9184, 50.0482, 46.9184, 48.9833, -48.9149, 47.9185, -50.9114 )
@@ -25,6 +24,13 @@ font_data = ExtResource( 9 )
 [sub_resource type="DynamicFont" id=2]
 size = 40
 font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=9]
+font_data = ExtResource( 9 )
+
+[sub_resource type="DynamicFont" id=8]
+size = 24
+font_data = ExtResource( 9 )
 
 [sub_resource type="RectangleShape2D" id=4]
 extents = Vector2( 90, 92.5 )
@@ -74,9 +80,6 @@ custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_fonts/font = SubResource( 7 )
 text = "Letters:"
 
-[node name="currenthints" parent="Player/Hints" instance=ExtResource( 10 )]
-text = " No hints"
-
 [node name="colliders" type="StaticBody2D" parent="."]
 
 [node name="WallA" type="CollisionPolygon2D" parent="colliders"]
@@ -123,12 +126,24 @@ margin_top = 35.0
 margin_bottom = -442.0
 
 [node name="WindowDialog" type="WindowDialog" parent="GUI"]
-margin_left = 656.0
-margin_top = 1210.0
-margin_right = 704.0
-margin_bottom = 1250.0
-rect_scale = Vector2( 5.13829, 1.56244 )
-resizable = true
+visible = true
+margin_left = 436.0
+margin_top = 1174.0
+margin_right = 484.0
+margin_bottom = 1214.0
+rect_scale = Vector2( 2.06932, 1.03635 )
+custom_colors/title_color = Color( 0.0431373, 0.0431373, 0.0431373, 1 )
+custom_fonts/title_font = SubResource( 9 )
+
+[node name="hintspopup" type="WindowDialog" parent="GUI"]
+visible = true
+margin_left = 650.0
+margin_top = 1290.0
+margin_right = 795.0
+margin_bottom = 1330.0
+custom_colors/title_color = Color( 0, 0, 0, 1 )
+custom_fonts/title_font = SubResource( 8 )
+window_title = "No letters found"
 
 [node name="item1area" type="Area2D" parent="."]
 position = Vector2( 530, 272 )
