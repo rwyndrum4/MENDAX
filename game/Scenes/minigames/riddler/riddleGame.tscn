@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://Assets/Teko-Light.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://Scenes/minigames/riddler/riddleGame.gd" type="Script" id=2]
@@ -26,10 +26,6 @@ size = 40
 font_data = ExtResource( 1 )
 
 [sub_resource type="DynamicFont" id=9]
-font_data = ExtResource( 9 )
-
-[sub_resource type="DynamicFont" id=8]
-size = 24
 font_data = ExtResource( 9 )
 
 [sub_resource type="RectangleShape2D" id=4]
@@ -125,8 +121,7 @@ visible = false
 margin_top = 35.0
 margin_bottom = -442.0
 
-[node name="WindowDialog" type="WindowDialog" parent="GUI"]
-visible = true
+[node name="show_letter" type="WindowDialog" parent="GUI"]
 margin_left = 436.0
 margin_top = 1174.0
 margin_right = 484.0
@@ -134,16 +129,6 @@ margin_bottom = 1214.0
 rect_scale = Vector2( 2.06932, 1.03635 )
 custom_colors/title_color = Color( 0.0431373, 0.0431373, 0.0431373, 1 )
 custom_fonts/title_font = SubResource( 9 )
-
-[node name="hintspopup" type="WindowDialog" parent="GUI"]
-visible = true
-margin_left = 650.0
-margin_top = 1290.0
-margin_right = 795.0
-margin_bottom = 1330.0
-custom_colors/title_color = Color( 0, 0, 0, 1 )
-custom_fonts/title_font = SubResource( 8 )
-window_title = "No letters found"
 
 [node name="item1area" type="Area2D" parent="."]
 position = Vector2( 530, 272 )
@@ -282,7 +267,6 @@ texture = ExtResource( 8 )
 position = Vector2( -3, -2 )
 shape = SubResource( 3 )
 
-[connection signal="pressed" from="Player/Hints" to="." method="_on_Hints_pressed"]
 [connection signal="timeout" from="GUI/Timer" to="." method="_on_Timer_timeout"]
 [connection signal="body_entered" from="item1area" to="." method="_on_item1area_body_entered"]
 [connection signal="body_exited" from="item1area" to="." method="_on_item1area_body_exited"]

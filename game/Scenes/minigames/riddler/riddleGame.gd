@@ -1,5 +1,3 @@
-
-
 """
 * Programmer Name - Freeman Spray and Mohit Garg
 * Description - Code for controlling the Riddle minigame
@@ -17,7 +15,7 @@ onready var settingsMenu = $GUI/SettingsMenu
 onready var myTimer: Timer = $GUI/Timer
 onready var timerText: Label = $GUI/Timer/timerText
 onready var textBox = $GUI/textBox
-onready var hintbox=$GUI/WindowDialog
+onready var hintbox=$GUI/show_letter
 onready var itemarray=[] #determines if items have been found
 onready var hint="person";
 onready var currenthints=""; #keeps track of currenhints found
@@ -37,14 +35,10 @@ func _ready():
 	textBox.queue_text("What walks on four legs in the morning, two legs in the afternoon, and three in the evening?")
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("openChatbox", self, "chatbox_use")
+	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("inputText", self, "chatbox_submit")
 	init_hiddenitems() #initalizes hidden items array and other things needed
-	
-
-
-
-
-
+	textBox.queue_text("Please enter the answer in the chat once you have it, there are hints hidden here if you need them (:")
 
 """
 /*
@@ -123,19 +117,7 @@ func init_hiddenitems():
 	hintlength=hint.length()
 	for i in hintlength:
 		itemarray.append(0)
-"""
-/*
-* @pre Called when player clicks to view current letters found
-* @post Displays current letters found for riddle
-* @param Player
-* @return None
-*/
-"""
-func _on_Hints_pressed():
-	$GUI/hintspopup.popup()
-	
-	
-	
+
 """
 /*
 * @pre Called when player enters hidden item area
@@ -152,7 +134,7 @@ func enterarea(spritepath,itemnumber):
 		var index=rng.randi_range(0, hintlength-1)
 		var letter=hint[index];
 		currenthints=str(currenthints)+letter;
-		$GUI/hintspopup.window_title=str(currenthints);
+		$Player/Hints.text += " " + letter
 		if hintlength==1:
 			hintbox.window_title=str(letter)+" is in the word. All hints have been found."; #all hints found
 		else:
@@ -173,22 +155,22 @@ func enterarea(spritepath,itemnumber):
 * @return None
 */
 """
-func _on_item1area_body_entered(body:PhysicsBody2D)->void:
+func _on_item1area_body_entered(_body:PhysicsBody2D)->void:
 	if itemarray[0]==0:
 		$Player/Labelarea.show()
-func _on_item2area_body_entered(body:PhysicsBody2D)->void:
+func _on_item2area_body_entered(_body:PhysicsBody2D)->void:
 	if itemarray[1]==0:
 		$Player/Labelarea.show()
-func _on_item3area_body_entered(body:PhysicsBody2D)->void:
+func _on_item3area_body_entered(_body:PhysicsBody2D)->void:
 	if itemarray[2]==0:
 		$Player/Labelarea.show()
-func _on_item4area_body_entered(body:PhysicsBody2D)->void:
+func _on_item4area_body_entered(_body:PhysicsBody2D)->void:
 	if itemarray[3]==0:
 		$Player/Labelarea.show()
-func _on_item5area_body_entered(body:PhysicsBody2D)->void:
+func _on_item5area_body_entered(_body:PhysicsBody2D)->void:
 	if itemarray[4]==0:
 		$Player/Labelarea.show()
-func _on_item6area_body_entered(body:PhysicsBody2D)->void:
+func _on_item6area_body_entered(_body:PhysicsBody2D)->void:
 	if itemarray[5]==0:
 		$Player/Labelarea.show()
 """
@@ -199,17 +181,17 @@ func _on_item6area_body_entered(body:PhysicsBody2D)->void:
 * @return None
 */
 """
-func _on_item1area_body_exited(body:PhysicsBody2D)->void:
+func _on_item1area_body_exited(_body:PhysicsBody2D)->void:
 	$Player/Labelarea.hide()
-func _on_item2area_body_exited(body:PhysicsBody2D)->void:
+func _on_item2area_body_exited(_body:PhysicsBody2D)->void:
 	$Player/Labelarea.hide()
-func _on_item3area_body_exited(body:PhysicsBody2D)->void:
+func _on_item3area_body_exited(_body:PhysicsBody2D)->void:
 	$Player/Labelarea.hide()
-func _on_item4area_body_exited(body:PhysicsBody2D)->void:
+func _on_item4area_body_exited(_body:PhysicsBody2D)->void:
 	$Player/Labelarea.hide()
-func _on_item5area_body_exited(body:PhysicsBody2D)->void:
+func _on_item5area_body_exited(_body:PhysicsBody2D)->void:
 	$Player/Labelarea.hide()
-func _on_item6area_body_exited(body:PhysicsBody2D)->void:
+func _on_item6area_body_exited(_body:PhysicsBody2D)->void:
 	$Player/Labelarea.hide()
 
 """
@@ -220,22 +202,22 @@ func _on_item6area_body_exited(body:PhysicsBody2D)->void:
 * @return None
 */
 """
-func _on_item1_body_entered(body:PhysicsBody2D)->void:
+func _on_item1_body_entered(_body:PhysicsBody2D)->void:
 	if itemarray[0]==0:
 		enterarea($item1/Sprite,1)
-func _on_item2_body_entered(body:PhysicsBody2D)->void:
+func _on_item2_body_entered(_body:PhysicsBody2D)->void:
 	if itemarray[1]==0:
 		enterarea($item2/Sprite,2)
-func _on_item3_body_entered(body:PhysicsBody2D)->void:
+func _on_item3_body_entered(_body:PhysicsBody2D)->void:
 	if itemarray[2]==0:
 		enterarea($item3/Sprite,3)
-func _on_item4_body_entered(body:PhysicsBody2D)->void:
+func _on_item4_body_entered(_body:PhysicsBody2D)->void:
 	if itemarray[3]==0:
 		enterarea($item4/Sprite,4)
-func _on_item5_body_entered(body:PhysicsBody2D)->void:
+func _on_item5_body_entered(_body:PhysicsBody2D)->void:
 	if itemarray[4]==0:
 		enterarea($item5/Sprite,5)
-func _on_item6_body_entered(body:PhysicsBody2D)->void:
+func _on_item6_body_entered(_body:PhysicsBody2D)->void:
 	if itemarray[5]==0:
 		enterarea($item6/Sprite,6)
 """
@@ -246,21 +228,21 @@ func _on_item6_body_entered(body:PhysicsBody2D)->void:
 * @return None
 */
 """
-func _on_item1_body_exited(body:PhysicsBody2D)->void:
+func _on_item1_body_exited(_body:PhysicsBody2D)->void:
 	$item1/Sprite.hide()
 	hintbox.hide()
-func _on_item2_body_exited(body:PhysicsBody2D)->void:
+func _on_item2_body_exited(_body:PhysicsBody2D)->void:
 	$item2/Sprite.hide()
 	hintbox.hide()
-func _on_item3_body_exited(body:PhysicsBody2D)->void:
+func _on_item3_body_exited(_body:PhysicsBody2D)->void:
 	$item3/Sprite.hide()
 	hintbox.hide()
-func _on_item4_body_exited(body:PhysicsBody2D)->void:
+func _on_item4_body_exited(_body:PhysicsBody2D)->void:
 	$item4/Sprite.hide()
 	hintbox.hide()
-func _on_item5_body_exited(body:PhysicsBody2D)->void:
+func _on_item5_body_exited(_body:PhysicsBody2D)->void:
 	$item5/Sprite.hide()
 	hintbox.hide()
-func _on_item6_body_exited(body):
+func _on_item6_body_exited(_body):
 	$item6/Sprite.hide()
 	hintbox.hide()
