@@ -2,13 +2,12 @@
 
 [ext_resource path="res://Assets/mainMenuBG.png" type="Texture" id=1]
 [ext_resource path="res://Scenes/startArea/startArea.gd" type="Script" id=2]
-[ext_resource path="res://Assets/playerCursor.png" type="Texture" id=3]
-[ext_resource path="res://Scenes/startArea/PlayerCursor.gd" type="Script" id=4]
+[ext_resource path="res://Scenes/player/player.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Scenes/worldEnvironment/worldEnv.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Scenes/settingsMenu/settingsMenu.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Scenes/textBox/textBox.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Assets/SFX/wahh.wav" type="AudioStream" id=7]
-
-[sub_resource type="RectangleShape2D" id=1]
+[ext_resource path="res://Scenes/chatBox/chatBox.tscn" type="PackedScene" id=8]
 
 [sub_resource type="CircleShape2D" id=2]
 
@@ -16,6 +15,8 @@
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 2 )
+
+[node name="WorldEnvironment" parent="." instance=ExtResource( 4 )]
 
 [node name="TextureRect" type="TextureRect" parent="."]
 anchor_right = 1.0
@@ -26,23 +27,12 @@ rect_scale = Vector2( 0.997, 0.996 )
 texture = ExtResource( 1 )
 stretch_mode = 1
 
-[node name="PlayerCursor" type="KinematicBody2D" parent="."]
-position = Vector2( 1082, 590 )
-scale = Vector2( 0.939095, 1.00174 )
-collision_layer = 3
-script = ExtResource( 4 )
-__meta__ = {
-"_edit_group_": true
-}
-
-[node name="Sprite" type="Sprite" parent="PlayerCursor"]
-texture = ExtResource( 3 )
-
-[node name="playerHitbox" type="CollisionShape2D" parent="PlayerCursor"]
-scale = Vector2( 5, 4.97178 )
-shape = SubResource( 1 )
+[node name="Player" parent="." instance=ExtResource( 3 )]
+position = Vector2( 1082, 591 )
+collision_layer = 1
 
 [node name="Colliders" type="StaticBody2D" parent="."]
+collision_layer = 2
 
 [node name="leftScreen" type="CollisionPolygon2D" parent="Colliders"]
 scale = Vector2( 1.22813, 1.11475 )
@@ -91,8 +81,7 @@ polygon = PoolVector2Array( -8.71484, 44, -43.5742, 6, -200.442, -16, -43.5742, 
 [node name="enterCaveArea" type="Area2D" parent="."]
 position = Vector2( 1082, 590 )
 scale = Vector2( 0.939095, 1.00174 )
-collision_layer = 2
-collision_mask = 2
+collision_layer = 4
 
 [node name="caveEntranceOval" type="CollisionShape2D" parent="enterCaveArea"]
 light_mask = 2
@@ -118,6 +107,10 @@ align = 1
 
 [node name="textBox" parent="GUI" instance=ExtResource( 6 )]
 visible = false
+
+[node name="chatbox" parent="GUI" instance=ExtResource( 8 )]
+margin_top = 35.0
+margin_bottom = -442.0
 
 [node name="Enter" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 7 )

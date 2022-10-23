@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Scenes/chatBox/chatBox.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Scenes/globalScope/ServerConnection.gd" type="Script" id=2]
+[ext_resource path="res://Scenes/globalScope/globalScope.gd" type="Script" id=3]
+
+[node name="globalScope" type="Node"]
+script = ExtResource( 3 )
+
+[node name="ServerConnection" type="Node" parent="."]
+script = ExtResource( 2 )
+
+[node name="GUI" type="CanvasLayer" parent="."]
+
+[node name="chatbox" parent="GUI" instance=ExtResource( 1 )]
+margin_top = 35.0
+margin_bottom = -442.0
+
+[connection signal="chat_message_received" from="ServerConnection" to="." method="_on_ServerConnection_chat_message_received"]
+[connection signal="message_sent" from="GUI/chatbox" to="." method="_on_chatbox_message_sent"]

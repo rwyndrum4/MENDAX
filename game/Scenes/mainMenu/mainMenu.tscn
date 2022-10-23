@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://Scenes/mainMenu/mainMenu.gd" type="Script" id=1]
 [ext_resource path="res://Assets/mainMenuAssets/LTYPEB.TTF" type="DynamicFontData" id=2]
@@ -9,6 +9,7 @@
 [ext_resource path="res://Scenes/fpsDisplay/fpsLabel.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Assets/ARIALBD.TTF" type="DynamicFontData" id=8]
 [ext_resource path="res://Scenes/worldEnvironment/worldEnv.tscn" type="PackedScene" id=9]
+[ext_resource path="res://Scenes/chatBox/chatBox.tscn" type="PackedScene" id=10]
 
 [sub_resource type="DynamicFont" id=1]
 size = 38
@@ -168,9 +169,37 @@ margin_right = 59.0
 margin_bottom = 24.0
 custom_fonts/font = SubResource( 7 )
 
+[node name="chatbox" parent="." instance=ExtResource( 10 )]
+margin_top = 35.0
+margin_bottom = -442.0
+
+[node name="askForUsername" type="AcceptDialog" parent="."]
+margin_left = 525.0
+margin_top = 270.0
+margin_right = 741.0
+margin_bottom = 414.0
+rect_min_size = Vector2( 350, 0 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+window_title = "Welcome to Mendax!"
+resizable = true
+dialog_text = "Username required!
+Please enter username:
+(You can always change it afterwards in settings)"
+dialog_autowrap = true
+
+[node name="LineEdit" type="LineEdit" parent="askForUsername"]
+margin_left = 8.0
+margin_top = 56.0
+margin_right = 342.0
+margin_bottom = 108.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
 [connection signal="pressed" from="VBoxContainer/Start" to="." method="_on_Start_pressed"]
 [connection signal="pressed" from="VBoxContainer/Options" to="." method="_on_Options_pressed"]
 [connection signal="pressed" from="VBoxContainer/Market" to="." method="_on_Market_pressed"]
 [connection signal="pressed" from="VBoxContainer/Tests" to="." method="_on_Tests_pressed"]
 [connection signal="pressed" from="VBoxContainer/Quit" to="." method="_on_Quit_pressed"]
 [connection signal="button_up" from="joinCodeContainer/getCode" to="." method="_on_GetCode_button_up"]
+[connection signal="confirmed" from="askForUsername" to="." method="_on_askForUsername_confirmed"]

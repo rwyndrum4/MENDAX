@@ -15,9 +15,21 @@ onready var settingsMenu = $GUI/SettingsMenu
 onready var myTimer: Timer = $GUI/Timer
 onready var timerText: Label = $GUI/Timer/timerText
 
-# Called when the node enters the scene tree for the first time.
+"""
+/*
+* @pre Called when the node enters the scene tree for the first time.
+* @post updates starts the timer
+* @param None
+* @return None
+*/
+"""
 func _ready():
-	myTimer.start(300)
+	#hide cave instructions at start
+	instructions.hide()
+	#start timer
+	myTimer.start(90)
+	# warning-ignore:return_value_discarded
+	GlobalSignals.connect("openChatbox", self, "chatbox_use")
 
 """
 /*
@@ -35,6 +47,10 @@ func _process(_delta): #change to delta if used
 		if Input.is_action_just_pressed("ui_accept",false):
 			# warning-ignore:return_value_discarded
 			SceneTrans.change_scene("res://Scenes/mainMenu/mainMenu.tscn")
+	#DEBUG PURPOSES - REMOVE FOR FINAL GAME!!!
+	#IF YOU PRESS P -> TIMER WILL REDUCE TO 3 SECONDS
+	if Input.is_action_just_pressed("debug_key",false):
+		myTimer.start(3)
 	
 """
 /*
@@ -45,9 +61,9 @@ func _process(_delta): #change to delta if used
 */
 """
 func _on_exitCaveArea_body_entered(_body: PhysicsBody2D): #change to body if want to use
-	if myTimer.time_left < 300:
-		instructions.show()
-		in_exit = true
+	print("here")
+	instructions.show()
+	in_exit = true
 	
 """
 /*
@@ -90,3 +106,18 @@ func convert_time(time_in:float) -> String:
 	var minutes: int = rounded_time/60
 	var seconds: int = rounded_time - (minutes*60)
 	return str(minutes,":",seconds)
+
+"""
+/*
+* @pre Called when the timer hits 0
+* @post Changes scene to minigame
+* @param None
+* @return String (text of current time left)
+*/
+"""
+func _on_Timer_timeout():
+	SceneTrans.change_scene("res://Scenes/minigames/riddler/riddleGame.tscn")
+
+func chatbox_use(value):
+	if value:
+		in_menu = true

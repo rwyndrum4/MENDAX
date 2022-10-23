@@ -1,20 +1,19 @@
 [gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://Assets/EntryAreaBackground.png" type="Texture" id=1]
-[ext_resource path="res://Scenes/startArea/PlayerCursor.gd" type="Script" id=2]
-[ext_resource path="res://Assets/playerCursor.png" type="Texture" id=3]
+[ext_resource path="res://Scenes/player/player.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Scenes/worldEnvironment/worldEnv.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Scenes/startArea/EntrySpace.gd" type="Script" id=4]
 [ext_resource path="res://Scenes/SettingsMenu/settingsMenu.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Assets/Teko-Light.ttf" type="DynamicFontData" id=6]
+[ext_resource path="res://Scenes/chatBox/chatBox.tscn" type="PackedScene" id=7]
 
 [sub_resource type="StreamTexture" id=3]
 flags = 4
 load_path = "res://.import/light.png-9e6eff90e703f084db87a88d6ba8f890.stex"
 
-[sub_resource type="OccluderPolygon2D" id=4]
+[sub_resource type="OccluderPolygon2D" id=6]
 polygon = PoolVector2Array( -48.9833, -45.9201, -50.0482, 47.9166, -50.0482, 47.9166, 50.0482, 46.9184, 50.0482, 46.9184, 48.9833, -48.9149, 47.9185, -50.9114 )
-
-[sub_resource type="RectangleShape2D" id=1]
 
 [sub_resource type="DynamicFont" id=2]
 size = 40
@@ -24,6 +23,8 @@ font_data = ExtResource( 6 )
 
 [node name="EntrySpace" type="Control"]
 script = ExtResource( 4 )
+
+[node name="WorldEnvironment" parent="." instance=ExtResource( 3 )]
 
 [node name="Light2D" type="Light2D" parent="."]
 position = Vector2( 827, 618 )
@@ -44,29 +45,18 @@ rect_scale = Vector2( 1.31642, 1.08664 )
 texture = ExtResource( 1 )
 stretch_mode = 1
 
-[node name="PlayerCursor" type="KinematicBody2D" parent="."]
-position = Vector2( 832, 1352 )
-scale = Vector2( 0.939095, 1.00174 )
-script = ExtResource( 2 )
-__meta__ = {
-"_edit_group_": true
-}
+[node name="Player" parent="." instance=ExtResource( 2 )]
+position = Vector2( 832, 1344 )
+collision_layer = 1
 
-[node name="Camera2D" type="Camera2D" parent="PlayerCursor"]
-position = Vector2( 2.1297, 0 )
+[node name="LightOccluder2D" type="LightOccluder2D" parent="Player"]
+occluder = SubResource( 6 )
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
 current = true
 
-[node name="Sprite" type="Sprite" parent="PlayerCursor"]
-texture = ExtResource( 3 )
-
-[node name="LightOccluder2D" type="LightOccluder2D" parent="PlayerCursor/Sprite"]
-occluder = SubResource( 4 )
-
-[node name="playerHitbox" type="CollisionShape2D" parent="PlayerCursor"]
-scale = Vector2( 5, 4.97178 )
-shape = SubResource( 1 )
-
 [node name="colliders" type="StaticBody2D" parent="."]
+collision_layer = 2
 
 [node name="WallA" type="CollisionPolygon2D" parent="colliders"]
 scale = Vector2( 1.22813, 1.11475 )
@@ -104,9 +94,14 @@ custom_colors/font_color = Color( 0, 1, 0.203922, 1 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 2 )
 
+[node name="chatbox" parent="GUI" instance=ExtResource( 7 )]
+margin_top = 35.0
+margin_bottom = -442.0
+
 [node name="exitCaveArea" type="Area2D" parent="."]
-position = Vector2( 832, 1504 )
+position = Vector2( 831, 1504 )
 scale = Vector2( 11.5835, 3.22615 )
+collision_layer = 4
 __meta__ = {
 "_edit_group_": true
 }
@@ -127,5 +122,6 @@ text = "Press Enter
 to exit cave"
 align = 1
 
+[connection signal="timeout" from="GUI/Timer" to="." method="_on_Timer_timeout"]
 [connection signal="body_entered" from="exitCaveArea" to="." method="_on_exitCaveArea_body_entered"]
 [connection signal="body_exited" from="exitCaveArea" to="." method="_on_exitCaveArea_body_exited"]

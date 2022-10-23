@@ -12,6 +12,7 @@ extends Control
 # Member Variables:
 var in_cave = false
 var in_menu = false
+var using_chat = false
 onready var instructions: Label = $enterCaveArea/enterDirections
 onready var settingsMenu = $GUI/SettingsMenu
 onready var textBox = $GUI/textBox
@@ -28,6 +29,8 @@ onready var textBox = $GUI/textBox
 func _ready():
 	#This is how you queue text to the textbox queue
 	textBox.queue_text("If you're ready to begin your challenge, press enter")
+	# warning-ignore:return_value_discarded
+	GlobalSignals.connect("openChatbox", self, "chatbox_use")
 
 """
 /*
@@ -85,3 +88,7 @@ func check_settings():
 	elif Input.is_action_just_pressed("ui_cancel",false) and in_menu:
 		settingsMenu.hide()
 		in_menu = false
+
+func chatbox_use(value):
+	if value:
+		in_menu = true

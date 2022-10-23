@@ -2,10 +2,15 @@
 * Programmer Name - Freeman Spray
 * Description - Code that designates player movement
 * Date Created - 10/1/2022
+* Citations - based on https://www.youtube.com/watch?v=TQKXU7iSWUU
 * Date Revisions:
 	10/2/2022 - Improved movement to feel more natural
+	10/14/2022 - Added signals to stop player when in options or textbox scene
 """
 extends KinematicBody2D
+
+# Member Variables
+var is_stopped = false
 
 # Player physics constants
 const ACCELERATION = 25000
@@ -15,7 +20,21 @@ const FRICTION = 500
 # Global velocity
 var velocity = Vector2.ZERO
 
-# Reference: https://www.youtube.com/watch?v=TQKXU7iSWUU
+"""
+/*
+* @pre Called once when player is initialized
+* @post Connects the "textbox_shift" and "openMnu" signals to the player
+* @param None
+* @return None
+*/
+"""
+func _ready():
+	#Connects singal to GlobalSignals, will stop/unstop player when called from "textbBox.gd"
+	# warning-ignore:return_value_discarded
+	GlobalSignals.connect("textbox_shift",self,"stop_go_player")
+	# warning-ignore:return_value_discarded
+	GlobalSignals.connect("openMenu",self,"stop_go_player")
+
 """
 /*
 * @pre Called every frame
@@ -25,6 +44,9 @@ var velocity = Vector2.ZERO
 */
 """
 func _physics_process(delta):
+	#don't move player if textbox is playing or options are open
+	if is_stopped:
+		return
 	# Initialize input velocity
 	var input_velocity = Vector2.ZERO
 	input_velocity.x = Input.get_axis("ui_left", "ui_right")
@@ -47,3 +69,14 @@ func _physics_process(delta):
 	
 	# Factor in collisions
 	velocity = move_and_slide(velocity)
+
+"""
+/*
+* @pre Called when signal is received from GlobalSignals
+* @post updates is_stopped to whatever value is passed in (true = stopped, false = can move)
+* @param value -> boolean
+* @return None
+*/
+"""
+func stop_go_player(value:bool):
+	is_stopped = value

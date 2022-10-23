@@ -1,0 +1,7 @@
+[gd_scene format=2]
+
+[node name="RiddleGame" type="Node2D"]
+
+[node name="Background" type="TextureRect" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
