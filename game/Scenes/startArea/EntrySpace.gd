@@ -68,7 +68,14 @@ func _process(_delta): #change to delta if used
 	check_settings()
 	timerText.text = convert_time(myTimer.time_left)
 
-
+"""
+/*
+* @pre None
+* @post Starts timer for minigame, sets playerCam to current, and sets physic_process to True
+* @param None
+* @return None
+*/
+"""
 func _finish_anim():
 	var t = Timer.new()
 	t.set_wait_time(1)
@@ -94,6 +101,14 @@ func _finish_anim():
 	$Player.set_physics_process(true)
 	playerCam.current = true
 
+"""
+/*
+* @pre An input of any sort
+* @post None
+* @param Takes in an event
+* @return None
+*/
+"""
 func _input(ev):
 	if Input.is_key_pressed(KEY_ENTER) and not ev.echo:
 		if Global.in_anim == 1:
@@ -173,6 +188,14 @@ func _on_Timer_timeout():
 	#change scene to riddler minigame
 	Global.state = Global.scenes.RIDDLER_MINIGAME
 
+"""
+/*
+* @pre None
+* @post Sets in_menu to true
+* @param value
+* @return None
+*/
+"""
 func chatbox_use(value):
 	if value:
 		in_menu = true
