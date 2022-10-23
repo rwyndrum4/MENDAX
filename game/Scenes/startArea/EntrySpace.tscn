@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://Scenes/startArea/worldMap.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Scenes/player/player.tscn" type="PackedScene" id=2]
@@ -21,6 +21,12 @@ font_data = ExtResource( 6 )
 
 [sub_resource type="CircleShape2D" id=5]
 
+[sub_resource type="DynamicFont" id=7]
+size = 42
+extra_spacing_char = 15
+extra_spacing_space = 15
+font_data = ExtResource( 6 )
+
 [node name="EntrySpace" type="Control"]
 script = ExtResource( 4 )
 
@@ -29,16 +35,19 @@ script = ExtResource( 4 )
 [node name="WorldEnvironment" parent="." instance=ExtResource( 3 )]
 
 [node name="Light2D" type="Light2D" parent="."]
-position = Vector2( 827, 618 )
-rotation = -3.14159
-scale = Vector2( 0.148387, 0.589738 )
+position = Vector2( 117, 1588 )
+rotation = -4.70422
+scale = Vector2( 0.157201, 0.59011 )
 texture = SubResource( 3 )
 shadow_enabled = true
 shadow_color = Color( 0.686275, 0.0901961, 0.0901961, 0 )
 
 [node name="Player" parent="." instance=ExtResource( 2 )]
-position = Vector2( 832, 1344 )
+position = Vector2( 888, 1584 )
 collision_layer = 1
+__meta__ = {
+"_edit_group_": true
+}
 
 [node name="LightOccluder2D" type="LightOccluder2D" parent="Player"]
 occluder = SubResource( 6 )
@@ -48,6 +57,15 @@ current = true
 
 [node name="colliders" type="StaticBody2D" parent="."]
 collision_layer = 2
+
+[node name="leftWallSpace" type="CollisionPolygon2D" parent="colliders"]
+polygon = PoolVector2Array( 576, 576, -576, 576, -576, 2568, -1152, 2568, -1152, 3432, 288, 3432, 280, 4584, -1160, 4552, -1408, 4552, -1368, 0, 384, 0, 384, -832, 576, -832 )
+
+[node name="rightWallSpace" type="CollisionPolygon2D" parent="colliders"]
+polygon = PoolVector2Array( 1440, 4576, 1440, 4008, 3168, 4008, 3168, 3432, 3456, 3432, 3456, 3144, 3752, 3144, 3752, 2288, 3168, 2280, 3168, 1704, 2304, 1704, 2304, 2280, 1152, 2280, 1152, 1152, 2304, 1152, 2304, 0, 1152, 0, 1152, -576, 576, -576, 576, -832, 4352, -824, 4352, 4712, 288, 4584 )
+
+[node name="well" type="CollisionPolygon2D" parent="colliders"]
+polygon = PoolVector2Array( 392, 4152, 408, 4040, 472, 3944, 544, 3880, 640, 3840, 712, 3832, 808, 3840, 904, 3888, 968, 3936, 1024, 4016, 1056, 4128, 1048, 4232, 1008, 4328, 944, 4408, 872, 4456, 808, 4480, 744, 4488, 640, 4480, 560, 4448, 496, 4400, 448, 4344, 424, 4304, 400, 4240 )
 
 [node name="GUI" type="CanvasLayer" parent="."]
 
@@ -77,8 +95,9 @@ margin_top = 35.0
 margin_bottom = -442.0
 
 [node name="exitCaveArea" type="Area2D" parent="."]
-position = Vector2( 831, 1504 )
-scale = Vector2( 11.5835, 3.22615 )
+position = Vector2( 1153, 1583 )
+rotation = -1.5562
+scale = Vector2( 2.81069, 2.75853 )
 collision_layer = 4
 __meta__ = {
 "_edit_group_": true
@@ -90,12 +109,14 @@ shape = SubResource( 5 )
 
 [node name="exitDirections" type="Label" parent="exitCaveArea"]
 visible = false
-margin_left = -4.14386
-margin_top = -9.91895
-margin_right = 88.8561
-margin_bottom = 31.0811
+margin_left = 20.0
+margin_top = -10.0
+margin_right = 359.0
+margin_bottom = 115.0
+rect_rotation = 90.0
 rect_scale = Vector2( 0.0838492, 0.334329 )
-custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0.980392, 0.980392, 0.980392, 1 )
+custom_fonts/font = SubResource( 7 )
 text = "Press Enter 
 to exit cave"
 align = 1

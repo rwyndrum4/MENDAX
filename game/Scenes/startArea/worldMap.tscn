@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://Assets/tiles/TilesCorrected/WallTile_Tilt.png" type="Texture" id=1]
 [ext_resource path="res://Assets/tiles/TilesCorrected/GroundTile.png" type="Texture" id=2]
@@ -9,6 +9,9 @@
 [ext_resource path="res://Assets/tiles/TilesCorrected/WallTile_NoTilt_Vert.png" type="Texture" id=7]
 [ext_resource path="res://Assets/tiles/TilesCorrected/WallTile_Tilt_Horiz.png" type="Texture" id=8]
 [ext_resource path="res://Assets/tiles/TilesCorrected/WallTile_NoTilt_Horiz.png" type="Texture" id=9]
+[ext_resource path="res://Assets/tiles/TilesCorrected/CaveEntrance.png" type="Texture" id=10]
+[ext_resource path="res://Assets/tiles/TilesCorrected/LadderTile.png" type="Texture" id=11]
+[ext_resource path="res://Assets/tiles/TilesCorrected/Well3x3.png" type="Texture" id=12]
 
 [node name="Node2D" type="Control"]
 
@@ -959,9 +962,9 @@ margin_bottom = 864.0
 texture = ExtResource( 2 )
 
 [node name="CornerB3x3_5" type="GridContainer" parent="."]
-margin_top = 4848.0
+margin_top = 4869.0
 margin_right = 864.0
-margin_bottom = 5712.0
+margin_bottom = 5733.0
 rect_rotation = 270.0
 custom_constants/vseparation = 0
 custom_constants/hseparation = 0
@@ -1033,9 +1036,9 @@ texture = ExtResource( 2 )
 
 [node name="CornerB3x3_6" type="GridContainer" parent="."]
 margin_left = 1728.0
-margin_top = 4848.0
+margin_top = 4869.0
 margin_right = 2592.0
-margin_bottom = 5712.0
+margin_bottom = 5733.0
 rect_rotation = 180.0
 custom_constants/vseparation = 0
 custom_constants/hseparation = 0
@@ -2631,3 +2634,24 @@ margin_top = 3431.0
 margin_right = 3819.0
 margin_bottom = 3719.0
 texture = ExtResource( 5 )
+
+[node name="CaveEntrance1x1" type="TextureRect" parent="."]
+margin_left = 1151.0
+margin_top = 1436.0
+margin_right = 1439.0
+margin_bottom = 1724.0
+texture = ExtResource( 10 )
+
+[node name="Ladder1x1" type="TextureRect" parent="."]
+margin_left = 863.0
+margin_top = -863.0
+margin_right = 1151.0
+margin_bottom = -575.0
+texture = ExtResource( 11 )
+
+[node name="Well3x3" type="TextureRect" parent="."]
+margin_left = 288.0
+margin_top = 3718.0
+margin_right = 1152.0
+margin_bottom = 4582.0
+texture = ExtResource( 12 )
