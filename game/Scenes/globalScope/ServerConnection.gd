@@ -16,9 +16,9 @@ const KEY := "nakama_mendax"
 
 var _session: NakamaSession
 
-#my server: 3.143.142.232
+#my server: 18.222.220.187
 #jasons server: 52.205.252.95
-var _client := Nakama.create_client(KEY, "3.143.142.232", 7350, "http")
+var _client := Nakama.create_client(KEY, "18.222.220.187", 7350, "http")
 var _socket : NakamaSocket
 
 var _general_chat_id = ""
@@ -157,8 +157,10 @@ func send_text_async_general(text: String) -> int:
 	var msg_result = yield(
 		_socket.write_chat_message_async(_general_chat_id, 
 		{"msg": text, 
-		"user": Save.game_data.username,
-		"type": "general"}), "completed")
+		"user_sent": "",
+		"from_user": Save.game_data.username,
+		"type": "whisper"
+		}), "completed")
 	return ERR_CONNECTION_ERROR if msg_result.is_exception() else OK
 
 func send_text_async_whisper(text: String,user_sent_to:String) -> int:
