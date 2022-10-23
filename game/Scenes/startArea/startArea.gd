@@ -43,11 +43,12 @@ func _ready():
 func _process(_delta): #change to delta if using it
 	check_settings()
 	if in_cave:
-		if Input.is_action_just_pressed("ui_accept",false):
+		if Input.is_action_just_pressed("ui_accept",false) and not Input.is_action_just_pressed("ui_enter_chat"):
 			in_cave = false
 			# warning-ignore:return_value_discarded
 			$Enter.play()
-			CaveInTrans.change_scene("res://Scenes/startArea/EntrySpace.tscn")
+			#change scene to cave area
+			CaveInTrans.change_scene(Global.scenes.CAVE)
 
 """
 /*

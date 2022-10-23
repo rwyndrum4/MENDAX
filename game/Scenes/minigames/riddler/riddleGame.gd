@@ -96,7 +96,7 @@ func convert_time(time_in:float) -> String:
 */
 """
 func _on_Timer_timeout():
-	SceneTrans.change_scene("res://Scenes/startArea/EntrySpace.tscn")
+	Global.state = Global.scenes.CAVE
 
 func chatbox_use(value):
 	if value:

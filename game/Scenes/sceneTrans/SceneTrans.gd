@@ -16,10 +16,10 @@ extends CanvasLayer
 */
 """
 #Fade to black transition
-func change_scene(target: String) -> void:
+func change_scene(target) -> void:
 	$AnimationPlayer.play("DISSOLVE")
 	yield($AnimationPlayer, 'animation_finished')
 	# warning-ignore:return_value_discarded
-	get_tree().change_scene(target)
+	Global.state = target
 	$AnimationPlayer.play_backwards("DISSOLVE")
 	
