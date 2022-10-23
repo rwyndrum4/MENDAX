@@ -14,6 +14,14 @@ onready var instructions: Label = $exitCaveArea/exitDirections
 onready var settingsMenu = $GUI/SettingsMenu
 onready var myTimer: Timer = $GUI/Timer
 onready var timerText: Label = $GUI/Timer/timerText
+onready var textBox = $GUI/textBox
+onready var playerCam = $Player/Camera2D
+onready var transCam = $Path2D/PathFollow2D/camTrans
+onready var riddler = $riddler
+
+#signals
+signal textWait()
+
 
 """
 /*
@@ -26,10 +34,26 @@ onready var timerText: Label = $GUI/Timer/timerText
 func _ready():
 	#hide cave instructions at start
 	instructions.hide()
-	#start timer
-	myTimer.start(90)
+	
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("openChatbox", self, "chatbox_use")
+	#scene animation for entering cave(for first time)
+	if Global.entry == 0:
+		#Insert Dialogue: "Oh who do we have here?" or something similar
+		
+		Global.entry = 1
+		transCam.current = true
+		$Player.set_physics_process(false)
+		#Begin scene dialogue
+		textBox.queue_text("Oh who do we have here?")
+		$Path2D/AnimationPlayer.play("BEGIN")
+		yield($Path2D/AnimationPlayer, "animation_finished")
+		textBox.queue_text("Ooga booga. Riddle here and you got so and so time")
+		
+		connect("textWait", self, "_finish_anim")
+		Global.in_anim = 1;
+	else:
+		myTimer.start(90)
 
 """
 /*
@@ -43,25 +67,55 @@ func _ready():
 func _process(_delta): #change to delta if used
 	check_settings()
 	timerText.text = convert_time(myTimer.time_left)
+
+
+func _finish_anim():
+	var t = Timer.new()
+	t.set_wait_time(1)
+	t.set_one_shot(false)
+	self.add_child(t)
+		
+	t.start()
+	yield(t, "timeout")
+
+	$Path2D/AnimationPlayer.play_backwards("BEGIN")
+	yield($Path2D/AnimationPlayer, "animation_finished")
+	t.start()
+	yield(t, "timeout")
+	
+	#start timer
+	textBox.queue_text("Time starts now!")
+	myTimer.start(90)
+	
+	#remove jester
+	riddler.queue_free()
+	
+	t.queue_free()
+	$Player.set_physics_process(true)
+	playerCam.current = true
+
+func _input(ev):
+	if Input.is_key_pressed(KEY_ENTER) and not ev.echo:
+		if Global.in_anim == 1:
+			Global.in_anim = 0
+			emit_signal("textWait")
 	if in_exit:
-		if Input.is_action_just_pressed("ui_accept",false):
+		if Input.is_action_just_pressed("ui_accept",false) and not Input.is_action_just_pressed("ui_enter_chat"):
 			# warning-ignore:return_value_discarded
-			SceneTrans.change_scene("res://Scenes/mainMenu/mainMenu.tscn")
+			Global.state = Global.scenes.MAIN_MENU #change scene to main menu
 	#DEBUG PURPOSES - REMOVE FOR FINAL GAME!!!
 	#IF YOU PRESS P -> TIMER WILL REDUCE TO 3 SECONDS
 	if Input.is_action_just_pressed("debug_key",false):
 		myTimer.start(3)
-	
 """
 /*
-* @pre Called when player enters the Area2D zone
+* @pre Ca	velocity = move_and_slide(velocity)lled when player enters the Area2D zone
 * @post shows instructions on screen and sets in_cave to true
 * @param _body -> body of the player
 * @return None
 */
 """
 func _on_exitCaveArea_body_entered(_body: PhysicsBody2D): #change to body if want to use
-	print("here")
 	instructions.show()
 	in_exit = true
 	
@@ -116,7 +170,8 @@ func convert_time(time_in:float) -> String:
 */
 """
 func _on_Timer_timeout():
-	SceneTrans.change_scene("res://Scenes/minigames/riddler/riddleGame.tscn")
+	#change scene to riddler minigame
+	Global.state = Global.scenes.RIDDLER_MINIGAME
 
 func chatbox_use(value):
 	if value:

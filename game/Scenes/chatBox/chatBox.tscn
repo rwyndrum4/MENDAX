@@ -33,4 +33,6 @@ size_flags_vertical = 3
 placeholder_text = "SHIFT+ENTER to chat, Esc to exit"
 placeholder_alpha = 0.233
 
+[connection signal="focus_entered" from="textHolder/inputField/playerInput" to="." method="_on_playerInput_focus_entered"]
+[connection signal="focus_exited" from="textHolder/inputField/playerInput" to="." method="_on_playerInput_focus_exited"]
 [connection signal="text_entered" from="textHolder/inputField/playerInput" to="." method="_on_playerInput_text_entered"]

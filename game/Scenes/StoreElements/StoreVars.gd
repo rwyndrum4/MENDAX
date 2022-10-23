@@ -51,7 +51,7 @@ func _on_subMoney_pressed():
 */
 """
 func _on_Back2Menu_pressed():
-	SceneTrans.change_scene("res://Scenes/mainMenu/mainMenu.tscn") #changes to main menu scene
+	Global.state = Global.scenes.MAIN_MENU
 	
 
 

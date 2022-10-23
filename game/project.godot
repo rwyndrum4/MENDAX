@@ -111,7 +111,7 @@ Freeman Spray
 Jason Truong
 Ben Moeller
 Mohit Garg"
-run/main_scene="res://Scenes/mainMenu/mainMenu.tscn"
+run/main_scene="res://Scenes/globalScope/globalScope.tscn"
 config/icon="res://Assets/MendaxLogo.png"
 
 [autoload]

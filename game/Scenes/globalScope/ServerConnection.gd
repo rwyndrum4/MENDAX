@@ -1,7 +1,17 @@
+"""
+* Programmer Name - Ben Moeller, Jason Truong
+* Description - File for setting up connection to the server and sending messages
+* Date Created - 10/9/2022
+* Date Revisions:
+	10/12/2022 - Start of adding network functionality
+	10/14/2022 - Got general chat working for player
+	10/22/2022 - Adding scene changer functionality
+"""
 extends Node
 
 signal chat_message_received(username, text)
 
+#Key that is stored in the server
 const KEY := "nakama_mendax"
 
 var _session: NakamaSession
@@ -52,12 +62,16 @@ func connect_to_server_async() -> int:
 	yield(_client.update_account_async(_session, new_username), "completed")
 	if not result.is_exception():
 		#connect to closed signal, called when connection is closed to free memory
+		# warning-ignore:return_value_discarded
 		_socket.connect("closed", self, "_on_NakamaSocket_closed")
-		#connect 
+		#connect
+		# warning-ignore:return_value_discarded
 		_socket.connect("received_channel_message", self, "_on_Nakama_Socket_received_channel_message")
 		#get user who joins
+		# warning-ignore:return_value_discarded
 		_socket.connect("received_channel_presence", self, "_on_channel_presence")
 		#get a notification
+		# warning-ignore:return_value_discarded
 		_socket.connect("received_notification", self, "_on_notification")
 		return OK
 	return ERR_CANT_CONNECT
@@ -191,8 +205,10 @@ func _on_channel_presence(p_presence : NakamaRTAPI.ChannelPresenceEvent):
 		room_users[p.username] = p.user_id
 
 	for p in p_presence.leaves:
+		# warning-ignore:return_value_discarded
 		room_users.erase(p.username)
 	print("users in room: ",room_users)
+	Global.current_players = room_users
 
 """
 /*
