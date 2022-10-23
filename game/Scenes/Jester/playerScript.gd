@@ -57,20 +57,20 @@ func _physics_process(delta):
 	
 	# Case where no input is given
 	if input_velocity == Vector2.ZERO:
-		velocity = input_velocity.move_toward(Vector2.ZERO, FRICTION*delta)
+		velocity = 0
 	# Case where only vertical input is given
 	elif input_velocity.x == 0:
-		velocity = input_velocity.move_toward(Vector2(0,input_velocity.y).normalized()*MAX_SPEED, ACCELERATION*delta)
+		velocity = input_velocity.move_toward(Vector2(0,0).normalized()*MAX_SPEED, ACCELERATION*delta)
 	# Case where only horizontal input is given
 	elif input_velocity.y == 0:
-		velocity = input_velocity.move_toward(Vector2(input_velocity.x,0).normalized()*MAX_SPEED, ACCELERATION*delta)
+		velocity = input_velocity.move_toward(Vector2(0,0).normalized()*MAX_SPEED, ACCELERATION*delta)
 	# Case where both horizontal and vertical input is given
 	# This ensures diagonal speed is not faster, which is especially significant when sliding against a wall.
 	else:
-		velocity = input_velocity.move_toward(0.7*input_velocity*MAX_SPEED, ACCELERATION*delta)
+		velocity = input_velocity.move_toward(0*input_velocity*MAX_SPEED, ACCELERATION*delta)
 	
 	# Factor in collisions
-	velocity = move_and_slide(velocity)
+	velocity = 0
 	control_animations(velocity)
 
 """
@@ -93,9 +93,6 @@ func stop_go_player(value:bool):
 */
 """
 func control_animations(vel):
-	if vel.x > 0:
-		char_pos.scale.x = 1
-	elif vel.x < 0:
-		char_pos.scale.x = -1
-	else:
 		character.play("idle")
+
+

@@ -10,6 +10,10 @@ extends Node
 # Player's balance
 var money = 0
 
+#Entry First Time
+var entry = 0
+var in_anim = 0
+
 """
 -----------------------------SCENE LOADER INSTRUCTION-------------------------------------
 - state -> this is the variable that tracks what scene the game is currently in
@@ -21,7 +25,7 @@ var money = 0
 - The paths for all the scenes are also defined in Scenes/globalScope/globalScope.gd
 ------------------------------------------------------------------------------------------
 """
-# Current scene in game
+# Current scene
 var state = null
 enum scenes {
 	MAIN_MENU,
@@ -32,4 +36,4 @@ enum scenes {
 }
 
 # Current players in scnene
-var curent_players:Dictionary = {}
+var current_players:Dictionary = {}

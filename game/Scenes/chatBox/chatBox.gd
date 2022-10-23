@@ -98,11 +98,11 @@ func _input(event):
 					playerInput.text = "/clear"
 					playerInput.set_cursor_position(len(playerInput.text) +1)
 				#Auto fill for current players
-				elif "/whisper " in playerInput.text and Global.curent_players.size() > 0:
-					playerInput.text = "/whisper " + Global.curent_players.keys()[current_usr] + " "
+				elif "/whisper " in playerInput.text and Global.current_players.size() > 0:
+					playerInput.text = "/whisper " + Global.current_players.keys()[current_usr] + " "
 					playerInput.set_cursor_position(len(playerInput.text) +1)
 					current_usr += 1
-					if current_usr == Global.curent_players.size():
+					if current_usr == Global.current_players.size():
 						current_usr = 0
 
 """

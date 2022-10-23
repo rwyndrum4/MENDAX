@@ -14,7 +14,7 @@
 [ext_resource path="res://Scenes/Jester/playerScript.gd" type="Script" id=12]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 9, 9 )
+extents = Vector2( 22.1, 25.1419 )
 
 [sub_resource type="SpriteFrames" id=2]
 animations = [ {
