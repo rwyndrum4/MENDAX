@@ -7,6 +7,7 @@
 * Date Revisions:
 	10/16/2022 - 
 	10/19/2022 -Added hidden item detector functionality -Mohit Garg
+	10/22/2022-Added hidden item detector for multiple hints-Mohit Garg
 """
 extends Control
 
@@ -16,7 +17,11 @@ onready var settingsMenu = $GUI/SettingsMenu
 onready var myTimer: Timer = $GUI/Timer
 onready var timerText: Label = $GUI/Timer/timerText
 onready var textBox = $GUI/textBox
-onready var itemfound=false #determines if item is found
+onready var hintbox=$GUI/WindowDialog
+onready var itemarray=[] #determines if items have been found
+onready var hint="person";
+onready var currenthints=""; #keeps track of currenhints found
+onready var hintlength=0#keeps track of hintlength to give random letter clues
 
 """
 /*
@@ -33,6 +38,8 @@ func _ready():
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("openChatbox", self, "chatbox_use")
 	GlobalSignals.connect("inputText", self, "chatbox_submit")
+	init_hiddenitems() #initalizes hidden items array and other things needed
+	$Player/Hints/currenthints.hide()#hides hints
 
 
 
@@ -104,7 +111,18 @@ func chatbox_use(value):
 func chatbox_submit(inText):
 	if inText == "person":
 		SceneTrans.change_scene("res://Scenes/startArea/EntrySpace.tscn")
-
+"""
+/*
+* @pre Called in ready function before minigame
+* @postInitalizes itemarray to 0s indicating no items have been found
+* @param None
+* @return None
+*/
+"""
+func init_hiddenitems():
+	hintlength=hint.length()
+	for i in hintlength:
+		itemarray.append(0)
 """
 /*
 * @pre Called when player enters hidden item area
@@ -113,38 +131,114 @@ func chatbox_submit(inText):
 * @return None
 */
 """
+func _on_Hints_pressed():
+	SceneTrans.change_scene("res://Scenes/minigames/riddler/currenthints.tscn")
+	
+	
+	
+"""
+/*
+* @pre Called when player enters hidden item area
+* @post If item hasn't been found alerts player item is nearby
+* @param Player
+* @return None
+*/
+"""
+func enterarea(spritepath,itemnumber):
+	$Player/Labelarea.hide()
+	if itemarray[itemnumber-1]==0: #means item has not been found
+		spritepath.show()
+		var rng = RandomNumberGenerator.new()
+		var index=rng.randi_range(0, hintlength-1)
+		var letter=hint[index];
+		currenthints=str(currenthints)+letter;
+		$Player/Hints/currenthints.text=str(currenthints);
+		hintbox.window_title=str(letter)+" is in the word"; #sets hint to letter given
+		hintbox.popup()
+		#erases letter from hint so it cannot be given again
+		hint.erase(index,1)
+		#print(hint)
+		if hintlength!=0:
+			hintlength=hintlength-1;#hintlength decreased as one letter given as hint
+		itemarray[itemnumber-1]=1; #item has been found
+
+
+"""
+/*
+* @pre Called when player enters hidden item area function declared for all 6 items
+* @post If item hasn't been found alerts player item is nearby
+* @param Player
+* @return None
+*/
+"""
 func _on_item1area_body_entered(body:PhysicsBody2D)->void:
-	if itemfound==false:
+	if itemarray[0]==0:
+		$Player/Labelarea.show()
+func _on_item2area_body_entered(body:PhysicsBody2D)->void:
+	if itemarray[1]==0:
+		$Player/Labelarea.show()
+func _on_item3area_body_entered(body:PhysicsBody2D)->void:
+	if itemarray[2]==0:
+		$Player/Labelarea.show()
+func _on_item4area_body_entered(body:PhysicsBody2D)->void:
+	if itemarray[3]==0:
+		$Player/Labelarea.show()
+func _on_item5area_body_entered(body:PhysicsBody2D)->void:
+	if itemarray[4]==0:
+		$Player/Labelarea.show()
+func _on_item6area_body_entered(body:PhysicsBody2D)->void:
+	if itemarray[5]==0:
 		$Player/Labelarea.show()
 """
 /*
-* @pre Called when player exits area near item
+* @pre Called when player exits area near item called for all 6 items
 * @post Hides message alerting player they are near item
 * @param Player
 * @return None
 */
 """
-func _on_item1area_body_exited(body):
+func _on_item1area_body_exited(body:PhysicsBody2D)->void:
 	$Player/Labelarea.hide()
+func _on_item2area_body_exited(body:PhysicsBody2D)->void:
+	$Player/Labelarea.hide()
+func _on_item3area_body_exited(body:PhysicsBody2D)->void:
+	$Player/Labelarea.hide()
+func _on_item4area_body_exited(body:PhysicsBody2D)->void:
+	$Player/Labelarea.hide()
+func _on_item5area_body_exited(body:PhysicsBody2D)->void:
+	$Player/Labelarea.hide()
+func _on_item6area_body_exited(body:PhysicsBody2D)->void:
+	$Player/Labelarea.hide()
+
 """
 /*
-* @pre Called when player finds hidden item
+* @pre Called when player finds hidden item called for all 6 items
 * @post Hides hidden item area label and shows hidden item along with alerting the player they have found the item
 * @param Player
 * @return None
 */
 """
 func _on_item1_body_entered(body:PhysicsBody2D)->void:
-	$Player/Labelarea.hide()
-	if itemfound==false:
-		$Player/Labelitem.show()
-		$item1/Sprite.show()
-		itemfound=true;
-	
-
+	if itemarray[0]==0:
+		enterarea($item1/Sprite,1)
+func _on_item2_body_entered(body:PhysicsBody2D)->void:
+	if itemarray[1]==0:
+		enterarea($item2/Sprite,2)
+func _on_item3_body_entered(body:PhysicsBody2D)->void:
+	if itemarray[2]==0:
+		enterarea($item3/Sprite,3)
+func _on_item4_body_entered(body:PhysicsBody2D)->void:
+	if itemarray[3]==0:
+		enterarea($item4/Sprite,4)
+func _on_item5_body_entered(body:PhysicsBody2D)->void:
+	if itemarray[4]==0:
+		enterarea($item5/Sprite,5)
+func _on_item6_body_entered(body:PhysicsBody2D)->void:
+	if itemarray[5]==0:
+		enterarea($item6/Sprite,6)
 """
 /*
-* @pre Called when player has found item and is leaving
+* @pre Called when player has found item and is leaving called for all 6 items
 * @post Hides hidden item  and label so they aren't shown again
 * @param Player
 * @return None
@@ -152,7 +246,19 @@ func _on_item1_body_entered(body:PhysicsBody2D)->void:
 """
 func _on_item1_body_exited(body:PhysicsBody2D)->void:
 	$item1/Sprite.hide()
-	$Player/Labelitem.hide()
-
-
-
+	hintbox.hide()
+func _on_item2_body_exited(body:PhysicsBody2D)->void:
+	$item2/Sprite.hide()
+	hintbox.hide()
+func _on_item3_body_exited(body:PhysicsBody2D)->void:
+	$item3/Sprite.hide()
+	hintbox.hide()
+func _on_item4_body_exited(body:PhysicsBody2D)->void:
+	$item4/Sprite.hide()
+	hintbox.hide()
+func _on_item5_body_exited(body:PhysicsBody2D)->void:
+	$item5/Sprite.hide()
+	hintbox.hide()
+func _on_item6_body_exited(body):
+	$item6/Sprite.hide()
+	hintbox.hide()

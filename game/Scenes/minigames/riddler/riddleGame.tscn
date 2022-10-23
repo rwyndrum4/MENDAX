@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://Assets/Teko-Light.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://Scenes/minigames/riddler/riddleGame.gd" type="Script" id=2]
@@ -9,6 +9,7 @@
 [ext_resource path="res://Scenes/chatBox/chatBox.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Assets/35189.png" type="Texture" id=8]
 [ext_resource path="res://Assets/ARIALBD.TTF" type="DynamicFontData" id=9]
+[ext_resource path="res://Scenes/minigames/riddler/currenthints.tscn" type="PackedScene" id=10]
 
 [sub_resource type="OccluderPolygon2D" id=1]
 polygon = PoolVector2Array( -48.9833, -45.9201, -50.0482, 47.9166, -50.0482, 47.9166, 50.0482, 46.9184, 50.0482, 46.9184, 48.9833, -48.9149, 47.9185, -50.9114 )
@@ -17,7 +18,7 @@ polygon = PoolVector2Array( -48.9833, -45.9201, -50.0482, 47.9166, -50.0482, 47.
 size = 24
 font_data = ExtResource( 9 )
 
-[sub_resource type="DynamicFont" id=6]
+[sub_resource type="DynamicFont" id=7]
 size = 24
 font_data = ExtResource( 9 )
 
@@ -56,21 +57,25 @@ current = true
 
 [node name="Labelarea" type="Label" parent="Player"]
 visible = false
-margin_left = -78.0
-margin_top = 51.0
-margin_right = 89.0
-margin_bottom = 79.0
+margin_left = -85.0
+margin_top = -86.0
+margin_right = 82.0
+margin_bottom = -58.0
 custom_fonts/font = SubResource( 5 )
 text = "Hint is nearby!"
+align = 1
 
-[node name="Labelitem" type="Label" parent="Player"]
-visible = false
-margin_left = -59.0
-margin_top = 51.0
-margin_right = 78.0
-margin_bottom = 79.0
-custom_fonts/font = SubResource( 6 )
-text = "Found Hint!"
+[node name="Hints" type="Button" parent="Player"]
+margin_left = -156.0
+margin_top = -110.0
+margin_right = -57.0
+margin_bottom = -76.0
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_fonts/font = SubResource( 7 )
+text = "Letters:"
+
+[node name="currenthints" parent="Player/Hints" instance=ExtResource( 10 )]
+text = " No hints"
 
 [node name="colliders" type="StaticBody2D" parent="."]
 
@@ -117,28 +122,174 @@ visible = false
 margin_top = 35.0
 margin_bottom = -442.0
 
+[node name="WindowDialog" type="WindowDialog" parent="GUI"]
+margin_left = 656.0
+margin_top = 1210.0
+margin_right = 704.0
+margin_bottom = 1250.0
+rect_scale = Vector2( 5.13829, 1.56244 )
+resizable = true
+
 [node name="item1area" type="Area2D" parent="."]
+position = Vector2( 530, 272 )
 collision_mask = 2
 
 [node name="itemareacollision" type="CollisionShape2D" parent="item1area"]
-position = Vector2( 722, 398.5 )
+position = Vector2( -2, 1 )
 scale = Vector2( 1.5, 1.5 )
 shape = SubResource( 4 )
 
 [node name="item1" type="Area2D" parent="."]
+position = Vector2( 531, 267 )
 
 [node name="Sprite" type="Sprite" parent="item1"]
 visible = false
-position = Vector2( 723, 408 )
+position = Vector2( -0.999878, -1.99994 )
 scale = Vector2( 0.2, 0.2 )
 texture = ExtResource( 8 )
 
 [node name="itemcollision" type="CollisionShape2D" parent="item1"]
-position = Vector2( 723.5, 407.5 )
+position = Vector2( -2, -2 )
 shape = SubResource( 3 )
 
+[node name="item2area" type="Area2D" parent="."]
+position = Vector2( 1430, 793 )
+collision_layer = 4
+collision_mask = 2
+
+[node name="itemareacollision" type="CollisionShape2D" parent="item2area"]
+position = Vector2( 1, 1 )
+scale = Vector2( 1.5, 1.5 )
+shape = SubResource( 4 )
+
+[node name="item2" type="Area2D" parent="."]
+position = Vector2( 1431, 794 )
+
+[node name="Sprite" type="Sprite" parent="item2"]
+visible = false
+position = Vector2( -1.99988, -6 )
+scale = Vector2( 0.2, 0.2 )
+texture = ExtResource( 8 )
+
+[node name="itemcollision" type="CollisionShape2D" parent="item2"]
+position = Vector2( -3, -2 )
+shape = SubResource( 3 )
+
+[node name="item3area" type="Area2D" parent="."]
+position = Vector2( 312, 1021 )
+collision_layer = 4
+collision_mask = 2
+
+[node name="itemareacollision" type="CollisionShape2D" parent="item3area"]
+position = Vector2( 1, 1 )
+scale = Vector2( 1.5, 1.5 )
+shape = SubResource( 4 )
+
+[node name="item3" type="Area2D" parent="."]
+position = Vector2( 313, 1024 )
+
+[node name="Sprite" type="Sprite" parent="item3"]
+visible = false
+position = Vector2( -1.99988, -6 )
+scale = Vector2( 0.2, 0.2 )
+texture = ExtResource( 8 )
+
+[node name="itemcollision" type="CollisionShape2D" parent="item3"]
+position = Vector2( -3, -2 )
+shape = SubResource( 3 )
+
+[node name="item4area" type="Area2D" parent="."]
+position = Vector2( 426, 621 )
+collision_layer = 4
+collision_mask = 2
+
+[node name="itemareacollision" type="CollisionShape2D" parent="item4area"]
+position = Vector2( 1, 1 )
+scale = Vector2( 1.5, 1.5 )
+shape = SubResource( 4 )
+
+[node name="item4" type="Area2D" parent="."]
+position = Vector2( 425, 628 )
+
+[node name="Sprite" type="Sprite" parent="item4"]
+visible = false
+position = Vector2( -1.99988, -6 )
+scale = Vector2( 0.2, 0.2 )
+texture = ExtResource( 8 )
+
+[node name="itemcollision" type="CollisionShape2D" parent="item4"]
+position = Vector2( -3, -2 )
+shape = SubResource( 3 )
+
+[node name="item5area" type="Area2D" parent="."]
+position = Vector2( 1360, 323 )
+collision_layer = 4
+collision_mask = 2
+
+[node name="itemareacollision" type="CollisionShape2D" parent="item5area"]
+position = Vector2( 1, 1 )
+scale = Vector2( 1.5, 1.5 )
+shape = SubResource( 4 )
+
+[node name="item5" type="Area2D" parent="."]
+position = Vector2( 1361, 328 )
+
+[node name="Sprite" type="Sprite" parent="item5"]
+visible = false
+position = Vector2( -1.99988, -6 )
+scale = Vector2( 0.2, 0.2 )
+texture = ExtResource( 8 )
+
+[node name="itemcollision" type="CollisionShape2D" parent="item5"]
+position = Vector2( -3, -2 )
+shape = SubResource( 3 )
+
+[node name="item6area" type="Area2D" parent="."]
+position = Vector2( 1070, 1131 )
+collision_layer = 4
+collision_mask = 2
+
+[node name="itemareacollision" type="CollisionShape2D" parent="item6area"]
+position = Vector2( 1, 1 )
+scale = Vector2( 1.5, 1.5 )
+shape = SubResource( 4 )
+
+[node name="item6" type="Area2D" parent="."]
+position = Vector2( 1069, 1132 )
+
+[node name="Sprite" type="Sprite" parent="item6"]
+visible = false
+position = Vector2( -1.99988, -6 )
+scale = Vector2( 0.2, 0.2 )
+texture = ExtResource( 8 )
+
+[node name="itemcollision" type="CollisionShape2D" parent="item6"]
+position = Vector2( -3, -2 )
+shape = SubResource( 3 )
+
+[connection signal="pressed" from="Player/Hints" to="." method="_on_Hints_pressed"]
 [connection signal="timeout" from="GUI/Timer" to="." method="_on_Timer_timeout"]
 [connection signal="body_entered" from="item1area" to="." method="_on_item1area_body_entered"]
 [connection signal="body_exited" from="item1area" to="." method="_on_item1area_body_exited"]
 [connection signal="body_entered" from="item1" to="." method="_on_item1_body_entered"]
 [connection signal="body_exited" from="item1" to="." method="_on_item1_body_exited"]
+[connection signal="body_entered" from="item2area" to="." method="_on_item2area_body_entered"]
+[connection signal="body_exited" from="item2area" to="." method="_on_item2area_body_exited"]
+[connection signal="body_entered" from="item2" to="." method="_on_item2_body_entered"]
+[connection signal="body_exited" from="item2" to="." method="_on_item2_body_exited"]
+[connection signal="body_entered" from="item3area" to="." method="_on_item3area_body_entered"]
+[connection signal="body_exited" from="item3area" to="." method="_on_item3area_body_exited"]
+[connection signal="body_entered" from="item3" to="." method="_on_item3_body_entered"]
+[connection signal="body_exited" from="item3" to="." method="_on_item3_body_exited"]
+[connection signal="body_entered" from="item4area" to="." method="_on_item4area_body_entered"]
+[connection signal="body_exited" from="item4area" to="." method="_on_item4area_body_exited"]
+[connection signal="body_entered" from="item4" to="." method="_on_item4_body_entered"]
+[connection signal="body_exited" from="item4" to="." method="_on_item4_body_exited"]
+[connection signal="body_entered" from="item5area" to="." method="_on_item5area_body_entered"]
+[connection signal="body_exited" from="item5area" to="." method="_on_item5area_body_exited"]
+[connection signal="body_entered" from="item5" to="." method="_on_item5_body_entered"]
+[connection signal="body_exited" from="item5" to="." method="_on_item5_body_exited"]
+[connection signal="body_entered" from="item6area" to="." method="_on_item6area_body_entered"]
+[connection signal="body_exited" from="item6area" to="." method="_on_item6area_body_exited"]
+[connection signal="body_entered" from="item6" to="." method="_on_item6_body_entered"]
+[connection signal="body_exited" from="item6" to="." method="_on_item6_body_exited"]
