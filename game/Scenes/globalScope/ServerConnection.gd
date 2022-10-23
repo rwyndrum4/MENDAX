@@ -157,7 +157,7 @@ func send_text_async_general(text: String) -> int:
 	var msg_result = yield(
 		_socket.write_chat_message_async(_general_chat_id, 
 		{"msg": text, 
-		"user_sent": "",
+		"user_sent": "n/a",
 		"from_user": Save.game_data.username,
 		"type": "general"
 		}), "completed")
