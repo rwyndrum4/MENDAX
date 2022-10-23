@@ -159,7 +159,7 @@ func send_text_async_general(text: String) -> int:
 		{"msg": text, 
 		"user_sent": "",
 		"from_user": Save.game_data.username,
-		"type": "whisper"
+		"type": "general"
 		}), "completed")
 	return ERR_CONNECTION_ERROR if msg_result.is_exception() else OK
 
