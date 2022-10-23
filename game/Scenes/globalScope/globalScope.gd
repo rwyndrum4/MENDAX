@@ -1,3 +1,14 @@
+"""
+* Programmer Name - Ben Moeller, Jason Truong
+* Description - File for controlling swapping out scenes and controlling network and chatbox
+* 	This is the scnene that will ALWAYS be a part of the game
+*	If you want to know how to load a scene, checkout instructions in Loader/Global.gd
+* Date Created - 10/9/2022
+* Date Revisions:
+	10/12/2022 - Start of adding network functionality
+	10/14/2022 - Got general chat working for player
+	10/22/2022 - Adding scene changer functionality
+"""
 extends Node
 
 #Member Variables
@@ -16,6 +27,9 @@ var current_scene = null
 #State to compare to the global state to see if anything changes
 var local_state = null
 
+#Variable that checks if connected to server
+var is_connected_to_server: bool = false
+
 """
 /*
 * @pre called once when scene is called
@@ -25,6 +39,7 @@ var local_state = null
 */
 """
 func _ready():
+	is_connected_to_server = false
 	#Load initial scene (main menu)
 	current_scene = load(main_menu).instance()
 	add_child(current_scene)
@@ -44,7 +59,7 @@ func _ready():
 """
 func _process(_delta): #if you want to use _delta, remove _
 	if local_state != Global.state:
-		#free up memory
+		#free up memory from the current scene
 		current_scene.queue_free()
 		#change the scene
 		_change_scene_to(Global.state)
@@ -79,22 +94,24 @@ func _change_scene_to(state):
 * @post authenticates, connects to server, and joins general chat
 * 	if there were no errors along the way
 * @param None
-* @return None
+* @return bool
 */
 """
 func server_checks():
+	is_connected_to_server = false
 	var result = yield(request_authentication(), "completed")
 	if result == OK:
 		result = yield(connect_to_server(), "completed")
 		if result == OK:
 			yield(server_connection.join_chat_async_general(), "completed")
+			is_connected_to_server = true
 
 """
 /*
 * @pre called in _ready
 * @post calls authentication function
 * @param None
-* @return None
+* @return int
 */
 """
 func request_authentication() -> int:
@@ -112,10 +129,10 @@ func request_authentication() -> int:
 * @pre called once in _ready
 * @post calls connection to server function
 * @param None
-* @return None
+* @return int
 */
 """
-func connect_to_server() -> void:
+func connect_to_server() -> int:
 	var result: int = yield(server_connection.connect_to_server_async(), "completed")
 	if result == OK:
 		print("Connected to the server")
@@ -123,6 +140,7 @@ func connect_to_server() -> void:
 		print("Could not connect to server")
 	else:
 		print("Unexpected error received")
+	return result
 
 """
 /*
@@ -145,8 +163,14 @@ func _on_ServerConnection_chat_message_received(text,type,user_sent_to,user_rece
 */
 """
 func _on_chatbox_message_sent(msg,is_whisper,username_to_send_to):
+	#If not connected to server, don't send message
+	if not is_connected_to_server:
+		chat_box.add_err_message()
+		return
+	#Else send message corresponding to whisper or general
 	if is_whisper:
 		yield(server_connection.join_chat_async_whisper(username_to_send_to,false), "completed")
+		#Set a timer to give time for connection to form between players
 		var t = Timer.new()
 		t.set_wait_time(0.1)
 		t.set_one_shot(true)
@@ -154,7 +178,9 @@ func _on_chatbox_message_sent(msg,is_whisper,username_to_send_to):
 		t.start()
 		yield(t, "timeout")
 		t.queue_free()
+		#end of timer, send whisper
 		yield(server_connection.send_text_async_whisper(msg,username_to_send_to), "completed")
 	else:
+		#send message to general
 		yield(server_connection.send_text_async_general(msg), "completed")
 	print("sent message to server")
