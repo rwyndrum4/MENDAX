@@ -1,6 +1,6 @@
 [gd_scene load_steps=12 format=2]
 
-[ext_resource path="res://Assets/EntryAreaBackground.png" type="Texture" id=1]
+[ext_resource path="res://Scenes/startArea/worldMap.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Scenes/player/player.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Scenes/worldEnvironment/worldEnv.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Scenes/startArea/EntrySpace.gd" type="Script" id=4]
@@ -33,17 +33,6 @@ scale = Vector2( 0.148387, 0.589738 )
 texture = SubResource( 3 )
 shadow_enabled = true
 shadow_color = Color( 0.686275, 0.0901961, 0.0901961, 0 )
-
-[node name="TextureRect" type="TextureRect" parent="."]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -856.0
-margin_top = -720.0
-margin_right = 2024.0
-margin_bottom = 2160.0
-rect_scale = Vector2( 1.31642, 1.08664 )
-texture = ExtResource( 1 )
-stretch_mode = 1
 
 [node name="Player" parent="." instance=ExtResource( 2 )]
 position = Vector2( 832, 1344 )
@@ -121,6 +110,8 @@ custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Press Enter 
 to exit cave"
 align = 1
+
+[node name="Node2D" parent="." instance=ExtResource( 1 )]
 
 [connection signal="timeout" from="GUI/Timer" to="." method="_on_Timer_timeout"]
 [connection signal="body_entered" from="exitCaveArea" to="." method="_on_exitCaveArea_body_entered"]
