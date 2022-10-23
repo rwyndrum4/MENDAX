@@ -18,6 +18,7 @@ onready var textBox = $GUI/textBox
 onready var hintbox=$GUI/show_letter
 onready var itemarray=[] #determines if items have been found
 onready var hint="person";
+var answer = "person"
 onready var currenthints=""; #keeps track of currenhints found
 onready var hintlength=0#keeps track of hintlength to give random letter clues
 
@@ -77,7 +78,7 @@ func check_settings():
 */
 """
 func _check_answer(answer:String):
-	if answer == hint:
+	if answer == answer:
 		Global.state = Global.scenes.CAVE
 
 """
