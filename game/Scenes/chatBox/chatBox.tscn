@@ -25,14 +25,7 @@ margin_top = 219.0
 margin_right = 400.0
 margin_bottom = 243.0
 
-[node name="playerName" type="Label" parent="textHolder/inputField"]
-margin_top = 5.0
-margin_right = 47.0
-margin_bottom = 19.0
-text = "[Player]"
-
 [node name="playerInput" type="LineEdit" parent="textHolder/inputField"]
-margin_left = 51.0
 margin_right = 400.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
@@ -40,4 +33,6 @@ size_flags_vertical = 3
 placeholder_text = "SHIFT+ENTER to chat, Esc to exit"
 placeholder_alpha = 0.233
 
+[connection signal="focus_entered" from="textHolder/inputField/playerInput" to="." method="_on_playerInput_focus_entered"]
+[connection signal="focus_exited" from="textHolder/inputField/playerInput" to="." method="_on_playerInput_focus_exited"]
 [connection signal="text_entered" from="textHolder/inputField/playerInput" to="." method="_on_playerInput_text_entered"]

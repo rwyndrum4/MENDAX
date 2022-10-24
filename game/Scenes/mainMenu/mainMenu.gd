@@ -17,6 +17,8 @@ onready var startButton = $VBoxContainer/Start
 onready var settingsMenu = $SettingsMenu
 onready var fpsLabel = $fpsLabel
 onready var worldEnv = $WorldEnvironment
+onready var usernameAsk = $askForUsername
+onready var usernameInput = $askForUsername/LineEdit
 
 
 """
@@ -39,6 +41,11 @@ func _ready():
 	settingsMenu._on_MasterVolSlider_value_changed(Save.game_data.master_vol)
 	settingsMenu._on_MusicVolSlider_value_changed(Save.game_data.music_vol)
 	settingsMenu._on_SfxVolSlider_value_changed(Save.game_data.sfx_vol)
+	#check if there is a username
+	if Save.game_data.username == "":
+		usernameAsk.popup_centered()
+		usernameInput.grab_focus()
+		
 
 
 """
@@ -62,7 +69,8 @@ func _process(_delta): #if you want to use delta, then change it to delta
 */
 """
 func _on_Start_pressed():
-	SceneTrans.change_scene("res://Scenes/startArea/startArea.tscn")
+	#change scene to start area
+	SceneTrans.change_scene(Global.scenes.START_AREA)
 
 """
 /*
@@ -89,7 +97,7 @@ func _on_Options_pressed():
 """
 #When button pressed switches to Store scene
 func _on_Market_pressed():
-	SceneTrans.change_scene("res://StoreElements/StoreVars.tscn")
+	Global.state = Global.scenes.MARKET
 
 """
 /*
@@ -145,3 +153,7 @@ func getRandAlphInd(rng):
 		rng.randomize()
 		var randomAlphabetIndex = rng.randi_range(0, 25)
 		return randomAlphabetIndex
+
+
+func _on_askForUsername_confirmed():
+	settingsMenu._on_usernameInput_text_entered(usernameInput.text)

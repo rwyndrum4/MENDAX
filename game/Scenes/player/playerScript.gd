@@ -10,6 +10,8 @@
 extends KinematicBody2D
 
 # Member Variables
+onready var character = $position/animated_sprite
+onready var char_pos = $position
 var is_stopped = false
 
 # Player physics constants
@@ -34,6 +36,7 @@ func _ready():
 	GlobalSignals.connect("textbox_shift",self,"stop_go_player")
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("openMenu",self,"stop_go_player")
+	character.play("idle")
 
 """
 /*
@@ -45,8 +48,10 @@ func _ready():
 """
 func _physics_process(delta):
 	#don't move player if textbox is playing or options are open
+	
 	if is_stopped:
 		return
+	
 	# Initialize input velocity
 	var input_velocity = Vector2.ZERO
 	input_velocity.x = Input.get_axis("ui_left", "ui_right")
@@ -69,6 +74,7 @@ func _physics_process(delta):
 	
 	# Factor in collisions
 	velocity = move_and_slide(velocity)
+	control_animations(velocity)
 
 """
 /*
@@ -80,3 +86,23 @@ func _physics_process(delta):
 """
 func stop_go_player(value:bool):
 	is_stopped = value
+
+"""
+/*
+* @pre None
+* @post updates the character's animations
+* @param vel -> int
+* @return None
+*/
+"""
+func control_animations(vel):
+	if vel.x > 0:
+		char_pos.scale.x = 1
+		character.play("roll")
+	elif vel.x < 0:
+		char_pos.scale.x = -1
+		character.play("roll")
+	elif vel.y != 0:
+		character.play("roll")
+	else:
+		character.play("idle")

@@ -40,3 +40,10 @@ signal openChatbox(value)
 """
 # warning-ignore:unused_signal
 signal inputText(inText)
+
+"""
+* Purpose - Send a signal when a message received, to send to riddler minigame
+* Used in - riddleGame.gd, globalScope.gd
+* Parameter - answer -> string (text of a message)
+"""
+signal answer_received(answer)
