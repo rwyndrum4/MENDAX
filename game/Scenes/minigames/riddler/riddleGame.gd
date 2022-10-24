@@ -21,6 +21,12 @@ onready var hint="person";
 var answer = "person"
 onready var currenthints=""; #keeps track of currenhints found
 onready var hintlength=0#keeps track of hintlength to give random letter clues
+onready var transCam = $Path2D/PathFollow2D/camTrans
+onready var riddler = $riddler
+onready var playerCam = $Player/Camera2D
+
+#signals
+signal textWait()
 
 """
 /*
@@ -32,13 +38,41 @@ onready var hintlength=0#keeps track of hintlength to give random letter clues
 """
 func _ready():
 	GlobalSignals.connect("answer_received",self,"_check_answer")
-	myTimer.start(90)
-	#This is how you queue text to the textbox queue
-	textBox.queue_text("What walks on four legs in the morning, two legs in the afternoon, and three in the evening?")
+	#myTimer.start(90)
+	
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("openChatbox", self, "chatbox_use")
 	init_hiddenitems() #initalizes hidden items array and other things needed
-	textBox.queue_text("Please enter the answer in the chat once you have it, there are hints hidden here if you need them (:")
+	
+	
+	#scene animation for entering cave(for first time)
+	if Global.entry == 0:
+	#Insert Dialogue: "Oh who do we have here?" or something similar
+		var t = Timer.new()
+		t.set_wait_time(1)
+		t.set_one_shot(false)
+		self.add_child(t)
+			
+		
+		
+		Global.entry = 1
+		transCam.current = true
+		$Player.set_physics_process(false)
+		#Begin scene dialogue
+		textBox.queue_text("Oh who do we have here?")
+		t.start()
+		yield(t, "timeout")
+		t.queue_free()
+		$Path2D/AnimationPlayer.play("BEGIN")
+		yield($Path2D/AnimationPlayer, "animation_finished")
+		#This is how you queue text to the textbox queue
+		textBox.queue_text("In order to pass you must solve this riddle...")
+		textBox.queue_text("What walks on four legs in the morning, two legs in the afternoon, and three in the evening?")
+		textBox.queue_text("Please enter the answer in the chat once you have it, there are hints hidden here if you need them (:")
+		connect("textWait", self, "_finish_anim")
+		Global.in_anim = 1;
+	else:
+		myTimer.start(90)
 
 """
 /*
@@ -52,6 +86,54 @@ func _ready():
 func _process(_delta): #change to delta if used
 	check_settings()
 	timerText.text = convert_time(myTimer.time_left)
+
+"""
+/*
+* @pre None
+* @post Starts timer for minigame, sets playerCam to current, and sets physic_process to True
+* @param None
+* @return None
+*/
+"""
+func _finish_anim():
+	var t = Timer.new()
+	t.set_wait_time(1)
+	t.set_one_shot(false)
+	self.add_child(t)
+		
+	t.start()
+	yield(t, "timeout")
+
+	$Path2D/AnimationPlayer.play_backwards("BEGIN")
+	yield($Path2D/AnimationPlayer, "animation_finished")
+	t.start()
+	yield(t, "timeout")
+	
+	#start timer
+	textBox.queue_text("Time starts now!")
+	myTimer.start(90)
+	
+	#remove jester
+	riddler.queue_free()
+	
+	t.queue_free()
+	$Player.set_physics_process(true)
+	playerCam.current = true
+
+
+"""
+/*
+* @pre An input of any sort
+* @post None
+* @param Takes in an event
+* @return None
+*/
+"""
+func _input(ev):
+	if Input.is_key_pressed(KEY_ENTER) and not ev.echo and textBox.queue_text_length() == 0:
+		if Global.in_anim == 1:
+			Global.in_anim = 0
+			emit_signal("textWait")
 
 """
 /*

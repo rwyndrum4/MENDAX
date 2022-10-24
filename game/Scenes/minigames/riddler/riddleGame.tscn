@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://Assets/Teko-Light.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://Scenes/minigames/riddler/riddleGame.gd" type="Script" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://Scenes/SettingsMenu/settingsMenu.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Assets/EntryAreaBackground.png" type="Texture" id=5]
 [ext_resource path="res://Scenes/textBox/textBox.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Scenes/Jester/jester.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Assets/35189.png" type="Texture" id=8]
 [ext_resource path="res://Assets/ARIALBD.TTF" type="DynamicFontData" id=9]
 
@@ -32,6 +33,42 @@ extents = Vector2( 90, 92.5 )
 
 [sub_resource type="RectangleShape2D" id=3]
 extents = Vector2( 48.5, 48.5 )
+
+[sub_resource type="Curve2D" id=10]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 832, 1344, 0, 0, 0, 0, -293, 180 )
+}
+
+[sub_resource type="Animation" id=11]
+resource_name = "BEGIN"
+length = 3.0
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:offset")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0.0, 1598.22 ]
+}
+
+[sub_resource type="Animation" id=12]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:offset")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0.0 ]
+}
 
 [node name="riddleGame" type="Control"]
 script = ExtResource( 2 )
@@ -261,6 +298,23 @@ texture = ExtResource( 8 )
 [node name="itemcollision" type="CollisionShape2D" parent="item6"]
 position = Vector2( -3, -2 )
 shape = SubResource( 3 )
+
+[node name="riddler" parent="." instance=ExtResource( 7 )]
+position = Vector2( -293, 180 )
+
+[node name="Path2D" type="Path2D" parent="."]
+curve = SubResource( 10 )
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Path2D"]
+position = Vector2( 832, 1344 )
+rotation = -2.33913
+
+[node name="camTrans" type="Camera2D" parent="Path2D/PathFollow2D"]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Path2D"]
+root_node = NodePath("../PathFollow2D")
+anims/BEGIN = SubResource( 11 )
+anims/RESET = SubResource( 12 )
 
 [connection signal="timeout" from="GUI/Timer" to="." method="_on_Timer_timeout"]
 [connection signal="body_entered" from="item1area" to="." method="_on_item1area_body_entered"]

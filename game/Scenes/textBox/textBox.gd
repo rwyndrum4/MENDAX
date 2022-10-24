@@ -87,6 +87,18 @@ func queue_text(next_text):
 """
 /*
 * @pre None
+* @post None
+* @param 
+* @return Returns task list
+*/
+"""
+func queue_text_length():
+	#return text length
+	return len(text_queue)
+
+"""
+/*
+* @pre None
 * @post Resets current textbox and hides from screen
 * @param None
 * @return None
