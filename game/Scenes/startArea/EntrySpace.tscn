@@ -35,10 +35,11 @@ script = ExtResource( 4 )
 [node name="WorldEnvironment" parent="." instance=ExtResource( 3 )]
 
 [node name="Light2D" type="Light2D" parent="."]
-position = Vector2( 117, 1588 )
+position = Vector2( 1060, 1600 )
 rotation = -4.70422
 scale = Vector2( 0.157201, 0.59011 )
 texture = SubResource( 3 )
+offset = Vector2( 0, 1600 )
 shadow_enabled = true
 shadow_color = Color( 0.686275, 0.0901961, 0.0901961, 0 )
 
