@@ -16,9 +16,9 @@ const KEY := "nakama_mendax"
 
 var _session: NakamaSession
 
-#my server: 18.222.220.187
+#bens server: 18.118.82.24
 #jasons server: 52.205.252.95
-var _client := Nakama.create_client(KEY, "18.222.220.187", 7350, "http")
+var _client := Nakama.create_client(KEY, "18.118.82.24", 7350, "http")
 var _socket : NakamaSocket
 
 var _general_chat_id = ""
