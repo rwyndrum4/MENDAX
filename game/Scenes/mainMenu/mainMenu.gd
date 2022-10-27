@@ -45,7 +45,7 @@ func _ready():
 	if Save.game_data.username == "":
 		usernameAsk.popup_centered()
 		usernameInput.grab_focus()
-		
+
 
 
 """
@@ -165,14 +165,3 @@ func getRandAlphInd(rng):
 func _on_askForUsername_confirmed():
 	settingsMenu._on_usernameInput_text_entered(usernameInput.text)
 
-"""
-/*
-* @pre called when the player wants to join a match
-* @post joins the match by calling server
-* @param None
-* @return None
-*/
-"""
-func join_world():
-	var presences: Dictionary = yield(ServerConnection.join_world_async(), "completed")
-	print("Joined the match!")

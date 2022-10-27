@@ -46,7 +46,8 @@ func _ready():
 	Global.state = Global.scenes.MAIN_MENU
 	local_state = Global.scenes.MAIN_MENU
 	#Connect to Server
-	server_checks()
+	yield(server_checks(), "completed")
+	yield(server_connection.join_world_async(), "completed")
 
 """
 /*

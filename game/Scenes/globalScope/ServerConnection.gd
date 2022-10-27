@@ -9,8 +9,18 @@
 """
 extends Node
 
-signal chat_message_received(username, text)
+enum OpCodes {
+	UPDATE_POSITION,
+	UPDATE_INPUT,
+	DO_SPAWN,
+	UPDATE_STATE,
+	INITIAL_STATE
+}
 
+signal chat_message_received(username, text)
+signal state_update(positions, inputs)
+signal initial_state_received(positions, inputs, names)
+signal character_spawned(id, name)
 #Key that is stored in the server
 const KEY := "nakama_mendax"
 
@@ -25,6 +35,7 @@ var _general_chat_id = ""
 var _current_whisper_id = ""
 var _world_id: String = ""
 var _world_presences = {}
+var deviceid:String = ""
 
 var room_users:Dictionary = {}
 
@@ -38,7 +49,7 @@ var room_users:Dictionary = {}
 """
 func authenticate_async() -> int:
 	var result := OK
-	var deviceid = OS.get_unique_id()
+	deviceid = OS.get_unique_id()
 	
 	var new_session: NakamaSession = yield(_client.authenticate_device_async(deviceid), "completed")
 	
@@ -75,6 +86,8 @@ func connect_to_server_async() -> int:
 		#get a notification
 		# warning-ignore:return_value_discarded
 		_socket.connect("received_notification", self, "_on_notification")
+		#warning-ignore: return_value_discarded
+		_socket.connect("received_match_state", self, "_on_NakamaSocket_received_match_state")
 		return OK
 	return ERR_CANT_CONNECT
 
@@ -225,6 +238,34 @@ func _on_channel_presence(p_presence : NakamaRTAPI.ChannelPresenceEvent):
 func _on_notification(p_notification : NakamaAPI.ApiNotification):
 	join_chat_async_whisper(p_notification._get_sender_id(),true)
 
+func _on_NakamaSocket_received_match_state(match_state: NakamaRTAPI.MatchData) -> void:
+	var code := match_state.op_code
+	var raw := match_state.data
+	
+	match code:
+		OpCodes.UPDATE_STATE:
+			var decoded: Dictionary = JSON.parse(raw).result
+			
+			var positions: Dictionary = decoded.pos
+			var inputs: Dictionary = decoded.inp
+			
+			emit_signal("state_updated", positions, inputs)
+		OpCodes.INITIAL_STATE:
+			var decoded: Dictionary = JSON.parse(raw).result
+			
+			var positions: Dictionary = decoded.pos
+			var inputs: Dictionary = decoded.inp
+			var names: Dictionary = decoded.nms
+			
+			emit_signal("initial_state_received", positions, inputs, names)
+		OpCodes.DO_SPAWN:
+			var decoded: Dictionary = JSON.parse(raw).result
+			
+			var id: String = decoded.id
+			var name: String = decoded.nm
+			
+			emit_signal("character_spawned", id, name)
+
 func join_world_async() -> Dictionary:
 	var world: NakamaAPI.ApiRpc = yield(_client.rpc_async(_session, "get_world_id", ""), "completed")
 	if not world.is_exception():
@@ -237,7 +278,24 @@ func join_world_async() -> Dictionary:
 	if match_join_result.is_exception():
 		var exception: NakamaException = match_join_result.get_exception()
 		print("Error joining the match: %s - %s" % [exception.status_code, exception.message])
+		return {}
 	else:
 		for presence in match_join_result.presences:
 			_world_presences[presence.user_id] = presence
-	return _world_presences
+	return _world_presences #holds user ids
+
+
+func send_position_update(position: Vector2) -> void:
+	if _socket:
+		var payload := {id = deviceid, pos = {x=position.x, y = position.y}}
+		_socket.send_match_state_async(_world_id, OpCodes.UPDATE_POSITION,JSON.print(payload))
+		
+func send_input_update(input: float) -> void:
+	if _socket:
+		var payload := {id = deviceid, inp = input}
+		_socket.send_match_state_async(_world_id, OpCodes.UPDATE_INPUT,JSON.print(payload))
+		
+func send_spawn(name: String) -> void:
+	if _socket:
+		var payload := {id = deviceid, nm = name}
+		_socket.send_match_state_async(_world_id, OpCodes.DO_SPAWN,JSON.print(payload))
