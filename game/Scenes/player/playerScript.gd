@@ -1,11 +1,12 @@
 """
-* Programmer Name - Freeman Spray
+* Programmer Name - Freeman Spray, Ben Moeller
 * Description - Code that designates player movement
 * Date Created - 10/1/2022
 * Citations - based on https://www.youtube.com/watch?v=TQKXU7iSWUU
 * Date Revisions:
 	10/2/2022 - Improved movement to feel more natural
 	10/14/2022 - Added signals to stop player when in options or textbox scene
+	10/27/2022 - Added character animation
 """
 extends KinematicBody2D
 
@@ -36,6 +37,7 @@ func _ready():
 	GlobalSignals.connect("textbox_shift",self,"stop_go_player")
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("openMenu",self,"stop_go_player")
+	#Initially have character idle
 	character.play("idle")
 
 """
@@ -48,8 +50,8 @@ func _ready():
 """
 func _physics_process(delta):
 	#don't move player if textbox is playing or options are open
-	
 	if is_stopped:
+		control_animations(Vector2.ZERO) #play idle animation
 		return
 	
 	# Initialize input velocity
@@ -74,6 +76,7 @@ func _physics_process(delta):
 	
 	# Factor in collisions
 	velocity = move_and_slide(velocity)
+	#Animate character
 	control_animations(velocity)
 
 """
@@ -91,18 +94,33 @@ func stop_go_player(value:bool):
 /*
 * @pre None
 * @post updates the character's animations
-* @param vel -> int
+* @param vel -> Vector2
 * @return None
 */
 """
-func control_animations(vel):
-	if vel.x > 0:
+func control_animations(vel:Vector2):
+	#Character moves NorthEast
+	if vel.y < 0 and vel.x > 0:
+		char_pos.scale.x = -1
+		character.play("roll_northwest")
+	#Character moves NorthWest
+	elif vel.y < 0 and vel.x < 0:
 		char_pos.scale.x = 1
-		character.play("roll")
+		character.play("roll_northwest")
+	#Character moves East or SouthEast
+	elif vel.x > 0:
+		char_pos.scale.x = 1
+		character.play("roll_southeast")
+	#Character moves West or SoutWest
 	elif vel.x < 0:
 		char_pos.scale.x = -1
-		character.play("roll")
-	elif vel.y != 0:
-		character.play("roll")
+		character.play("roll_southeast")
+	#Character moves North
+	elif vel.y < 0:
+		character.play("roll_north")
+	#Character moves South
+	elif vel.y > 0:
+		character.play("roll_south")
+	#Character not moving (idle)
 	else:
 		character.play("idle")
