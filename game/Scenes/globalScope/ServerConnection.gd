@@ -18,7 +18,7 @@ enum OpCodes {
 }
 
 signal chat_message_received(username, text)
-signal state_update(positions, inputs)
+signal state_updated(positions, inputs)
 signal initial_state_received(positions, inputs, names)
 signal character_spawned(id, name)
 #Key that is stored in the server
