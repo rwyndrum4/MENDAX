@@ -123,6 +123,7 @@ Save="*res://Loader/save.gd"
 Global="*res://Loader/Global.gd"
 GlobalSignals="*res://Loader/globalSignals.gd"
 Nakama="*res://Loader/Nakama/com.heroiclabs.nakama/Nakama.gd"
+ServerConnection="*res://Scenes/globalScope/ServerConnection.gd"
 
 [display]
 

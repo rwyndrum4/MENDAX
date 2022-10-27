@@ -23,6 +23,8 @@ var _socket : NakamaSocket
 
 var _general_chat_id = ""
 var _current_whisper_id = ""
+var _world_id: String = ""
+var _world_presences = {}
 
 var room_users:Dictionary = {}
 
@@ -223,3 +225,19 @@ func _on_channel_presence(p_presence : NakamaRTAPI.ChannelPresenceEvent):
 func _on_notification(p_notification : NakamaAPI.ApiNotification):
 	join_chat_async_whisper(p_notification._get_sender_id(),true)
 
+func join_world_async() -> Dictionary:
+	var world: NakamaAPI.ApiRpc = yield(_client.rpc_async(_session, "get_world_id", ""), "completed")
+	if not world.is_exception():
+		_world_id = world.payload
+	else:
+		print("rpc_async failed")
+		return {}
+	
+	var match_join_result: NakamaRTAPI.Match = yield(_socket.join_match_async(_world_id), "completed")
+	if match_join_result.is_exception():
+		var exception: NakamaException = match_join_result.get_exception()
+		print("Error joining the match: %s - %s" % [exception.status_code, exception.message])
+	else:
+		for presence in match_join_result.presences:
+			_world_presences[presence.user_id] = presence
+	return _world_presences

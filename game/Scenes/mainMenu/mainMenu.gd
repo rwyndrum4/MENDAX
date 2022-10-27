@@ -154,6 +154,25 @@ func getRandAlphInd(rng):
 		var randomAlphabetIndex = rng.randi_range(0, 25)
 		return randomAlphabetIndex
 
-
+"""
+/*
+* @pre when the user inputs their username
+* @post sets the global username to text entered
+* @param None
+* @return None
+*/
+"""
 func _on_askForUsername_confirmed():
 	settingsMenu._on_usernameInput_text_entered(usernameInput.text)
+
+"""
+/*
+* @pre called when the player wants to join a match
+* @post joins the match by calling server
+* @param None
+* @return None
+*/
+"""
+func join_world():
+	var presences: Dictionary = yield(ServerConnection.join_world_async(), "completed")
+	print("Joined the match!")
