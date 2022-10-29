@@ -5,6 +5,7 @@
 * Date Revisions:
 	10/14/2022 - Added the openMenu signal
 	10/16/2022 - Added the inputText signal
+	10/28/2022 - Added server control signals
 """
 
 extends Node
@@ -46,4 +47,5 @@ signal inputText(inText)
 * Used in - riddleGame.gd, globalScope.gd
 * Parameter - answer -> string (text of a message)
 """
+# warning-ignore:unused_signal
 signal answer_received(answer)

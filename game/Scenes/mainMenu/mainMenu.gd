@@ -30,23 +30,8 @@ onready var usernameInput = $askForUsername/LineEdit
 */
 """
 func _ready():
-	#Grab focus on start button so keys can be used to navigate buttons
-	startButton.grab_focus()
-	#Call function to use user saved fps
-	fpsLabel._on_fps_displayed(Save.game_data.display_fps)
-	#Call functions to use user saved brightness and bloom values
-	worldEnv._on_brightness_toggled(Save.game_data.brightness)
-	worldEnv._on_bloom_toggled(Save.game_data.bloom_on)
-	#Call functions to sync audio settings with user save
-	settingsMenu._on_MasterVolSlider_value_changed(Save.game_data.master_vol)
-	settingsMenu._on_MusicVolSlider_value_changed(Save.game_data.music_vol)
-	settingsMenu._on_SfxVolSlider_value_changed(Save.game_data.sfx_vol)
-	#check if there is a username
-	if Save.game_data.username == "":
-		usernameAsk.popup_centered()
-		usernameInput.grab_focus()
-
-
+	initialize_menu()
+	ServerConnection.connect("character_spawned",self,"_character_spawned")
 
 """
 /*
@@ -156,6 +141,31 @@ func getRandAlphInd(rng):
 
 """
 /*
+* @pre Called in ready func
+* @post Initialize necessary components in menu
+* @param None
+* @return None
+*/
+"""
+func initialize_menu():
+	#Grab focus on start button so keys can be used to navigate buttons
+	startButton.grab_focus()
+	#Call function to use user saved fps
+	fpsLabel._on_fps_displayed(Save.game_data.display_fps)
+	#Call functions to use user saved brightness and bloom values
+	worldEnv._on_brightness_toggled(Save.game_data.brightness)
+	worldEnv._on_bloom_toggled(Save.game_data.bloom_on)
+	#Call functions to sync audio settings with user save
+	settingsMenu._on_MasterVolSlider_value_changed(Save.game_data.master_vol)
+	settingsMenu._on_MusicVolSlider_value_changed(Save.game_data.music_vol)
+	settingsMenu._on_SfxVolSlider_value_changed(Save.game_data.sfx_vol)
+	#check if there is a username
+	if Save.game_data.username == "":
+		usernameAsk.popup_centered()
+		usernameInput.grab_focus()
+
+"""
+/*
 * @pre when the user inputs their username
 * @post sets the global username to text entered
 * @param None
@@ -165,3 +175,5 @@ func getRandAlphInd(rng):
 func _on_askForUsername_confirmed():
 	settingsMenu._on_usernameInput_text_entered(usernameInput.text)
 
+func _character_spawned(id: String,char_name: String):
+	print("a character has spawned with id ", id, "and name", char_name)

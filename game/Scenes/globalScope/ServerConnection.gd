@@ -9,35 +9,65 @@
 """
 extends Node
 
+#Opcodes used to send to server about what is happening in game
 enum OpCodes {
-	UPDATE_POSITION,
+	UPDATE_POSITION = 1,
 	UPDATE_INPUT,
-	DO_SPAWN,
 	UPDATE_STATE,
+	UPDATE_JUMP,
+	DO_SPAWN,
+	UPDATE_COLOR,
 	INITIAL_STATE
 }
 
-signal chat_message_received(username, text)
-signal state_updated(positions, inputs)
-signal initial_state_received(positions, inputs, names)
-signal character_spawned(id, name)
-#Key that is stored in the server
-const KEY := "nakama_mendax"
+#Variable that checks if connected to server
+var server_status: bool = false
 
-var _session: NakamaSession
+#Signals for recieving game state data from server (from  the .lua files)
+signal state_updated(positions, inputs) #state of game has been updated
+signal initial_state_received(positions, inputs, names) #first state of game
+signal character_spawned(id, char_name) #singal to tell if someone has spawned
+
+#Other signals
+signal chat_message_received(msg,type,user_sent,from_user) #signal to tell game a chat message has come in
+
+const KEY := "nakama_mendax" #Key that is stored in the server
+
+var _session: NakamaSession #User session
 
 #bens server: 18.118.82.24
 #jasons server: 52.205.252.95
 var _client := Nakama.create_client(KEY, "18.118.82.24", 7350, "http")
 var _socket : NakamaSocket
 
-var _general_chat_id = ""
-var _current_whisper_id = ""
-var _world_id: String = ""
-var _world_presences = {}
-var deviceid:String = ""
+var _general_chat_id = "" #id for communicating in general room
+var _current_whisper_id = "" #id for person you want to whisper
+var _world_id: String = "" #id of the world you are currently in
+var _world_presences = {}  #presences of users connected to world
+var _device_id: String = "" #id of the user's computer generated id
+var room_users: Dictionary = {} #chatroom users
 
-var room_users:Dictionary = {}
+"""
+/*
+* @pre called to set server status
+* @post sets server status to value passed in
+* @param status -> bool
+* @return None
+*/
+"""
+func set_server_status(status: bool):
+	server_status = status
+
+"""
+/*
+* @pre called when game wants server status
+* @post returns the status
+* @param None
+* @return bool
+*/
+"""
+func get_server_status() -> bool:
+	return server_status
 
 """
 /*
@@ -49,9 +79,9 @@ var room_users:Dictionary = {}
 """
 func authenticate_async() -> int:
 	var result := OK
-	deviceid = OS.get_unique_id()
+	_device_id = OS.get_unique_id()
 	
-	var new_session: NakamaSession = yield(_client.authenticate_device_async(deviceid), "completed")
+	var new_session: NakamaSession = yield(_client.authenticate_device_async(_device_id), "completed")
 	
 	if not new_session.is_exception():
 		_session = new_session
@@ -196,6 +226,72 @@ func send_text_async_whisper(text: String,user_sent_to:String) -> int:
 
 """
 /*
+* @pre called when user joins the game world
+* @post joins the world
+* @param None
+* @return None
+*/
+"""
+func join_world_async() -> Dictionary:
+	var world: NakamaAPI.ApiRpc = yield(_client.rpc_async(_session, "get_world_id", ""), "completed")
+	if not world.is_exception():
+		_world_id = world.payload
+	else:
+		print("rpc_async failed")
+		return {}
+	
+	var match_join_result: NakamaRTAPI.Match = yield(_socket.join_match_async(_world_id), "completed")
+	if match_join_result.is_exception():
+		var exception: NakamaException = match_join_result.get_exception()
+		print("Error joining the match: %s - %s" % [exception.status_code, exception.message])
+		return {}
+	else:
+		for presence in match_join_result.presences:
+			_world_presences[presence.user_id] = presence
+	return _world_presences #holds user ids
+
+"""
+/*
+* @pre called when you want to send your position to the server
+* @post sends data to server, and to other players from server
+* @param position -> Vector2
+* @return None
+*/
+"""
+func send_position_update(position: Vector2) -> void:
+	if _socket:
+		var payload := {id = _device_id, pos = {x=position.x, y = position.y}}
+		_socket.send_match_state_async(_world_id, OpCodes.UPDATE_POSITION,JSON.print(payload))
+
+"""
+/*
+* @pre called when you want to let server know you are changing directions
+* @post sends to server and other players
+* @param input -> float
+* @return None
+*/
+"""
+func send_input_update(input: float) -> void:
+	if _socket:
+		var payload := {id = _device_id, inp = input}
+		_socket.send_match_state_async(_world_id, OpCodes.UPDATE_INPUT,JSON.print(payload))
+
+"""
+/*
+* @pre called when you want to tell server you have spawned (aka entered world)
+* @post tells server and other players you are in the game
+* @param name -> String
+* @return None
+*/
+"""
+func send_spawn(char_name: String) -> void:
+	if _socket:
+		var payload := {id = _device_id, nm = char_name}
+		_socket.send_match_state_async(_world_id, OpCodes.DO_SPAWN,JSON.print(payload))
+
+
+"""
+/*
 * @pre called when a message is received from Nakama server
 * @post emits signal that the message has been received
 * @param message -> NakamaAPI.APIChannelMessage
@@ -205,8 +301,10 @@ func send_text_async_whisper(text: String,user_sent_to:String) -> int:
 func _on_Nakama_Socket_received_channel_message(message: NakamaAPI.ApiChannelMessage) -> void:
 	if message.code != 0:
 		return
-
+	
 	var content: Dictionary = JSON.parse(message.content).result
+	
+	
 	emit_signal("chat_message_received",content.msg,content.type,content.user_sent,content.from_user)
 
 """
@@ -236,8 +334,17 @@ func _on_channel_presence(p_presence : NakamaRTAPI.ChannelPresenceEvent):
 */
 """
 func _on_notification(p_notification : NakamaAPI.ApiNotification):
+	print("hi")
 	join_chat_async_whisper(p_notification._get_sender_id(),true)
 
+"""
+/*
+* @pre called when received a match state from the server
+* @post does the corresponding operation
+* @param match_state -> NakamaRTAPI.MatchData
+* @return None
+*/
+"""
 func _on_NakamaSocket_received_match_state(match_state: NakamaRTAPI.MatchData) -> void:
 	var code := match_state.op_code
 	var raw := match_state.data
@@ -262,40 +369,6 @@ func _on_NakamaSocket_received_match_state(match_state: NakamaRTAPI.MatchData) -
 			var decoded: Dictionary = JSON.parse(raw).result
 			
 			var id: String = decoded.id
-			var name: String = decoded.nm
+			var char_name: String = decoded.nm
 			
-			emit_signal("character_spawned", id, name)
-
-func join_world_async() -> Dictionary:
-	var world: NakamaAPI.ApiRpc = yield(_client.rpc_async(_session, "get_world_id", ""), "completed")
-	if not world.is_exception():
-		_world_id = world.payload
-	else:
-		print("rpc_async failed")
-		return {}
-	
-	var match_join_result: NakamaRTAPI.Match = yield(_socket.join_match_async(_world_id), "completed")
-	if match_join_result.is_exception():
-		var exception: NakamaException = match_join_result.get_exception()
-		print("Error joining the match: %s - %s" % [exception.status_code, exception.message])
-		return {}
-	else:
-		for presence in match_join_result.presences:
-			_world_presences[presence.user_id] = presence
-	return _world_presences #holds user ids
-
-
-func send_position_update(position: Vector2) -> void:
-	if _socket:
-		var payload := {id = deviceid, pos = {x=position.x, y = position.y}}
-		_socket.send_match_state_async(_world_id, OpCodes.UPDATE_POSITION,JSON.print(payload))
-		
-func send_input_update(input: float) -> void:
-	if _socket:
-		var payload := {id = deviceid, inp = input}
-		_socket.send_match_state_async(_world_id, OpCodes.UPDATE_INPUT,JSON.print(payload))
-		
-func send_spawn(name: String) -> void:
-	if _socket:
-		var payload := {id = deviceid, nm = name}
-		_socket.send_match_state_async(_world_id, OpCodes.DO_SPAWN,JSON.print(payload))
+			emit_signal("character_spawned", id, char_name)

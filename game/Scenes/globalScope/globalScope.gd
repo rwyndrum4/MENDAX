@@ -12,7 +12,6 @@
 extends Node
 
 #Member Variables
-onready var server_connection := $ServerConnection
 onready var chat_box = $GUI/chatbox
 
 #Scene Paths
@@ -27,9 +26,6 @@ var current_scene = null
 #State to compare to the global state to see if anything changes
 var local_state = null
 
-#Variable that checks if connected to server
-var is_connected_to_server: bool = false
-
 """
 /*
 * @pre called once when scene is called
@@ -39,15 +35,16 @@ var is_connected_to_server: bool = false
 */
 """
 func _ready():
-	is_connected_to_server = false
+	ServerConnection.connect("chat_message_received",self,"_on_ServerConnection_chat_message_received")
+	#Connect to Server and join world
+	yield(server_checks(), "completed")
+	yield(ServerConnection.join_world_async(), "completed")
 	#Load initial scene (main menu)
 	current_scene = load(main_menu).instance()
 	add_child(current_scene)
 	Global.state = Global.scenes.MAIN_MENU
 	local_state = Global.scenes.MAIN_MENU
-	#Connect to Server
-	yield(server_checks(), "completed")
-	yield(server_connection.join_world_async(), "completed")
+	ServerConnection.send_spawn(Save.game_data.username)
 
 """
 /*
@@ -99,13 +96,13 @@ func _change_scene_to(state):
 */
 """
 func server_checks():
-	is_connected_to_server = false
+	ServerConnection.set_server_status(false)
 	var result = yield(request_authentication(), "completed")
 	if result == OK:
 		result = yield(connect_to_server(), "completed")
 		if result == OK:
-			yield(server_connection.join_chat_async_general(), "completed")
-			is_connected_to_server = true
+			yield(ServerConnection.join_chat_async_general(), "completed")
+			ServerConnection.set_server_status(true)
 
 """
 /*
@@ -118,7 +115,7 @@ func server_checks():
 func request_authentication() -> int:
 	var user: String = Save.game_data.username
 	
-	var result: int = yield(server_connection.authenticate_async(), "completed")
+	var result: int = yield(ServerConnection.authenticate_async(), "completed")
 	if result == OK:
 		print("Authenticated user %s successfully" % user)
 	else:
@@ -134,7 +131,7 @@ func request_authentication() -> int:
 */
 """
 func connect_to_server() -> int:
-	var result: int = yield(server_connection.connect_to_server_async(), "completed")
+	var result: int = yield(ServerConnection.connect_to_server_async(), "completed")
 	if result == OK:
 		print("Connected to the server")
 	elif ERR_CANT_CONNECT:
@@ -151,10 +148,10 @@ func connect_to_server() -> int:
 * @return None
 */
 """
-func _on_ServerConnection_chat_message_received(text,type,user_sent_to,user_received_from):
-	print("message received from %s" % user_received_from)
-	chat_box.add_message(text,type,user_sent_to,user_received_from)
-	GlobalSignals.emit_signal("answer_received",text)
+func _on_ServerConnection_chat_message_received(msg,type,user_sent,from_user):
+	print("message received from %s" % from_user)
+	chat_box.add_message(msg,type,user_sent,from_user)
+	GlobalSignals.emit_signal("answer_received",msg)
 
 """
 /*
@@ -166,23 +163,24 @@ func _on_ServerConnection_chat_message_received(text,type,user_sent_to,user_rece
 """
 func _on_chatbox_message_sent(msg,is_whisper,username_to_send_to):
 	#If not connected to server, don't send message
-	if not is_connected_to_server:
+	if not ServerConnection.get_server_status():
 		chat_box.add_err_message()
 		return
 	#Else send message corresponding to whisper or general
 	if is_whisper:
-		yield(server_connection.join_chat_async_whisper(username_to_send_to,false), "completed")
+		yield(ServerConnection.join_chat_async_whisper(username_to_send_to,false), "completed")
+		print("i am here")
 		#Set a timer to give time for connection to form between players
 		var t = Timer.new()
-		t.set_wait_time(0.1)
+		t.set_wait_time(0.5)
 		t.set_one_shot(true)
 		self.add_child(t)
 		t.start()
 		yield(t, "timeout")
 		t.queue_free()
 		#end of timer, send whisper
-		yield(server_connection.send_text_async_whisper(msg,username_to_send_to), "completed")
+		yield(ServerConnection.send_text_async_whisper(msg,username_to_send_to), "completed")
 	else:
 		#send message to general
-		yield(server_connection.send_text_async_general(msg), "completed")
+		yield(ServerConnection.send_text_async_general(msg), "completed")
 	print("sent message to server")
