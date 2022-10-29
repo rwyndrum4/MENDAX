@@ -97,7 +97,7 @@ func _on_Options_pressed():
 """
 #When button pressed switches to Store scene
 func _on_Market_pressed():
-	Global.state = Global.scenes.MARKET
+	SceneTrans.change_scene(Global.scenes.MARKET)
 
 """
 /*

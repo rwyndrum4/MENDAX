@@ -51,7 +51,7 @@ func _on_subMoney_pressed():
 */
 """
 func _on_Back2Menu_pressed():
-	Global.state = Global.scenes.MAIN_MENU
+	SceneTrans.change_scene(Global.scenes.MAIN_MENU)
 	
 
 
