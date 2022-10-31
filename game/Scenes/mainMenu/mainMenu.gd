@@ -189,8 +189,10 @@ func _on_askForUsername_confirmed():
 */
 """
 func _your_character_spawned(id: String,char_name: String, current_players:Dictionary):
+	#if player is not first in the scene hand responsibility to spawn_other_players()
 	if len(current_players) != 1:
 		spawn_other_players(current_players)
+		return
 	#Add animated player to scene
 	var char_pos = get_char_pos(len(players_spawned))
 	var spawned_player:AnimatedSprite = load(idle_player).instance()
