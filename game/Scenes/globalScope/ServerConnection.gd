@@ -26,7 +26,7 @@ var server_status: bool = false
 #Signals for recieving game state data from server (from  the .lua files)
 signal state_updated(positions, inputs) #state of game has been updated
 signal initial_state_received(positions, inputs, names) #first state of game
-signal character_spawned(id, char_name) #singal to tell if someone has spawned
+signal character_spawned(id, char_name, current_players) #singal to tell if someone has spawned
 
 #Other signals
 signal chat_message_received(msg,type,user_sent,from_user) #signal to tell game a chat message has come in
@@ -369,4 +369,4 @@ func _on_NakamaSocket_received_match_state(match_state: NakamaRTAPI.MatchData) -
 			var id: String = decoded.id
 			var char_name: String = decoded.nm
 			
-			emit_signal("character_spawned", id, char_name)
+			emit_signal("character_spawned", id, char_name, room_users)

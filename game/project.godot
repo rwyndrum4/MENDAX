@@ -130,8 +130,8 @@ ServerConnection="*res://Scenes/globalScope/ServerConnection.gd"
 multirun/number_of_windows=2
 multirun/window_distance=1270
 multirun/add_custom_args=true
-multirun/first_window_args="listen"
-multirun/other_window_args="join"
+multirun/first_window_args=""
+multirun/other_window_args=""
 
 [display]
 

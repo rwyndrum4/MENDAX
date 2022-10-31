@@ -36,7 +36,7 @@ var idle_player = "res://Scenes/player/idle_player/idle_player.tscn"
 func _ready():
 	initialize_menu()
 	# warning-ignore:return_value_discarded
-	ServerConnection.connect("character_spawned",self,"_character_spawned")
+	ServerConnection.connect("character_spawned",self,"_your_character_spawned")
 
 """
 /*
@@ -180,7 +180,17 @@ func initialize_menu():
 func _on_askForUsername_confirmed():
 	settingsMenu._on_usernameInput_text_entered(usernameInput.text)
 
-func _character_spawned(id: String,char_name: String):
+"""
+/*
+* @pre called when received that you have spawned back from server
+* @post loads your player and all other players into scene
+* @param id -> String, char_name -> String, current_players -> Dictionary
+* @return None
+*/
+"""
+func _your_character_spawned(id: String,char_name: String, current_players:Dictionary):
+	if len(current_players) != 1:
+		spawn_other_players(current_players)
 	#Add animated player to scene
 	var char_pos = get_char_pos(len(players_spawned))
 	var spawned_player:AnimatedSprite = load(idle_player).instance()
@@ -206,6 +216,42 @@ func _character_spawned(id: String,char_name: String):
 		'player_obj': spawned_player
 	})
 
+func spawn_other_players(players_dict:Dictionary):
+	# warning-ignore:return_value_discarded
+	players_dict.erase(Save.game_data.username)
+	for p in players_dict.keys():
+		#Add animated player to scene
+		var char_pos = get_char_pos(len(players_spawned))
+		var spawned_player:AnimatedSprite = load(idle_player).instance()
+		#Change size and pos of sprite
+		spawned_player.offset = char_pos
+		spawned_player.scale = Vector2(SCALE_VAL,SCALE_VAL)
+		#Add child to the scene
+		add_child(spawned_player)
+		#Create text and add it as a child of the new player obj
+		var player_title: Label = Label.new()
+		player_title.text = p
+		player_title.rect_position = Vector2(
+			(char_pos.x*SCALE_VAL)-(5*SCALE_VAL), 
+			(char_pos.y*SCALE_VAL)-(20*SCALE_VAL)
+		)
+		player_title.add_font_override("font",load("res://Assets/ARIALBD.TTF"))
+		add_child_below_node(spawned_player,player_title)
+		#Add data to array
+		players_spawned.append({
+			'name': p,
+			'pos': char_pos,
+			'id': players_dict[p],
+			'player_obj': spawned_player
+		})
+"""
+/*
+* @pre None
+* @post returns Vector2 of where a character position should be 
+* @param sizeof_arr -> int
+* @return Vector2
+*/
+"""
 func get_char_pos(sizeof_arr: int) -> Vector2:
 	var result: Vector2 = Vector2.ZERO
 	if sizeof_arr == 0:
