@@ -24,7 +24,6 @@ onready var usernameInput = $askForUsername/LineEdit
 var players_spawned: Array = []
 var SCALE_VAL: int = 5
 var idle_player = "res://Scenes/player/idle_player/idle_player.tscn"
-var has_spawned: bool = false
 
 """
 /*
@@ -37,7 +36,7 @@ var has_spawned: bool = false
 func _ready():
 	initialize_menu()
 	# warning-ignore:return_value_discarded
-	ServerConnection.connect("character_spawned",self,"_your_character_spawned")
+	ServerConnection.connect("character_spawned",self,"_character_spawned")
 
 """
 /*
@@ -189,42 +188,11 @@ func _on_askForUsername_confirmed():
 * @return None
 */
 """
-func _your_character_spawned(id: String,char_name: String, current_players:Dictionary):
-	#if player is not first in the scene hand responsibility to spawn_other_players()
-	if len(current_players) != 1:
-		spawn_other_players(current_players)
-		return
-	#Add animated player to scene
-	var char_pos = get_char_pos(len(players_spawned))
-	var spawned_player:AnimatedSprite = load(idle_player).instance()
-	#Change size and pos of sprite
-	spawned_player.offset = char_pos
-	spawned_player.scale = Vector2(SCALE_VAL,SCALE_VAL)
-	#Add child to the scene
-	add_child(spawned_player)
-	#Create text and add it as a child of the new player obj
-	var player_title: Label = Label.new()
-	player_title.text = char_name
-	player_title.rect_position = Vector2(
-		(char_pos.x*SCALE_VAL)-(5*SCALE_VAL), 
-		(char_pos.y*SCALE_VAL)-(20*SCALE_VAL)
-	)
-	player_title.add_font_override("font",load("res://Assets/ARIALBD.TTF"))
-	add_child_below_node(spawned_player,player_title)
-	#Add data to array
-	players_spawned.append({
-		'name': char_name,
-		'pos': char_pos,
-		'id': id,
-		'player_obj': spawned_player
-	})
-	has_spawned = true
-
-func spawn_other_players(players_dict:Dictionary):
-	if has_spawned:
+func _character_spawned(id: String,char_name: String, current_players:Dictionary):
+	for d in players_spawned:
 		# warning-ignore:return_value_discarded
-		players_dict.erase(Save.game_data.username)
-	for p in players_dict.keys():
+		current_players.erase(d['name'])
+	for p in current_players.keys():
 		#Add animated player to scene
 		var char_pos = get_char_pos(len(players_spawned))
 		var spawned_player:AnimatedSprite = load(idle_player).instance()
@@ -246,9 +214,10 @@ func spawn_other_players(players_dict:Dictionary):
 		players_spawned.append({
 			'name': p,
 			'pos': char_pos,
-			'id': players_dict[p],
+			'id': current_players[p],
 			'player_obj': spawned_player
 		})
+
 """
 /*
 * @pre None
