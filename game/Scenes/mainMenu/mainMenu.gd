@@ -24,6 +24,7 @@ onready var usernameInput = $askForUsername/LineEdit
 var players_spawned: Array = []
 var SCALE_VAL: int = 5
 var idle_player = "res://Scenes/player/idle_player/idle_player.tscn"
+var has_spawned: bool = false
 
 """
 /*
@@ -217,10 +218,12 @@ func _your_character_spawned(id: String,char_name: String, current_players:Dicti
 		'id': id,
 		'player_obj': spawned_player
 	})
+	has_spawned = true
 
 func spawn_other_players(players_dict:Dictionary):
-	# warning-ignore:return_value_discarded
-	players_dict.erase(Save.game_data.username)
+	if has_spawned:
+		# warning-ignore:return_value_discarded
+		players_dict.erase(Save.game_data.username)
 	for p in players_dict.keys():
 		#Add animated player to scene
 		var char_pos = get_char_pos(len(players_spawned))
