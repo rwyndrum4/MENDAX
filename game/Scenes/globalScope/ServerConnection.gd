@@ -130,7 +130,6 @@ func connect_to_server_async() -> int:
 */
 """
 func _on_NakamaSocket_closed() -> void:
-	print("Disconnected from socket")
 	_socket = null
 
 """
@@ -334,7 +333,6 @@ func _on_channel_presence(p_presence : NakamaRTAPI.ChannelPresenceEvent):
 */
 """
 func _on_notification(p_notification : NakamaAPI.ApiNotification):
-	print("hi")
 	join_chat_async_whisper(p_notification._get_sender_id(),true)
 
 """

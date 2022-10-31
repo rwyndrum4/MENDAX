@@ -125,12 +125,24 @@ GlobalSignals="*res://Loader/globalSignals.gd"
 Nakama="*res://Loader/Nakama/com.heroiclabs.nakama/Nakama.gd"
 ServerConnection="*res://Scenes/globalScope/ServerConnection.gd"
 
+[debug]
+
+multirun/number_of_windows=2
+multirun/window_distance=1270
+multirun/add_custom_args=true
+multirun/first_window_args="listen"
+multirun/other_window_args="join"
+
 [display]
 
 window/size/width=1280
 window/size/height=720
 window/dpi/allow_hidpi=true
 window/stretch/mode="viewport"
+
+[editor_plugins]
+
+enabled=PoolStringArray( "res://addons/multirun/plugin.cfg" )
 
 [global]
 

@@ -35,15 +35,17 @@ var local_state = null
 */
 """
 func _ready():
+	# warning-ignore:return_value_discarded
 	ServerConnection.connect("chat_message_received",self,"_on_ServerConnection_chat_message_received")
-	#Connect to Server and join world
-	yield(server_checks(), "completed")
-	yield(ServerConnection.join_world_async(), "completed")
 	#Load initial scene (main menu)
 	current_scene = load(main_menu).instance()
 	add_child(current_scene)
 	Global.state = Global.scenes.MAIN_MENU
 	local_state = Global.scenes.MAIN_MENU
+	#Connect to Server and join world
+	yield(server_checks(), "completed")
+	yield(ServerConnection.join_world_async(), "completed")
+	#Tell server you can spawn
 	ServerConnection.send_spawn(Save.game_data.username)
 
 """
@@ -149,7 +151,7 @@ func connect_to_server() -> int:
 */
 """
 func _on_ServerConnection_chat_message_received(msg,type,user_sent,from_user):
-	print("message received from %s" % from_user)
+	#add message from server to chatbox
 	chat_box.add_message(msg,type,user_sent,from_user)
 	GlobalSignals.emit_signal("answer_received",msg)
 
@@ -169,7 +171,6 @@ func _on_chatbox_message_sent(msg,is_whisper,username_to_send_to):
 	#Else send message corresponding to whisper or general
 	if is_whisper:
 		yield(ServerConnection.join_chat_async_whisper(username_to_send_to,false), "completed")
-		print("i am here")
 		#Set a timer to give time for connection to form between players
 		var t = Timer.new()
 		t.set_wait_time(0.5)
@@ -183,4 +184,3 @@ func _on_chatbox_message_sent(msg,is_whisper,username_to_send_to):
 	else:
 		#send message to general
 		yield(ServerConnection.send_text_async_general(msg), "completed")
-	print("sent message to server")

@@ -20,6 +20,10 @@ onready var worldEnv = $WorldEnvironment
 onready var usernameAsk = $askForUsername
 onready var usernameInput = $askForUsername/LineEdit
 
+# Variables for showing players on rocks
+var players_spawned: Array = []
+var SCALE_VAL: int = 5
+var idle_player = "res://Scenes/player/idle_player/idle_player.tscn"
 
 """
 /*
@@ -31,6 +35,7 @@ onready var usernameInput = $askForUsername/LineEdit
 """
 func _ready():
 	initialize_menu()
+	# warning-ignore:return_value_discarded
 	ServerConnection.connect("character_spawned",self,"_character_spawned")
 
 """
@@ -176,4 +181,43 @@ func _on_askForUsername_confirmed():
 	settingsMenu._on_usernameInput_text_entered(usernameInput.text)
 
 func _character_spawned(id: String,char_name: String):
-	print("a character has spawned with id ", id, "and name", char_name)
+	#Add animated player to scene
+	var char_pos = get_char_pos(len(players_spawned))
+	var spawned_player:AnimatedSprite = load(idle_player).instance()
+	#Change size and pos of sprite
+	spawned_player.offset = char_pos
+	spawned_player.scale = Vector2(SCALE_VAL,SCALE_VAL)
+	#Add child to the scene
+	add_child(spawned_player)
+	#Create text and add it as a child of the new player obj
+	var player_title: Label = Label.new()
+	player_title.text = char_name
+	player_title.rect_position = Vector2(
+		(char_pos.x*SCALE_VAL)-(5*SCALE_VAL), 
+		(char_pos.y*SCALE_VAL)-(20*SCALE_VAL)
+	)
+	player_title.add_font_override("font",load("res://Assets/ARIALBD.TTF"))
+	add_child_below_node(spawned_player,player_title)
+	#Add data to array
+	players_spawned.append({
+		'name': char_name,
+		'pos': char_pos,
+		'id': id,
+		'player_obj': spawned_player
+	})
+
+func get_char_pos(sizeof_arr: int) -> Vector2:
+	var result: Vector2 = Vector2.ZERO
+	if sizeof_arr == 0:
+		result.x = 150
+		result.y = 65
+	elif sizeof_arr == 1:
+		result.x = 220
+		result.y = 65
+	elif sizeof_arr == 2:
+		result.x = 150
+		result.y = 130
+	elif sizeof_arr == 3:
+		result.x = 220
+		result.y = 130
+	return result
