@@ -46,7 +46,8 @@ func _ready():
 	yield(server_checks(), "completed")
 	yield(ServerConnection.join_world_async(), "completed")
 	#Tell server you can spawn
-	ServerConnection.send_spawn(Save.game_data.username)
+	if ServerConnection.get_server_status():
+		ServerConnection.send_spawn(Save.game_data.username)
 
 """
 /*
