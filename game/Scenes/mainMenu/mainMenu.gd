@@ -22,7 +22,7 @@ onready var usernameInput = $askForUsername/LineEdit
 
 # Variables for showing players on rocks
 var players_spawned: Array = []
-var SCALE_VAL: int = 5
+const SCALE_VAL: int = 5
 var idle_player = "res://Scenes/player/idle_player/idle_player.tscn"
 var animation_names = ["blue_idle","red_idle","green_idle","orange_idle"]
 var num_players: int = 0
@@ -192,6 +192,9 @@ func _on_askForUsername_confirmed():
 */
 """
 func _character_spawned(id: String,char_name: String, current_players:Dictionary):
+	#Only allow 4 players
+	if num_players == MAX_PLAYERS:
+		return
 	for d in players_spawned:
 		# warning-ignore:return_value_discarded
 		current_players.erase(d['name'])
@@ -222,6 +225,17 @@ func _character_spawned(id: String,char_name: String, current_players:Dictionary
 			'player_obj': spawned_player
 		})
 		num_players += 1
+
+"""
+/*
+* @pre called when server notices a player has left
+* @post deletes player from the scene
+* @param 
+* @return None
+*/
+"""
+func _player_despawned():
+	pass
 
 """
 /*
