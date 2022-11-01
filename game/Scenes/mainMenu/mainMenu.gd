@@ -25,6 +25,8 @@ var players_spawned: Array = []
 var SCALE_VAL: int = 5
 var idle_player = "res://Scenes/player/idle_player/idle_player.tscn"
 var animation_names = ["blue_idle","red_idle","green_idle","orange_idle"]
+var num_players: int = 0
+const MAX_PLAYERS: int = 4
 
 """
 /*
@@ -200,7 +202,7 @@ func _character_spawned(id: String,char_name: String, current_players:Dictionary
 		#Change size and pos of sprite
 		spawned_player.offset = char_pos
 		spawned_player.scale = Vector2(SCALE_VAL,SCALE_VAL)
-		spawned_player.play_animation(animation_names[len(current_players)-1])
+		spawned_player.play_animation(animation_names[num_players])
 		#Add child to the scene
 		add_child(spawned_player)
 		#Create text and add it as a child of the new player obj
@@ -219,6 +221,7 @@ func _character_spawned(id: String,char_name: String, current_players:Dictionary
 			'id': current_players[p],
 			'player_obj': spawned_player
 		})
+		num_players += 1
 
 """
 /*
