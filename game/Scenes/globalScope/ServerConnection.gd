@@ -231,23 +231,23 @@ func send_text_async_whisper(text: String,user_sent_to:String) -> int:
 * @return None
 */
 """
-func join_world_async() -> Dictionary:
+func join_world_async() -> int:
 	var world: NakamaAPI.ApiRpc = yield(_client.rpc_async(_session, "get_world_id", ""), "completed")
 	if not world.is_exception():
 		_world_id = world.payload
 	else:
 		print("rpc_async failed")
-		return {}
+		return ERR_CONNECTION_ERROR
 	
 	var match_join_result: NakamaRTAPI.Match = yield(_socket.join_match_async(_world_id), "completed")
 	if match_join_result.is_exception():
 		var exception: NakamaException = match_join_result.get_exception()
 		print("Error joining the match: %s - %s" % [exception.status_code, exception.message])
-		return {}
+		return ERR_CONNECTION_ERROR
 	else:
 		for presence in match_join_result.presences:
 			_world_presences[presence.user_id] = presence
-	return _world_presences #holds user ids
+		return OK
 
 """
 /*
