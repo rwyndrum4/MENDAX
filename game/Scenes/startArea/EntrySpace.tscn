@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://Scenes/startArea/worldMap.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Scenes/player/player.tscn" type="PackedScene" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://Scenes/SettingsMenu/settingsMenu.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Assets/Teko-Light.ttf" type="DynamicFontData" id=6]
 [ext_resource path="res://Scenes/textBox/textBox.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Assets/background.png" type="Texture" id=8]
 
 [sub_resource type="StreamTexture" id=3]
 flags = 4
@@ -31,8 +32,12 @@ font_data = ExtResource( 6 )
 script = ExtResource( 4 )
 
 [node name="background" type="TextureRect" parent="."]
-margin_right = 40.0
-margin_bottom = 40.0
+margin_left = -12416.0
+margin_top = -1832.0
+margin_right = 1986.0
+margin_bottom = 12570.0
+rect_scale = Vector2( 1.37122, 0.680183 )
+texture = ExtResource( 8 )
 
 [node name="worldMap" parent="." instance=ExtResource( 1 )]
 margin_left = 802.0
