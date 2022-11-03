@@ -109,6 +109,7 @@ func spawn_players():
 			
 		else:
 			var new_player:KinematicBody2D = load(other_player).instance()
+			new_player.player_id = player['id']
 			#Change size and pos of sprite
 			new_player.position = player['pos']
 			#Add child to the scene

@@ -12,6 +12,7 @@ onready var character = $position/animated_sprite
 onready var char_pos = $position
 var is_stopped = false
 var player_id:String = ""
+var last_position:Vector2 = Vector2.ZERO
 
 # Player physics constants
 const ACCELERATION = 25000
@@ -36,6 +37,7 @@ func _ready():
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("openMenu",self,"stop_go_player")
 	character.play("idle")
+	last_position = self.position
 
 """
 /*
@@ -52,8 +54,8 @@ func _physics_process(delta):
 	
 	# Initialize input velocity
 	var input_velocity = Vector2.ZERO
-	input_velocity.x = velocity.x - Global.get_player_pos(player_id).x
-	input_velocity.y = velocity.y - Global.get_player_pos(player_id).y 
+	input_velocity.x = last_position.x - Global.get_player_pos(player_id).x
+	input_velocity.y = last_position.y - Global.get_player_pos(player_id).y 
 	input_velocity = input_velocity.normalized()
 	
 	# Case where no input is given
