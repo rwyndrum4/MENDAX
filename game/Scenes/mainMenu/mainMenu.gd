@@ -21,7 +21,7 @@ onready var usernameAsk = $askForUsername
 onready var usernameInput = $askForUsername/LineEdit
 
 # Variables for showing players on rocks
-var players_spawned: Array = []
+var player_objects: Array = []
 const SCALE_VAL: int = 5
 var idle_player = "res://Scenes/player/idle_player/idle_player.tscn"
 var animation_names = ["blue_idle","red_idle","green_idle","orange_idle"]
@@ -62,6 +62,9 @@ func _process(_delta): #if you want to use delta, then change it to delta
 */
 """
 func _on_Start_pressed():
+	#delete player objects
+	for player in player_objects:
+		despawn_player(player['player_obj'])
 	#change scene to start area
 	SceneTrans.change_scene(Global.scenes.START_AREA)
 
@@ -191,16 +194,16 @@ func _on_askForUsername_confirmed():
 * @return None
 */
 """
-func _character_spawned(id: String,char_name: String, current_players:Dictionary):
+func _character_spawned(current_players:Dictionary):
 	#Only allow 4 players
 	if num_players == MAX_PLAYERS:
 		return
-	for d in players_spawned:
+	for d in player_objects:
 		# warning-ignore:return_value_discarded
 		current_players.erase(d['name'])
-	for p in current_players.keys():
+	for player_name in current_players.keys():
 		#Add animated player to scene
-		var char_pos = get_char_pos(len(players_spawned))
+		var char_pos = get_char_pos(len(player_objects))
 		var spawned_player:AnimatedSprite = load(idle_player).instance()
 		#Change size and pos of sprite
 		spawned_player.offset = char_pos
@@ -210,7 +213,7 @@ func _character_spawned(id: String,char_name: String, current_players:Dictionary
 		add_child(spawned_player)
 		#Create text and add it as a child of the new player obj
 		var player_title: Label = Label.new()
-		player_title.text = p
+		player_title.text = player_name
 		player_title.rect_position = Vector2(
 			(char_pos.x*SCALE_VAL)-(5*SCALE_VAL), 
 			(char_pos.y*SCALE_VAL)-(20*SCALE_VAL)
@@ -218,11 +221,17 @@ func _character_spawned(id: String,char_name: String, current_players:Dictionary
 		player_title.add_font_override("font",load("res://Assets/ARIALBD.TTF"))
 		add_child_below_node(spawned_player,player_title)
 		#Add data to array
-		players_spawned.append({
-			'name': p,
-			'pos': char_pos,
-			'id': current_players[p],
+		player_objects.append({
+			'name': player_name,
 			'player_obj': spawned_player
+		})
+		char_pos.x *= 5
+		char_pos.y *= 5
+		Global.player_positions.append({
+			'name': player_name,
+			'id': current_players[player_name],
+			'num': len(player_objects),
+			'pos': char_pos
 		})
 		num_players += 1
 
@@ -234,8 +243,8 @@ func _character_spawned(id: String,char_name: String, current_players:Dictionary
 * @return None
 */
 """
-func _player_despawned():
-	pass
+func despawn_player(player:AnimatedSprite):
+	player.queue_free()
 
 """
 /*

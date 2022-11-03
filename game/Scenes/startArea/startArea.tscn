@@ -27,8 +27,7 @@ texture = ExtResource( 1 )
 stretch_mode = 1
 
 [node name="Player" parent="." instance=ExtResource( 3 )]
-position = Vector2( 1082, 591 )
-collision_layer = 1
+position = Vector2( 1083, 596 )
 
 [node name="Colliders" type="StaticBody2D" parent="."]
 collision_layer = 2

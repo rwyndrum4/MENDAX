@@ -43,7 +43,6 @@ var _socket : NakamaSocket
 var _general_chat_id = "" #id for communicating in general room
 var _current_whisper_id = "" #id for person you want to whisper
 var _world_id: String = "" #id of the world you are currently in
-var _world_presences = {}  #presences of users connected to world
 var _device_id: String = "" #id of the user's computer generated id
 var room_users: Dictionary = {} #chatroom users
 
@@ -245,8 +244,6 @@ func join_world_async() -> int:
 		print("Error joining the match: %s - %s" % [exception.status_code, exception.message])
 		return ERR_CONNECTION_ERROR
 	else:
-		for presence in match_join_result.presences:
-			_world_presences[presence.user_id] = presence
 		return OK
 
 """
@@ -369,4 +366,4 @@ func _on_NakamaSocket_received_match_state(match_state: NakamaRTAPI.MatchData) -
 			var id: String = decoded.id
 			var char_name: String = decoded.nm
 			
-			emit_signal("character_spawned", id, char_name, room_users)
+			emit_signal("character_spawned", room_users)

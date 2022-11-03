@@ -13,9 +13,13 @@ extends Control
 var in_cave = false
 var in_menu = false
 var using_chat = false
+onready var player_one = $Player
 onready var instructions: Label = $enterCaveArea/enterDirections
 onready var settingsMenu = $GUI/SettingsMenu
 onready var textBox = $GUI/textBox
+
+var idle_player = "res://Scenes/player/idle_player/idle_player.tscn"
+var normal_player = "res://Scenes/player/player.tscn"
 
 
 """
@@ -27,6 +31,9 @@ onready var textBox = $GUI/textBox
 */
 """
 func _ready():
+	#If there is a server connection, spawn all players
+	if ServerConnection.get_server_status():
+		spawn_players()
 	#This is how you queue text to the textbox queue
 	textBox.queue_text("If you're ready to begin your challenge, press enter")
 	# warning-ignore:return_value_discarded
@@ -93,3 +100,15 @@ func check_settings():
 func chatbox_use(value):
 	if value:
 		in_menu = true
+
+func spawn_players():
+	for player in Global.player_positions:
+		#Add animated player to scene
+		if player['name'] == Save.game_data.username:
+			player_one.position = player['pos']
+		else:
+			var new_player:KinematicBody2D = load(idle_player).instance()
+			#Change size and pos of sprite
+			new_player.position = player['pos']
+			#Add child to the scene
+			add_child(new_player)
