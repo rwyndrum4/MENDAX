@@ -97,19 +97,35 @@ func check_settings():
 		settingsMenu.hide()
 		in_menu = false
 
+"""
+/*
+* @pre called when chatbox is opened
+* @post sets in_menu to true so game knows chat is being used
+* @param value -> bool 
+* @return None
+*/
+"""
 func chatbox_use(value):
 	if value:
 		in_menu = true
 
+"""
+/*
+* @pre called when players need to be spawned in (assuming server is online)
+* @post Spawns players that move with server input and sets position regular player
+* @param None
+* @return None
+*/
+"""
 func spawn_players():
 	for player in Global.player_positions:
 		#Add animated player to scene
 		if player['name'] == Save.game_data.username:
 			player_one.position = player['pos']
-			
 		else:
 			var new_player:KinematicBody2D = load(other_player).instance()
-			new_player.player_id = player['id']
+			new_player.set_player_id(player['id'])
+			new_player.set_color(player['num'])
 			#Change size and pos of sprite
 			new_player.position = player['pos']
 			#Add child to the scene

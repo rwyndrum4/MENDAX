@@ -10,6 +10,7 @@ extends KinematicBody2D
 # Member Variables
 onready var character = $position/animated_sprite
 onready var char_pos = $position
+var player_color: String = ""
 var is_stopped = false
 var player_id:String = ""
 var last_position:Vector2 = Vector2.ZERO
@@ -54,6 +55,7 @@ func _physics_process(delta):
 	
 	# Initialize input velocity
 	var input_velocity = Vector2.ZERO
+	#Check previous position and check if it has changed since last frame
 	input_velocity.x = last_position.x - Global.get_player_pos(player_id).x
 	input_velocity.y = last_position.y - Global.get_player_pos(player_id).y 
 	input_velocity = input_velocity.normalized()
@@ -107,5 +109,34 @@ func control_animations(vel):
 	else:
 		character.play("idle")
 
-func set_player_id(id_in):
+"""
+/*
+* @pre None
+* @post sets player id to what was passed int
+* @param id_in -> String
+* @return None
+*/
+"""
+func set_player_id(id_in:String):
 	player_id = id_in
+
+"""
+/*
+* @pre None
+* @post sets player color to what was passed int
+* @param player_num -> int
+* @return None
+*/
+"""
+func set_color(player_num:int):
+	match player_num:
+		1:
+			player_color = "blue"
+		2:
+			player_color = "red"
+		3:
+			player_color = "green"
+		4:
+			player_color = "orange"
+		_:
+			player_color = "blue"

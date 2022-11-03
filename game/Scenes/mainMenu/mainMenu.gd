@@ -20,12 +20,18 @@ onready var worldEnv = $WorldEnvironment
 onready var usernameAsk = $askForUsername
 onready var usernameInput = $askForUsername/LineEdit
 
-# Variables for showing players on rocks
-var player_objects: Array = []
-const SCALE_VAL: int = 5
+#### Variables for showing players on rocks ###
+#array for holding player objects that are created
+var player_objects: Array = [] 
+#value to scale up animated sprites
+const SCALE_VAL: int = 5 
+#scene that holds the idle player animation
 var idle_player = "res://Scenes/player/idle_player/idle_player.tscn"
-var animation_names = ["blue_idle","red_idle","green_idle","orange_idle"]
+#array that holds the animation names
+var animation_names: Array = ["blue_idle","red_idle","green_idle","orange_idle"]
+#current number of players in menu
 var num_players: int = 0
+#max players allowed
 const MAX_PLAYERS: int = 4
 
 """
