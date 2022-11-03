@@ -18,8 +18,8 @@ onready var instructions: Label = $enterCaveArea/enterDirections
 onready var settingsMenu = $GUI/SettingsMenu
 onready var textBox = $GUI/textBox
 
-var idle_player = "res://Scenes/player/idle_player/idle_player.tscn"
 var normal_player = "res://Scenes/player/player.tscn"
+var other_player = "res://Scenes/player/other_players/other_players.tscn"
 
 
 """
@@ -106,8 +106,9 @@ func spawn_players():
 		#Add animated player to scene
 		if player['name'] == Save.game_data.username:
 			player_one.position = player['pos']
+			
 		else:
-			var new_player:KinematicBody2D = load(idle_player).instance()
+			var new_player:KinematicBody2D = load(other_player).instance()
 			#Change size and pos of sprite
 			new_player.position = player['pos']
 			#Add child to the scene
