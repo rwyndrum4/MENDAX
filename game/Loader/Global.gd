@@ -40,7 +40,13 @@ var current_players:Dictionary = {}
 # Hold array of player positions
 var player_positions:Array = []
 
+func _ready():
+	ServerConnection.connect("state_updated",self,"_player_positions_updated")
+
 func get_player_pos(player_id:String):
 	for player in player_positions:
 		if player['id'] == player_id:
 			return player['pos']
+
+func _player_positions_updated(positions,inputs):
+	print("here")

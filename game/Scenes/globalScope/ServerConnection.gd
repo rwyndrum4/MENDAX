@@ -363,7 +363,7 @@ func _on_NakamaSocket_received_match_state(match_state: NakamaRTAPI.MatchData) -
 		OpCodes.DO_SPAWN:
 			var decoded: Dictionary = JSON.parse(raw).result
 			
-			var id: String = decoded.id
-			var char_name: String = decoded.nm
+			var _id: String = decoded.id
+			var _char_name: String = decoded.nm
 			
 			emit_signal("character_spawned", room_users)
