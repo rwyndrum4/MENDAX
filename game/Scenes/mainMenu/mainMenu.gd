@@ -8,17 +8,17 @@
 	9/21/2022 - Fixing issue with fps label not working correctly
 	10/1/2022 - Added the ability to move with keyboard in settings menu
 	10/1/2022 - Fixed options menu movment
+	11/4/2022 - Adding server functionality 
 """
 
 extends Control
 
 # Member Variables
-onready var startButton = $VBoxContainer/Start
+onready var startButton = $menuButtons/Start
 onready var settingsMenu = $SettingsMenu
 onready var fpsLabel = $fpsLabel
 onready var worldEnv = $WorldEnvironment
-onready var usernameAsk = $askForUsername
-onready var usernameInput = $askForUsername/LineEdit
+onready var code_line_edit = $joinLobby/enterLobbyCode
 
 #### Variables for showing players on rocks ###
 #array for holding player objects that are created
@@ -34,6 +34,14 @@ var num_players: int = 0
 #max players allowed
 const MAX_PLAYERS: int = 4
 
+### Member Variables ###
+#popup that is displayed when creating a new game
+var game_init_popup:AcceptDialog
+#popup that is displayed need to get user's username
+var get_user_input:AcceptDialog
+#bool to let menu know if player is typing code
+var typing_code: bool = false
+
 """
 /*
 * @pre called when main menu is loaded in (run once)
@@ -44,8 +52,6 @@ const MAX_PLAYERS: int = 4
 """
 func _ready():
 	initialize_menu()
-	# warning-ignore:return_value_discarded
-	ServerConnection.connect("character_spawned",self,"_character_spawned")
 
 """
 /*
@@ -56,6 +62,9 @@ func _ready():
 */
 """
 func _process(_delta): #if you want to use delta, then change it to delta
+	if typing_code and Input.is_action_just_pressed("ui_cancel"):
+		startButton.grab_focus()
+		code_line_edit.hide()
 	if Input.is_action_just_pressed("ui_cancel"):
 		startButton.grab_focus()
 
@@ -131,7 +140,7 @@ func _on_Quit_pressed():
 * @return None
 */
 """
-func _on_GetCode_button_up():
+func generate_random_code() -> String:
 	var letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 
 				   'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 
 				   'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',]
@@ -140,8 +149,7 @@ func _on_GetCode_button_up():
 	var index2 = getRandAlphInd(rng)
 	var index3 = getRandAlphInd(rng)
 	var index4 = getRandAlphInd(rng)
-	var code = letters[index1] + letters[index2] + letters[index3] + letters[index4]
-	$joinCodeContainer/code.set("text", code)
+	return letters[index1] + letters[index2] + letters[index3] + letters[index4]
 	
 """
 /*
@@ -178,19 +186,10 @@ func initialize_menu():
 	settingsMenu._on_SfxVolSlider_value_changed(Save.game_data.sfx_vol)
 	#check if there is a username
 	if Save.game_data.username == "":
-		usernameAsk.popup_centered()
-		usernameInput.grab_focus()
-
-"""
-/*
-* @pre when the user inputs their username
-* @post sets the global username to text entered
-* @param None
-* @return None
-*/
-"""
-func _on_askForUsername_confirmed():
-	settingsMenu._on_usernameInput_text_entered(usernameInput.text)
+		var win_text = "Welcome to Mendax!"
+		var d_text = "Username required!\nPlease enter username:\n"
+		d_text += "(Single word, you can change it afterward in settings)"
+		create_get_user_window(win_text,d_text)
 
 """
 /*
@@ -243,6 +242,119 @@ func _character_spawned(current_players:Dictionary):
 
 """
 /*
+* @pre called when create game button is pressed
+* @post creates a game code and joins the game
+* @param None
+* @return None
+*/
+"""
+func _on_createGameButton_pressed():
+	var code: String = generate_random_code()
+	game_init_popup = AcceptDialog.new()
+	if ServerConnection.get_server_status():
+		game_init_popup.window_title = "New game created!"
+		game_init_popup.dialog_text = "Your code is: " + code + "\nPlease share it with your friends!"
+	else:
+		game_init_popup.window_title = "Server not available"
+		game_init_popup.dialog_text = "Multiplayer not available, you are not connected to a game"
+	# warning-ignore:return_value_discarded
+	game_init_popup.connect("confirmed",self,"_delete_game_init_obj")
+	add_child(game_init_popup)
+	game_init_popup.popup_centered()
+	if ServerConnection.get_server_status():
+		ServerConnection.create_match(code)
+		$showLobbyCode/code.text = code
+
+"""
+/*
+* @pre called when joinGame button is pressed
+* @post shows the input field to enter match code
+* @param None
+* @return None
+*/
+"""
+func _on_joinGame_pressed():
+	code_line_edit.show()
+	code_line_edit.grab_focus()
+	code_line_edit.placeholder_text = "Enter Lobby Code Here"
+
+"""
+/*
+* @pre called when focus of typing code is entered
+* @post sets typing code to true (used in process func)
+* @param None
+* @return None
+*/
+"""
+func _on_enterLobbyCode_focus_entered():
+	typing_code = true
+
+"""
+/*
+* @pre whenver the match code is entered
+* @post if code is valid, joins the given match, displays error otherwise
+* @param None
+* @return None
+*/
+"""
+func _on_enterLobbyCode_text_entered(new_text):
+	var match_code = new_text.to_upper()
+	if len(match_code) != 4:
+		game_init_popup = AcceptDialog.new()
+		game_init_popup.window_title = "Invalid code"
+		game_init_popup.dialog_text = "Please enter an alphabetical code with a length of 4"
+		# warning-ignore:return_value_discarded
+		game_init_popup.connect("confirmed",self,"_delete_game_init_obj")
+		add_child(game_init_popup)
+		game_init_popup.popup_centered()
+	else:
+		if ServerConnection.get_server_status():
+			ServerConnection.join_match(match_code)
+			$showLobbyCode/code.text = match_code
+		else:
+			game_init_popup = AcceptDialog.new()
+			game_init_popup.window_title = "Server not available"
+			game_init_popup.dialog_text = "Multiplayer not available, you are not connected to a game"
+			# warning-ignore:return_value_discarded
+			game_init_popup.connect("confirmed",self,"_delete_game_init_obj")
+			add_child(game_init_popup)
+			game_init_popup.popup_centered()
+			code_line_edit.text = ""
+			code_line_edit.hide()
+"""
+/*
+* @pre None
+* @post deltes the game_init_popup object
+* @param None
+* @return None
+*/
+"""
+func _delete_game_init_obj():
+	game_init_popup.queue_free()
+	startButton.grab_focus()
+
+"""
+/*
+* @pre None
+* @post deltes the get_user_input object and sends username data to settings
+* @param None
+* @return None
+*/
+"""
+func _delete_get_user_input_obj():
+	#get username from the LineEdit
+	var given_username = get_user_input.get_child(3).text
+	get_user_input.queue_free()
+	if " " in given_username:
+		var win_text = "Invalid username, please try again"
+		var d_text = "Username can be one word, no spaces"
+		create_get_user_window(win_text, d_text)
+	else:
+		settingsMenu._on_usernameInput_text_entered(given_username)
+		startButton.grab_focus()
+
+"""
+/*
 * @pre called when server notices a player has left
 * @post deletes player from the scene
 * @param 
@@ -275,3 +387,25 @@ func get_char_pos(sizeof_arr: int) -> Vector2:
 		result.x = 220
 		result.y = 130
 	return result
+
+"""
+/*
+* @pre None
+* @post creates the acceptDialog for getting player's username
+* @param window_text -> String, dialog_text -> String
+* @return None
+*/
+"""
+func create_get_user_window(window_text, dialog_text):
+	get_user_input = AcceptDialog.new()
+	get_user_input.window_title = window_text
+	get_user_input.dialog_text = dialog_text
+	get_user_input.dialog_autowrap = true
+	get_user_input.rect_min_size = Vector2(250,220)
+	# warning-ignore:return_value_discarded
+	get_user_input.connect("confirmed",self,"_delete_get_user_input_obj")
+	var input_field = LineEdit.new()
+	input_field.rect_min_size = Vector2(30,20)
+	get_user_input.add_child(input_field)
+	add_child(get_user_input)
+	get_user_input.popup()

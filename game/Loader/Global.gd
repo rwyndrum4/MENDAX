@@ -41,6 +41,7 @@ var current_players:Dictionary = {}
 var player_positions:Array = []
 
 func _ready():
+	# warning-ignore:return_value_discarded
 	ServerConnection.connect("state_updated",self,"_player_positions_updated")
 
 func get_player_pos(player_id:String):
@@ -48,5 +49,12 @@ func get_player_pos(player_id:String):
 		if player['id'] == player_id:
 			return player['pos']
 
-func _player_positions_updated(positions,inputs):
-	print("here")
+func _player_positions_updated(positions,_inputs):
+	if state == scenes.START_AREA || state == scenes.CAVE || state == scenes.RIDDLER_MINIGAME:
+		for p_id in positions.keys():
+			for player in player_positions:
+				if player['id'] == p_id:
+					var pos_dict = positions[p_id]
+					var x = int(pos_dict['x'])
+					var y = int(pos_dict['y'])
+					player['pos'] = Vector2(x,y)

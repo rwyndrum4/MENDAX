@@ -1,7 +1,6 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://Scenes/mainMenu/mainMenu.gd" type="Script" id=1]
-[ext_resource path="res://Assets/mainMenuAssets/LTYPEB.TTF" type="DynamicFontData" id=2]
 [ext_resource path="res://Assets/mainMenuAssets/BAUHS93.TTF" type="DynamicFontData" id=3]
 [ext_resource path="res://Assets/mainMenuBG.png" type="Texture" id=4]
 [ext_resource path="res://Scenes/settingsMenu/settingsMenu.tscn" type="PackedScene" id=5]
@@ -9,15 +8,23 @@
 [ext_resource path="res://Scenes/fpsDisplay/fpsLabel.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Assets/ARIALBD.TTF" type="DynamicFontData" id=8]
 [ext_resource path="res://Scenes/worldEnvironment/worldEnv.tscn" type="PackedScene" id=9]
+[ext_resource path="res://Assets/Teko-Light.ttf" type="DynamicFontData" id=10]
+
+[sub_resource type="DynamicFont" id=8]
+size = 32
+font_data = ExtResource( 10 )
+
+[sub_resource type="DynamicFont" id=9]
+size = 32
+font_data = ExtResource( 10 )
 
 [sub_resource type="DynamicFont" id=1]
 size = 38
 font_data = ExtResource( 3 )
 
-[sub_resource type="DynamicFont" id=2]
-size = 77
-outline_color = Color( 0.0352941, 0.0784314, 0.0784314, 1 )
-font_data = ExtResource( 2 )
+[sub_resource type="DynamicFont" id=10]
+size = 60
+font_data = ExtResource( 8 )
 
 [sub_resource type="Shader" id=4]
 resource_local_to_scene = true
@@ -82,73 +89,98 @@ rect_scale = Vector2( 0.997, 0.996 )
 texture = ExtResource( 4 )
 stretch_mode = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="menuButtons" type="VBoxContainer" parent="."]
 anchor_top = 1.0
 anchor_bottom = 1.0
-margin_left = 23.0
+margin_left = 25.0
 margin_top = -264.0
 margin_right = 143.0
 margin_bottom = -142.0
 rect_scale = Vector2( 1.77124, 1.77124 )
 
-[node name="Start" type="Button" parent="VBoxContainer"]
-margin_right = 120.0
+[node name="Start" type="Button" parent="menuButtons"]
+margin_right = 118.0
 margin_bottom = 20.0
 rect_pivot_offset = Vector2( -644, -266 )
 focus_neighbour_top = NodePath("../Quit")
 text = "Start"
 
-[node name="Options" type="Button" parent="VBoxContainer"]
+[node name="Options" type="Button" parent="menuButtons"]
 margin_top = 24.0
-margin_right = 120.0
+margin_right = 118.0
 margin_bottom = 44.0
 text = "Options"
 
-[node name="Market" type="Button" parent="VBoxContainer"]
+[node name="Market" type="Button" parent="menuButtons"]
 margin_top = 48.0
-margin_right = 120.0
+margin_right = 118.0
 margin_bottom = 68.0
 rect_pivot_offset = Vector2( -644, -266 )
 text = "Market"
 
-[node name="Tests" type="Button" parent="VBoxContainer"]
+[node name="Tests" type="Button" parent="menuButtons"]
 margin_top = 72.0
-margin_right = 120.0
+margin_right = 118.0
 margin_bottom = 92.0
 text = "Tests"
 
-[node name="Quit" type="Button" parent="VBoxContainer"]
+[node name="Quit" type="Button" parent="menuButtons"]
 margin_top = 96.0
-margin_right = 120.0
+margin_right = 118.0
 margin_bottom = 116.0
 focus_neighbour_bottom = NodePath("../Start")
 text = "Quit"
 
-[node name="joinCodeContainer" type="VBoxContainer" parent="."]
+[node name="createGameButton" type="Button" parent="."]
+margin_left = 1095.0
+margin_top = 11.0
+margin_right = 1269.0
+margin_bottom = 64.0
+custom_fonts/font = SubResource( 8 )
+text = "Create Game"
+
+[node name="joinLobby" type="VBoxContainer" parent="."]
+margin_left = 1095.0
+margin_top = 77.0
+margin_right = 1269.0
+margin_bottom = 130.0
+
+[node name="joinGame" type="Button" parent="joinLobby"]
+margin_right = 174.0
+margin_bottom = 53.0
+custom_fonts/font = SubResource( 9 )
+text = "Join Existing Game"
+
+[node name="enterLobbyCode" type="LineEdit" parent="joinLobby"]
+visible = false
+margin_left = 178.0
+margin_right = 236.0
+margin_bottom = 53.0
+
+[node name="showLobbyCode" type="VBoxContainer" parent="."]
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -250.0
-margin_top = 25.0
-margin_right = -77.0
-margin_bottom = 191.0
+margin_left = -1077.0
+margin_top = 613.0
+margin_right = -864.0
+margin_bottom = 779.0
 rect_scale = Vector2( 0.889601, 0.796081 )
 
-[node name="getCode" type="Button" parent="joinCodeContainer"]
-margin_right = 187.0
+[node name="lobbyCode" type="Button" parent="showLobbyCode"]
+margin_right = 213.0
 margin_bottom = 50.0
 rect_pivot_offset = Vector2( -644, -266 )
 custom_fonts/font = SubResource( 1 )
-text = "GET CODE"
+text = "Lobby Code"
 
-[node name="code" type="RichTextLabel" parent="joinCodeContainer"]
+[node name="code" type="Label" parent="showLobbyCode"]
 margin_top = 54.0
-margin_right = 187.0
-margin_bottom = 166.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-custom_colors/default_color = Color( 0, 0, 0, 1 )
-custom_fonts/normal_font = SubResource( 2 )
+margin_right = 213.0
+margin_bottom = 122.0
+custom_fonts/font = SubResource( 10 )
 text = "XXXX"
+align = 1
+valign = 1
 
 [node name="SettingsMenu" parent="." instance=ExtResource( 5 )]
 
@@ -168,33 +200,12 @@ margin_right = 59.0
 margin_bottom = 24.0
 custom_fonts/font = SubResource( 7 )
 
-[node name="askForUsername" type="AcceptDialog" parent="."]
-margin_left = 525.0
-margin_top = 270.0
-margin_right = 741.0
-margin_bottom = 414.0
-rect_min_size = Vector2( 350, 0 )
-size_flags_horizontal = 3
-size_flags_vertical = 3
-window_title = "Welcome to Mendax!"
-resizable = true
-dialog_text = "Username required!
-Please enter username:
-(You can always change it afterwards in settings)"
-dialog_autowrap = true
-
-[node name="LineEdit" type="LineEdit" parent="askForUsername"]
-margin_left = 8.0
-margin_top = 56.0
-margin_right = 342.0
-margin_bottom = 108.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[connection signal="pressed" from="VBoxContainer/Start" to="." method="_on_Start_pressed"]
-[connection signal="pressed" from="VBoxContainer/Options" to="." method="_on_Options_pressed"]
-[connection signal="pressed" from="VBoxContainer/Market" to="." method="_on_Market_pressed"]
-[connection signal="pressed" from="VBoxContainer/Tests" to="." method="_on_Tests_pressed"]
-[connection signal="pressed" from="VBoxContainer/Quit" to="." method="_on_Quit_pressed"]
-[connection signal="button_up" from="joinCodeContainer/getCode" to="." method="_on_GetCode_button_up"]
-[connection signal="confirmed" from="askForUsername" to="." method="_on_askForUsername_confirmed"]
+[connection signal="pressed" from="menuButtons/Start" to="." method="_on_Start_pressed"]
+[connection signal="pressed" from="menuButtons/Options" to="." method="_on_Options_pressed"]
+[connection signal="pressed" from="menuButtons/Market" to="." method="_on_Market_pressed"]
+[connection signal="pressed" from="menuButtons/Tests" to="." method="_on_Tests_pressed"]
+[connection signal="pressed" from="menuButtons/Quit" to="." method="_on_Quit_pressed"]
+[connection signal="pressed" from="createGameButton" to="." method="_on_createGameButton_pressed"]
+[connection signal="pressed" from="joinLobby/joinGame" to="." method="_on_joinGame_pressed"]
+[connection signal="focus_entered" from="joinLobby/enterLobbyCode" to="." method="_on_enterLobbyCode_focus_entered"]
+[connection signal="text_entered" from="joinLobby/enterLobbyCode" to="." method="_on_enterLobbyCode_text_entered"]

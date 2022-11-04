@@ -1,6 +1,6 @@
 tool
 extends Node
-
+# warnings-disable
 # An adapter which implements the HTTP protocol.
 class_name NakamaHTTPAdapter
 

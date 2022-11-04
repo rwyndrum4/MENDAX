@@ -1,6 +1,6 @@
 extends Reference
 class_name NakamaStorageObjectId
-
+# warnings-disable
 # The collection which stores the object.
 var collection : String
 

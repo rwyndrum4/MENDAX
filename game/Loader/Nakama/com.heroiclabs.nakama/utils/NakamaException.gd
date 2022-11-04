@@ -1,5 +1,5 @@
 extends Reference
-
+# warnings-disable
 # An exception generated during a request.
 # Usually contains at least an error message.
 class_name NakamaException

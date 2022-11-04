@@ -44,9 +44,6 @@ func _ready():
 	local_state = Global.scenes.MAIN_MENU
 	#Connect to Server and join world
 	yield(server_checks(), "completed")
-	#Tell server you can spawn
-	if ServerConnection.get_server_status():
-		ServerConnection.send_spawn(Save.game_data.username)
 
 """
 /*

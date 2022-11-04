@@ -56,8 +56,8 @@ func _physics_process(delta):
 	var input_velocity = Vector2.ZERO
 	input_velocity.x = Input.get_axis("ui_left", "ui_right")
 	input_velocity.y = Input.get_axis("ui_up", "ui_down") 
-	input_velocity = input_velocity.normalized()
 	ServerConnection.send_position_update(input_velocity)
+	input_velocity = input_velocity.normalized()
 	
 	# Case where no input is given
 	if input_velocity == Vector2.ZERO:

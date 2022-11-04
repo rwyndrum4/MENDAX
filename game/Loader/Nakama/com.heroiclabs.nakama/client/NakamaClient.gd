@@ -1,5 +1,5 @@
 extends Reference
-
+# warnings-disable
 # A client for the API in Nakama server.
 class_name NakamaClient
 

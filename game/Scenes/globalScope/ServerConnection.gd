@@ -248,6 +248,63 @@ func join_world_async() -> int:
 
 """
 /*
+* @pre None
+* @post creates match for user when with given match name
+* @param lobby_name -> String
+* @return None
+*/
+"""
+func create_match(lobby_name:String) -> int:
+	var _game_match: NakamaRTAPI.Match = yield(_socket.create_match_async(lobby_name), "completed")
+	return OK
+
+"""
+/*
+* @pre None
+* @post joins the match of a given name
+* @param lobby_name -> String
+* @return None
+*/
+"""
+func join_match(lobby_name:String) -> int:
+	var _game_match = yield(_socket.join_match_async(lobby_name), "completed")
+	return OK
+
+"""
+/*
+* @pre None
+* @post leave a given match
+* @param lobby_name -> String
+* @return None
+*/
+"""
+func leave_match(lobby_name:String) -> int:
+	var leave: NakamaAsyncResult = yield(_socket.leave_match_async(lobby_name), "completed")
+	if leave.is_exception():
+		return ERR_CANT_RESOLVE
+	else:
+		return OK
+
+"""
+/*
+* @pre None
+* @post returns the current matches in the server
+* @param None
+* @return Array 
+*/
+"""
+func current_matches() -> Array:
+	var min_players = 2
+	var max_players = 4
+	var limit = 10
+	var authoritative = true
+	var label = ""
+	var query = ""
+	var result: NakamaRTAPI.Match = yield(_client.list_matches_async(_session,min_players, max_players, limit, authoritative, label, query), "completed")
+	return result.matches
+
+"""
+/*
 * @pre called when you want to send your position to the server
 * @post sends data to server, and to other players from server
 * @param position -> Vector2
