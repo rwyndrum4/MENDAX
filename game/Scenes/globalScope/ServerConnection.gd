@@ -250,7 +250,7 @@ func create_match(lobby_name:String) -> Array:
 * @return None
 */
 """
-func join_match(lobby_name:String) -> Array:
+func join_match(lobby_name:String) -> Dictionary:
 	var game_match = yield(_socket.join_match_async(lobby_name), "completed")
 	for p in game_match.presences:
 		connected_opponents[p.user_id] = p.username

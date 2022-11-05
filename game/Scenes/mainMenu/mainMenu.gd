@@ -281,10 +281,11 @@ func _on_enterLobbyCode_text_entered(new_text):
 		if ServerConnection.get_server_status():
 			if ServerConnection.match_exists():
 				ServerConnection.reset_match()
-			var users_in_menu:Array = ServerConnection.join_match(Global.current_matches[match_code])
+			var users_in_menu = yield(ServerConnection.join_match(Global.current_matches[match_code]), "completed")
 			#Spawn users that are currently in game and you
 			for user in users_in_menu:
 				spawn_character(user.username)
+			spawn_character(Save.game_data.username)
 			$showLobbyCode/code.text = match_code
 			create_game_init_window(
 				"Joined match " + match_code,
