@@ -28,6 +28,7 @@ var server_status: bool = false
 signal state_updated(positions, inputs) #state of game has been updated
 signal initial_state_received(positions, inputs, names) #first state of game
 signal character_spawned(char_name) #singal to tell if someone has spawned
+signal character_despawned(char_name) #signal to tell if someone has despawned
 
 #Other signals
 signal chat_message_received(msg,type,user_sent,from_user) #signal to tell game a chat message has come in
@@ -249,7 +250,7 @@ func create_match(lobby_name:String) -> Array:
 /*
 * @pre None
 * @post joins the match of a given name
-* @param lobby_name -> String
+* @param id -> String
 * @return None
 */
 """
@@ -269,6 +270,7 @@ func join_match(id:String) -> Dictionary:
 */
 """
 func leave_match(id:String) -> int:
+	_match_id = ""
 	var leave: NakamaAsyncResult = yield(_socket.leave_match_async(id), "completed")
 	if leave.is_exception():
 		return ERR_CANT_RESOLVE
@@ -406,6 +408,7 @@ func _on_NakamaSocket_received_match_precence(p_match_presence_event : NakamaRTA
 		connected_opponents[p.user_id] = p
 		emit_signal("character_spawned", p.username)
 	for p in p_match_presence_event.leaves:
+		emit_signal("character_despawned", p.username)
 		# warning-ignore:return_value_discarded
 		
 		connected_opponents.erase(p.user_id)

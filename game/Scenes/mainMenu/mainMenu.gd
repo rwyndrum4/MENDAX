@@ -50,7 +50,8 @@ func _ready():
 	initialize_menu()
 	# warning-ignore:return_value_discarded
 	ServerConnection.connect("character_spawned",self,"spawn_character")
-
+	# warning-ignore:return_value_discarded
+	ServerConnection.connect("character_despawned",self,"despawn_character")
 """
 /*
 * @pre called for every frame inside of the game
@@ -77,7 +78,7 @@ func _process(_delta): #if you want to use delta, then change it to delta
 func _on_Start_pressed():
 	#delete player objects
 	for player in player_objects:
-		despawn_player(player['player_obj'])
+		delete_player_obj(player['player_obj'],player['text_obj'])
 	#change scene to start area
 	SceneTrans.change_scene(Global.scenes.START_AREA)
 
@@ -194,16 +195,44 @@ func spawn_character(player_name:String):
 		return
 	#Add animated player to scene
 	var char_pos = get_char_pos(len(player_objects))
-	var spawned_player = create_spawn_player(char_pos,player_name)
+	var obj_arr = create_spawn_player(char_pos,player_name)
+	var spawned_player = obj_arr[0]
+	var text_name = obj_arr[1]
 	#Add data to array
 	player_objects.append({
-		'player_obj': spawned_player
+		'name': player_name,
+		'player_obj': spawned_player,
+		'text_obj': text_name
 	})
 	Global.player_positions.append({
+		'name': player_name,
 		'id': num_players+1,
 		'pos': Vector2(char_pos.x*5,char_pos.y*5)
 	})
 	num_players += 1
+
+"""
+/*
+* @pre called when received that someone has left the match
+* @post loads your player and all other players into scene
+* @param player_name -> String
+* @return None
+*/
+"""
+func despawn_character(player_name:String):
+	num_players = 0
+	var player_names_copy:Array = []
+	#Save the names of the players that are still in the game
+	for dict in player_objects:
+		if dict['name'] != player_name:
+			player_names_copy.append(dict['name'])
+	#delete player objects
+	for player in player_objects:
+		delete_player_obj(player['player_obj'],player['text_obj'])
+	#respawn players again with the one deleted
+	player_objects = []
+	for _name in player_names_copy:
+		spawn_character(_name)
 
 """
 /*
@@ -214,6 +243,14 @@ func spawn_character(player_name:String):
 */
 """
 func _on_createGameButton_pressed():
+	if ServerConnection.match_exists():
+		#leave the match if the game is alredy created
+		game_already_created()
+	else:
+		#create a match if there is no matche yet
+		no_game_created()
+
+func no_game_created():
 	var code: String = generate_random_code()
 	game_init_popup = AcceptDialog.new()
 	if not ServerConnection.get_server_status():
@@ -222,21 +259,20 @@ func _on_createGameButton_pressed():
 			"Multiplayer not available, you are not connected to a game"
 		)
 	else:
-		if ServerConnection.match_exists():
-			create_game_init_window(
-				"Game already exists!",
-				"Please use the game code you already have"
-			)
-			return
 		var current_players = yield(ServerConnection.create_match(code), "completed")
 		create_game_init_window(
 			"New game created!",
 			"Your code is: " + code + "\nPlease share it with your friends!"
 		)
 		print("current players: ", current_players)
-		#Add your user to scene
-		#spawn_character(Save.game_data.username)
 		$showLobbyCode/code.text = code
+		$createGameButton.text = "Leave match"
+
+func game_already_created():
+	yield(ServerConnection.leave_match(ServerConnection._match_id), "completed")
+	despawn_character(Save.game_data.username)
+	$createGameButton.text = "Create match"
+	$showLobbyCode/code.text = "XXXX"
 
 """
 /*
@@ -286,6 +322,7 @@ func _on_enterLobbyCode_text_entered(new_text):
 			for user in users_in_menu:
 				spawn_character(user.username)
 			$showLobbyCode/code.text = match_code
+			$createGameButton.text = "Leave match"
 			create_game_init_window(
 				"Joined match " + match_code,
 				"Start the game with your friends when you want"
@@ -306,8 +343,9 @@ func _on_enterLobbyCode_text_entered(new_text):
 * @return None
 */
 """
-func despawn_player(player:AnimatedSprite):
+func delete_player_obj(player:AnimatedSprite, text:Label):
 	player.queue_free()
+	text.queue_free()
 
 """
 /*
@@ -380,14 +418,12 @@ func create_game_init_window(window_text,dialog_text):
 * @return None
 */
 """
-func create_spawn_player(char_pos:Vector2, player_name:String) -> AnimatedSprite:
+func create_spawn_player(char_pos:Vector2, player_name:String) -> Array:
 	var spawned_player:AnimatedSprite = load(idle_player).instance()
 	#Change size and pos of sprite
 	spawned_player.offset = char_pos
 	spawned_player.scale = Vector2(SCALE_VAL,SCALE_VAL)
 	spawned_player.play_animation(animation_names[num_players])
-	#Add child to the scene
-	add_child(spawned_player)
 	#Create text and add it as a child of the new player obj
 	var player_title: Label = Label.new()
 	player_title.text = player_name
@@ -396,8 +432,10 @@ func create_spawn_player(char_pos:Vector2, player_name:String) -> AnimatedSprite
 		(char_pos.y*SCALE_VAL)-(20*SCALE_VAL)
 	)
 	player_title.add_font_override("font",load("res://Assets/ARIALBD.TTF"))
-	add_child_below_node(spawned_player,player_title)
-	return spawned_player
+	add_child(player_title)
+	#Add child to the scene
+	add_child(spawned_player)
+	return [spawned_player,player_title]
 
 """
 /*
