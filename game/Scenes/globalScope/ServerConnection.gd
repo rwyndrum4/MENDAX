@@ -411,6 +411,7 @@ func _on_NakamaSocket_received_match_precence(p_match_presence_event):
 	for p in p_match_presence_event.joins:
 		connected_opponents[p.user_id] = p
 	for p in p_match_presence_event.leaves:
+		# warning-ignore:return_value_discarded
 		connected_opponents.erase(p.user_id)
 	print("Connected opponents: %s" % [connected_opponents])
 

@@ -29,6 +29,7 @@ var in_anim = 0
 var state = null
 enum scenes {
 	MAIN_MENU,
+	OPTIONS_FROM_MAIN,
 	MARKET,
 	START_AREA,
 	CAVE,

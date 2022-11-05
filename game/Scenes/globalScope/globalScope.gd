@@ -13,6 +13,9 @@ extends Node
 
 #Member Variables
 onready var chat_box = $GUI/chatbox
+onready var settings_menu = $GUI/SettingsMenu
+onready var world_env = $WorldEnvironment
+onready var fps_label = $GUI/fpsLabel
 
 #Scene Paths
 var main_menu = "res://Scenes/mainMenu/mainMenu.tscn"
@@ -25,6 +28,11 @@ var riddler_minigame = "res://Scenes/minigames/riddler/riddleGame.tscn"
 var current_scene = null
 #State to compare to the global state to see if anything changes
 var local_state = null
+#Bool to tell if in a popup or not
+var in_popup: bool = false
+#Bools to tell if in chatbox or not, work like a locking mechanism
+var in_chatbox: bool = false
+var can_open_settings: bool = false
 
 """
 /*
@@ -37,6 +45,12 @@ var local_state = null
 func _ready():
 	# warning-ignore:return_value_discarded
 	ServerConnection.connect("chat_message_received",self,"_on_ServerConnection_chat_message_received")
+	# warning-ignore:return_value_discarded
+	GlobalSignals.connect("openChatbox",self,"_chatbox_use")
+	#Initialize the options menu and world environment
+	initialize_settings()
+	initialize_world_env()
+	initialize_fps_label()
 	#Load initial scene (main menu)
 	current_scene = load(main_menu).instance()
 	add_child(current_scene)
@@ -55,12 +69,21 @@ func _ready():
 */
 """
 func _process(_delta): #if you want to use _delta, remove _
+	#Change scene
 	if local_state != Global.state:
-		#free up memory from the current scene
-		current_scene.queue_free()
+		#free up memory from the current scene if not a popup scene (example: settings menu)
+		if not_popup(Global.state):
+			current_scene.queue_free()
 		#change the scene
 		_change_scene_to(Global.state)
-
+	if Input.is_action_just_pressed("ui_cancel",false) and local_state != Global.scenes.MAIN_MENU:
+		if in_popup:
+			settings_menu.hide()
+			in_popup = false
+		elif can_open_settings:
+			settings_menu.popup_centered_ratio()
+			in_popup = true
+	set_popup_locks()
 """
 /*
 * @pre called when global wants to change scenes
@@ -73,6 +96,10 @@ func _change_scene_to(state):
 	#Load the correct scene
 	if state == Global.scenes.MAIN_MENU:
 		current_scene = load(main_menu).instance()
+	elif state == Global.scenes.OPTIONS_FROM_MAIN:
+		settings_menu.popup_centered_ratio()
+		Global.state = Global.scenes.MAIN_MENU
+		return
 	elif state == Global.scenes.MARKET:
 		current_scene = load(market).instance()
 	elif state == Global.scenes.START_AREA:
@@ -182,3 +209,67 @@ func _on_chatbox_message_sent(msg,is_whisper,username_to_send_to):
 	else:
 		#send message to general
 		yield(ServerConnection.send_text_async_general(msg), "completed")
+
+"""
+/*
+* @pre called in the _ready func
+* @post initializes the settings menu for values look same
+* @param None
+* @return None
+*/
+"""
+func initialize_settings():
+	#Call functions to sync audio settings with user save
+	settings_menu._on_MasterVolSlider_value_changed(Save.game_data.master_vol)
+	settings_menu._on_MusicVolSlider_value_changed(Save.game_data.music_vol)
+	settings_menu._on_SfxVolSlider_value_changed(Save.game_data.sfx_vol)
+
+func initialize_world_env():
+	#Call functions to use user saved brightness and bloom values
+	world_env._on_brightness_toggled(Save.game_data.brightness)
+	world_env._on_bloom_toggled(Save.game_data.bloom_on)
+
+
+func initialize_fps_label():
+	#Call function to use user saved fps
+	fps_label._on_fps_displayed(Save.game_data.display_fps)
+
+"""
+/*
+* @pre None
+* @post tells if the scene is a popup scene or not
+* @param state -> Global.scenes
+* @return bool
+*/
+"""
+func not_popup(state) -> bool:
+	match state:
+		Global.scenes.OPTIONS_FROM_MAIN:
+			return false
+		_:
+			return true
+
+"""
+/*
+* @pre called when chatbox is opened
+* @post sets in_chatbox to true so game knows chat is being used
+* @param value -> bool 
+* @return None
+*/
+"""
+func _chatbox_use(value):
+	in_chatbox = value
+
+"""
+/*
+* @pre None
+* @post sets locks for if settings menu can be opened or not
+* @param None
+* @return None
+*/
+"""
+func set_popup_locks():
+	if not in_chatbox and not can_open_settings:
+		can_open_settings = true
+	elif in_chatbox and can_open_settings:
+		can_open_settings = false

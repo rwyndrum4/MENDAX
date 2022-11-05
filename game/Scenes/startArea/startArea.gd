@@ -11,8 +11,6 @@ extends Control
 
 # Member Variables:
 var in_cave = false
-var in_menu = false
-var using_chat = false
 onready var player_one = $Player
 onready var instructions: Label = $enterCaveArea/enterDirections
 onready var settingsMenu = $GUI/SettingsMenu
@@ -36,8 +34,6 @@ func _ready():
 		spawn_players()
 	#This is how you queue text to the textbox queue
 	textBox.queue_text("If you're ready to begin your challenge, press enter")
-	# warning-ignore:return_value_discarded
-	GlobalSignals.connect("openChatbox", self, "chatbox_use")
 
 """
 /*
@@ -48,7 +44,6 @@ func _ready():
 */
 """
 func _process(_delta): #change to delta if using it
-	check_settings()
 	if in_cave:
 		if Input.is_action_just_pressed("ui_accept",false) and not Input.is_action_just_pressed("ui_enter_chat"):
 			in_cave = false
@@ -80,34 +75,6 @@ func _on_Area2D_body_entered(_body: PhysicsBody2D): #change to body if want to u
 func _on_Area2D_body_exited(_body: PhysicsBody2D): #change to body if want to use
 	in_cave = false
 	instructions.hide()
-
-"""
-/*
-* @pre Called for every frame inside process function
-* @post Opens and closes settings when escape is pressed
-* @param None
-* @return None
-*/
-"""
-func check_settings():
-	if Input.is_action_just_pressed("ui_cancel",false) and not in_menu:
-		settingsMenu.popup_centered_ratio()
-		in_menu = true
-	elif Input.is_action_just_pressed("ui_cancel",false) and in_menu:
-		settingsMenu.hide()
-		in_menu = false
-
-"""
-/*
-* @pre called when chatbox is opened
-* @post sets in_menu to true so game knows chat is being used
-* @param value -> bool 
-* @return None
-*/
-"""
-func chatbox_use(value):
-	if value:
-		in_menu = true
 
 """
 /*

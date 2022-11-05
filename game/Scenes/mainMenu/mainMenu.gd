@@ -14,9 +14,6 @@ extends Control
 
 # Member Variables
 onready var startButton = $menuButtons/Start
-onready var settingsMenu = $SettingsMenu
-onready var fpsLabel = $fpsLabel
-onready var worldEnv = $WorldEnvironment
 onready var code_line_edit = $joinLobby/enterLobbyCode
 
 #### Variables for showing players on rocks ###
@@ -51,6 +48,8 @@ var typing_code: bool = false
 """
 func _ready():
 	initialize_menu()
+	# warning-ignore:return_value_discarded
+	ServerConnection.connect("character_spawned",self,"spawn_character")
 
 """
 /*
@@ -94,7 +93,7 @@ func _on_Start_pressed():
 */
 """
 func _on_Options_pressed():
-	settingsMenu.popup_centered_ratio()
+	Global.state = Global.scenes.OPTIONS_FROM_MAIN
 
 """
 /*
@@ -174,15 +173,6 @@ func getRandAlphInd(rng):
 func initialize_menu():
 	#Grab focus on start button so keys can be used to navigate buttons
 	startButton.grab_focus()
-	#Call function to use user saved fps
-	fpsLabel._on_fps_displayed(Save.game_data.display_fps)
-	#Call functions to use user saved brightness and bloom values
-	worldEnv._on_brightness_toggled(Save.game_data.brightness)
-	worldEnv._on_bloom_toggled(Save.game_data.bloom_on)
-	#Call functions to sync audio settings with user save
-	settingsMenu._on_MasterVolSlider_value_changed(Save.game_data.master_vol)
-	settingsMenu._on_MusicVolSlider_value_changed(Save.game_data.music_vol)
-	settingsMenu._on_SfxVolSlider_value_changed(Save.game_data.sfx_vol)
 	#check if there is a username
 	if Save.game_data.username == "":
 		var win_text = "Welcome to Mendax!"
@@ -194,50 +184,26 @@ func initialize_menu():
 /*
 * @pre called when received that you have spawned back from server
 * @post loads your player and all other players into scene
-* @param id -> String, char_name -> String, current_players -> Dictionary
+* @param player_name -> String
 * @return None
 */
 """
-func spawn_characters(current_players:Dictionary):
+func spawn_character(player_name:String):
 	#Only allow 4 players
 	if num_players == MAX_PLAYERS:
 		return
-	for d in player_objects:
-		# warning-ignore:return_value_discarded
-		current_players.erase(d['name'])
-	for player_name in current_players.keys():
-		#Add animated player to scene
-		var char_pos = get_char_pos(len(player_objects))
-		var spawned_player:AnimatedSprite = load(idle_player).instance()
-		#Change size and pos of sprite
-		spawned_player.offset = char_pos
-		spawned_player.scale = Vector2(SCALE_VAL,SCALE_VAL)
-		spawned_player.play_animation(animation_names[num_players])
-		#Add child to the scene
-		add_child(spawned_player)
-		#Create text and add it as a child of the new player obj
-		var player_title: Label = Label.new()
-		player_title.text = player_name
-		player_title.rect_position = Vector2(
-			(char_pos.x*SCALE_VAL)-(5*SCALE_VAL), 
-			(char_pos.y*SCALE_VAL)-(20*SCALE_VAL)
-		)
-		player_title.add_font_override("font",load("res://Assets/ARIALBD.TTF"))
-		add_child_below_node(spawned_player,player_title)
-		#Add data to array
-		player_objects.append({
-			'name': player_name,
-			'player_obj': spawned_player
-		})
-		char_pos.x *= 5
-		char_pos.y *= 5
-		Global.player_positions.append({
-			'name': player_name,
-			'id': current_players[player_name],
-			'num': len(player_objects),
-			'pos': char_pos
-		})
-		num_players += 1
+	#Add animated player to scene
+	var char_pos = get_char_pos(len(player_objects))
+	var spawned_player = create_spawn_player(char_pos,player_name)
+	#Add data to array
+	player_objects.append({
+		'player_obj': spawned_player
+	})
+	Global.player_positions.append({
+		'id': num_players+1,
+		'pos': Vector2(char_pos.x*5,char_pos.y*5)
+	})
+	num_players += 1
 
 """
 /*
@@ -250,21 +216,26 @@ func spawn_characters(current_players:Dictionary):
 func _on_createGameButton_pressed():
 	var code: String = generate_random_code()
 	game_init_popup = AcceptDialog.new()
-	if ServerConnection.get_server_status():
-		create_game_init_window(
-			"New game created!",
-			"Your code is: " + code + "\nPlease share it with your friends!"
-		)
-	else:
+	if not ServerConnection.get_server_status():
 		create_game_init_window(
 			"Server not available",
 			"Multiplayer not available, you are not connected to a game"
 		)
-	if ServerConnection.get_server_status():
+	else:
 		if ServerConnection.match_exists():
-			ServerConnection.reset_match()
+			create_game_init_window(
+				"Game already exists!",
+				"Please use the game code you already have"
+			)
+			return
 		var current_players = yield(ServerConnection.create_match(code), "completed")
+		create_game_init_window(
+			"New game created!",
+			"Your code is: " + code + "\nPlease share it with your friends!"
+		)
 		print("current players: ", current_players)
+		#Add your user to scene
+		spawn_character(Save.game_data.username)
 		$showLobbyCode/code.text = code
 
 """
@@ -308,7 +279,10 @@ func _on_enterLobbyCode_text_entered(new_text):
 		)
 	else:
 		if ServerConnection.get_server_status():
-			ServerConnection.join_match(Global.current_matches[match_code])
+			var users_in_menu:Array = ServerConnection.join_match(Global.current_matches[match_code])
+			#Spawn users that are currently in game and you
+			for user in users_in_menu:
+				spawn_character(user.username)
 			$showLobbyCode/code.text = match_code
 		else:
 			create_game_init_window(
@@ -343,14 +317,14 @@ func get_char_pos(sizeof_arr: int) -> Vector2:
 		result.x = 150
 		result.y = 65
 	elif sizeof_arr == 1:
-		result.x = 220
+		result.x = 215
 		result.y = 65
 	elif sizeof_arr == 2:
 		result.x = 150
-		result.y = 130
+		result.y = 120
 	elif sizeof_arr == 3:
-		result.x = 220
-		result.y = 130
+		result.x = 215
+		result.y = 120
 	return result
 
 """
@@ -395,6 +369,33 @@ func create_game_init_window(window_text,dialog_text):
 """
 /*
 * @pre None
+* @post creates players that show up on rocks
+* @param char_pos -> Vector2, player_name -> String
+* @return None
+*/
+"""
+func create_spawn_player(char_pos:Vector2, player_name:String) -> AnimatedSprite:
+	var spawned_player:AnimatedSprite = load(idle_player).instance()
+	#Change size and pos of sprite
+	spawned_player.offset = char_pos
+	spawned_player.scale = Vector2(SCALE_VAL,SCALE_VAL)
+	spawned_player.play_animation(animation_names[num_players])
+	#Add child to the scene
+	add_child(spawned_player)
+	#Create text and add it as a child of the new player obj
+	var player_title: Label = Label.new()
+	player_title.text = player_name
+	player_title.rect_position = Vector2(
+		(char_pos.x*SCALE_VAL)-(5*SCALE_VAL), 
+		(char_pos.y*SCALE_VAL)-(20*SCALE_VAL)
+	)
+	player_title.add_font_override("font",load("res://Assets/ARIALBD.TTF"))
+	add_child_below_node(spawned_player,player_title)
+	return spawned_player
+
+"""
+/*
+* @pre None
 * @post deltes the game_init_popup object
 * @param None
 * @return None
@@ -421,5 +422,5 @@ func _delete_get_user_input_obj():
 		var d_text = "Username can be one word, no spaces"
 		create_get_user_window(win_text, d_text)
 	else:
-		settingsMenu._on_usernameInput_text_entered(given_username)
+		GlobalSettings.update_username(given_username)
 		startButton.grab_focus()
