@@ -25,7 +25,7 @@ enum OpCodes {
 var server_status: bool = false
 
 #Signals for recieving game state data from server (from  the .lua files)
-signal state_updated(positions, inputs) #state of game has been updated
+signal state_updated(id, position) #state of game has been updated
 signal initial_state_received(positions, inputs, names) #first state of game
 signal character_spawned(char_name) #singal to tell if someone has spawned
 signal character_despawned(char_name) #signal to tell if someone has despawned
@@ -48,10 +48,8 @@ var _world_id: String = "" #id of the world you are currently in
 var _device_id: String = "" #id of the user's computer generated id
 var room_users: Dictionary = {} #chatroom users
 var _match_id: String = "" #String to hold match id
-var connected_opponents: Dictionary = {}
-var game_match : NakamaRTAPI.Match
-var op_code = 1
-var new_state  = {"hello" : "world"}
+var _player_num: int = 0 #Number of the player
+var connected_opponents: Dictionary = {} #opponents currently in match (including you)
 
 """
 /*
@@ -240,7 +238,7 @@ func send_text_async_whisper(text: String,user_sent_to:String) -> int:
 */
 """
 func create_match(lobby_name:String) -> Array:
-	game_match = yield(_socket.create_match_async(lobby_name), "completed")
+	var game_match = yield(_socket.create_match_async(lobby_name), "completed")
 	Global.current_matches[lobby_name] = game_match.match_id
 	_match_id = game_match.match_id
 	send_text_async_general("MATCH_RECEIVED " + JSON.print(Global.current_matches))
@@ -255,7 +253,7 @@ func create_match(lobby_name:String) -> Array:
 */
 """
 func join_match(id:String) -> Dictionary:
-	game_match = yield(_socket.join_match_async(id), "completed")
+	var game_match = yield(_socket.join_match_async(id), "completed")
 	_match_id = game_match.match_id
 	for p in game_match.presences:
 		connected_opponents[p.user_id] = p.username
@@ -319,7 +317,7 @@ func current_matches(match_code:String) -> String:
 func send_position_update(position: Vector2) -> void:
 	if _socket:
 		var payload := {id = _device_id, pos = {x=position.x, y = position.y}}
-		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_POSITION,JSON.print(payload), [game_match.presences[0]])
+		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_POSITION,JSON.print(payload), connected_opponents)
 
 """
 /*
@@ -332,7 +330,7 @@ func send_position_update(position: Vector2) -> void:
 func send_input_update(input: float) -> void:
 	if _socket:
 		var payload := {id = _device_id, inp = input}
-		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_INPUT,JSON.print(payload), [game_match.presences[0]])
+		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_INPUT,JSON.print(payload), connected_opponents)
 
 """
 /*
@@ -432,10 +430,11 @@ func _on_NakamaSocket_received_match_state(match_state: NakamaRTAPI.MatchData) -
 		OpCodes.UPDATE_STATE:
 			var decoded: Dictionary = JSON.parse(raw).result
 			
-			var positions: Dictionary = decoded.pos
-			var inputs: Dictionary = decoded.inp
+			var id: int = int(decoded.id)
+			var position_decoded: Dictionary = decoded.pos
+			var position: Vector2 = Vector2(int(position_decoded.x),int(position_decoded.y))
 			
-			emit_signal("state_updated", positions, inputs)
+			emit_signal("state_updated", id, position)
 		OpCodes.INITIAL_STATE:
 			var decoded: Dictionary = JSON.parse(raw).result
 			

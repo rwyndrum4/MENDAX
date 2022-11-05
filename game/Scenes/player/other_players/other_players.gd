@@ -12,7 +12,7 @@ onready var character = $position/animated_sprite
 onready var char_pos = $position
 var player_color: String = ""
 var is_stopped = false
-var player_id:String = ""
+var player_id: int = 0
 var last_position:Vector2 = Vector2.ZERO
 
 # Player physics constants
@@ -117,7 +117,7 @@ func control_animations(vel):
 * @return None
 */
 """
-func set_player_id(id_in:String):
+func set_player_id(id_in:int):
 	player_id = id_in
 
 """

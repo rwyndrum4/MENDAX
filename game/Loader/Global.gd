@@ -52,12 +52,7 @@ func get_player_pos(player_id:String):
 		if player['id'] == player_id:
 			return player['pos']
 
-func _player_positions_updated(positions,_inputs):
-	if state == scenes.START_AREA || state == scenes.CAVE || state == scenes.RIDDLER_MINIGAME:
-		for p_id in positions.keys():
-			for player in player_positions:
-				if player['id'] == p_id:
-					var pos_dict = positions[p_id]
-					var x = int(pos_dict['x'])
-					var y = int(pos_dict['y'])
-					player['pos'] = Vector2(x,y)
+func _player_positions_updated(id, position):
+	for player in player_positions:
+		if player['id'] == id:
+			player['pos'] = position

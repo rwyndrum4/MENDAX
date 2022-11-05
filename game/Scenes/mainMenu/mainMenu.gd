@@ -210,6 +210,8 @@ func spawn_character(player_name:String):
 		'pos': Vector2(char_pos.x*5,char_pos.y*5)
 	})
 	num_players += 1
+	if player_name == Save.game_data.username:
+		ServerConnection._player_num = num_players
 
 """
 /*
