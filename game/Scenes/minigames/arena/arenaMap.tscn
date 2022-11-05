@@ -9,6 +9,25 @@
 
 [node name="Node2D" type="Control"]
 
+[node name="collisionElements" type="StaticBody2D" parent="."]
+
+[node name="northWall" type="CollisionPolygon2D" parent="collisionElements"]
+polygon = PoolVector2Array( 0, 0, 0, 288, 3744, 288, 3744, 0 )
+
+[node name="southWall" type="CollisionPolygon2D" parent="collisionElements"]
+position = Vector2( 0, 3456 )
+polygon = PoolVector2Array( 0, 0, 0, 288, 3744, 288, 3744, 0, 902.945, 0 )
+
+[node name="westWall" type="CollisionPolygon2D" parent="collisionElements"]
+position = Vector2( 288, 0 )
+rotation = 1.5708
+polygon = PoolVector2Array( 0, 0, 0, 288, 3744, 288, 3744, 0, 902.945, 0 )
+
+[node name="eastWall" type="CollisionPolygon2D" parent="collisionElements"]
+position = Vector2( 3744, 0 )
+rotation = 1.5708
+polygon = PoolVector2Array( 0, 0, 0, 288, 3744, 288, 3744, 0, 902.945, 0 )
+
 [node name="GridContainer" type="GridContainer" parent="."]
 margin_right = 40.0
 margin_bottom = 40.0

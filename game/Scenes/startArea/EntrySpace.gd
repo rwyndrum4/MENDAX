@@ -11,7 +11,6 @@ extends Control
 # Member Variables
 var in_exit = false
 var in_menu = false
-onready var nextMinigame = 0
 onready var instructions: Label = $exitCaveArea/exitDirections
 onready var settingsMenu = $GUI/SettingsMenu
 onready var myTimer: Timer = $GUI/Timer

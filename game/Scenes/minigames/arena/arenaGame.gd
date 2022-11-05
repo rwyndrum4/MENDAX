@@ -12,11 +12,6 @@ onready var settingsMenu = $GUI/SettingsMenu
 onready var myTimer: Timer = $GUI/Timer
 onready var timerText: Label = $GUI/Timer/timerText
 onready var textBox = $GUI/textBox
-onready var transCam = $Path2D/PathFollow2D/camTrans
-onready var playerCam = $Player/Camera2D
-
-#signals
-signal textWait()
 
 """
 /*
@@ -27,40 +22,10 @@ signal textWait()
 */
 """
 func _ready():
-	#myTimer.start(90)
+	myTimer.start(90)
 	
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("openChatbox", self, "chatbox_use")
-	
-	
-	#scene animation for entering cave(for first time)
-	if Global.entry == 0:
-
-		var t = Timer.new()
-		t.set_wait_time(1)
-		t.set_one_shot(false)
-		self.add_child(t)
-			
-		
-		
-		Global.entry = 1
-		transCam.current = true
-		$Player.set_physics_process(false)
-		#Begin scene dialogue
-		textBox.queue_text("Welcome to the arena")
-		t.start()
-		yield(t, "timeout")
-		t.queue_free()
-		$Path2D/AnimationPlayer.play("BEGIN")
-		yield($Path2D/AnimationPlayer, "animation_finished")
-		#This is how you queue text to the textbox queue
-		textBox.queue_text("In order to pass, you must defeat every enemy. ")
-		textBox.queue_text("If you fail to defeat the enemies within the time allotted, they will become vastly more powerful.")
-		textBox.queue_text("Whenever a player dies, the timer will reset. Note that this does not help if the time has already run out.")
-		connect("textWait", self, "_finish_anim")
-		Global.in_anim = 1;
-	else:
-		myTimer.start(90)
 
 """
 /*
@@ -74,51 +39,6 @@ func _ready():
 func _process(_delta): #change to delta if used
 	check_settings()
 	timerText.text = convert_time(myTimer.time_left)
-
-"""
-/*
-* @pre None
-* @post Starts timer for minigame, sets playerCam to current, and sets physic_process to True
-* @param None
-* @return None
-*/
-"""
-func _finish_anim():
-	var t = Timer.new()
-	t.set_wait_time(1)
-	t.set_one_shot(false)
-	self.add_child(t)
-		
-	t.start()
-	yield(t, "timeout")
-
-	$Path2D/AnimationPlayer.play_backwards("BEGIN")
-	yield($Path2D/AnimationPlayer, "animation_finished")
-	t.start()
-	yield(t, "timeout")
-	
-	#start timer
-	textBox.queue_text("Time starts now!")
-	myTimer.start(90)
-	
-	t.queue_free()
-	$Player.set_physics_process(true)
-	playerCam.current = true
-
-
-"""
-/*
-* @pre An input of any sort
-* @post None
-* @param Takes in an event
-* @return None
-*/
-"""
-func _input(ev):
-	if Input.is_key_pressed(KEY_ENTER) and not ev.echo and textBox.queue_text_length() == 0:
-		if Global.in_anim == 1:
-			Global.in_anim = 0
-			emit_signal("textWait")
 
 """
 /*
