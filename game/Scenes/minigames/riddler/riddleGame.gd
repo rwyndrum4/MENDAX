@@ -159,8 +159,8 @@ func check_settings():
 * @return None
 */
 """
-func _check_answer(answer:String):
-	if answer == answer:
+func _check_answer(answer_in:String):
+	if answer == answer_in:
 		Global.state = Global.scenes.CAVE
 
 """
