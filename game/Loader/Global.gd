@@ -39,6 +39,8 @@ enum scenes {
 var current_players:Dictionary = {}
 # Hold array of player positions
 var player_positions:Array = []
+# Hold current matches
+var current_matches: Dictionary = {}
 
 func _ready():
 	# warning-ignore:return_value_discarded

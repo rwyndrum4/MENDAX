@@ -264,6 +264,7 @@ func _on_createGameButton_pressed():
 		if ServerConnection.match_exists():
 			ServerConnection.reset_match()
 		var current_players = yield(ServerConnection.create_match(code), "completed")
+		print("current players: ", current_players)
 		$showLobbyCode/code.text = code
 
 """
@@ -300,14 +301,14 @@ func _on_enterLobbyCode_focus_entered():
 """
 func _on_enterLobbyCode_text_entered(new_text):
 	var match_code = new_text.to_upper()
-	if len(match_code) != 4:
+	if len(match_code) == 4:
 		create_game_init_window(
 			"Invalid code",
 			"Please enter an alphabetical code with a length of 4"
 		)
 	else:
 		if ServerConnection.get_server_status():
-			ServerConnection.join_match(match_code)
+			ServerConnection.join_match(Global.current_matches[match_code])
 			$showLobbyCode/code.text = match_code
 		else:
 			create_game_init_window(

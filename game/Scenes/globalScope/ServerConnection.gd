@@ -17,7 +17,8 @@ enum OpCodes {
 	UPDATE_JUMP,
 	DO_SPAWN,
 	UPDATE_COLOR,
-	INITIAL_STATE
+	INITIAL_STATE,
+	MATCHES_LIST
 }
 
 #Variable that checks if connected to server
@@ -46,6 +47,7 @@ var _world_id: String = "" #id of the world you are currently in
 var _device_id: String = "" #id of the user's computer generated id
 var room_users: Dictionary = {} #chatroom users
 var _match_id: String = "" #String to hold match id
+var connected_opponents: Dictionary = {}
 
 """
 /*
@@ -225,30 +227,6 @@ func send_text_async_whisper(text: String,user_sent_to:String) -> int:
 		}), "completed")
 	return ERR_CONNECTION_ERROR if msg_result.is_exception() else OK
 
-#"""
-#/*
-#* @pre called when user joins the game world
-#* @post joins the world
-#* @param None
-#* @return None
-#*/
-#"""
-#func join_world_async() -> int:
-#	var world: NakamaAPI.ApiRpc = yield(_client.rpc_async(_session, "get_world_id", ""), "completed")
-#	if not world.is_exception():
-#		_world_id = world.payload
-#	else:
-#		print("rpc_async failed")
-#		return ERR_CONNECTION_ERROR
-#
-#	var match_join_result: NakamaRTAPI.Match = yield(_socket.join_match_async(_world_id), "completed")
-#	if match_join_result.is_exception():
-#		var exception: NakamaException = match_join_result.get_exception()
-#		print("Error joining the match: %s - %s" % [exception.status_code, exception.message])
-#		return ERR_CONNECTION_ERROR
-#	else:
-#		return OK
-
 """
 /*
 * @pre None
@@ -260,6 +238,8 @@ func send_text_async_whisper(text: String,user_sent_to:String) -> int:
 func create_match(lobby_name:String) -> Array:
 	_match_id = lobby_name
 	var game_match: NakamaRTAPI.Match = yield(_socket.create_match_async(_match_id), "completed")
+	Global.current_matches[lobby_name] = game_match.match_id
+	send_text_async_general("MATCH_RECEIVED " + JSON.print(Global.current_matches))
 	return game_match.presences
 
 """
@@ -320,14 +300,14 @@ func reset_match():
 * @return Array 
 */
 """
-func current_matches() -> Array:
+func current_matches(match_code:String) -> String:
 	var min_players = 2
 	var max_players = 4
 	var limit = 10
 	var authoritative = true
-	var label = ""
+	var label = match_code
 	var query = ""
-	var result: NakamaRTAPI.Match = yield(_client.list_matches_async(_session,min_players, max_players, limit, authoritative, label, query), "completed")
+	var result = yield(_client.list_matches_async(_session,min_players, max_players, limit, authoritative, label, query), "completed")
 	return result.matches
 
 """
@@ -398,6 +378,8 @@ func _on_Nakama_Socket_received_channel_message(message: NakamaAPI.ApiChannelMes
 func _on_channel_presence(p_presence : NakamaRTAPI.ChannelPresenceEvent):
 	for p in p_presence.joins:
 		room_users[p.username] = p.user_id
+		send_text_async_general("MATCH_RECEIVED " + JSON.print(Global.current_matches))
+		
 
 	for p in p_presence.leaves:
 		# warning-ignore:return_value_discarded
@@ -425,7 +407,12 @@ func _on_notification(p_notification : NakamaAPI.ApiNotification):
 */
 """
 func _on_NakamaSocket_received_match_precence(p_match_presence_event):
-	pass
+	for p in p_match_presence_event.joins:
+		connected_opponents[p.user_id] = p
+	for p in p_match_presence_event.leaves:
+		connected_opponents.erase(p.user.id)
+	print("Connected opponents: %s" % [connected_opponents])
+	#Global.current_match_players = connected_opponents
 
 """
 /*
