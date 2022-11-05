@@ -102,9 +102,7 @@ func server_checks():
 		if result == OK:
 			result = yield(ServerConnection.join_chat_async_general(), "completed")
 			if result == OK:
-				result = yield(ServerConnection.join_world_async(), "completed")
-				if result == OK:
-					ServerConnection.set_server_status(true)
+				ServerConnection.set_server_status(true)
 
 """
 /*

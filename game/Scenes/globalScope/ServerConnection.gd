@@ -45,6 +45,7 @@ var _current_whisper_id = "" #id for person you want to whisper
 var _world_id: String = "" #id of the world you are currently in
 var _device_id: String = "" #id of the user's computer generated id
 var room_users: Dictionary = {} #chatroom users
+var _match_id: String = "" #String to hold match id
 
 """
 /*
@@ -222,29 +223,29 @@ func send_text_async_whisper(text: String,user_sent_to:String) -> int:
 		}), "completed")
 	return ERR_CONNECTION_ERROR if msg_result.is_exception() else OK
 
-"""
-/*
-* @pre called when user joins the game world
-* @post joins the world
-* @param None
-* @return None
-*/
-"""
-func join_world_async() -> int:
-	var world: NakamaAPI.ApiRpc = yield(_client.rpc_async(_session, "get_world_id", ""), "completed")
-	if not world.is_exception():
-		_world_id = world.payload
-	else:
-		print("rpc_async failed")
-		return ERR_CONNECTION_ERROR
-	
-	var match_join_result: NakamaRTAPI.Match = yield(_socket.join_match_async(_world_id), "completed")
-	if match_join_result.is_exception():
-		var exception: NakamaException = match_join_result.get_exception()
-		print("Error joining the match: %s - %s" % [exception.status_code, exception.message])
-		return ERR_CONNECTION_ERROR
-	else:
-		return OK
+#"""
+#/*
+#* @pre called when user joins the game world
+#* @post joins the world
+#* @param None
+#* @return None
+#*/
+#"""
+#func join_world_async() -> int:
+#	var world: NakamaAPI.ApiRpc = yield(_client.rpc_async(_session, "get_world_id", ""), "completed")
+#	if not world.is_exception():
+#		_world_id = world.payload
+#	else:
+#		print("rpc_async failed")
+#		return ERR_CONNECTION_ERROR
+#
+#	var match_join_result: NakamaRTAPI.Match = yield(_socket.join_match_async(_world_id), "completed")
+#	if match_join_result.is_exception():
+#		var exception: NakamaException = match_join_result.get_exception()
+#		print("Error joining the match: %s - %s" % [exception.status_code, exception.message])
+#		return ERR_CONNECTION_ERROR
+#	else:
+#		return OK
 
 """
 /*
@@ -254,9 +255,10 @@ func join_world_async() -> int:
 * @return None
 */
 """
-func create_match(lobby_name:String) -> int:
-	var _game_match: NakamaRTAPI.Match = yield(_socket.create_match_async(lobby_name), "completed")
-	return OK
+func create_match(lobby_name:String) -> Array:
+	_match_id = lobby_name
+	var game_match: NakamaRTAPI.Match = yield(_socket.create_match_async(_match_id), "completed")
+	return game_match.presences
 
 """
 /*
@@ -266,9 +268,9 @@ func create_match(lobby_name:String) -> int:
 * @return None
 */
 """
-func join_match(lobby_name:String) -> int:
-	var _game_match = yield(_socket.join_match_async(lobby_name), "completed")
-	return OK
+func join_match(lobby_name:String) -> Array:
+	var game_match = yield(_socket.join_match_async(lobby_name), "completed")
+	return game_match.presences
 
 """
 /*
@@ -284,6 +286,29 @@ func leave_match(lobby_name:String) -> int:
 		return ERR_CANT_RESOLVE
 	else:
 		return OK
+
+"""
+/*
+* @pre None
+* @post tells if there is a match going on or not
+* @param None
+* @return None
+*/
+"""
+func match_exists():
+	return _match_id != ""
+
+"""
+/*
+* @pre None
+* @post leaves the current user match
+* @param None
+* @return None
+*/
+"""
+func reset_match():
+	leave_match(_match_id)
+	_match_id = ""
 
 """
 /*
@@ -314,7 +339,7 @@ func current_matches() -> Array:
 func send_position_update(position: Vector2) -> void:
 	if _socket:
 		var payload := {id = _device_id, pos = {x=position.x, y = position.y}}
-		_socket.send_match_state_async(_world_id, OpCodes.UPDATE_POSITION,JSON.print(payload))
+		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_POSITION,JSON.print(payload))
 
 """
 /*
@@ -327,7 +352,7 @@ func send_position_update(position: Vector2) -> void:
 func send_input_update(input: float) -> void:
 	if _socket:
 		var payload := {id = _device_id, inp = input}
-		_socket.send_match_state_async(_world_id, OpCodes.UPDATE_INPUT,JSON.print(payload))
+		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_INPUT,JSON.print(payload))
 
 """
 /*
@@ -340,7 +365,7 @@ func send_input_update(input: float) -> void:
 func send_spawn(char_name: String) -> void:
 	if _socket:
 		var payload := {id = _device_id, nm = char_name}
-		_socket.send_match_state_async(_world_id, OpCodes.DO_SPAWN,JSON.print(payload))
+		_socket.send_match_state_async(_match_id, OpCodes.DO_SPAWN,JSON.print(payload))
 
 
 """
