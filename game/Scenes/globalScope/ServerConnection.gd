@@ -252,6 +252,8 @@ func create_match(lobby_name:String) -> Array:
 """
 func join_match(lobby_name:String) -> Array:
 	var game_match = yield(_socket.join_match_async(lobby_name), "completed")
+	for p in game_match.presences:
+		connected_opponents[p.user_id] = p.username
 	return game_match.presences
 
 """
@@ -380,7 +382,6 @@ func _on_channel_presence(p_presence : NakamaRTAPI.ChannelPresenceEvent):
 		room_users[p.username] = p.user_id
 		send_text_async_general("MATCH_RECEIVED " + JSON.print(Global.current_matches))
 		
-
 	for p in p_presence.leaves:
 		# warning-ignore:return_value_discarded
 		room_users.erase(p.username)
@@ -410,9 +411,8 @@ func _on_NakamaSocket_received_match_precence(p_match_presence_event):
 	for p in p_match_presence_event.joins:
 		connected_opponents[p.user_id] = p
 	for p in p_match_presence_event.leaves:
-		connected_opponents.erase(p.user.id)
+		connected_opponents.erase(p.user_id)
 	print("Connected opponents: %s" % [connected_opponents])
-	#Global.current_match_players = connected_opponents
 
 """
 /*

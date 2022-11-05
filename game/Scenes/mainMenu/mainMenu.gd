@@ -301,7 +301,7 @@ func _on_enterLobbyCode_focus_entered():
 """
 func _on_enterLobbyCode_text_entered(new_text):
 	var match_code = new_text.to_upper()
-	if len(match_code) == 4:
+	if len(match_code) != 4:
 		create_game_init_window(
 			"Invalid code",
 			"Please enter an alphabetical code with a length of 4"
