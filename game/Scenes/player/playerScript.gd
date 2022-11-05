@@ -72,7 +72,6 @@ func _physics_process(delta):
 	# This ensures diagonal speed is not faster, which is especially significant when sliding against a wall.
 	else:
 		velocity = input_velocity.move_toward(0.7*input_velocity*MAX_SPEED, ACCELERATION*delta)
-	ServerConnection.send_input_update(input_velocity.x, input_velocity.y)
 	# Factor in collisions
 	velocity = move_and_slide(velocity)
 	control_animations(velocity)
