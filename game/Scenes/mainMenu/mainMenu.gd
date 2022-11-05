@@ -230,7 +230,8 @@ func despawn_character(player_name:String):
 			player_names_copy.append(dict['name'])
 	#delete player objects
 	for player in player_objects:
-		delete_player_obj(player['player_obj'],player['text_obj'])
+			if player['name'] == player_name and player['player_obj'] != null and player['text_obj'] != null:
+				delete_player_obj(player['player_obj'],player['text_obj'])
 	#respawn players again with the one deleted
 	player_objects = []
 	for _name in player_names_copy:
@@ -346,8 +347,10 @@ func _on_enterLobbyCode_text_entered(new_text):
 */
 """
 func delete_player_obj(player:AnimatedSprite, text:Label):
-	player.queue_free()
-	text.queue_free()
+	if player != null:
+		player.queue_free()
+	if text != null:
+		text.queue_free()
 
 """
 /*
