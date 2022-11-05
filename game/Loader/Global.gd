@@ -47,7 +47,7 @@ func _ready():
 	# warning-ignore:return_value_discarded
 	ServerConnection.connect("state_updated",self,"_player_positions_updated")
 
-func get_player_pos(player_id:String):
+func get_player_pos(player_id:int):
 	for player in player_positions:
 		if player['id'] == player_id:
 			return player['pos']

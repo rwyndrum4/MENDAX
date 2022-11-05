@@ -327,9 +327,9 @@ func send_position_update(position: Vector2) -> void:
 * @return None
 */
 """
-func send_input_update(input: float) -> void:
+func send_input_update(inputx: float, inputy: float) -> void:
 	if _socket:
-		var payload := {id = _device_id, inp = input}
+		var payload := {id = _device_id, inpx = inputx, inpy = inputy}
 		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_INPUT,JSON.print(payload), connected_opponents)
 
 """
