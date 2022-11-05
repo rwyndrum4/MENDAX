@@ -27,7 +27,7 @@ var server_status: bool = false
 #Signals for recieving game state data from server (from  the .lua files)
 signal state_updated(positions, inputs) #state of game has been updated
 signal initial_state_received(positions, inputs, names) #first state of game
-signal character_spawned(id, char_name, current_players) #singal to tell if someone has spawned
+signal character_spawned(char_name) #singal to tell if someone has spawned
 
 #Other signals
 signal chat_message_received(msg,type,user_sent,from_user) #signal to tell game a chat message has come in
@@ -48,6 +48,9 @@ var _device_id: String = "" #id of the user's computer generated id
 var room_users: Dictionary = {} #chatroom users
 var _match_id: String = "" #String to hold match id
 var connected_opponents: Dictionary = {}
+var game_match : NakamaRTAPI.Match
+var op_code = 1
+var new_state  = {"hello" : "world"}
 
 """
 /*
@@ -236,9 +239,9 @@ func send_text_async_whisper(text: String,user_sent_to:String) -> int:
 */
 """
 func create_match(lobby_name:String) -> Array:
-	_match_id = lobby_name
-	var game_match: NakamaRTAPI.Match = yield(_socket.create_match_async(_match_id), "completed")
+	game_match = yield(_socket.create_match_async(lobby_name), "completed")
 	Global.current_matches[lobby_name] = game_match.match_id
+	_match_id = game_match.match_id
 	send_text_async_general("MATCH_RECEIVED " + JSON.print(Global.current_matches))
 	return game_match.presences
 
@@ -250,8 +253,9 @@ func create_match(lobby_name:String) -> Array:
 * @return None
 */
 """
-func join_match(lobby_name:String) -> Dictionary:
-	var game_match = yield(_socket.join_match_async(lobby_name), "completed")
+func join_match(id:String) -> Dictionary:
+	game_match = yield(_socket.join_match_async(id), "completed")
+	_match_id = game_match.match_id
 	for p in game_match.presences:
 		connected_opponents[p.user_id] = p.username
 	return game_match.presences
@@ -264,8 +268,8 @@ func join_match(lobby_name:String) -> Dictionary:
 * @return None
 */
 """
-func leave_match(lobby_name:String) -> int:
-	var leave: NakamaAsyncResult = yield(_socket.leave_match_async(lobby_name), "completed")
+func leave_match(id:String) -> int:
+	var leave: NakamaAsyncResult = yield(_socket.leave_match_async(id), "completed")
 	if leave.is_exception():
 		return ERR_CANT_RESOLVE
 	else:
@@ -282,17 +286,7 @@ func leave_match(lobby_name:String) -> int:
 func match_exists():
 	return _match_id != ""
 
-"""
-/*
-* @pre None
-* @post leaves the current user match
-* @param None
-* @return None
-*/
-"""
-func reset_match():
-	leave_match(_match_id)
-	_match_id = ""
+
 
 """
 /*
@@ -323,7 +317,7 @@ func current_matches(match_code:String) -> String:
 func send_position_update(position: Vector2) -> void:
 	if _socket:
 		var payload := {id = _device_id, pos = {x=position.x, y = position.y}}
-		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_POSITION,JSON.print(payload))
+		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_POSITION,JSON.print(payload), [game_match.presences[0]])
 
 """
 /*
@@ -336,7 +330,7 @@ func send_position_update(position: Vector2) -> void:
 func send_input_update(input: float) -> void:
 	if _socket:
 		var payload := {id = _device_id, inp = input}
-		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_INPUT,JSON.print(payload))
+		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_INPUT,JSON.print(payload), [game_match.presences[0]])
 
 """
 /*
@@ -407,12 +401,15 @@ func _on_notification(p_notification : NakamaAPI.ApiNotification):
 * @return None
 */
 """
-func _on_NakamaSocket_received_match_precence(p_match_presence_event):
+func _on_NakamaSocket_received_match_precence(p_match_presence_event : NakamaRTAPI.MatchPresenceEvent):
 	for p in p_match_presence_event.joins:
 		connected_opponents[p.user_id] = p
+		emit_signal("character_spawned", p.username)
 	for p in p_match_presence_event.leaves:
 		# warning-ignore:return_value_discarded
+		
 		connected_opponents.erase(p.user_id)
+
 	print("Connected opponents: %s" % [connected_opponents])
 
 """
@@ -424,6 +421,7 @@ func _on_NakamaSocket_received_match_precence(p_match_presence_event):
 */
 """
 func _on_NakamaSocket_received_match_state(match_state: NakamaRTAPI.MatchData) -> void:
+	print("Received match state with opcode %s, data %s" % [match_state.op_code, parse_json(match_state.data)])
 	var code := match_state.op_code
 	var raw := match_state.data
 	
@@ -450,3 +448,4 @@ func _on_NakamaSocket_received_match_state(match_state: NakamaRTAPI.MatchData) -
 			var _char_name: String = decoded.nm
 			
 			emit_signal("character_spawned", room_users)
+
