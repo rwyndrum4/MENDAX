@@ -263,7 +263,7 @@ func _on_createGameButton_pressed():
 	if ServerConnection.get_server_status():
 		if ServerConnection.match_exists():
 			ServerConnection.reset_match()
-		yield(ServerConnection.create_match(code), "completed")
+		var current_players = yield(ServerConnection.create_match(code), "completed")
 		$showLobbyCode/code.text = code
 
 """

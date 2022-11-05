@@ -118,6 +118,8 @@ func connect_to_server_async() -> int:
 		_socket.connect("received_notification", self, "_on_notification")
 		#warning-ignore: return_value_discarded
 		_socket.connect("received_match_state", self, "_on_NakamaSocket_received_match_state")
+		#warning-ignore: return_value_discarded
+		_socket.connect("received_match_presence", self, "_on_NakamaSocket_received_match_precence")
 		return OK
 	return ERR_CANT_CONNECT
 
@@ -413,6 +415,17 @@ func _on_channel_presence(p_presence : NakamaRTAPI.ChannelPresenceEvent):
 """
 func _on_notification(p_notification : NakamaAPI.ApiNotification):
 	join_chat_async_whisper(p_notification._get_sender_id(),true)
+
+"""
+/*
+* @pre called when received match precense from match
+* @post sends updates current presences in Global
+* @param p_notification -> NakamaAPI.ApiNotification
+* @return None
+*/
+"""
+func _on_NakamaSocket_received_match_precence(p_match_presence_event):
+	pass
 
 """
 /*
