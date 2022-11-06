@@ -50,6 +50,7 @@ var room_users: Dictionary = {} #chatroom users
 var _match_id: String = "" #String to hold match id
 var _player_num: int = 0 #Number of the player
 var connected_opponents: Dictionary = {} #opponents currently in match (including you)
+var game_match
 
 """
 /*
@@ -238,7 +239,7 @@ func send_text_async_whisper(text: String,user_sent_to:String) -> int:
 */
 """
 func create_match(lobby_name:String) -> Array:
-	var game_match = yield(_socket.create_match_async(lobby_name), "completed")
+	game_match = yield(_socket.create_match_async(lobby_name), "completed")
 	Global.current_matches[lobby_name] = game_match.match_id
 	_match_id = game_match.match_id
 	send_text_async_general("MATCH_RECEIVED " + JSON.print(Global.current_matches))
@@ -253,7 +254,7 @@ func create_match(lobby_name:String) -> Array:
 */
 """
 func join_match(id:String) -> Dictionary:
-	var game_match = yield(_socket.join_match_async(id), "completed")
+	game_match = yield(_socket.join_match_async(id), "completed")
 	_match_id = game_match.match_id
 	for p in game_match.presences:
 		connected_opponents[p.user_id] = p.username
@@ -316,8 +317,8 @@ func current_matches(match_code:String) -> String:
 """
 func send_position_update(position: Vector2) -> void:
 	if _socket:
-		var payload := {id = _device_id, pos = {x=position.x, y = position.y}}
-		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_POSITION,JSON.print(payload), connected_opponents)
+		var payload = {id = _player_num, pos = {x=position.x, y = position.y}}
+		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_POSITION,JSON.print(payload), game_match.presences)
 
 """
 /*

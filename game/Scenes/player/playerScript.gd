@@ -56,7 +56,7 @@ func _physics_process(delta):
 	var input_velocity = Vector2.ZERO
 	input_velocity.x = Input.get_axis("ui_left", "ui_right")
 	input_velocity.y = Input.get_axis("ui_up", "ui_down") 
-	ServerConnection.send_position_update(input_velocity)
+	
 	input_velocity = input_velocity.normalized()
 	
 	# Case where no input is given
@@ -72,6 +72,9 @@ func _physics_process(delta):
 	# This ensures diagonal speed is not faster, which is especially significant when sliding against a wall.
 	else:
 		velocity = input_velocity.move_toward(0.7*input_velocity*MAX_SPEED, ACCELERATION*delta)
+	
+	var position : Vector2 = self.position
+	ServerConnection.send_position_update(position)
 	# Factor in collisions
 	velocity = move_and_slide(velocity)
 	control_animations(velocity)
