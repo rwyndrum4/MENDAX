@@ -85,17 +85,16 @@ func _on_Area2D_body_exited(_body: PhysicsBody2D): #change to body if want to us
 */
 """
 func spawn_players():
-	var counter: int = 1
-	for player in Global.player_positions:
+	for num_str in Global.player_positions:
 		#Add animated player to scene
-		if counter == ServerConnection._player_num:
-			player_one.position = player['pos']
+		var num = int(num_str)
+		if num == ServerConnection._player_num:
+			player_one.position = Global.player_positions[str(num)]
 		else:
 			var new_player:KinematicBody2D = load(other_player).instance()
 			new_player.set_player_id(ServerConnection._player_num)
-			new_player.set_color(counter)
+			new_player.set_color(num)
 			#Change size and pos of sprite
-			new_player.position = player[str(counter)]
+			new_player.position = Global.player_positions[str(num)]
 			#Add child to the scene
 			add_child(new_player)
-		counter += 1
