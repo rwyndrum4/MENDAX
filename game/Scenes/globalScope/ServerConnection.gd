@@ -317,6 +317,7 @@ func current_matches(match_code:String) -> String:
 """
 func send_position_update(position: Vector2) -> void:
 	if _socket:
+		print("my x:", position.x, "my y:", position.y)
 		var payload = {id = _player_num, pos = {x=position.x, y = position.y}}
 		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_POSITION,JSON.print(payload))
 

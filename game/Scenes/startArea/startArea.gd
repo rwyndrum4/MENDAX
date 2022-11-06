@@ -92,7 +92,7 @@ func spawn_players():
 			player_one.position = Global.player_positions[str(num)]
 		else:
 			var new_player:KinematicBody2D = load(other_player).instance()
-			new_player.set_player_id(ServerConnection._player_num)
+			new_player.set_player_id(num)
 			new_player.set_color(num)
 			#Change size and pos of sprite
 			new_player.position = Global.player_positions[str(num)]
