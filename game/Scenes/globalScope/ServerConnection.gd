@@ -428,7 +428,7 @@ func _on_NakamaSocket_received_match_state(match_state: NakamaRTAPI.MatchData) -
 	var raw := match_state.data
 	
 	match code:
-		OpCodes.UPDATE_STATE:
+		OpCodes.UPDATE_POSITION:
 			var decoded: Dictionary = JSON.parse(raw).result
 			
 			var id: int = int(decoded.id)

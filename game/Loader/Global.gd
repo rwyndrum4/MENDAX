@@ -39,7 +39,7 @@ enum scenes {
 # Current players in scnene
 var current_players:Dictionary = {}
 # Hold array of player positions
-var player_positions:Array = []
+var player_positions:Dictionary = {}
 # Hold current matches
 var current_matches: Dictionary = {}
 
@@ -48,11 +48,9 @@ func _ready():
 	ServerConnection.connect("state_updated",self,"_player_positions_updated")
 
 func get_player_pos(player_id:int):
-	for player in player_positions:
-		if player['id'] == player_id:
-			return player['pos']
+	return player_positions[str(player_id)]
 
 func _player_positions_updated(id, position):
-	for player in player_positions:
-		if player['id'] == id:
-			player['pos'] = position
+	print("x:",position.x)
+	print("y:",position.y)
+	player_positions[str(id)] = position
