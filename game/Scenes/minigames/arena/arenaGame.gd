@@ -23,7 +23,6 @@ onready var textBox = $GUI/textBox
 """
 func _ready():
 	myTimer.start(90)
-	
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("openChatbox", self, "chatbox_use")
 

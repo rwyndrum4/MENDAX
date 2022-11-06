@@ -27,6 +27,9 @@ onready var hintlength=0#keeps track of hintlength to give random letter clues
 onready var answerlength=0 #keeps track of asnwer length is constant
 onready var itemsleft=6;#helps  withi giving hints
 onready var lettersleft=0;#helps with giving hints
+onready var x_overlap=[] #array to prevent horizontal overlap with hints 
+onready var y_overlap=[]#array to prevent vertical overlap with hints 
+onready var init_playerpos; #initial player position helps with hint placement
 onready var transCam = $Path2D/PathFollow2D/camTrans
 onready var riddler = $riddler
 onready var playerCam = $Player/Camera2D
@@ -55,7 +58,7 @@ func init_riddle(file):
 		randomize()
 		number = randi() % key 
 	if(number%2==1): #inidcates line contains hint
-		print(number)
+		#print(number)
 		riddle= str(riddle_dict[number])
 		hint=str(riddle_dict[number+1])
 		answer=hint
@@ -71,7 +74,7 @@ func init_riddle(file):
 func _ready():
 	GlobalSignals.connect("answer_received",self,"_check_answer")
 	#myTimer.start(90)
-	
+	init_playerpos=$Player.position
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("openChatbox", self, "chatbox_use")
 	
@@ -146,7 +149,7 @@ func _finish_anim():
 	
 	#start timer
 	textBox.queue_text("Time starts now!")
-	myTimer.start(90)
+	myTimer.start(300)
 	
 	#remove jester
 	riddler.queue_free()
@@ -169,7 +172,7 @@ func _input(ev):
 		if Global.in_anim == 1:
 			Global.in_anim = 0
 			emit_signal("textWait")
-
+		
 """
 /*
 * @pre Called for every frame inside process function
@@ -230,22 +233,70 @@ func chatbox_use(value):
 """
 /*
 * @pre Called in ready function before minigame
-* @postInitalizes itemarray to 0s indicating no items have been found
+* @post Initalizes itemarray to 0s indicating no items have been found places hints randomly so there is no overlap
 * @param None
 * @return None
 */
 """
 func init_hiddenitems():
 	hintlength=hint.length()
+	print(hintlength)
 	answerlength=answer.length()
 	lettersleft=answer.length()
 	for i in 6:
 		itemarray.append(0)
+	#initalizing 2d overlap arrays for x and y 7 rows and 2 entries per each row
+	for i in range(0,7):
+		x_overlap.append([])
+		y_overlap.append([])
+		for j in range(0,2):
+			x_overlap[i].append(0)
+			y_overlap[i].append(0)
+	x_overlap[0][0]=init_playerpos.x-10; #left endpoint of player_pos
+	x_overlap[0][1]=init_playerpos.x+10;# right endpoint of player_pos
+	y_overlap[0][0]=init_playerpos.y-10;
+	y_overlap[0][1]=init_playerpos.y+10;
+	#need to randomize locations of hidden hints
+	var hints= get_tree().get_nodes_in_group("hints")
+	
+	var hintcounter=1 #helps keep track of hints in for loop
+	var overlap;#1 if overlap found in for loop 2 if overlap found
+	var x;
+	var y;
+	for hint in hints:
+		overlap=1
+		while overlap==1:
+			x=rand_range(0, 3000) #range of game map reduced  due to size of hint area
+			y=rand_range(0,3000)#range of game map reduced  due to size of hint area
+			for i in range(0, hintcounter):
+				if ((x+150)>=x_overlap[i][0] or (x-150)<=x_overlap[i][1]) and ((y+150)>=y_overlap[i][0] or (y-150)<=y_overlap[i][1]): #overlap in both x and y direcitons indicates overlap
+					overlap=2
+			#logic below makes loop behave like do while will break if  overlap not found
+			if overlap==2:
+				overlap=1
+			if overlap==1:
+				overlap=2 
+				
+		hint.position = Vector2(x,y)
+		#set overlaps for hint using hintcounter
+		x_overlap[hintcounter][0]=x-150; #left endpoint of hint area box
+		x_overlap[hintcounter][1]=x+150;# right endpoint of hint area box
+		y_overlap[hintcounter][0]=init_playerpos.y-150;
+		y_overlap[hintcounter][1]=init_playerpos.y+150;
+		#print(hint.position)
+		hintcounter=hintcounter+1
+	$item1area.position=$item1.position
+	$item2area.position=$item2.position
+	$item3area.position=$item3.position
+	$item4area.position=$item4.position
+	$item5area.position=$item5.position
+	$item6area.position=$item6.position
+		
 
 """
 /*
-* @pre Called when player enters hidden item area
-* @post If item hasn't been found alerts player item is nearby
+* @pre Called when player find hidden item
+* @post If item hasn't been found gives player letters for hint
 * @param Player
 * @return None
 */
@@ -260,30 +311,38 @@ func enterarea(spritepath,itemnumber):
 		if(answerlength>=6):
 			while(lettersleft>=itemsleft and lettercount<=2):
 				randomize()
-				var index = randi() % hintlength-1
-				letter=hint[index];
-				letters=letters+str(letter);# add letter
-				#print(letters)
-				lettercount+=1;
-				lettersleft=lettersleft-1;
+				#print(hintlength)
+				var random=hintlength-1;
+				var index
+				if(random!=0):
+					index = randi() % random #generates random index for letter
+				else:
+					index=0
+				letter=hint[index];#get random letter
+				#print(index)
+				letters=letters+str(letter);# add letter to hints
+				lettercount+=1;#update lettercount
+				lettersleft=lettersleft-1;#update letters left that can be given
 				#erases letter from hint so it cannot be given again
 				hint.erase(index,1)
-				if hintlength!=0:
+				if hintlength!=0:#checks if any letters left in hint
 					hintlength=hintlength-1;#hintlength decreased as one letter given as hint
 				#print(letters)
+				#print(hint)
 		else:
 			randomize()
-			var index = randi() % hintlength-1
+			var random=hintlength-1;
+			var index
+			if random!=0:
+				index = randi() % random
+			else:
+				index=0
 			letter=hint[index];
 			letters=letters+str(letter);# add letter
-			#print(letters)
-			lettercount+=1;
-			lettersleft=lettersleft-1;
-				#erases letter from hint so it cannot be given again
+			#erases letter from hint so it cannot be given again
 			hint.erase(index,1)
 			if hintlength!=0:
 				hintlength=hintlength-1;#hintlength decreased as one letter given as hint
-			#print(letters)
 		currenthints=str(currenthints)+letters;
 		$Player/Hints.text += "" + letters
 		if hintlength==0:
