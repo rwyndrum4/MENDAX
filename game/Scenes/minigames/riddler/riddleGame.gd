@@ -17,22 +17,54 @@ onready var timerText: Label = $GUI/Timer/timerText
 onready var textBox = $GUI/textBox
 onready var hintbox=$GUI/show_letter
 onready var itemarray=[] #determines if items have been found
-onready var hint="person";
-var answer = "person"
+onready var hint="";# set in init riddle
+var answer = ""#set in init riddle
+onready var riddle="";#set in init riddle
+onready var riddlefile = 'res://Assets/riddle_jester/riddles.txt'
+var riddle_dict = {} #stores riddles and their answers
 onready var currenthints=""; #keeps track of currenhints found
 onready var hintlength=0#keeps track of hintlength to give random letter clues
+onready var answerlength=0 #keeps track of asnwer length is constant
+onready var itemsleft=6;#helps  withi giving hints
+onready var lettersleft=0;#helps with giving hints
 onready var transCam = $Path2D/PathFollow2D/camTrans
 onready var riddler = $riddler
 onready var playerCam = $Player/Camera2D
 
 #signals
 signal textWait()
-
+"""
+/*
+* @pre Called when the node enters the scene tree for the first time.
+* @post Updates riddle answer and riddle hint
+* @param None
+* @return None
+*/
+"""
+func init_riddle(file):
+	var f = File.new()
+	var err=f.open(file, File.READ)
+	var key=1
+	while !f.eof_reached():
+		var line=f.get_line()
+		riddle_dict[key]=line
+		key=key+1
+	f.close()
+	var number=0
+	while number==0 or number%2==0:
+		randomize()
+		number = randi() % key 
+	if(number%2==1): #inidcates line contains hint
+		print(number)
+		riddle= str(riddle_dict[number])
+		hint=str(riddle_dict[number+1])
+		answer=hint
+	
 """
 /*
 * @pre Called when the node enters the scene tree for the first time.
 * @post updates starts the timer
-* @param None
+* @param file
 * @return None
 */
 """
@@ -42,7 +74,7 @@ func _ready():
 	
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("openChatbox", self, "chatbox_use")
-	init_hiddenitems() #initalizes hidden items array and other things needed
+	
 	
 	
 	#scene animation for entering cave(for first time)
@@ -67,7 +99,10 @@ func _ready():
 		yield($Path2D/AnimationPlayer, "animation_finished")
 		#This is how you queue text to the textbox queue
 		textBox.queue_text("In order to pass you must solve this riddle...")
-		textBox.queue_text("What walks on four legs in the morning, two legs in the afternoon, and three in the evening?")
+		init_riddle(riddlefile) #initalizes riddle randomly
+		init_hiddenitems() #initalizes hidden items array and other things needed
+		#textBox.queue_text("What walks on four legs in the morning, two legs in the afternoon, and three in the evening?")
+		textBox.queue_text(riddle)
 		textBox.queue_text("Please enter the answer in the chat once you have it, there are hints hidden here if you need them (:")
 		connect("textWait", self, "_finish_anim")
 		Global.in_anim = 1;
@@ -202,7 +237,9 @@ func chatbox_use(value):
 """
 func init_hiddenitems():
 	hintlength=hint.length()
-	for i in hintlength:
+	answerlength=answer.length()
+	lettersleft=answer.length()
+	for i in 6:
 		itemarray.append(0)
 
 """
@@ -217,20 +254,44 @@ func enterarea(spritepath,itemnumber):
 	$Player/Labelarea.hide()
 	if itemarray[itemnumber-1]==0: #means item has not been found
 		spritepath.show()
-		var rng = RandomNumberGenerator.new()
-		var index=rng.randi_range(0, hintlength-1)
-		var letter=hint[index];
-		currenthints=str(currenthints)+letter;
-		$Player/Hints.text += " " + letter
-		if hintlength==1:
-			hintbox.window_title=str(letter)+" is in the word. All hints have been found."; #all hints found
+		var letter; # single letters found
+		var letters=""; # string of letters if mutiple letter hint
+		var lettercount=1;#keeps track so we don't return more than 2 letters
+		if(answerlength>=6):
+			while(lettersleft>=itemsleft and lettercount<=2):
+				randomize()
+				var index = randi() % hintlength-1
+				letter=hint[index];
+				letters=letters+str(letter);# add letter
+				#print(letters)
+				lettercount+=1;
+				lettersleft=lettersleft-1;
+				#erases letter from hint so it cannot be given again
+				hint.erase(index,1)
+				if hintlength!=0:
+					hintlength=hintlength-1;#hintlength decreased as one letter given as hint
+				#print(letters)
 		else:
-			hintbox.window_title=str(letter)+" is in the word"; #sets hint to letter given
+			randomize()
+			var index = randi() % hintlength-1
+			letter=hint[index];
+			letters=letters+str(letter);# add letter
+			#print(letters)
+			lettercount+=1;
+			lettersleft=lettersleft-1;
+				#erases letter from hint so it cannot be given again
+			hint.erase(index,1)
+			if hintlength!=0:
+				hintlength=hintlength-1;#hintlength decreased as one letter given as hint
+			#print(letters)
+		currenthints=str(currenthints)+letters;
+		$Player/Hints.text += "" + letters
+		if hintlength==0:
+			hintbox.window_title=str(letters)+" is in the word. All hints have been found."; #all hints found
+		else:
+			hintbox.window_title=str(letters)+" is in the word"; #sets hint to letter given
 		hintbox.popup()
-		#erases letter from hint so it cannot be given again
-		hint.erase(index,1)
-		if hintlength!=0:
-			hintlength=hintlength-1;#hintlength decreased as one letter given as hint
+		itemsleft=itemsleft-1;#one item has been found
 		itemarray[itemnumber-1]=1; #item has been found
 
 
@@ -243,22 +304,22 @@ func enterarea(spritepath,itemnumber):
 */
 """
 func _on_item1area_body_entered(_body:PhysicsBody2D)->void:
-	if itemarray[0]==0:
+	if itemarray[0]==0 and answerlength>=1:
 		$Player/Labelarea.show()
 func _on_item2area_body_entered(_body:PhysicsBody2D)->void:
-	if itemarray[1]==0:
+	if itemarray[1]==0 and answerlength>=2:
 		$Player/Labelarea.show()
 func _on_item3area_body_entered(_body:PhysicsBody2D)->void:
-	if itemarray[2]==0:
+	if itemarray[2]==0 and answerlength>=3:
 		$Player/Labelarea.show()
 func _on_item4area_body_entered(_body:PhysicsBody2D)->void:
-	if itemarray[3]==0:
+	if itemarray[3]==0 and answerlength>=4:
 		$Player/Labelarea.show()
 func _on_item5area_body_entered(_body:PhysicsBody2D)->void:
-	if itemarray[4]==0:
+	if itemarray[4]==0 and answerlength>=5:
 		$Player/Labelarea.show()
 func _on_item6area_body_entered(_body:PhysicsBody2D)->void:
-	if itemarray[5]==0:
+	if itemarray[5]==0 and answerlength>=6:
 		$Player/Labelarea.show()
 """
 /*
@@ -290,22 +351,22 @@ func _on_item6area_body_exited(_body:PhysicsBody2D)->void:
 */
 """
 func _on_item1_body_entered(_body:PhysicsBody2D)->void:
-	if itemarray[0]==0:
+	if itemarray[0]==0 and answerlength>=1:
 		enterarea($item1/Sprite,1)
 func _on_item2_body_entered(_body:PhysicsBody2D)->void:
-	if itemarray[1]==0:
+	if itemarray[1]==0 and answerlength>=2:
 		enterarea($item2/Sprite,2)
 func _on_item3_body_entered(_body:PhysicsBody2D)->void:
-	if itemarray[2]==0:
+	if itemarray[2]==0 and answerlength>=3:
 		enterarea($item3/Sprite,3)
 func _on_item4_body_entered(_body:PhysicsBody2D)->void:
-	if itemarray[3]==0:
+	if itemarray[3]==0 and answerlength>=4:
 		enterarea($item4/Sprite,4)
 func _on_item5_body_entered(_body:PhysicsBody2D)->void:
-	if itemarray[4]==0:
+	if itemarray[4]==0 and answerlength>=5:
 		enterarea($item5/Sprite,5)
 func _on_item6_body_entered(_body:PhysicsBody2D)->void:
-	if itemarray[5]==0:
+	if itemarray[5]==0 and answerlength>=6:
 		enterarea($item6/Sprite,6)
 """
 /*
