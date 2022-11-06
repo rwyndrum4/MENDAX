@@ -1,62 +1,72 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=13 format=2]
 
-[ext_resource path="res://Assets/EntryAreaBackground.png" type="Texture" id=1]
-[ext_resource path="res://Scenes/startArea/PlayerCursor.gd" type="Script" id=2]
-[ext_resource path="res://Assets/playerCursor.png" type="Texture" id=3]
+[ext_resource path="res://Scenes/startArea/worldMap.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Scenes/player/player.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Scenes/worldEnvironment/worldEnv.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Scenes/startArea/EntrySpace.gd" type="Script" id=4]
 [ext_resource path="res://Scenes/SettingsMenu/settingsMenu.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Assets/Teko-Light.ttf" type="DynamicFontData" id=6]
+[ext_resource path="res://Scenes/textBox/textBox.tscn" type="PackedScene" id=7]
 
-[sub_resource type="RectangleShape2D" id=1]
+[sub_resource type="StreamTexture" id=3]
+flags = 4
+load_path = "res://.import/light.png-9e6eff90e703f084db87a88d6ba8f890.stex"
+
+[sub_resource type="OccluderPolygon2D" id=6]
+polygon = PoolVector2Array( -48.9833, -45.9201, -50.0482, 47.9166, -50.0482, 47.9166, 50.0482, 46.9184, 50.0482, 46.9184, 48.9833, -48.9149, 47.9185, -50.9114 )
 
 [sub_resource type="DynamicFont" id=2]
 size = 40
 font_data = ExtResource( 6 )
 
+[sub_resource type="CircleShape2D" id=5]
+
+[sub_resource type="DynamicFont" id=7]
+size = 42
+extra_spacing_char = 15
+extra_spacing_space = 15
+font_data = ExtResource( 6 )
+
 [node name="EntrySpace" type="Control"]
 script = ExtResource( 4 )
 
-[node name="TextureRect" type="TextureRect" parent="."]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -856.0
-margin_top = -720.0
-margin_right = 2024.0
-margin_bottom = 2160.0
-rect_scale = Vector2( 1.31642, 1.08664 )
-texture = ExtResource( 1 )
-stretch_mode = 1
+[node name="worldMap" parent="." instance=ExtResource( 1 )]
 
-[node name="PlayerCursor" type="KinematicBody2D" parent="."]
-position = Vector2( 808, 424 )
-scale = Vector2( 0.939095, 1.00174 )
-script = ExtResource( 2 )
+[node name="WorldEnvironment" parent="." instance=ExtResource( 3 )]
+
+[node name="Light2D" type="Light2D" parent="."]
+position = Vector2( 1060, 1600 )
+rotation = -4.70422
+scale = Vector2( 0.157201, 0.59011 )
+texture = SubResource( 3 )
+offset = Vector2( 0, 1600 )
+shadow_enabled = true
+shadow_color = Color( 0.686275, 0.0901961, 0.0901961, 0 )
+
+[node name="Player" parent="." instance=ExtResource( 2 )]
+position = Vector2( 888, 1584 )
+collision_layer = 1
 __meta__ = {
 "_edit_group_": true
 }
 
-[node name="Camera2D" type="Camera2D" parent="PlayerCursor"]
-position = Vector2( 2.1297, 0 )
+[node name="LightOccluder2D" type="LightOccluder2D" parent="Player"]
+occluder = SubResource( 6 )
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
 current = true
 
-[node name="Sprite" type="Sprite" parent="PlayerCursor"]
-texture = ExtResource( 3 )
+[node name="colliders" type="StaticBody2D" parent="."]
+collision_layer = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerCursor"]
-scale = Vector2( 5, 4.97178 )
-shape = SubResource( 1 )
+[node name="leftWallSpace" type="CollisionPolygon2D" parent="colliders"]
+polygon = PoolVector2Array( 576, 576, -576, 576, -576, 2568, -1152, 2568, -1152, 3432, 288, 3432, 280, 4584, -1160, 4552, -1408, 4552, -1368, 0, 384, 0, 384, -832, 576, -832 )
 
-[node name="StaticBody2D" type="StaticBody2D" parent="."]
+[node name="rightWallSpace" type="CollisionPolygon2D" parent="colliders"]
+polygon = PoolVector2Array( 1440, 4576, 1440, 4008, 3168, 4008, 3168, 3432, 3456, 3432, 3456, 3144, 3752, 3144, 3752, 2288, 3168, 2280, 3168, 1704, 2304, 1704, 2304, 2280, 1152, 2280, 1152, 1152, 2304, 1152, 2304, 0, 1152, 0, 1152, -576, 576, -576, 576, -832, 4352, -824, 4352, 4712, 288, 4584 )
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]
-scale = Vector2( 1.22813, 1.11475 )
-polygon = PoolVector2Array( 625.341, 1392.24, 553.687, 1220, 514.604, 1176.95, 397.352, 1112.36, 254.045, 1090.83, 117.251, 1047.77, 71.6537, 961.651, 71.6537, 889.886, 104.223, 868.356, 104.223, 846.827, 91.1956, 825.297, 52.1117, 803.768, 32.5698, 796.591, 78.1676, 775.062, 97.7095, 739.179, 117.251, 681.767, 130.279, 660.238, 123.765, 645.885, 156.335, 602.826, 175.877, 495.178, 117.251, 430.59, 149.821, 416.237, 169.363, 380.354, 195.419, 380.354, 214.961, 366.001, 241.017, 344.472, 254.045, 308.589, 260.559, 258.354, 247.531, 186.589, 227.989, 143.53, 227.989, 107.647, 267.073, 100.471, 280.101, 107.647, 306.157, 107.647, 319.184, 100.471, 390.838, 35.8825, 403.866, 35.8825, 449.464, 21.5295, 508.09, 21.5295, 501.576, -7.1765, -6.51397, -7.1765, 0, 1406.59 )
-
-[node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="StaticBody2D"]
-polygon = PoolVector2Array( 1872, 304, 1896, 304, 1896, 0, 616, 0, 624, 24, 704, 32, 792, 40, 808, 64, 896, 96, 968, 96, 1064, 72, 1048, 120, 1024, 136, 1032, 144, 1080, 152, 1096, 160, 1120, 152, 1216, 128, 1280, 128, 1384, 144, 1536, 144, 1624, 184, 1688, 224, 1824, 280, 1840, 288, 1864, 272, 1880, 256 )
-
-[node name="CollisionPolygon2D3" type="CollisionPolygon2D" parent="StaticBody2D"]
-polygon = PoolVector2Array( 912, 1560, 912, 1488, 936, 1440, 984, 1408, 1136, 1360, 1312, 1304, 1304, 1256, 1240, 1256, 1224, 1224, 1248, 1200, 1328, 1160, 1512, 1104, 1640, 1056, 1656, 1000, 1744, 968, 1816, 960, 1888, 936, 1832, 840, 1832, 808, 1736, 744, 1736, 712, 1768, 680, 1824, 648, 1864, 600, 1856, 536, 1776, 504, 1752, 464, 1744, 440, 1744, 416, 1776, 408, 1824, 392, 1848, 368, 1848, 336, 1880, 304, 1896, 304, 1896, 1000, 1888, 1560 )
+[node name="well" type="CollisionPolygon2D" parent="colliders"]
+polygon = PoolVector2Array( 392, 4152, 408, 4040, 472, 3944, 544, 3880, 640, 3840, 712, 3832, 808, 3840, 904, 3888, 968, 3936, 1024, 4016, 1056, 4128, 1048, 4232, 1008, 4328, 944, 4408, 872, 4456, 808, 4480, 744, 4488, 640, 4480, 560, 4448, 496, 4400, 448, 4344, 424, 4304, 400, 4240 )
 
 [node name="GUI" type="CanvasLayer" parent="."]
 
@@ -80,3 +90,36 @@ margin_bottom = 68.0
 custom_colors/font_color = Color( 0, 1, 0.203922, 1 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 2 )
+
+[node name="textBox" parent="GUI" instance=ExtResource( 7 )]
+
+[node name="exitCaveArea" type="Area2D" parent="."]
+position = Vector2( 1153, 1583 )
+rotation = -1.5562
+scale = Vector2( 2.81069, 2.75853 )
+collision_layer = 4
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="caveExitOval" type="CollisionShape2D" parent="exitCaveArea"]
+scale = Vector2( 2.12582, 2.45751 )
+shape = SubResource( 5 )
+
+[node name="exitDirections" type="Label" parent="exitCaveArea"]
+visible = false
+margin_left = 20.0
+margin_top = -10.0
+margin_right = 359.0
+margin_bottom = 115.0
+rect_rotation = 90.0
+rect_scale = Vector2( 0.0838492, 0.334329 )
+custom_colors/font_color = Color( 0.980392, 0.980392, 0.980392, 1 )
+custom_fonts/font = SubResource( 7 )
+text = "Press Enter 
+to exit cave"
+align = 1
+
+[connection signal="timeout" from="GUI/Timer" to="." method="_on_Timer_timeout"]
+[connection signal="body_entered" from="exitCaveArea" to="." method="_on_exitCaveArea_body_entered"]
+[connection signal="body_exited" from="exitCaveArea" to="." method="_on_exitCaveArea_body_exited"]

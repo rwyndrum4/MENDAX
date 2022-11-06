@@ -8,21 +8,89 @@
 extends Control
 
 # Member Variables
+var in_exit = false
 var in_menu = false
+onready var instructions: Label = $exitCaveArea/exitDirections
 onready var settingsMenu = $GUI/SettingsMenu
 onready var myTimer: Timer = $GUI/Timer
 onready var timerText: Label = $GUI/Timer/timerText
+onready var textBox = $GUI/textBox
 
-# Called when the node enters the scene tree for the first time.
+
+
+
+
+"""
+/*
+* @pre Called when the node enters the scene tree for the first time.
+* @post updates starts the timer
+* @param None
+* @return None
+*/
+"""
 func _ready():
-	myTimer.start(300)
+	#hide cave instructions at start
+	instructions.hide()
+	myTimer.start(90)
+	# warning-ignore:return_value_discarded
+	GlobalSignals.connect("openChatbox", self, "chatbox_use")
 
 
+"""
+/*
+* @pre Called for every frame
+* @post updates timer and changes scenes if player presses enter and is in the zone
+* @param _delta -> time variable that can be optionally used
+* @return None
+*/
+"""
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta): #change to delta if used
 	check_settings()
 	timerText.text = convert_time(myTimer.time_left)
+
+
+
+"""
+/*
+* @pre An input of any sort
+* @post None
+* @param Takes in an event
+* @return None
+*/
+"""
+func _input(ev):
+	if in_exit:
+		if Input.is_action_just_pressed("ui_accept",false) and not Input.is_action_just_pressed("ui_enter_chat"):
+			# warning-ignore:return_value_discarded
+			Global.state = Global.scenes.MAIN_MENU #change scene to main menu
+	#DEBUG PURPOSES - REMOVE FOR FINAL GAME!!!
+	#IF YOU PRESS P -> TIMER WILL REDUCE TO 3 SECONDS
+	if Input.is_action_just_pressed("debug_key",false):
+		myTimer.start(3)
+"""
+/*
+* @pre Ca	velocity = move_and_slide(velocity)lled when player enters the Area2D zone
+* @post shows instructions on screen and sets in_cave to true
+* @param _body -> body of the player
+* @return None
+*/
+"""
+func _on_exitCaveArea_body_entered(_body: PhysicsBody2D): #change to body if want to use
+	instructions.show()
+	in_exit = true
 	
+"""
+/*
+* @pre Called when player exits the Area2D zone
+* @post hides instructions on screen and sets in_cave to false
+* @param _body -> body of the player
+* @return None
+*/
+"""
+func _on_exitCaveArea_body_exited(_body: PhysicsBody2D): #change to body if want to use
+	in_exit = false
+	instructions.hide()
 
 """
 /*
@@ -53,4 +121,27 @@ func convert_time(time_in:float) -> String:
 	var minutes: int = rounded_time/60
 	var seconds: int = rounded_time - (minutes*60)
 	return str(minutes,":",seconds)
-	
+
+"""
+/*
+* @pre Called when the timer hits 0
+* @post Changes scene to minigame
+* @param None
+* @return String (text of current time left)
+*/
+"""
+func _on_Timer_timeout():
+	#change scene to riddler minigame
+	Global.state = Global.scenes.RIDDLER_MINIGAME
+
+"""
+/*
+* @pre None
+* @post Sets in_menu to true
+* @param value
+* @return None
+*/
+"""
+func chatbox_use(value):
+	if value:
+		in_menu = true

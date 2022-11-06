@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/cash-register-purchase-87313.mp3-52b6550d4d9f5cdfb84c395196ba69f1.mp3str"
+
+[deps]
+
+source_file="res://Assets/SFX/cash-register-purchase-87313.mp3"
+dest_files=[ "res://.import/cash-register-purchase-87313.mp3-52b6550d4d9f5cdfb84c395196ba69f1.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

@@ -15,6 +15,8 @@ extends Popup
 var MASTER_VOLUME = 0 #corresponds to master volume bus
 var MUSIC_VOLUME = 1 #corresponds to music volume bus
 var SFX_VOLUME = 2 #corrsponds to sfx volume bus
+var just_in_menu = false
+var changing_username = false
 
 # Video Settings
 onready var displayOptions = $SettingsTabs/Video/MarginContainer/videoSettings/DisplayOptionsButton
@@ -33,6 +35,7 @@ onready var sfxVolSlider = $SettingsTabs/Audio/MarginContainer/audioSettings/Sfx
 # Gameplay Settings
 onready var mouseVal = $SettingsTabs/Gameplay/GameplaySettings/audioSettings/MouseSense/MouseVal
 onready var mouseSlider = $SettingsTabs/Gameplay/GameplaySettings/audioSettings/MouseSense/MouseSensSlider
+onready var usernameInput = $SettingsTabs/Gameplay/GameplaySettings/audioSettings/HBoxContainer/usernameInput
 
 """
 /*
@@ -64,8 +67,17 @@ func _ready():
 	mouseSlider.value = Save.game_data.mouse_sens
 
 func _process(_delta): #change to delta if using
-	change_settings_tabs()
-
+	#checks if settings menu is currently being used
+	if is_visible_in_tree():
+		#Emit signal to tell player to stop moving
+		GlobalSignals.emit_signal("openMenu",true)
+		if not changing_username:
+			change_settings_tabs()
+		just_in_menu = true
+	if not is_visible_in_tree() and just_in_menu:
+		#Emit signal to tell player to start moving again
+		GlobalSignals.emit_signal("openMenu",false)
+		just_in_menu = false
 """
 /*
 * @pre called when the display options dropdown options are pressed
@@ -148,6 +160,50 @@ func _on_MouseSensSlider_value_changed(value):
 
 """
 /*
+* @pre called when username focus is entered
+* @post changes placeholder text and makes it so you can't move around in menu
+* @param None
+* @return None
+*/
+"""
+func _on_usernameInput_focus_entered():
+	usernameInput.placeholder_text = "ENTER to submit, Arrow Keys to exit"
+	changing_username = true
+
+"""
+/*
+* @pre called when username focus is exited
+* @post changes placeholder text and makes it so you can move around in menu
+* @param None
+* @return None
+*/
+"""
+func _on_usernameInput_focus_exited():
+	usernameInput.placeholder_text = ""
+	changing_username = false
+
+"""
+/*
+* @pre called when username is submitted
+* @post changes username if valid
+* @param new_text -> String
+* @return None
+*/
+"""
+func _on_usernameInput_text_entered(new_text):
+	if " " in new_text:
+		var dialog = AcceptDialog.new()
+		dialog.dialog_text = "No spaces in username please, change again in settings"
+		dialog.window_title = "Invalid Username"
+		dialog.connect('modal_closed', dialog, 'queue_free')
+		add_child(dialog)
+		dialog.popup_centered()
+	else:
+		GlobalSettings.update_username(new_text)
+	usernameInput.text = ""
+
+"""
+/*
 * @pre called when the master volume slider is moved
 * @post calls update_volume function in globalSettings.gd with master param
 * @param button_pressed -> integer
@@ -179,9 +235,27 @@ func _on_MusicVolSlider_value_changed(value):
 func _on_SfxVolSlider_value_changed(value):
 	GlobalSettings.update_volume(SFX_VOLUME,value)
 
-
+"""
+/*
+* @pre called when the quit button is pressed
+* @post quits out of the game
+* @param None
+* @return None
+*/
+"""
 func _on_quitButton_pressed():
 	get_tree().quit()
+
+"""
+/*
+* @pre called when the main menu button is pressed
+* @post sends player to main menu
+* @param None
+* @return None
+*/
+"""
+func _on_mainMenuButton_pressed():
+	Global.state = Global.scenes.MAIN_MENU
 
 """
 /*
@@ -205,6 +279,14 @@ func change_settings_tabs():
 			tab.current_tab -= 1
 			grab_button(tab.current_tab)
 
+"""
+/*
+* @pre called from the change_settins_tabs function
+* @post grabs the attention of the button/object at the top of the current tab
+* @param current_tab -> int (current tab that user is on)
+* @return None
+*/
+"""
 func grab_button(current_tab):
 	if current_tab == 0:
 		get_node("SettingsTabs/Video/MarginContainer/videoSettings/DisplayOptionsButton").grab_focus()
