@@ -85,9 +85,10 @@ func _on_Area2D_body_exited(_body: PhysicsBody2D): #change to body if want to us
 */
 """
 func spawn_players():
+	var counter: int = 1
 	for player in Global.player_positions:
 		#Add animated player to scene
-		if player['name'] == Save.game_data.username:
+		if counter == ServerConnection._player_num:
 			player_one.position = player['pos']
 		else:
 			var new_player:KinematicBody2D = load(other_player).instance()
@@ -97,3 +98,4 @@ func spawn_players():
 			new_player.position = player['pos']
 			#Add child to the scene
 			add_child(new_player)
+		counter += 1
