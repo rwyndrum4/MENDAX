@@ -32,6 +32,7 @@ var minigame = 0
 var state = null
 enum scenes {
 	MAIN_MENU,
+	OPTIONS_FROM_MAIN,
 	MARKET,
 	START_AREA,
 	CAVE,
@@ -41,3 +42,19 @@ enum scenes {
 
 # Current players in scnene
 var current_players:Dictionary = {}
+# Hold array of player positions
+var player_positions:Dictionary = {}
+# Hold current matches
+var current_matches: Dictionary = {}
+
+func _ready():
+	# warning-ignore:return_value_discarded
+	ServerConnection.connect("state_updated",self,"_player_positions_updated")
+
+func get_player_pos(player_id:int):
+	return player_positions[str(player_id)]
+
+func _player_positions_updated(id, position):
+	print("x:",position.x)
+	print("y:",position.y)
+	player_positions[str(id)] = position

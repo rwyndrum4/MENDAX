@@ -1,6 +1,6 @@
 extends NakamaAsyncResult
 class_name NakamaSession
-
+# warnings-disable
 
 var created : bool = false setget _no_set
 var token : String = "" setget _no_set

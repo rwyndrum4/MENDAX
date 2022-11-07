@@ -11,11 +11,13 @@ extends Control
 
 # Member Variables:
 var in_cave = false
-var in_menu = false
-var using_chat = false
+onready var player_one = $Player
 onready var instructions: Label = $enterCaveArea/enterDirections
 onready var settingsMenu = $GUI/SettingsMenu
 onready var textBox = $GUI/textBox
+
+var normal_player = "res://Scenes/player/player.tscn"
+var other_player = "res://Scenes/player/other_players/other_players.tscn"
 
 
 """
@@ -27,10 +29,11 @@ onready var textBox = $GUI/textBox
 */
 """
 func _ready():
+	#If there is a server connection, spawn all players
+	if ServerConnection.get_server_status():
+		spawn_players()
 	#This is how you queue text to the textbox queue
 	textBox.queue_text("If you're ready to begin your challenge, press enter")
-	# warning-ignore:return_value_discarded
-	GlobalSignals.connect("openChatbox", self, "chatbox_use")
 
 """
 /*
@@ -41,7 +44,6 @@ func _ready():
 */
 """
 func _process(_delta): #change to delta if using it
-	check_settings()
 	if in_cave:
 		if Input.is_action_just_pressed("ui_accept",false) and not Input.is_action_just_pressed("ui_enter_chat"):
 			in_cave = false
@@ -76,20 +78,23 @@ func _on_Area2D_body_exited(_body: PhysicsBody2D): #change to body if want to us
 
 """
 /*
-* @pre Called for every frame inside process function
-* @post Opens and closes settings when escape is pressed
+* @pre called when players need to be spawned in (assuming server is online)
+* @post Spawns players that move with server input and sets position regular player
 * @param None
 * @return None
 */
 """
-func check_settings():
-	if Input.is_action_just_pressed("ui_cancel",false) and not in_menu:
-		settingsMenu.popup_centered_ratio()
-		in_menu = true
-	elif Input.is_action_just_pressed("ui_cancel",false) and in_menu:
-		settingsMenu.hide()
-		in_menu = false
-
-func chatbox_use(value):
-	if value:
-		in_menu = true
+func spawn_players():
+	for num_str in Global.player_positions:
+		#Add animated player to scene
+		var num = int(num_str)
+		if num == ServerConnection._player_num:
+			player_one.position = Global.player_positions[str(num)]
+		else:
+			var new_player:KinematicBody2D = load(other_player).instance()
+			new_player.set_player_id(num)
+			new_player.set_color(num)
+			#Change size and pos of sprite
+			new_player.position = Global.player_positions[str(num)]
+			#Add child to the scene
+			add_child(new_player)

@@ -1,14 +1,19 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Scenes/chatBox/chatBox.tscn" type="PackedScene" id=1]
-[ext_resource path="res://Scenes/globalScope/ServerConnection.gd" type="Script" id=2]
+[ext_resource path="res://Scenes/SettingsMenu/settingsMenu.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Scenes/globalScope/globalScope.gd" type="Script" id=3]
+[ext_resource path="res://Scenes/worldEnvironment/worldEnv.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Assets/ARIALBD.TTF" type="DynamicFontData" id=5]
+[ext_resource path="res://Scenes/fpsDisplay/fpsLabel.tscn" type="PackedScene" id=6]
+
+[sub_resource type="DynamicFont" id=1]
+font_data = ExtResource( 5 )
 
 [node name="globalScope" type="Node"]
 script = ExtResource( 3 )
 
-[node name="ServerConnection" type="Node" parent="."]
-script = ExtResource( 2 )
+[node name="WorldEnvironment" parent="." instance=ExtResource( 4 )]
 
 [node name="GUI" type="CanvasLayer" parent="."]
 
@@ -16,5 +21,12 @@ script = ExtResource( 2 )
 margin_top = 35.0
 margin_bottom = -442.0
 
-[connection signal="chat_message_received" from="ServerConnection" to="." method="_on_ServerConnection_chat_message_received"]
+[node name="SettingsMenu" parent="GUI" instance=ExtResource( 2 )]
+
+[node name="fpsLabel" parent="GUI" instance=ExtResource( 6 )]
+visible = false
+margin_right = 59.0
+margin_bottom = 24.0
+custom_fonts/font = SubResource( 1 )
+
 [connection signal="message_sent" from="GUI/chatbox" to="." method="_on_chatbox_message_sent"]

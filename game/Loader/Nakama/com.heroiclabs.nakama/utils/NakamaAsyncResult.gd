@@ -1,6 +1,6 @@
 extends Reference
 class_name NakamaAsyncResult
-
+# warnings-disable
 var exception : NakamaException setget _no_set, get_exception
 var _ex = null
 

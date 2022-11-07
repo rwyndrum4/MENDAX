@@ -1,6 +1,6 @@
 tool
 extends Node
-
+# warnings-disable
 # An adapter which implements a socket with a protocol supported by Nakama.
 class_name NakamaSocketAdapter
 

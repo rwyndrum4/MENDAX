@@ -1,6 +1,6 @@
 extends Reference
 class_name NakamaLogger
-
+# warnings-disable
 enum LOG_LEVEL {NONE, ERROR, WARNING, INFO, VERBOSE, DEBUG}
 
 var _level = LOG_LEVEL.ERROR
