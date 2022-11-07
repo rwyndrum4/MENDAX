@@ -34,6 +34,11 @@ onready var transCam = $Path2D/PathFollow2D/camTrans
 onready var riddler = $riddler
 onready var playerCam = $Player/Camera2D
 
+#Inventory changes - perhaps this should move somewhere more general
+var item = null
+var ItemClass = preload("res://Inventory/Item.tscn")
+onready var inv = get_node("/root/global/")
+
 #signals
 signal textWait()
 """
@@ -87,8 +92,6 @@ func _ready():
 		t.set_wait_time(1)
 		t.set_one_shot(false)
 		self.add_child(t)
-			
-		
 		
 		Global.entry = 1
 		transCam.current = true
@@ -172,7 +175,8 @@ func _input(ev):
 		if Global.in_anim == 1:
 			Global.in_anim = 0
 			emit_signal("textWait")
-		
+	if Input.is_key_pressed(KEY_SEMICOLON):
+		PlayerInventory.add_item("Coin", 1)
 """
 /*
 * @pre Called for every frame inside process function
@@ -390,17 +394,22 @@ func _on_item6area_body_entered(_body:PhysicsBody2D)->void:
 """
 func _on_item1area_body_exited(_body:PhysicsBody2D)->void:
 	$Player/Labelarea.hide()
+	
 func _on_item2area_body_exited(_body:PhysicsBody2D)->void:
 	$Player/Labelarea.hide()
+	
 func _on_item3area_body_exited(_body:PhysicsBody2D)->void:
 	$Player/Labelarea.hide()
+	
 func _on_item4area_body_exited(_body:PhysicsBody2D)->void:
 	$Player/Labelarea.hide()
+	
 func _on_item5area_body_exited(_body:PhysicsBody2D)->void:
 	$Player/Labelarea.hide()
+	
 func _on_item6area_body_exited(_body:PhysicsBody2D)->void:
 	$Player/Labelarea.hide()
-
+	
 """
 /*
 * @pre Called when player finds hidden item called for all 6 items
@@ -412,21 +421,38 @@ func _on_item6area_body_exited(_body:PhysicsBody2D)->void:
 func _on_item1_body_entered(_body:PhysicsBody2D)->void:
 	if itemarray[0]==0 and answerlength>=1:
 		enterarea($item1/Sprite,1)
+		
+		textBox.queue_text("MONEY!!")
 func _on_item2_body_entered(_body:PhysicsBody2D)->void:
 	if itemarray[1]==0 and answerlength>=2:
 		enterarea($item2/Sprite,2)
+		item = ItemClass.instance()
+		
+		textBox.queue_text("MONEY!!")
 func _on_item3_body_entered(_body:PhysicsBody2D)->void:
 	if itemarray[2]==0 and answerlength>=3:
 		enterarea($item3/Sprite,3)
+		item = ItemClass.instance()
+		
+		textBox.queue_text("MONEY!!")
 func _on_item4_body_entered(_body:PhysicsBody2D)->void:
 	if itemarray[3]==0 and answerlength>=4:
 		enterarea($item4/Sprite,4)
+		item = ItemClass.instance()
+		
+		textBox.queue_text("MONEY!!")
 func _on_item5_body_entered(_body:PhysicsBody2D)->void:
 	if itemarray[4]==0 and answerlength>=5:
 		enterarea($item5/Sprite,5)
+		item = ItemClass.instance()
+		
+		textBox.queue_text("MONEY!!")
 func _on_item6_body_entered(_body:PhysicsBody2D)->void:
 	if itemarray[5]==0 and answerlength>=6:
 		enterarea($item6/Sprite,6)
+		item = ItemClass.instance()
+		
+		textBox.queue_text("MONEY!!")
 """
 /*
 * @pre Called when player has found item and is leaving called for all 6 items
