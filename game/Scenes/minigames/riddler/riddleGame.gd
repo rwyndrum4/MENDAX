@@ -138,8 +138,7 @@ func _input(ev):
 			Global.in_anim = 0
 			emit_signal("textWait")
 	if Input.is_key_pressed(KEY_SEMICOLON):
-		item = ItemClass.instance()
-		$Global.player_inventory.add_child(item)
+		PlayerInventory.add_item("Coin", 1)
 """
 /*
 * @pre Called for every frame inside process function
@@ -275,27 +274,21 @@ func _on_item6area_body_entered(_body:PhysicsBody2D)->void:
 """
 func _on_item1area_body_exited(_body:PhysicsBody2D)->void:
 	$Player/Labelarea.hide()
-	item = ItemClass.instance()
 	
 func _on_item2area_body_exited(_body:PhysicsBody2D)->void:
 	$Player/Labelarea.hide()
-	item = ItemClass.instance()
 	
 func _on_item3area_body_exited(_body:PhysicsBody2D)->void:
 	$Player/Labelarea.hide()
-	item = ItemClass.instance()
 	
 func _on_item4area_body_exited(_body:PhysicsBody2D)->void:
 	$Player/Labelarea.hide()
-	item = ItemClass.instance()
 	
 func _on_item5area_body_exited(_body:PhysicsBody2D)->void:
 	$Player/Labelarea.hide()
-	item = ItemClass.instance()
 	
 func _on_item6area_body_exited(_body:PhysicsBody2D)->void:
 	$Player/Labelarea.hide()
-	item = ItemClass.instance()
 	
 """
 /*

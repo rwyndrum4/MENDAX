@@ -24,9 +24,8 @@ func refresh_style(): # useful for having a new empty inventory slot icon
 func _ready():
 	default_style = StyleBoxTexture.new()
 	empty_style = StyleBoxTexture.new()
-	if randi() % 3 == 0:
-		item = ItemClass.instance()
-		add_child(item)
+	refresh_style()
+
 
 func pickFromSlot():
 	remove_child(item)
@@ -44,6 +43,11 @@ func putIntoSlot(new_item):
 	item = null
 	refresh_style()	
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
+func initialize_item(name, amount):
+	if item == null:
+		item = ItemClass.instance()
+		add_child(item)
+		item.set_item(name, amount)
+	else:
+		item.set_item(name, amount)
+	refresh_style()
