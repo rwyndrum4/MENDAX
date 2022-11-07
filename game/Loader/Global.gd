@@ -14,6 +14,9 @@ var money = 0
 var entry = 0
 var in_anim = 0
 
+#track minigame
+var minigame = 0
+
 """
 -----------------------------SCENE LOADER INSTRUCTION-------------------------------------
 - state -> this is the variable that tracks what scene the game is currently in
@@ -34,6 +37,7 @@ enum scenes {
 	START_AREA,
 	CAVE,
 	RIDDLER_MINIGAME
+	ARENA_MINIGAME
 }
 
 # Current players in scnene
