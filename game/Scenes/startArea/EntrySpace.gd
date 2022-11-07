@@ -4,6 +4,7 @@
 * Date Created - 10/3/2022
 * Date Revisions:
 	10/8/2022 - Added the ability to go into settings from scene with enter key
+	11/5/2022 - Added ability to transition to further minigames after the first
 """
 extends Control
 
@@ -132,7 +133,13 @@ func convert_time(time_in:float) -> String:
 """
 func _on_Timer_timeout():
 	#change scene to riddler minigame
-	Global.state = Global.scenes.RIDDLER_MINIGAME
+	if Global.minigame == 0:
+		Global.minigame = 1
+		Global.state = Global.scenes.RIDDLER_MINIGAME
+	#change scene to arena minigame
+	elif Global.minigame == 1:
+		Global.minigame = 2
+		Global.state = Global.scenes.ARENA_MINIGAME
 
 """
 /*

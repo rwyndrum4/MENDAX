@@ -21,6 +21,7 @@ var market = "res://Scenes/StoreElements/StoreVars.tscn"
 var start_area = "res://Scenes/startArea/startArea.tscn"
 var cave = "res://Scenes/startArea/EntrySpace.tscn"
 var riddler_minigame = "res://Scenes/minigames/riddler/riddleGame.tscn"
+var arena_minigame = "res://Scenes/minigames/arena/arenaGame.tscn"
 
 #Current scene running
 var current_scene = null
@@ -84,6 +85,8 @@ func _change_scene_to(state):
 		current_scene = load(cave).instance()
 	elif state == Global.scenes.RIDDLER_MINIGAME:
 		current_scene = load(riddler_minigame).instance()
+	elif state == Global.scenes.ARENA_MINIGAME:
+		current_scene = load(arena_minigame).instance()
 	#add scene to tree and revise local state
 	add_child(current_scene)
 	local_state = Global.state
