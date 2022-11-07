@@ -12,8 +12,10 @@
 extends Node
 
 #Member Variables
-onready var server_connection := $ServerConnection
 onready var chat_box = $GUI/chatbox
+onready var settings_menu = $GUI/SettingsMenu
+onready var world_env = $WorldEnvironment
+onready var fps_label = $GUI/fpsLabel
 
 #Scene Paths
 var main_menu = "res://Scenes/mainMenu/mainMenu.tscn"
@@ -21,14 +23,17 @@ var market = "res://Scenes/StoreElements/StoreVars.tscn"
 var start_area = "res://Scenes/startArea/startArea.tscn"
 var cave = "res://Scenes/startArea/EntrySpace.tscn"
 var riddler_minigame = "res://Scenes/minigames/riddler/riddleGame.tscn"
+var arena_minigame = "res://Scenes/minigames/arena/arenaGame.tscn"
 
 #Current scene running
 var current_scene = null
 #State to compare to the global state to see if anything changes
 var local_state = null
-
-#Variable that checks if connected to server
-var is_connected_to_server: bool = false
+#Bool to tell if in a popup or not
+var in_popup: bool = false
+#Bools to tell if in chatbox or not, work like a locking mechanism
+var in_chatbox: bool = false
+var can_open_settings: bool = false
 
 """
 /*
@@ -39,14 +44,21 @@ var is_connected_to_server: bool = false
 */
 """
 func _ready():
-	is_connected_to_server = false
+	# warning-ignore:return_value_discarded
+	ServerConnection.connect("chat_message_received",self,"_on_ServerConnection_chat_message_received")
+	# warning-ignore:return_value_discarded
+	GlobalSignals.connect("openChatbox",self,"_chatbox_use")
+	#Initialize the options menu and world environment
+	initialize_settings()
+	initialize_world_env()
+	initialize_fps_label()
 	#Load initial scene (main menu)
 	current_scene = load(main_menu).instance()
 	add_child(current_scene)
 	Global.state = Global.scenes.MAIN_MENU
 	local_state = Global.scenes.MAIN_MENU
-	#Connect to Server
-	server_checks()
+	#Connect to Server and join world
+	yield(server_checks(), "completed")
 
 """
 /*
@@ -58,12 +70,21 @@ func _ready():
 */
 """
 func _process(_delta): #if you want to use _delta, remove _
+	#Change scene
 	if local_state != Global.state:
-		#free up memory from the current scene
-		current_scene.queue_free()
+		#free up memory from the current scene if not a popup scene (example: settings menu)
+		if not_popup(Global.state):
+			current_scene.queue_free()
 		#change the scene
 		_change_scene_to(Global.state)
-
+	if Input.is_action_just_pressed("ui_cancel",false) and local_state != Global.scenes.MAIN_MENU:
+		if in_popup:
+			settings_menu.hide()
+			in_popup = false
+		elif can_open_settings:
+			settings_menu.popup_centered_ratio()
+			in_popup = true
+	set_popup_locks()
 """
 /*
 * @pre called when global wants to change scenes
@@ -76,6 +97,10 @@ func _change_scene_to(state):
 	#Load the correct scene
 	if state == Global.scenes.MAIN_MENU:
 		current_scene = load(main_menu).instance()
+	elif state == Global.scenes.OPTIONS_FROM_MAIN:
+		settings_menu.popup_centered_ratio()
+		Global.state = Global.scenes.MAIN_MENU
+		return
 	elif state == Global.scenes.MARKET:
 		current_scene = load(market).instance()
 	elif state == Global.scenes.START_AREA:
@@ -84,6 +109,8 @@ func _change_scene_to(state):
 		current_scene = load(cave).instance()
 	elif state == Global.scenes.RIDDLER_MINIGAME:
 		current_scene = load(riddler_minigame).instance()
+	elif state == Global.scenes.ARENA_MINIGAME:
+		current_scene = load(arena_minigame).instance()
 	#add scene to tree and revise local state
 	add_child(current_scene)
 	local_state = Global.state
@@ -98,13 +125,14 @@ func _change_scene_to(state):
 */
 """
 func server_checks():
-	is_connected_to_server = false
+	ServerConnection.set_server_status(false)
 	var result = yield(request_authentication(), "completed")
 	if result == OK:
 		result = yield(connect_to_server(), "completed")
 		if result == OK:
-			yield(server_connection.join_chat_async_general(), "completed")
-			is_connected_to_server = true
+			result = yield(ServerConnection.join_chat_async_general(), "completed")
+			if result == OK:
+				ServerConnection.set_server_status(true)
 
 """
 /*
@@ -117,7 +145,7 @@ func server_checks():
 func request_authentication() -> int:
 	var user: String = Save.game_data.username
 	
-	var result: int = yield(server_connection.authenticate_async(), "completed")
+	var result: int = yield(ServerConnection.authenticate_async(), "completed")
 	if result == OK:
 		print("Authenticated user %s successfully" % user)
 	else:
@@ -133,7 +161,7 @@ func request_authentication() -> int:
 */
 """
 func connect_to_server() -> int:
-	var result: int = yield(server_connection.connect_to_server_async(), "completed")
+	var result: int = yield(ServerConnection.connect_to_server_async(), "completed")
 	if result == OK:
 		print("Connected to the server")
 	elif ERR_CANT_CONNECT:
@@ -150,10 +178,10 @@ func connect_to_server() -> int:
 * @return None
 */
 """
-func _on_ServerConnection_chat_message_received(text,type,user_sent_to,user_received_from):
-	print("message received from %s" % user_received_from)
-	chat_box.add_message(text,type,user_sent_to,user_received_from)
-	GlobalSignals.emit_signal("answer_received",text)
+func _on_ServerConnection_chat_message_received(msg,type,user_sent,from_user):
+	#add message from server to chatbox
+	chat_box.add_message(msg,type,user_sent,from_user)
+	GlobalSignals.emit_signal("answer_received",msg)
 
 """
 /*
@@ -165,23 +193,86 @@ func _on_ServerConnection_chat_message_received(text,type,user_sent_to,user_rece
 """
 func _on_chatbox_message_sent(msg,is_whisper,username_to_send_to):
 	#If not connected to server, don't send message
-	if not is_connected_to_server:
+	if not ServerConnection.get_server_status():
 		chat_box.add_err_message()
 		return
 	#Else send message corresponding to whisper or general
 	if is_whisper:
-		yield(server_connection.join_chat_async_whisper(username_to_send_to,false), "completed")
+		yield(ServerConnection.join_chat_async_whisper(username_to_send_to,false), "completed")
 		#Set a timer to give time for connection to form between players
 		var t = Timer.new()
-		t.set_wait_time(0.1)
+		t.set_wait_time(0.5)
 		t.set_one_shot(true)
 		self.add_child(t)
 		t.start()
 		yield(t, "timeout")
 		t.queue_free()
 		#end of timer, send whisper
-		yield(server_connection.send_text_async_whisper(msg,username_to_send_to), "completed")
+		yield(ServerConnection.send_text_async_whisper(msg,username_to_send_to), "completed")
 	else:
 		#send message to general
-		yield(server_connection.send_text_async_general(msg), "completed")
-	print("sent message to server")
+		yield(ServerConnection.send_text_async_general(msg), "completed")
+
+"""
+/*
+* @pre called in the _ready func
+* @post initializes the settings menu for values look same
+* @param None
+* @return None
+*/
+"""
+func initialize_settings():
+	#Call functions to sync audio settings with user save
+	settings_menu._on_MasterVolSlider_value_changed(Save.game_data.master_vol)
+	settings_menu._on_MusicVolSlider_value_changed(Save.game_data.music_vol)
+	settings_menu._on_SfxVolSlider_value_changed(Save.game_data.sfx_vol)
+
+func initialize_world_env():
+	#Call functions to use user saved brightness and bloom values
+	world_env._on_brightness_toggled(Save.game_data.brightness)
+	world_env._on_bloom_toggled(Save.game_data.bloom_on)
+
+
+func initialize_fps_label():
+	#Call function to use user saved fps
+	fps_label._on_fps_displayed(Save.game_data.display_fps)
+
+"""
+/*
+* @pre None
+* @post tells if the scene is a popup scene or not
+* @param state -> Global.scenes
+* @return bool
+*/
+"""
+func not_popup(state) -> bool:
+	match state:
+		Global.scenes.OPTIONS_FROM_MAIN:
+			return false
+		_:
+			return true
+
+"""
+/*
+* @pre called when chatbox is opened
+* @post sets in_chatbox to true so game knows chat is being used
+* @param value -> bool 
+* @return None
+*/
+"""
+func _chatbox_use(value):
+	in_chatbox = value
+
+"""
+/*
+* @pre None
+* @post sets locks for if settings menu can be opened or not
+* @param None
+* @return None
+*/
+"""
+func set_popup_locks():
+	if not in_chatbox and not can_open_settings:
+		can_open_settings = true
+	elif in_chatbox and can_open_settings:
+		can_open_settings = false

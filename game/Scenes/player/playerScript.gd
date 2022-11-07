@@ -13,7 +13,6 @@ extends KinematicBody2D
 # Member Variables
 onready var character = $position/animated_sprite
 onready var char_pos = $position
-onready var inventory = $GUI/Inventory
 var is_stopped = false
 
 # Player physics constants
@@ -59,6 +58,7 @@ func _physics_process(delta):
 	var input_velocity = Vector2.ZERO
 	input_velocity.x = Input.get_axis("ui_left", "ui_right")
 	input_velocity.y = Input.get_axis("ui_up", "ui_down") 
+	
 	input_velocity = input_velocity.normalized()
 	
 	# Case where no input is given
@@ -75,6 +75,8 @@ func _physics_process(delta):
 	else:
 		velocity = input_velocity.move_toward(0.7*input_velocity*MAX_SPEED, ACCELERATION*delta)
 	
+	var position : Vector2 = self.position
+	ServerConnection.send_position_update(position)
 	# Factor in collisions
 	velocity = move_and_slide(velocity)
 	#Animate character

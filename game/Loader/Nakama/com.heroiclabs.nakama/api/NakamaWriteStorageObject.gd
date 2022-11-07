@@ -1,6 +1,6 @@
 extends Reference
 class_name NakamaWriteStorageObject
-
+# warnings-disable
 var collection : String
 var key : String
 var permission_read : int = 0

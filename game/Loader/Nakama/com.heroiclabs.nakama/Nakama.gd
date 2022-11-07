@@ -1,6 +1,6 @@
 tool
 extends Node
-
+# warnings-disable
 # The default host address of the server.
 const DEFAULT_HOST : String = "127.0.0.1"
 

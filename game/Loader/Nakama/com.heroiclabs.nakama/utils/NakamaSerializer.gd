@@ -1,6 +1,6 @@
 extends Reference
 class_name NakamaSerializer
-
+# warnings-disable
 static func serialize(p_obj : Object) -> Dictionary:
 	var out = {}
 	var schema = p_obj.get("_SCHEMA")

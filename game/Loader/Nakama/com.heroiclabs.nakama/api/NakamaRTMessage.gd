@@ -1,6 +1,6 @@
 extends Reference
 class_name NakamaRTMessage
-
+# warnings-disable
 # Send a channel join message to the server.
 class ChannelJoin:
 

@@ -1,5 +1,5 @@
 extends NakamaAsyncResult
-
+# warnings-disable
 class_name NakamaRTAPI
 
 # A chat channel on the server.

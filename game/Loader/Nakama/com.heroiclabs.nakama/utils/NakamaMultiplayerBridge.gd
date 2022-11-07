@@ -1,6 +1,6 @@
 extends Reference
 class_name NakamaMultiplayerBridge
-
+# warnings-disable
 const NETWORKED_MULTIPLAYER_CUSTOM_CLASS = 'NetworkedMultiplayerCustom'
 
 enum MatchState {
