@@ -1,0 +1,7 @@
+{
+	"Coin": {
+	"ItemCategory": "Coin",
+	"StackSize": 100,
+	"Description": "Money! Spend at the store"
+	}
+}
