@@ -31,13 +31,14 @@ var minigame = 0
 """
 # Current scene
 var state = null
+# Scenes that the game can switch to
 enum scenes {
 	MAIN_MENU,
 	OPTIONS_FROM_MAIN,
 	MARKET,
 	START_AREA,
 	CAVE,
-	RIDDLER_MINIGAME
+	RIDDLER_MINIGAME,
 	ARENA_MINIGAME
 }
 
@@ -60,8 +61,29 @@ func _ready():
 	# warning-ignore:return_value_discarded
 	ServerConnection.connect("state_updated",self,"_player_positions_updated")
 
-func add_match(gen_id:String,match_id:String):
-	current_matches[gen_id] = match_id
+"""
+/*
+* @pre None
+* @post adds a match to the current_matches variable
+* @param lobby_name -> String, match_id -> String
+* @return None
+*/
+"""
+func add_match(lobby_name:String,match_id:String):
+	#adds to dictionary
+	current_matches[lobby_name] = match_id
+
+"""
+/*
+* @pre None
+* @post returns a match from current_matches
+* @param lobby_name -> String
+* @return String
+*/
+"""
+func get_match(lobby_name:String) -> String:
+	#returns the really long match id
+	return current_matches[lobby_name]
 
 """
 /*
@@ -84,6 +106,7 @@ func match_exists(player_code:String) -> bool:
 */
 """
 func get_player_pos(player_id:int) -> Vector2:
+	#returns a Vector2 containing player pos ---> {x,y}
 	return player_positions[str(player_id)]
 
 """

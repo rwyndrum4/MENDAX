@@ -314,9 +314,8 @@ func _on_enterLobbyCode_text_entered(new_text):
 	else:
 		if ServerConnection.get_server_status():
 			if Global.match_exists(match_code) and not ServerConnection.match_exists():
-				yield(ServerConnection.current_matches(), "completed")
 				yield(ServerConnection.leave_match(ServerConnection._match_id), "completed")
-				var users_in_menu = yield(ServerConnection.join_match(Global.current_matches[match_code]), "completed")
+				var users_in_menu = yield(ServerConnection.join_match(Global.get_match(match_code)), "completed")
 				#Spawn users that are currently in game and you
 				for user in users_in_menu:
 					spawn_character(user.username)
