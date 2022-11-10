@@ -47,14 +47,51 @@ var player_positions:Dictionary = {}
 # Hold current matches
 var current_matches: Dictionary = {}
 
+"""
+/*
+* @pre function that is played on game load (once)
+* @post connects relevant signals
+* @param None
+* @return None
+*/
+"""
 func _ready():
 	# warning-ignore:return_value_discarded
 	ServerConnection.connect("state_updated",self,"_player_positions_updated")
 
-func get_player_pos(player_id:int):
+func add_match(gen_id:String,match_id:String):
+	current_matches[gen_id] = match_id
+
+"""
+/*
+* @pre None
+* @post returns whether the current match exists in the match list or not
+* @param player_code -> String
+* @return bool
+*/
+"""
+func match_exists(player_code:String) -> bool:
+	#has = dictionary function that returns true if player_code is a key in current_matches
+	return current_matches.has(player_code)
+
+"""
+/*
+* @pre None
+* @post returns the position of a given characters
+* @param player_id -> int
+* @return Vector2
+*/
+"""
+func get_player_pos(player_id:int) -> Vector2:
 	return player_positions[str(player_id)]
 
-func _player_positions_updated(id, position):
-	print("x:",position.x)
-	print("y:",position.y)
+"""
+/*
+* @pre None
+* @post update a players position for a given id (their player number)
+* @param id -> int, position -> vector 2
+* @return None
+*/
+"""
+func _player_positions_updated(id:int, position:Vector2):
 	player_positions[str(id)] = position

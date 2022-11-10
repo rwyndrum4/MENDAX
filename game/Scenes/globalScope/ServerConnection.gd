@@ -117,7 +117,7 @@ func connect_to_server_async() -> int:
 		_socket.connect("received_channel_message", self, "_on_Nakama_Socket_received_channel_message")
 		#get user who joins
 		# warning-ignore:return_value_discarded
-		_socket.connect("received_channel_presence", self, "_on_channel_presence")
+		_socket.connect("received_channel_presence", self, "_on_channel_presence_general")
 		#get a notification
 		# warning-ignore:return_value_discarded
 		_socket.connect("received_notification", self, "_on_notification")
@@ -240,7 +240,7 @@ func send_text_async_whisper(text: String,user_sent_to:String) -> int:
 """
 func create_match(lobby_name:String) -> Array:
 	game_match = yield(_socket.create_match_async(lobby_name), "completed")
-	Global.current_matches[lobby_name] = game_match.match_id
+	Global.add_match(lobby_name,game_match.match_id)
 	_match_id = game_match.match_id
 	send_text_async_general("MATCH_RECEIVED " + JSON.print(Global.current_matches))
 	return game_match.presences
@@ -287,8 +287,6 @@ func leave_match(id:String) -> int:
 func match_exists():
 	return _match_id != ""
 
-
-
 """
 /*
 * @pre None
@@ -297,15 +295,15 @@ func match_exists():
 * @return Array 
 */
 """
-func current_matches(match_code:String) -> String:
+#not working for some reason :(
+func current_matches():
 	var min_players = 2
 	var max_players = 4
 	var limit = 10
 	var authoritative = true
-	var label = match_code
+	var label = ""
 	var query = ""
-	var result = yield(_client.list_matches_async(_session,min_players, max_players, limit, authoritative, label, query), "completed")
-	return result.matches
+	yield(_client.list_matches_async(_session,min_players, max_players, limit, authoritative, label, query), "completed")
 
 """
 /*
@@ -317,7 +315,6 @@ func current_matches(match_code:String) -> String:
 """
 func send_position_update(position: Vector2) -> void:
 	if _socket:
-		print("my x:", position.x, "my y:", position.y)
 		var payload = {id = _player_num, pos = {x=position.x, y = position.y}}
 		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_POSITION,JSON.print(payload))
 
@@ -373,10 +370,10 @@ func _on_Nakama_Socket_received_channel_message(message: NakamaAPI.ApiChannelMes
 * @return None
 */
 """
-func _on_channel_presence(p_presence : NakamaRTAPI.ChannelPresenceEvent):
+func _on_channel_presence_general(p_presence : NakamaRTAPI.ChannelPresenceEvent):
+	send_text_async_general("MATCH_RECEIVED " + JSON.print(Global.current_matches))
 	for p in p_presence.joins:
 		room_users[p.username] = p.user_id
-		send_text_async_general("MATCH_RECEIVED " + JSON.print(Global.current_matches))
 		
 	for p in p_presence.leaves:
 		# warning-ignore:return_value_discarded
