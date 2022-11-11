@@ -23,7 +23,6 @@ margin_top = 35.0
 margin_bottom = -442.0
 
 [node name="Inventory" parent="GUI" instance=ExtResource( 5 )]
-visible = false
 position = Vector2( 460, 250 )
 
 [node name="SettingsMenu" parent="GUI" instance=ExtResource( 2 )]
