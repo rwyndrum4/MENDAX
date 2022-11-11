@@ -49,16 +49,9 @@ func _ready():
 */
 """
 func _physics_process(delta):
-	#don't move player if textbox is playing or options are open
-	
-	
-	# Initialize input velocity
-	
-	#Check previous position and check if it has changed since last frame
-	
-	self.position  = Global.get_player_pos(player_id)
-	
-	control_animations(velocity)
+	self.position = Global.get_player_pos(player_id)
+	control_animations(self.position - last_position)
+	last_position = self.position
 
 """
 /*

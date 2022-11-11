@@ -142,6 +142,10 @@ window/size/height=720
 window/dpi/allow_hidpi=true
 window/stretch/mode="viewport"
 
+[editor_plugins]
+
+enabled=PoolStringArray( "res://addons/multirun/plugin.cfg" )
+
 [global]
 
 Auto=false

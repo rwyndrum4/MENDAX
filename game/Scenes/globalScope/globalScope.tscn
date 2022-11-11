@@ -30,6 +30,7 @@ position = Vector2( 460, 250 )
 [node name="SettingsMenu" parent="GUI" instance=ExtResource( 2 )]
 
 [node name="fpsLabel" parent="GUI" instance=ExtResource( 8 )]
+visible = false
 margin_right = 59.0
 margin_bottom = 24.0
 custom_fonts/font = SubResource( 1 )
