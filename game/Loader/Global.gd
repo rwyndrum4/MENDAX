@@ -9,7 +9,7 @@ extends Node
 
 # Player's balance
 var money = 0
-var player_inventory = preload("res://Inventory/Inventory.tscn").instance();
+var player_inventory = preload("res://Inventory/Inventory.tscn").instance()
 
 #Entry First Time
 var entry = 0

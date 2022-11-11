@@ -14,6 +14,7 @@ extends KinematicBody2D
 onready var character = $position/animated_sprite
 onready var char_pos = $position
 var is_stopped = false
+var player_color:String = ""
 
 # Player physics constants
 const ACCELERATION = 25000
@@ -37,8 +38,11 @@ func _ready():
 	GlobalSignals.connect("textbox_shift",self,"stop_go_player")
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("openMenu",self,"stop_go_player")
+	# if server wasnt' connected
+	if player_color == "":
+		player_color = "blue"
 	#Initially have character idle
-	character.play("idle")
+	character.play("idle_" + player_color)
 
 """
 /*
@@ -105,25 +109,38 @@ func control_animations(vel:Vector2):
 	#Character moves NorthEast
 	if vel.y < 0 and vel.x > 0:
 		char_pos.scale.x = -1
-		character.play("roll_northwest")
+		character.play("roll_northwest_" + player_color)
 	#Character moves NorthWest
 	elif vel.y < 0 and vel.x < 0:
 		char_pos.scale.x = 1
-		character.play("roll_northwest")
+		character.play("roll_northwest_" + player_color)
 	#Character moves East or SouthEast
 	elif vel.x > 0:
 		char_pos.scale.x = 1
-		character.play("roll_southeast")
+		character.play("roll_southeast_" + player_color)
 	#Character moves West or SoutWest
 	elif vel.x < 0:
 		char_pos.scale.x = -1
-		character.play("roll_southeast")
+		character.play("roll_southeast_" + player_color)
 	#Character moves North
 	elif vel.y < 0:
-		character.play("roll_north")
+		character.play("roll_north_" + player_color)
 	#Character moves South
 	elif vel.y > 0:
-		character.play("roll_south")
+		character.play("roll_south_" + player_color)
 	#Character not moving (idle)
 	else:
-		character.play("idle")
+		character.play("idle_" + player_color)
+
+func set_color(player_num:int):
+	match player_num:
+		1:
+			player_color = "blue"
+		2:
+			player_color = "red"
+		3:
+			player_color = "green"
+		4:
+			player_color = "orange"
+		_:
+			player_color = "blue"

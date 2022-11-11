@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Scenes/chatBox/chatBox.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Scenes/SettingsMenu/settingsMenu.tscn" type="PackedScene" id=2]
@@ -6,9 +6,11 @@
 [ext_resource path="res://Scenes/globalScope/GUI.gd" type="Script" id=4]
 [ext_resource path="res://Inventory/Inventory.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Scenes/worldEnvironment/worldEnv.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Assets/ARIALBD.TTF" type="DynamicFontData" id=7]
 [ext_resource path="res://Scenes/fpsDisplay/fpsLabel.tscn" type="PackedScene" id=8]
 
 [sub_resource type="DynamicFont" id=1]
+font_data = ExtResource( 7 )
 
 [node name="globalScope" type="Node"]
 script = ExtResource( 3 )
@@ -28,7 +30,6 @@ position = Vector2( 460, 250 )
 [node name="SettingsMenu" parent="GUI" instance=ExtResource( 2 )]
 
 [node name="fpsLabel" parent="GUI" instance=ExtResource( 8 )]
-visible = false
 margin_right = 59.0
 margin_bottom = 24.0
 custom_fonts/font = SubResource( 1 )

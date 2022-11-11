@@ -90,6 +90,7 @@ func spawn_players():
 		var num = int(num_str)
 		if num == ServerConnection._player_num:
 			player_one.position = Global.player_positions[str(num)]
+			player_one.set_color(num)
 		else:
 			var new_player:KinematicBody2D = load(other_player).instance()
 			new_player.set_player_id(num)
