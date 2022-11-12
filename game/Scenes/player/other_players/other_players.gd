@@ -32,11 +32,6 @@ var velocity = Vector2.ZERO
 */
 """
 func _ready():
-	#Connects singal to GlobalSignals, will stop/unstop player when called from "textbBox.gd"
-	# warning-ignore:return_value_discarded
-	GlobalSignals.connect("textbox_shift",self,"stop_go_player")
-	# warning-ignore:return_value_discarded
-	GlobalSignals.connect("openMenu",self,"stop_go_player")
 	character.play("idle_" + player_color)
 	last_position = self.position
 
@@ -50,25 +45,16 @@ func _ready():
 """
 func _physics_process(delta):
 	self.position = Global.get_player_pos(player_id)
-	control_animations(self.position - last_position)
+	var x = self.position.x - last_position.x
+	var y = self.position.y - last_position.y
+	control_animations(Vector2(x,y).normalized())
 	last_position = self.position
-
-"""
-/*
-* @pre Called when signal is received from GlobalSignals
-* @post updates is_stopped to whatever value is passed in (true = stopped, false = can move)
-* @param value -> boolean
-* @return None
-*/
-"""
-func stop_go_player(value:bool):
-	is_stopped = value
 
 """
 /*
 * @pre None
 * @post updates the character's animations
-* @param vel -> int
+* @param vel -> Vector2
 * @return None
 */
 """
