@@ -43,7 +43,7 @@ func _ready():
 * @return None
 */
 """
-func _physics_process(delta):
+func _physics_process(_delta):
 	self.position = Global.get_player_pos(player_id)
 	control_animations(Global.get_player_input_vec(player_id))
 	last_position = self.position

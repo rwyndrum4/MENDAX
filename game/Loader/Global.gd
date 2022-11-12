@@ -4,6 +4,7 @@
 * Date Created - 9/16/2022
 * Date Revisions:
 	- 10/22/2022: Added functionality for tracking scene changes
+	- 11/11/2022: Added ability for Global to track player input state
 """
 extends Node
 
@@ -42,8 +43,6 @@ enum scenes {
 	ARENA_MINIGAME
 }
 
-# Current players in scnene
-var current_players:Dictionary = {}
 # Hold dictionary of player positions
 var player_positions:Dictionary = {}
 # Hold dictionary of player input vectors
