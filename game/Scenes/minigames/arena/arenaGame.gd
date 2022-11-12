@@ -11,7 +11,10 @@ var in_menu = false
 onready var settingsMenu = $GUI/SettingsMenu
 onready var myTimer: Timer = $GUI/Timer
 onready var timerText: Label = $GUI/Timer/timerText
-onready var textBox = $GUI/textBox
+onready var player = $Player
+onready var swordPivot = $Player/Sword/pivot
+onready var sword = $Player/Sword
+
 
 """
 /*
@@ -26,6 +29,7 @@ func _ready():
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("openChatbox", self, "chatbox_use")
 
+
 """
 /*
 * @pre Called for every frame
@@ -38,6 +42,11 @@ func _ready():
 func _process(_delta): #change to delta if used
 	check_settings()
 	timerText.text = convert_time(myTimer.time_left)
+	if sword.direction == "right":
+		swordPivot.position = player.position + Vector2(55.5,-10)
+	if sword.direction == "left":
+		swordPivot.position = player.position + Vector2(-55.5,-10)
+	
 
 """
 /*
