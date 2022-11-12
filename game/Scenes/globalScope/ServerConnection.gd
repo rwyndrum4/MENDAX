@@ -438,8 +438,8 @@ func _on_NakamaSocket_received_match_state(match_state: NakamaRTAPI.MatchData) -
 			var decoded: Dictionary = JSON.parse(raw).result
 			
 			var id:int = int(decoded.id)
-			var x: int = int(decoded.x_in)
-			var y: int = int(decoded.y_in)
+			var x = decoded.x_in
+			var y = decoded.y_in
 			var out_vec: Vector2 = Vector2(x,y)
 			
 			emit_signal("input_received", id, out_vec)
