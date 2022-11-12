@@ -1,11 +1,13 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://Scenes/minigames/arena/arenaGame.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/minigames/arena/arenaMap.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Assets/Teko-Light.ttf" type="DynamicFontData" id=3]
 [ext_resource path="res://Scenes/textBox/textBox.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Scenes/minigames/arena/littleGuy.png" type="Texture" id=5]
 [ext_resource path="res://Scenes/player/player.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Scenes/SettingsMenu/settingsMenu.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Scenes/minigames/arena/littleGuy.gd" type="Script" id=8]
 
 [sub_resource type="OccluderPolygon2D" id=1]
 polygon = PoolVector2Array( -48.9833, -45.9201, -50.0482, 47.9166, -50.0482, 47.9166, 50.0482, 46.9184, 50.0482, 46.9184, 48.9833, -48.9149, 47.9185, -50.9114 )
@@ -13,6 +15,21 @@ polygon = PoolVector2Array( -48.9833, -45.9201, -50.0482, 47.9166, -50.0482, 47.
 [sub_resource type="DynamicFont" id=4]
 size = 40
 font_data = ExtResource( 3 )
+
+[sub_resource type="CircleShape2D" id=5]
+
+[sub_resource type="SpriteFrames" id=6]
+animations = [ {
+"frames": [ ExtResource( 5 ) ],
+"loop": true,
+"name": "crawl",
+"speed": 5.0
+}, {
+"frames": [  ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
 
 [node name="arenaGame" type="Control"]
 script = ExtResource( 1 )
@@ -53,3 +70,17 @@ custom_fonts/font = SubResource( 4 )
 
 [node name="textBox" parent="." instance=ExtResource( 4 )]
 visible = false
+
+[node name="littleGuy" type="KinematicBody2D" parent="."]
+position = Vector2( 1515, 831 )
+script = ExtResource( 8 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="guyHitbox" type="CollisionShape2D" parent="littleGuy"]
+shape = SubResource( 5 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="littleGuy"]
+frames = SubResource( 6 )
+animation = "crawl"
