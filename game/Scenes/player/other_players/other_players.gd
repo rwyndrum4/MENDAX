@@ -45,9 +45,7 @@ func _ready():
 """
 func _physics_process(delta):
 	self.position = Global.get_player_pos(player_id)
-	var x = self.position.x - last_position.x
-	var y = self.position.y - last_position.y
-	control_animations(Vector2(x,y).normalized())
+	control_animations(Global.get_player_input_vec(player_id))
 	last_position = self.position
 
 """

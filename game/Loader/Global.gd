@@ -44,9 +44,11 @@ enum scenes {
 
 # Current players in scnene
 var current_players:Dictionary = {}
-# Hold array of player positions
+# Hold dictionary of player positions
 var player_positions:Dictionary = {}
-# Hold current matches
+# Hold dictionary of player input vectors
+var player_input_vectors:Dictionary = {}
+# Hold current matches, for joining matches
 var current_matches: Dictionary = {}
 
 """
@@ -60,6 +62,8 @@ var current_matches: Dictionary = {}
 func _ready():
 	# warning-ignore:return_value_discarded
 	ServerConnection.connect("state_updated",self,"_player_positions_updated")
+	# warning-ignore:return_value_discarded
+	ServerConnection.connect("input_updated",self,"_player_input_updated")
 
 """
 /*
@@ -100,7 +104,7 @@ func match_exists(player_code:String) -> bool:
 """
 /*
 * @pre None
-* @post returns the position of a given characters
+* @post returns the position of a given character
 * @param player_id -> int
 * @return Vector2
 */
@@ -112,6 +116,18 @@ func get_player_pos(player_id:int) -> Vector2:
 """
 /*
 * @pre None
+* @post returns the input vector of a given character
+* @param player_id -> int
+* @return Vector2
+*/
+"""
+func get_player_input_vec(player_id:int) -> Vector2:
+	#returns a Vector2 containing player pos ---> {x,y}
+	return player_input_vectors[str(player_id)]
+
+"""
+/*
+* @pre None
 * @post update a players position for a given id (their player number)
 * @param id -> int, position -> vector 2
 * @return None
@@ -119,3 +135,14 @@ func get_player_pos(player_id:int) -> Vector2:
 """
 func _player_positions_updated(id:int, position:Vector2):
 	player_positions[str(id)] = position
+
+"""
+/*
+* @pre None
+* @post update a players current input
+* @param id -> int, vec -> Vector2
+* @return None
+*/
+"""
+func _player_input_updated(id:int, vec:Vector2):
+	player_input_vectors[str(id)] = vec

@@ -26,6 +26,7 @@ var server_status: bool = false
 
 #Signals for recieving game state data from server (from  the .lua files)
 signal state_updated(id, position) #state of game has been updated
+signal input_updated(id, vec) #input of player has changed and received
 signal initial_state_received(positions, inputs, names) #first state of game
 signal character_spawned(char_name) #singal to tell if someone has spawned
 signal character_despawned(char_name) #signal to tell if someone has despawned
@@ -314,7 +315,8 @@ func current_matches():
 */
 """
 func send_position_update(position: Vector2) -> void:
-	if _socket:
+	if _socket and position != Global.get_player_pos(_player_num):
+		print("hi there")
 		var payload = {id = _player_num, pos = {x=position.x, y = position.y}}
 		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_POSITION,JSON.print(payload))
 
@@ -326,9 +328,11 @@ func send_position_update(position: Vector2) -> void:
 * @return None
 */
 """
-func send_input_update(inputx: float, inputy: float) -> void:
-	if _socket:
-		var payload := {id = _device_id, inpx = inputx, inpy = inputy}
+func send_input_update(in_vec:Vector2) -> void:
+#	if in_vec == Global.get_player_input_vec(_player_num):
+#		print("here?")
+	if _socket and in_vec != Global.get_player_input_vec(_player_num):
+		var payload := {id = _player_num, vec = in_vec}
 		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_INPUT,JSON.print(payload))
 
 """
@@ -341,7 +345,7 @@ func send_input_update(inputx: float, inputy: float) -> void:
 """
 func send_spawn(char_name: String) -> void:
 	if _socket:
-		var payload := {id = _device_id, nm = char_name}
+		var payload := {id = _player_num, nm = char_name}
 		_socket.send_match_state_async(_match_id, OpCodes.DO_SPAWN,JSON.print(payload))
 
 
@@ -434,6 +438,13 @@ func _on_NakamaSocket_received_match_state(match_state: NakamaRTAPI.MatchData) -
 			var position: Vector2 = Vector2(int(position_decoded.x),int(position_decoded.y))
 			
 			emit_signal("state_updated", id, position)
+		OpCodes.UPDATE_INPUT:
+			var decoded: Dictionary = JSON.parse(raw).result
+			
+			var id:int = int(decoded.id)
+			var out_vec: float = float(decoded.vec)
+			
+			emit_signal("input_received", id, out_vec)
 		OpCodes.INITIAL_STATE:
 			var decoded: Dictionary = JSON.parse(raw).result
 			

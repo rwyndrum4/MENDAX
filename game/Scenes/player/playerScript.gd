@@ -79,8 +79,14 @@ func _physics_process(delta):
 	else:
 		velocity = input_velocity.move_toward(0.7*input_velocity*MAX_SPEED, ACCELERATION*delta)
 	
-	var position : Vector2 = self.position
-	ServerConnection.send_position_update(position)
+	#Send current player position to server if server is up
+	if ServerConnection.get_server_status():
+		#Send position and input to other players (if has changed!)
+		ServerConnection.send_position_update(position)
+		ServerConnection.send_input_update(velocity.normalized())
+		#Store new position and input in order to check if has changed next time (if has changed!)
+		Global._player_positions_updated(ServerConnection._player_num, self.position)
+		Global._player_input_updated(ServerConnection._player_num, velocity.normalized())
 	# Factor in collisions
 	velocity = move_and_slide(velocity)
 	#Animate character
