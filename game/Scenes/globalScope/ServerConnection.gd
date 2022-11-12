@@ -316,7 +316,6 @@ func current_matches():
 """
 func send_position_update(position: Vector2) -> void:
 	if _socket and position != Global.get_player_pos(_player_num):
-		print("hi there")
 		var payload = {id = _player_num, pos = {x=position.x, y = position.y}}
 		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_POSITION,JSON.print(payload))
 
@@ -329,10 +328,8 @@ func send_position_update(position: Vector2) -> void:
 */
 """
 func send_input_update(in_vec:Vector2) -> void:
-#	if in_vec == Global.get_player_input_vec(_player_num):
-#		print("here?")
 	if _socket and in_vec != Global.get_player_input_vec(_player_num):
-		var payload := {id = _player_num, vec = in_vec}
+		var payload := {id = _player_num, x_in = in_vec.x, y_in = in_vec.y}
 		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_INPUT,JSON.print(payload))
 
 """
@@ -425,7 +422,6 @@ func _on_NakamaSocket_received_match_precence(p_match_presence_event : NakamaRTA
 */
 """
 func _on_NakamaSocket_received_match_state(match_state: NakamaRTAPI.MatchData) -> void:
-	print("Received match state with opcode %s, data %s" % [match_state.op_code, parse_json(match_state.data)])
 	var code := match_state.op_code
 	var raw := match_state.data
 	
@@ -442,7 +438,9 @@ func _on_NakamaSocket_received_match_state(match_state: NakamaRTAPI.MatchData) -
 			var decoded: Dictionary = JSON.parse(raw).result
 			
 			var id:int = int(decoded.id)
-			var out_vec: float = float(decoded.vec)
+			var x: int = int(decoded.x_in)
+			var y: int = int(decoded.y_in)
+			var out_vec: Vector2 = Vector2(x,y)
 			
 			emit_signal("input_received", id, out_vec)
 		OpCodes.INITIAL_STATE:

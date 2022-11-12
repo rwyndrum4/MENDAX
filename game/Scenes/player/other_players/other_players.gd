@@ -26,7 +26,7 @@ var velocity = Vector2.ZERO
 """
 /*
 * @pre Called once when player is initialized
-* @post Connects the "textbox_shift" and "openMnu" signals to the player
+* @post Connects the "textbox_shift" and "openMnu" signals to the playerw
 * @param None
 * @return None
 */

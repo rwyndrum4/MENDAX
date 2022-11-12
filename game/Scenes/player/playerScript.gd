@@ -79,8 +79,8 @@ func _physics_process(delta):
 	else:
 		velocity = input_velocity.move_toward(0.7*input_velocity*MAX_SPEED, ACCELERATION*delta)
 	
-	#Send current player position to server if server is up
-	if ServerConnection.get_server_status():
+	#Send current player position to server if server and match is up
+	if ServerConnection.get_server_status() and ServerConnection.match_exists():
 		#Send position and input to other players (if has changed!)
 		ServerConnection.send_position_update(position)
 		ServerConnection.send_input_update(velocity.normalized())
