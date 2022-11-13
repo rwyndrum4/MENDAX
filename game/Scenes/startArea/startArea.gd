@@ -16,7 +16,6 @@ onready var instructions: Label = $enterCaveArea/enterDirections
 onready var settingsMenu = $GUI/SettingsMenu
 onready var textBox = $GUI/textBox
 
-var normal_player = "res://Scenes/player/player.tscn"
 var other_player = "res://Scenes/player/other_players/other_players.tscn"
 
 
@@ -30,7 +29,7 @@ var other_player = "res://Scenes/player/other_players/other_players.tscn"
 """
 func _ready():
 	#If there is a server connection, spawn all players
-	if ServerConnection.get_server_status():
+	if ServerConnection.match_exists():
 		spawn_players()
 	#This is how you queue text to the textbox queue
 	textBox.queue_text("If you're ready to begin your challenge, press enter")

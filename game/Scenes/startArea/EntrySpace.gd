@@ -16,10 +16,9 @@ onready var settingsMenu = $GUI/SettingsMenu
 onready var myTimer: Timer = $GUI/Timer
 onready var timerText: Label = $GUI/Timer/timerText
 onready var textBox = $GUI/textBox
+onready var player_one = $Player
 
-
-
-
+var other_player = "res://Scenes/player/other_players/other_players.tscn"
 
 """
 /*
@@ -30,6 +29,9 @@ onready var textBox = $GUI/textBox
 */
 """
 func _ready():
+	#Spawn the players if a match is ongoing
+	if ServerConnection.match_exists():
+		spawn_players()
 	#hide cave instructions at start
 	instructions.hide()
 	myTimer.start(90)
@@ -49,8 +51,6 @@ func _ready():
 func _process(_delta): #change to delta if used
 	check_settings()
 	timerText.text = convert_time(myTimer.time_left)
-
-
 
 """
 /*
@@ -152,3 +152,53 @@ func _on_Timer_timeout():
 func chatbox_use(value):
 	if value:
 		in_menu = true
+
+"""
+/*
+* @pre called when players need to be spawned in (assuming server is online)
+* @post Spawns players that move with server input and sets position regular player
+* @param None
+* @return None
+*/
+"""
+func spawn_players():
+	#set initial position the players should be on spawn
+	set_init_player_pos()
+	#num_str is the player number (1,2,3,4)
+	for num_str in Global.player_positions:
+		#Add animated player to scene
+		var num = int(num_str)
+		#if player is YOUR player (aka player you control)
+		if num == ServerConnection._player_num:
+			player_one.position = Global.player_positions[str(num)]
+			player_one.set_color(num)
+		#if the player is another online player
+		else:
+			var new_player:KinematicBody2D = load(other_player).instance()
+			new_player.set_player_id(num)
+			new_player.set_color(num)
+			#Change size and pos of sprite
+			new_player.position = Global.player_positions[str(num)]
+			#Add child to the scene
+			add_child(new_player)
+		#Set initial input vectors to zero
+		Global.player_input_vectors[str(num)] = Vector2.ZERO
+
+"""
+/*
+* @pre None
+* @post Sets players to intial positions by cave entrance
+* @param None
+* @return None
+*/
+"""
+func set_init_player_pos():
+	#num_str is the player number (1,2,3,4)
+	for num_str in Global.player_positions:
+		var num = int(num_str)
+		match num:
+			1: Global._player_positions_updated(num,Vector2(800,1550))
+			2: Global._player_positions_updated(num,Vector2(880,1550))
+			3: Global._player_positions_updated(num,Vector2(800,1450))
+			4: Global._player_positions_updated(num,Vector2(880,1450))
+			_: printerr("THERE ARE MORE THAN 4 PLAYERS TRYING TO BE SPAWNED IN EntrySpace.gd")
