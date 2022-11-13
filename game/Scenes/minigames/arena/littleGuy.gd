@@ -3,7 +3,7 @@
 * Description - Code that designates critter movement
 * Date Created - 11/11/2022
 * Citations - 
-* Date Revisions:
+* Date Revisions: 11/12/2022
 
 """
 extends KinematicBody2D
