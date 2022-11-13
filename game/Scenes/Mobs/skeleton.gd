@@ -26,18 +26,13 @@ func _ready():
 """
 /*
 * @pre Called every frame
-* @post x and y velocity of the PlayerCursor element is updated to reflect the current player input (given by pressing WASD)
+* @post x an y velocity of the Skeleton is updated to move towards the player (if the player is within it's Search range)
 * @param delta : elapsed time (in seconds) since previous frame. Should be constant across sequential calls
 * @return None
 */
 """	
 func _physics_process(delta):
-	if targetFound:
-		velocity = velocity.move_toward(50*.position, FRICTION*delta)
-	else:
-		velocity = velocity.move_toward(Vector2.ZERO, FRICTION*delta)
-	
-	velocity = move_and_slide(velocity)
+	velocity = move_and_slide(velocity.move_toward(targetPosition, FRICTION*delta))
 
 func take_damage(amount: int) -> void:
 	
@@ -62,11 +57,3 @@ func _on_AnimatedSprite_animation_finished():
 		skeleton.play("idle")
 	else:
 		queue_free()
-
-
-func _on_mySearchBox_body_entered(_body:PhysicsBody2D):
-	targetFound = true
-
-
-func _on_mySearchBox_body_exited(body):
-	targetFound = false

@@ -2,7 +2,7 @@
 * Programmer Name - Freeman Spray
 * Description - Code for controlling the Arena minigame
 * Date Created - 11/5/2022
-* Date Revisions:
+* Date Revisions: 11/12/2022 - added physics process to manage Skeleton positioning
 """
 extends Control
 
@@ -47,7 +47,12 @@ func _process(_delta): #change to delta if used
 	if sword.direction == "left":
 		swordPivot.position = player.position + Vector2(-55.5,-10)
 	
-
+func _physics_process(delta):
+	if $Skeleton.targetFound:
+		$Skeleton.targetPosition = $Player.position
+	else:
+		$Skeleton.targetPosition = Vector2.ZERO
+		
 """
 /*
 * @pre An input of any sort
@@ -108,5 +113,9 @@ func chatbox_use(value):
 		in_menu = true
 
 
-func _on_mySearchBox_body_entered(body):
-	pass # Replace with function body.
+func _on_mySearchBox_body_entered(_body:PhysicsBody2D):
+	$Skeleton.targetFound = true
+
+
+func _on_mySearchBox_body_exited(body):
+	$Skeleton.targetFound = false

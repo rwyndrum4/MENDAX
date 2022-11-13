@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://Scenes/minigames/arena/arenaGame.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/minigames/arena/arenaMap.tscn" type="PackedScene" id=2]
@@ -6,7 +6,6 @@
 [ext_resource path="res://Scenes/textBox/textBox.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Scenes/Mobs/skeleton.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Scenes/player/player.tscn" type="PackedScene" id=6]
-[ext_resource path="res://Scenes/SettingsMenu/settingsMenu.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Scenes/player/Sword/Sword.tscn" type="PackedScene" id=8]
 [ext_resource path="res://Scenes/minigames/arena/littleGuy.png" type="Texture" id=9]
 [ext_resource path="res://Scenes/minigames/arena/littleGuy.gd" type="Script" id=10]
@@ -75,16 +74,6 @@ shape = SubResource( 7 )
 
 [node name="GUI" type="CanvasLayer" parent="."]
 
-[node name="SettingsMenu" parent="GUI" instance=ExtResource( 7 )]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -640.0
-margin_top = -360.0
-margin_right = -640.0
-margin_bottom = -360.0
-
 [node name="Timer" type="Timer" parent="GUI"]
 
 [node name="timerText" type="Label" parent="GUI/Timer"]
@@ -113,5 +102,5 @@ shape = SubResource( 5 )
 frames = SubResource( 6 )
 animation = "crawl"
 
-[connection signal="body_entered" from="Skeleton/mySearchBox" to="Skeleton" method="_on_mySearchBox_body_entered"]
-[connection signal="body_exited" from="Skeleton/mySearchBox" to="Skeleton" method="_on_mySearchBox_body_exited"]
+[connection signal="body_entered" from="Skeleton/mySearchBox" to="." method="_on_mySearchBox_body_entered"]
+[connection signal="body_exited" from="Skeleton/mySearchBox" to="." method="_on_mySearchBox_body_exited"]
