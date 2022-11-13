@@ -106,3 +106,7 @@ func _on_Timer_timeout():
 func chatbox_use(value):
 	if value:
 		in_menu = true
+
+
+func _on_mySearchBox_body_entered(body):
+	pass # Replace with function body.

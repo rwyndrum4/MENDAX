@@ -28,10 +28,14 @@ var direction = true
 */
 """
 func _physics_process(delta):
+	print(framesTraveled)
 	framesTraveled = framesTraveled + 1
-	if framesTraveled == 80:
-		direction = !direction
+	if framesTraveled == 300:
+		framesTraveled = 0
+		direction = not(direction)
 	if direction: 
-		velocity = velocity.move_toward(Vector2(0,1), FRICTION*delta)
+		velocity = velocity.move_toward(Vector2(250,0), FRICTION*delta)
 	else:
-		velocity = velocity.move_toward(Vector2(0,-1), FRICTION*delta)
+		velocity = velocity.move_toward(Vector2(-250,0), FRICTION*delta)
+	
+	velocity = move_and_slide(velocity)
