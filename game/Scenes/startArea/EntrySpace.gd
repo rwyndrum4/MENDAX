@@ -67,8 +67,12 @@ func _input(ev):
 			Global.state = Global.scenes.MAIN_MENU #change scene to main menu
 	#DEBUG PURPOSES - REMOVE FOR FINAL GAME!!!
 	#IF YOU PRESS P -> TIMER WILL REDUCE TO 3 SECONDS
-	if Input.is_action_just_pressed("debug_key",false):
+	if Input.is_action_just_pressed("timer_debug_key",false):
 		myTimer.start(3)
+	if Input.is_action_just_pressed("minigame_debug_key",false):
+		Global.minigame = Global.minigame + 1
+	if Input.is_action_just_pressed("extend_timer_debug_key",false):
+		myTimer.start(30000)
 """
 /*
 * @pre Ca	velocity = move_and_slide(velocity)lled when player enters the Area2D zone

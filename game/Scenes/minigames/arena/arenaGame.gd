@@ -41,6 +41,20 @@ func _process(_delta): #change to delta if used
 
 """
 /*
+* @pre An input of any sort
+* @post None
+* @param Takes in an event
+* @return None
+*/
+"""
+func _input(ev):
+	if Input.is_action_just_pressed("timer_debug_key",false):
+		myTimer.start(3)
+	if Input.is_action_just_pressed("extend_timer_debug_key",false):
+		myTimer.start(30000)
+		
+"""
+/*
 * @pre Called for every frame inside process function
 * @post Opens and closes settings when escape is pressed
 * @param None
