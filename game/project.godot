@@ -9,6 +9,16 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Area2D",
+"class": "MyHitBox",
+"language": "GDScript",
+"path": "res://Scenes/player/Sword/MyHitBox.gd"
+}, {
+"base": "Area2D",
+"class": "MyHurtBox",
+"language": "GDScript",
+"path": "res://Scenes/player/Sword/MyHurtBox.gd"
+}, {
 "base": "Reference",
 "class": "NakamaAPI",
 "language": "GDScript",
@@ -85,6 +95,8 @@ _global_script_classes=[ {
 "path": "res://Loader/Nakama/com.heroiclabs.nakama/api/NakamaWriteStorageObject.gd"
 } ]
 _global_script_class_icons={
+"MyHitBox": "",
+"MyHurtBox": "",
 "NakamaAPI": "",
 "NakamaAsyncResult": "",
 "NakamaClient": "",
@@ -247,11 +259,6 @@ timer_debug_key={
 minigame_debug_key={
 "deadzone": 0.5,
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":0,"physical_scancode":81,"unicode":0,"echo":false,"script":null)
- ]
-}
-extend_timer_debug_key={
-"deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":0,"physical_scancode":79,"unicode":0,"echo":false,"script":null)
  ]
 }
 
