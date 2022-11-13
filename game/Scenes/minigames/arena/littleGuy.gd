@@ -28,7 +28,6 @@ var direction = true
 */
 """
 func _physics_process(delta):
-	print(framesTraveled)
 	framesTraveled = framesTraveled + 1
 	if framesTraveled == 300:
 		framesTraveled = 0
