@@ -13,6 +13,7 @@ extends KinematicBody2D
 # Member Variables
 onready var character = $position/animated_sprite
 onready var char_pos = $position
+onready var healthbar = $ProgressBar
 var is_stopped = false
 
 # Player physics constants
@@ -127,3 +128,11 @@ func control_animations(vel:Vector2):
 	#Character not moving (idle)
 	else:
 		character.play("idle")
+
+
+func take_damage(amount: int) -> void:
+	
+	healthbar.value = healthbar.value - amount
+	print(healthbar.value)
+	if healthbar.value == 0:
+		print("you dead")

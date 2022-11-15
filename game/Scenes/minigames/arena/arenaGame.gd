@@ -14,6 +14,7 @@ onready var timerText: Label = $GUI/Timer/timerText
 onready var player = $Player
 onready var swordPivot = $Player/Sword/pivot
 onready var sword = $Player/Sword
+onready var playerHealth = $Player/ProgressBar
 
 
 """
@@ -28,6 +29,10 @@ func _ready():
 	myTimer.start(90)
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("openChatbox", self, "chatbox_use")
+	playerHealth.visible = true
+	playerHealth.value = 100
+	sword.direction = "right"
+	swordPivot.position = player.position + Vector2(60,20)
 
 
 """
@@ -43,9 +48,9 @@ func _process(_delta): #change to delta if used
 	check_settings()
 	timerText.text = convert_time(myTimer.time_left)
 	if sword.direction == "right":
-		swordPivot.position = player.position + Vector2(55.5,-10)
+		swordPivot.position = player.position + Vector2(60,0)
 	if sword.direction == "left":
-		swordPivot.position = player.position + Vector2(-55.5,-10)
+		swordPivot.position = player.position + Vector2(-60,0)
 	
 
 """
@@ -87,6 +92,7 @@ func convert_time(time_in:float) -> String:
 */
 """
 func _on_Timer_timeout():
+	playerHealth.visible = false
 	Global.state = Global.scenes.CAVE
 
 func chatbox_use(value):
