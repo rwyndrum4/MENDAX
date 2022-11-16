@@ -4,8 +4,7 @@
 * Date Created - 11/5/2022
 * Date Revisions: 11/12/2022 - added physics process to manage Skeleton positioning
 *				  11/13/2022 - got Skeleton to track a player
-* Known bugs: physics process crashes the game if skeleton has been destroyed.
-			  skeleton movement is highly unreliable, stopping and starting seemingly at random
+* 				  11/15/2022 - move physics process to Skeleton.gd
 """
 extends Control
 
@@ -49,20 +48,6 @@ func _process(_delta): #change to delta if used
 		swordPivot.position = player.position + Vector2(55.5,-10)
 	if sword.direction == "left":
 		swordPivot.position = player.position + Vector2(-55.5,-10)
-
-"""
-/*
-* @pre Called every frame
-* @post x an y velocity of the Skeleton is updated to move towards the player (if the player is within it's Search range)
-* @param delta : elapsed time (in seconds) since previous frame. Should be constant across sequential calls
-* @return None
-*/
-"""		
-func _physics_process(delta):
-	if $Skeleton.targetFound:
-		$Skeleton.velocity = $Skeleton.move_and_slide($Skeleton.velocity.move_toward(0.7*(player.position - $Skeleton.position), 500*delta))
-	else:
-		$Skeleton.velocity = $Skeleton.move_and_slide($Skeleton.velocity.move_toward(0.7*Vector2.ZERO, 500*delta))
 		
 """
 /*
@@ -125,11 +110,3 @@ func _on_Timer_timeout():
 func chatbox_use(value):
 	if value:
 		in_menu = true
-
-
-func _on_mySearchBox_body_entered(_body:PhysicsBody2D):
-	$Skeleton.targetFound = true
-
-
-func _on_myLostBox_body_exited(body):
-	$Skeleton.targetFound = false

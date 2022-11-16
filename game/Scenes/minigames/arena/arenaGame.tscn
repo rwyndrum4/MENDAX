@@ -108,5 +108,5 @@ shape = SubResource( 5 )
 frames = SubResource( 6 )
 animation = "crawl"
 
-[connection signal="body_entered" from="Skeleton/mySearchBox" to="." method="_on_mySearchBox_body_entered"]
-[connection signal="body_exited" from="Skeleton/myLostBox" to="." method="_on_myLostBox_body_exited"]
+[connection signal="body_entered" from="Skeleton/mySearchBox" to="Skeleton" method="_on_mySearchBox_body_entered"]
+[connection signal="body_exited" from="Skeleton/myLostBox" to="Skeleton" method="_on_myLostBox_body_exited"]
