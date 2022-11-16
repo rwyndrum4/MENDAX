@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://Scenes/minigames/arena/arenaGame.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/minigames/arena/arenaMap.tscn" type="PackedScene" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://Scenes/player/player.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Scenes/SettingsMenu/settingsMenu.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Scenes/player/Sword/Sword.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Scenes/Mobs/BoD.tscn" type="PackedScene" id=9]
 
 [sub_resource type="OccluderPolygon2D" id=1]
 polygon = PoolVector2Array( -48.9833, -45.9201, -50.0482, 47.9166, -50.0482, 47.9166, 50.0482, 46.9184, 50.0482, 46.9184, 48.9833, -48.9149, 47.9185, -50.9114 )
@@ -75,3 +76,7 @@ custom_fonts/font = SubResource( 4 )
 
 [node name="textBox" parent="." instance=ExtResource( 4 )]
 visible = false
+
+[node name="BoD" parent="." instance=ExtResource( 9 )]
+position = Vector2( 1594, 825 )
+scale = Vector2( 3, 3 )
