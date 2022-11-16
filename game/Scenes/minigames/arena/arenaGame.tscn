@@ -69,7 +69,13 @@ shape = SubResource( 5 )
 [node name="mySearchBox" type="Area2D" parent="Skeleton"]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Skeleton/mySearchBox"]
-scale = Vector2( 30, 30 )
+scale = Vector2( 20, 20 )
+shape = SubResource( 7 )
+
+[node name="myLostBox" type="Area2D" parent="Skeleton"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Skeleton/myLostBox"]
+scale = Vector2( 40, 40 )
 shape = SubResource( 7 )
 
 [node name="GUI" type="CanvasLayer" parent="."]
@@ -103,4 +109,4 @@ frames = SubResource( 6 )
 animation = "crawl"
 
 [connection signal="body_entered" from="Skeleton/mySearchBox" to="." method="_on_mySearchBox_body_entered"]
-[connection signal="body_exited" from="Skeleton/mySearchBox" to="." method="_on_mySearchBox_body_exited"]
+[connection signal="body_exited" from="Skeleton/myLostBox" to="." method="_on_myLostBox_body_exited"]

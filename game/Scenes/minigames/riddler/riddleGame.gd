@@ -177,8 +177,11 @@ func _input(ev):
 			emit_signal("textWait")
 	if Input.is_key_pressed(KEY_SEMICOLON):
 		PlayerInventory.add_item("Coin", 1)
+	#DEBUG PURPOSES - REMOVE FOR FINAL GAME!!!
+	#IF YOU PRESS P -> TIMER WILL REDUCE TO 3 SECONDS
 	if Input.is_action_just_pressed("timer_debug_key",false):
 		myTimer.start(3)
+	#IF YOU PRESS Q -> TIMER WILL INCREASE TO ARBITRARILY MANY SECONDS
 	if Input.is_action_just_pressed("extend_timer_debug_key",false):
 		myTimer.start(30000)
 """

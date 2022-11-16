@@ -73,8 +73,11 @@ func _physics_process(delta):
 */
 """
 func _input(ev):
+	#DEBUG PURPOSES - REMOVE FOR FINAL GAME!!!
+	#IF YOU PRESS P -> TIMER WILL REDUCE TO 3 SECONDS
 	if Input.is_action_just_pressed("timer_debug_key",false):
 		myTimer.start(3)
+	#IF YOU PRESS O (capital 'o') -> TIMER WILL INCREASE TO ARBITRARILY MANY SECONDS
 	if Input.is_action_just_pressed("extend_timer_debug_key",false):
 		myTimer.start(30000)
 		
@@ -128,5 +131,5 @@ func _on_mySearchBox_body_entered(_body:PhysicsBody2D):
 	$Skeleton.targetFound = true
 
 
-func _on_mySearchBox_body_exited(body):
+func _on_myLostBox_body_exited(body):
 	$Skeleton.targetFound = false
