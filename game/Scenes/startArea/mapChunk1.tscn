@@ -2668,6 +2668,13 @@ margin_right = 1152.0
 margin_bottom = 4582.0
 texture = ExtResource( 13 )
 
+[node name="Hole1x1" type="TextureRect" parent="."]
+margin_left = 1152.0
+margin_top = 2280.0
+margin_right = 1440.0
+margin_bottom = 2568.0
+texture = ExtResource( 5 )
+
 [node name="Pitfall1x1_1" type="TextureRect" parent="."]
 margin_left = -864.0
 margin_top = 3144.0

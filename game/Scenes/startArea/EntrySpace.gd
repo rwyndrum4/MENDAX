@@ -11,11 +11,16 @@ extends Control
 # Member Variables
 var in_exit = false
 var in_menu = false
+var at_lever = false
+var at_ladder = false
 onready var instructions: Label = $exitCaveArea/exitDirections
 onready var settingsMenu = $GUI/SettingsMenu
 onready var myTimer: Timer = $GUI/Timer
 onready var timerText: Label = $GUI/Timer/timerText
 onready var textBox = $GUI/textBox
+onready var secretPanel = $worldMap/Node2D_1/Wall3x3_6
+onready var ladder = $worldMap/Node2D_1/Ladder1x1
+onready var pitfall = $worldMap/Node2D_1/Pitfall1x1_2
 
 
 
@@ -65,6 +70,12 @@ func _input(ev):
 		if Input.is_action_just_pressed("ui_accept",false) and not Input.is_action_just_pressed("ui_enter_chat"):
 			# warning-ignore:return_value_discarded
 			Global.state = Global.scenes.MAIN_MENU #change scene to main menu
+	if at_lever:
+		if Input.is_action_just_pressed("ui_accept",false) and not Input.is_action_just_pressed("ui_enter_chat"):
+			secretPanel.queue_free()
+	if at_ladder:
+		if Input.is_action_just_pressed("ui_accept",false) and not Input.is_action_just_pressed("ui_enter_chat"):
+			ladder.texture = $root/Assets/tiles/TilesCorrected/WallTile_Tilt_Horizontal
 	#DEBUG PURPOSES - REMOVE FOR FINAL GAME!!!
 	#IF YOU PRESS P -> TIMER WILL REDUCE TO 3 SECONDS
 	if Input.is_action_just_pressed("debug_key",false):
@@ -92,7 +103,7 @@ func _on_exitCaveArea_body_entered(_body: PhysicsBody2D): #change to body if wan
 func _on_exitCaveArea_body_exited(_body: PhysicsBody2D): #change to body if want to use
 	in_exit = false
 	instructions.hide()
-
+	
 """
 /*
 * @pre Called for every frame inside process function
@@ -152,3 +163,58 @@ func _on_Timer_timeout():
 func chatbox_use(value):
 	if value:
 		in_menu = true
+
+"""
+/*
+* @pre Called when player enters the lever's Area2D zone
+* @post sets at_lever to true (for interactability purposes)
+* @param _body -> body of the player
+* @return None
+*/
+"""
+func _on_leverArea_body_entered(_body: PhysicsBody2D): #change to body if want to use
+	at_lever = true
+
+"""
+/*
+* @pre Called when player exits the lever's Area2D zone
+* @post sets at_lever to false (for interactability purposes)
+* @param _body -> body of the player
+* @return None
+*/
+"""
+func _on_leverArea_body_exited(_body: PhysicsBody2D): #change to body if want to use
+	at_lever = false
+
+"""
+/*
+* @pre Called when player enters the ladder's Area2D zone
+* @post sets at_ladder to true (for interactability purposes)
+* @param _body -> body of the player
+* @return None
+*/
+"""
+func _on_ladderArea_body_entered(_body: PhysicsBody2D): #change to body if want to use
+	at_ladder = true
+
+"""
+/*
+* @pre Called when player exits the ladder's Area2D zone
+* @post sets at_ladder to false (for interactability purposes)
+* @param _body -> body of the player
+* @return None
+*/
+"""
+func _on_ladderArea_body_exited(_body: PhysicsBody2D): #change to body if want to use
+	at_ladder = false
+
+"""
+/*
+* @pre Called when player enters the pitfall's Area2D zone
+* @post replaces the tile with a pit (blank tile)
+* @param _body -> body of the player
+* @return None
+*/
+"""
+func _on_pitfallArea_body_entered(_body: PhysicsBody2D): #change to body if want to use
+	pitfall.texture = $root/Assets/tiles/TilesCorrected/BlankTile

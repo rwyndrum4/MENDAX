@@ -27,6 +27,9 @@ extra_spacing_char = 15
 extra_spacing_space = 15
 font_data = ExtResource( 6 )
 
+[sub_resource type="RectangleShape2D" id=8]
+extents = Vector2( 22, 19 )
+
 [node name="EntrySpace" type="Control"]
 script = ExtResource( 4 )
 
@@ -134,6 +137,50 @@ text = "Press Enter
 to exit cave"
 align = 1
 
+[node name="leverArea" type="Area2D" parent="."]
+position = Vector2( 3744, 2720 )
+rotation = -1.5562
+scale = Vector2( 2.81069, 2.75853 )
+collision_layer = 4
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="leverOval" type="CollisionShape2D" parent="leverArea"]
+scale = Vector2( 2.12582, 2.45751 )
+shape = SubResource( 5 )
+
+[node name="ladderArea" type="Area2D" parent="."]
+position = Vector2( 960, -568 )
+rotation = -1.5562
+scale = Vector2( 2.81069, 2.75853 )
+collision_layer = 4
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="ladderOval" type="CollisionShape2D" parent="ladderArea"]
+scale = Vector2( 2.12582, 2.45751 )
+shape = SubResource( 5 )
+
+[node name="pitfallArea" type="Area2D" parent="."]
+position = Vector2( 1297, 2423 )
+scale = Vector2( 2.81069, 2.75853 )
+collision_layer = 4
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="pitfallSquare" type="CollisionShape2D" parent="pitfallArea"]
+scale = Vector2( 2.12582, 2.45751 )
+shape = SubResource( 8 )
+
 [connection signal="timeout" from="GUI/Timer" to="." method="_on_Timer_timeout"]
 [connection signal="body_entered" from="exitCaveArea" to="." method="_on_exitCaveArea_body_entered"]
 [connection signal="body_exited" from="exitCaveArea" to="." method="_on_exitCaveArea_body_exited"]
+[connection signal="body_entered" from="leverArea" to="." method="_on_leverArea_body_entered"]
+[connection signal="body_exited" from="leverArea" to="." method="_on_leverArea_body_exited"]
+[connection signal="body_entered" from="ladderArea" to="." method="_on_ladderArea_body_entered"]
+[connection signal="body_exited" from="ladderArea" to="." method="_on_ladderArea_body_exited"]
+[connection signal="body_entered" from="pitfallArea" to="." method="_on_pitfallArea_body_entered"]
+[connection signal="body_exited" from="pitfallArea" to="." method="_on_pitfallArea_body_exited"]
