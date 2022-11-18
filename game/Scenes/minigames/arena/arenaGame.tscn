@@ -9,6 +9,7 @@
 [ext_resource path="res://Scenes/player/Sword/Sword.tscn" type="PackedScene" id=8]
 [ext_resource path="res://Scenes/minigames/arena/littleGuy.png" type="Texture" id=9]
 [ext_resource path="res://Scenes/minigames/arena/littleGuy.gd" type="Script" id=10]
+[ext_resource path="res://Scenes/Mobs/BoD.tscn" type="PackedScene" id=11]
 
 [sub_resource type="OccluderPolygon2D" id=1]
 polygon = PoolVector2Array( -48.9833, -45.9201, -50.0482, 47.9166, -50.0482, 47.9166, 50.0482, 46.9184, 50.0482, 46.9184, 48.9833, -48.9149, 47.9185, -50.9114 )
@@ -110,3 +111,6 @@ animation = "crawl"
 
 [connection signal="body_entered" from="Skeleton/mySearchBox" to="Skeleton" method="_on_mySearchBox_body_entered"]
 [connection signal="body_exited" from="Skeleton/myLostBox" to="Skeleton" method="_on_myLostBox_body_exited"]
+[node name="BoD" parent="." instance=ExtResource( 9 )]
+position = Vector2( 1594, 825 )
+scale = Vector2( 3, 3 )
