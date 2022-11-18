@@ -56,5 +56,5 @@ func _on_mySearchBox_body_entered(_body:PhysicsBody2D):
 	targetFound = true
 
 
-func _on_myLostBox_body_exited(body):
+func _on_myLostBox_body_exited(_body:PhysicsBody2D):
 	targetFound = false
