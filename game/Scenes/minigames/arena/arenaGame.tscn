@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://Scenes/minigames/arena/arenaGame.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/minigames/arena/arenaMap.tscn" type="PackedScene" id=2]
@@ -109,8 +109,9 @@ shape = SubResource( 5 )
 frames = SubResource( 6 )
 animation = "crawl"
 
-[connection signal="body_entered" from="Skeleton/mySearchBox" to="Skeleton" method="_on_mySearchBox_body_entered"]
-[connection signal="body_exited" from="Skeleton/myLostBox" to="Skeleton" method="_on_myLostBox_body_exited"]
-[node name="BoD" parent="." instance=ExtResource( 9 )]
+[node name="BoD" parent="." instance=ExtResource( 11 )]
 position = Vector2( 1594, 825 )
 scale = Vector2( 3, 3 )
+
+[connection signal="body_entered" from="Skeleton/mySearchBox" to="Skeleton" method="_on_mySearchBox_body_entered"]
+[connection signal="body_exited" from="Skeleton/myLostBox" to="Skeleton" method="_on_myLostBox_body_exited"]
