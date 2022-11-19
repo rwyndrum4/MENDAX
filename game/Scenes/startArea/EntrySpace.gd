@@ -18,9 +18,6 @@ onready var timerText: Label = $GUI/Timer/timerText
 onready var textBox = $GUI/textBox
 
 
-
-
-
 """
 /*
 * @pre Called when the node enters the scene tree for the first time.
@@ -35,6 +32,13 @@ func _ready():
 	myTimer.start(90)
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("openChatbox", self, "chatbox_use")
+	# Setup steam animations
+	for object in $SteamVents.get_children():
+		# warning-ignore:return_value_discarded
+		var ani_sprite = object.get_child(1)
+		object.connect("area_entered",self,"mist_area_triggered",[ani_sprite])
+		# warning-ignore:return_value_discarded
+		ani_sprite.connect("animation_finished",self,"mist_finished",[ani_sprite])
 
 
 """
@@ -158,3 +162,27 @@ func _on_Timer_timeout():
 func chatbox_use(value):
 	if value:
 		in_menu = true
+
+"""
+/*
+* @pre Area before mist hole is stepped into
+* @post unhides the animated sprite and plays the animation
+* @param _area -> Area2D node, ani_sprite -> AnimatedSprite node
+* @return None
+*/
+"""
+func mist_area_triggered(_area, ani_sprite):
+	ani_sprite.show()
+	ani_sprite.play("mist")
+
+"""
+/*
+* @pre Called when mist animation
+* @post hides and stops the animation
+* @param obj -> AnimatedSprite obj
+* @return None
+*/
+"""
+func mist_finished(obj:AnimatedSprite):
+	obj.hide()
+	obj.stop()
