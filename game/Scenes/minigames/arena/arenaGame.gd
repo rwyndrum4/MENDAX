@@ -10,7 +10,6 @@ extends Control
 
 # Member Variables
 var in_menu = false
-onready var settingsMenu = $GUI/SettingsMenu
 onready var myTimer: Timer = $GUI/Timer
 onready var timerText: Label = $GUI/Timer/timerText
 onready var player = $Player
@@ -47,7 +46,6 @@ func _ready():
 """
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta): #change to delta if used
-	check_settings()
 	timerText.text = convert_time(myTimer.time_left)
 	if sword.direction == "right":
 		swordPivot.position = player.position + Vector2(60,0)
@@ -62,7 +60,7 @@ func _process(_delta): #change to delta if used
 * @return None
 */
 """
-func _input(ev):
+func _input(_ev):
 	#DEBUG PURPOSES - REMOVE FOR FINAL GAME!!!
 	#IF YOU PRESS P -> TIMER WILL REDUCE TO 3 SECONDS
 	if Input.is_action_just_pressed("timer_debug_key",false):
@@ -70,23 +68,6 @@ func _input(ev):
 	#IF YOU PRESS O (capital 'o') -> TIMER WILL INCREASE TO ARBITRARILY MANY SECONDS
 	if Input.is_action_just_pressed("extend_timer_debug_key",false):
 		myTimer.start(30000)
-	
-
-"""
-/*
-* @pre Called for every frame inside process function
-* @post Opens and closes settings when escape is pressed
-* @param None
-* @return None
-*/
-"""
-func check_settings():
-	if Input.is_action_just_pressed("ui_cancel",false) and not in_menu:
-		settingsMenu.popup_centered_ratio()
-		in_menu = true
-	elif Input.is_action_just_pressed("ui_cancel",false) and in_menu:
-		settingsMenu.hide()
-		in_menu = false
 
 """
 /*

@@ -517,14 +517,13 @@ script = ExtResource( 2 )
 
 [node name="Position2D" type="Position2D" parent="."]
 
-[node name="AnimatedSprite" type="AnimatedSprite" parent="Position2D"]
+[node name="skeletonAnimation" type="AnimatedSprite" parent="Position2D"]
 visible = false
 position = Vector2( 0, 5 )
 frames = SubResource( 2 )
-animation = "idle"
-frame = 1
-playing = true
 animation = "attack1"
+frame = 4
+playing = true
 
 [node name="sprite" type="Sprite" parent="Position2D"]
 texture = ExtResource( 13 )
@@ -559,7 +558,7 @@ position = Vector2( 60, -6 )
 shape = SubResource( 40 )
 disabled = true
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+[node name="skeletonAnimationPlayer" type="AnimationPlayer" parent="."]
 anims/RESET = SubResource( 41 )
 anims/attack1 = SubResource( 42 )
 anims/death = SubResource( 43 )
@@ -572,8 +571,6 @@ anims/idle = SubResource( 45 )
 position = Vector2( 50, -5 )
 shape = SubResource( 46 )
 
-[connection signal="animation_finished" from="Position2D/AnimatedSprite" to="." method="_on_AnimatedSprite_animation_finished"]
-[connection signal="body_entered" from="MyHitBox" to="." method="_on_MyHitBox_body_entered"]
-[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]
+[connection signal="animation_finished" from="skeletonAnimationPlayer" to="." method="_on_skeletonAnimationPlayer_animation_finished"]
 [connection signal="body_entered" from="detector" to="." method="_on_detector_body_entered"]
 [connection signal="body_exited" from="detector" to="." method="_on_detector_body_exited"]

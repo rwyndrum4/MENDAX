@@ -7,6 +7,7 @@ func _init() -> void:
 	collision_mask = 19
 
 func _ready() -> void:
+	# warning-ignore:return_value_discarded
 	connect("area_entered", self, "_on_area_entered")
 	
 
