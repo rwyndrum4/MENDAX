@@ -5,6 +5,8 @@
 * Date Revisions:
 	10/8/2022 - Added the ability to go into settings from scene with enter key
 	11/5/2022 - Added ability to transition to further minigames after the first
+* Citations: https://godotengine.org/qa/33196/how-are-you-supposed-to-handle-null-objects
+	for handling deleted tiles
 """
 extends Control
 
@@ -72,7 +74,8 @@ func _input(ev):
 			Global.state = Global.scenes.MAIN_MENU #change scene to main menu
 	if at_lever:
 		if Input.is_action_just_pressed("ui_accept",false) and not Input.is_action_just_pressed("ui_enter_chat"):
-			secretPanel.queue_free()
+			if is_instance_valid(secretPanel):
+				secretPanel.queue_free()
 	if at_ladder:
 		if Input.is_action_just_pressed("ui_accept",false) and not Input.is_action_just_pressed("ui_enter_chat"):
 			ladder.texture = $root/Assets/tiles/TilesCorrected/WallTile_Tilt_Horizontal
