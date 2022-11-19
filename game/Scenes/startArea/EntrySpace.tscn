@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://Scenes/startArea/worldMap.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Scenes/player/player.tscn" type="PackedScene" id=2]
@@ -26,6 +26,9 @@ size = 42
 extra_spacing_char = 15
 extra_spacing_space = 15
 font_data = ExtResource( 6 )
+
+[sub_resource type="RectangleShape2D" id=8]
+extents = Vector2( 22.25, 517 )
 
 [node name="EntrySpace" type="Control"]
 script = ExtResource( 4 )
@@ -133,6 +136,78 @@ custom_fonts/font = SubResource( 7 )
 text = "Press Enter 
 to exit cave"
 align = 1
+
+[node name="SteamVents" type="Node" parent="."]
+
+[node name="1" type="Area2D" parent="SteamVents"]
+position = Vector2( -1484, 2993 )
+
+[node name="1_collider" type="CollisionShape2D" parent="SteamVents/1"]
+position = Vector2( -2, 3 )
+shape = SubResource( 8 )
+
+[node name="2" type="Area2D" parent="SteamVents"]
+position = Vector2( -1800, 2996 )
+
+[node name="2_collider" type="CollisionShape2D" parent="SteamVents/2"]
+position = Vector2( -2, 3 )
+shape = SubResource( 8 )
+
+[node name="3" type="Area2D" parent="SteamVents"]
+position = Vector2( -2656, 2996 )
+
+[node name="3_collider" type="CollisionShape2D" parent="SteamVents/3"]
+position = Vector2( -2, 3 )
+shape = SubResource( 8 )
+
+[node name="4" type="Area2D" parent="SteamVents"]
+position = Vector2( -2968, 2996 )
+
+[node name="4_collider" type="CollisionShape2D" parent="SteamVents/4"]
+position = Vector2( -2, 3 )
+shape = SubResource( 8 )
+
+[node name="5" type="Area2D" parent="SteamVents"]
+position = Vector2( -3248, 2993 )
+
+[node name="5_collider" type="CollisionShape2D" parent="SteamVents/5"]
+position = Vector2( -2, 3 )
+shape = SubResource( 8 )
+
+[node name="6" type="Area2D" parent="SteamVents"]
+position = Vector2( -4104, 2996 )
+
+[node name="6_collider" type="CollisionShape2D" parent="SteamVents/6"]
+position = Vector2( -2, 3 )
+shape = SubResource( 8 )
+
+[node name="7" type="Area2D" parent="SteamVents"]
+position = Vector2( -4392, 2996 )
+
+[node name="7_collider" type="CollisionShape2D" parent="SteamVents/7"]
+position = Vector2( -2, 3 )
+shape = SubResource( 8 )
+
+[node name="8" type="Area2D" parent="SteamVents"]
+position = Vector2( -5256, 2996 )
+
+[node name="8_collider" type="CollisionShape2D" parent="SteamVents/8"]
+position = Vector2( -2, 3 )
+shape = SubResource( 8 )
+
+[node name="9" type="Area2D" parent="SteamVents"]
+position = Vector2( -5528, 2993 )
+
+[node name="9_collider" type="CollisionShape2D" parent="SteamVents/9"]
+position = Vector2( -2, 3 )
+shape = SubResource( 8 )
+
+[node name="10" type="Area2D" parent="SteamVents"]
+position = Vector2( -5832, 2993 )
+
+[node name="10_collider" type="CollisionShape2D" parent="SteamVents/10"]
+position = Vector2( -2, 3 )
+shape = SubResource( 8 )
 
 [connection signal="timeout" from="GUI/Timer" to="." method="_on_Timer_timeout"]
 [connection signal="body_entered" from="exitCaveArea" to="." method="_on_exitCaveArea_body_entered"]
