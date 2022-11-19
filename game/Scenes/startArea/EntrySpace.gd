@@ -12,7 +12,6 @@ extends Control
 var in_exit = false
 var in_menu = false
 onready var instructions: Label = $exitCaveArea/exitDirections
-onready var settingsMenu = $GUI/SettingsMenu
 onready var myTimer: Timer = $GUI/Timer
 onready var timerText: Label = $GUI/Timer/timerText
 onready var textBox = $GUI/textBox
@@ -51,10 +50,7 @@ func _ready():
 """
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta): #change to delta if used
-	check_settings()
 	timerText.text = convert_time(myTimer.time_left)
-
-
 
 """
 /*
@@ -102,22 +98,6 @@ func _on_exitCaveArea_body_entered(_body: PhysicsBody2D): #change to body if wan
 func _on_exitCaveArea_body_exited(_body: PhysicsBody2D): #change to body if want to use
 	in_exit = false
 	instructions.hide()
-
-"""
-/*
-* @pre Called for every frame inside process function
-* @post Opens and closes settings when escape is pressed
-* @param None
-* @return None
-*/
-"""
-func check_settings():
-	if Input.is_action_just_pressed("ui_cancel",false) and not in_menu:
-		settingsMenu.popup_centered_ratio()
-		in_menu = true
-	elif Input.is_action_just_pressed("ui_cancel",false) and in_menu:
-		settingsMenu.hide()
-		in_menu = false
 
 """
 /*

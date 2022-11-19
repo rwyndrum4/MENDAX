@@ -1,9 +1,8 @@
-[gd_scene load_steps=36 format=2]
+[gd_scene load_steps=35 format=2]
 
 [ext_resource path="res://Scenes/startArea/worldMap.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Scenes/player/player.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Scenes/startArea/EntrySpace.gd" type="Script" id=4]
-[ext_resource path="res://Scenes/SettingsMenu/settingsMenu.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Assets/Teko-Light.ttf" type="DynamicFontData" id=6]
 [ext_resource path="res://Scenes/textBox/textBox.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Assets/background.png" type="Texture" id=8]
@@ -115,16 +114,6 @@ polygon = PoolVector2Array( 392, 4152, 408, 4040, 472, 3944, 544, 3880, 640, 384
 polygon = PoolVector2Array( 1432, 4576, 1512, 4576, 1512, 4656, 208, 4656, -896, 4656, -1344, 4656, -1336, 3432, 288, 3432, 288, 4576, 296, 4576 )
 
 [node name="GUI" type="CanvasLayer" parent="."]
-
-[node name="SettingsMenu" parent="GUI" instance=ExtResource( 5 )]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -640.0
-margin_top = -360.0
-margin_right = -640.0
-margin_bottom = -360.0
 
 [node name="Timer" type="Timer" parent="GUI"]
 
