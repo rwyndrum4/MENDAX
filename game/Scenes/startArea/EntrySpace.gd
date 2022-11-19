@@ -34,8 +34,8 @@ func _ready():
 	GlobalSignals.connect("openChatbox", self, "chatbox_use")
 	# Setup steam animations
 	for object in $SteamVents.get_children():
-		# warning-ignore:return_value_discarded
 		var ani_sprite = object.get_child(1)
+		# warning-ignore:return_value_discarded
 		object.connect("area_entered",self,"mist_area_triggered",[ani_sprite])
 		# warning-ignore:return_value_discarded
 		ani_sprite.connect("animation_finished",self,"mist_finished",[ani_sprite])
@@ -177,7 +177,7 @@ func mist_area_triggered(_area, ani_sprite):
 
 """
 /*
-* @pre Called when mist animation
+* @pre Called when mist animation is done
 * @post hides and stops the animation
 * @param obj -> AnimatedSprite obj
 * @return None
