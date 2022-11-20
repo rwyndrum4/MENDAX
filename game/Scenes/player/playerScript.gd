@@ -1,5 +1,5 @@
 """
-* Programmer Name - Freeman Spray, Ben Moeller
+* Programmer Name - Freeman Spray, Ben Moeller, Mohit Garg
 * Description - Code that designates player movement
 * Date Created - 10/1/2022
 * Citations - based on https://www.youtube.com/watch?v=TQKXU7iSWUU
@@ -7,6 +7,7 @@
 	10/2/2022 - Improved movement to feel more natural
 	10/14/2022 - Added signals to stop player when in options or textbox scene
 	10/27/2022 - Added character animation
+	11/19/2022 - Added bullets for player-Mohit
 """
 extends KinematicBody2D
 
@@ -15,6 +16,8 @@ onready var character = $position/animated_sprite
 onready var char_pos = $position
 onready var healthbar = $ProgressBar
 var is_stopped = false
+#bullet variables
+onready var bullet=preload("res://Scenes/bullet/bullet.tscn")
 
 # Player physics constants
 const ACCELERATION = 25000
@@ -82,6 +85,10 @@ func _physics_process(delta):
 	velocity = move_and_slide(velocity)
 	#Animate character
 	control_animations(velocity)
+	if Global.state == Global.scenes.ARENA_PROJ:
+		if Input.is_action_just_pressed("fire_key"):
+			fire()
+		$Node2D.look_at(get_global_mouse_position())
 
 """
 /*
@@ -136,3 +143,20 @@ func take_damage(amount: int) -> void:
 	print(healthbar.value)
 	if healthbar.value == 0:
 		print("you dead")
+
+
+	
+	
+	
+##Code from video https://www.youtube.com/watch?v=HycyFNQfqI0&t=203s
+##will customize later
+func fire():
+	print("shoot")
+	var bullet_instance=bullet.instance()
+	get_parent().add_child(bullet_instance)
+	bullet_instance.position=$Node2D/Position2D.global_position
+	bullet_instance.velocity= get_global_mouse_position()-bullet_instance.position
+	##bullet_instance.position=get_global_position()
+	##bullet_instance.rotation_degrees=rotation_degrees
+	##bullet_instance.apply_impulse(Vector2(),Vector2(bullet_speed,0).rotated(rotation))
+	##get_tree().get_root().call_deferred("add child",bullet_instance)

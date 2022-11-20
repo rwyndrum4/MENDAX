@@ -1,22 +1,19 @@
 [gd_scene load_steps=7 format=2]
 
-[ext_resource path="res://Scenes/player/playerScript.gd" type="Script" id=1]
+[ext_resource path="res://Scenes/minigames/arenaprojectile/arenaproj.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/player/player.tscn" type="PackedScene" id=2]
-[ext_resource path="res://Scenes/player/Sword/Sword.tscn" type="PackedScene" id=3]
-[ext_resource path="res://Scenes/minigames/arena/arenaMap.tscn" type="PackedScene" id=4]
-[ext_resource path="res://Scenes/player/Sword/Sword.gd" type="Script" id=5]
+[ext_resource path="res://Scenes/minigames/arenaprojectile/Node2D.gd" type="Script" id=3]
+[ext_resource path="res://Scenes/minigames/arenaprojectile/Enemy.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Scenes/minigames/arenaprojectile/Enemy.gd" type="Script" id=5]
 
 [sub_resource type="OccluderPolygon2D" id=1]
 polygon = PoolVector2Array( -48.9833, -45.9201, -50.0482, 47.9166, -50.0482, 47.9166, 50.0482, 46.9184, 50.0482, 46.9184, 48.9833, -48.9149, 47.9185, -50.9114 )
 
 [node name="arenaproj" type="Node2D"]
-
-[node name="arenaMap" type="Control" parent="." instance=ExtResource( 4 )]
-
-[node name="Player" type="KinematicBody2D" parent="." instance=ExtResource( 2 )]
-position = Vector2( 1153, 1333 )
-collision_layer = 3
 script = ExtResource( 1 )
+
+[node name="Player" parent="." instance=ExtResource( 2 )]
+position = Vector2( 1153, 1333 )
 
 [node name="LightOccluder2D" type="LightOccluder2D" parent="Player"]
 occluder = SubResource( 1 )
@@ -24,5 +21,11 @@ occluder = SubResource( 1 )
 [node name="Camera2D" type="Camera2D" parent="Player"]
 current = true
 
-[node name="Sword" type="Node" parent="Player" instance=ExtResource( 3 )]
+[node name="Node2D" type="Node2D" parent="Player"]
+script = ExtResource( 3 )
+
+[node name="Position2D" type="Position2D" parent="Player/Node2D"]
+position = Vector2( 100, 5 )
+
+[node name="Enemy" parent="." instance=ExtResource( 4 )]
 script = ExtResource( 5 )

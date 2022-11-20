@@ -39,6 +39,7 @@ enum scenes {
 	CAVE,
 	RIDDLER_MINIGAME
 	ARENA_MINIGAME
+	ARENA_PROJ
 }
 
 # Current players in scnene
