@@ -525,10 +525,10 @@ margin_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="CornerB3x3_1" type="GridContainer" parent="."]
-margin_left = 288.0
+margin_left = 289.0
 margin_top = -863.0
-margin_right = 1152.0
-margin_bottom = 1.0
+margin_right = 1153.0
+margin_bottom = 0.999756
 custom_constants/vseparation = 0
 custom_constants/hseparation = 0
 columns = 3
@@ -2733,3 +2733,91 @@ margin_top = 3431.0
 margin_right = 3819.0
 margin_bottom = 3719.0
 texture = ExtResource( 5 )
+
+[node name="wallTiltHoriz1x1_1" type="TextureRect" parent="."]
+margin_left = 213.844
+margin_top = -575.058
+margin_right = 501.844
+margin_bottom = -287.058
+texture = ExtResource( 9 )
+
+[node name="WallTiltVert1x1_1" type="TextureRect" parent="."]
+margin_left = -574.942
+margin_top = 213.157
+margin_right = -286.942
+margin_bottom = 501.157
+texture = ExtResource( 11 )
+flip_v = true
+
+[node name="CornerB3x3" type="GridContainer" parent="."]
+margin_left = -575.156
+margin_top = -574.843
+margin_right = 288.844
+margin_bottom = 289.157
+custom_constants/vseparation = 0
+custom_constants/hseparation = 0
+columns = 3
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="1_1" type="TextureRect" parent="CornerB3x3"]
+margin_right = 288.0
+margin_bottom = 288.0
+texture = ExtResource( 15 )
+flip_h = true
+flip_v = true
+
+[node name="1_2" type="TextureRect" parent="CornerB3x3"]
+margin_left = 288.0
+margin_right = 576.0
+margin_bottom = 288.0
+texture = ExtResource( 8 )
+flip_h = true
+
+[node name="1_3" type="TextureRect" parent="CornerB3x3"]
+margin_left = 576.0
+margin_right = 864.0
+margin_bottom = 288.0
+texture = ExtResource( 8 )
+flip_h = true
+
+[node name="2_1" type="TextureRect" parent="CornerB3x3"]
+margin_top = 288.0
+margin_right = 288.0
+margin_bottom = 576.0
+texture = ExtResource( 11 )
+
+[node name="2_2" type="TextureRect" parent="CornerB3x3"]
+margin_left = 288.0
+margin_top = 288.0
+margin_right = 576.0
+margin_bottom = 576.0
+texture = ExtResource( 3 )
+
+[node name="2_3" type="TextureRect" parent="CornerB3x3"]
+margin_left = 576.0
+margin_top = 288.0
+margin_right = 864.0
+margin_bottom = 576.0
+texture = ExtResource( 3 )
+
+[node name="2_4" type="TextureRect" parent="CornerB3x3"]
+margin_top = 576.0
+margin_right = 288.0
+margin_bottom = 864.0
+texture = ExtResource( 11 )
+
+[node name="3_2" type="TextureRect" parent="CornerB3x3"]
+margin_left = 288.0
+margin_top = 576.0
+margin_right = 576.0
+margin_bottom = 864.0
+texture = ExtResource( 3 )
+
+[node name="3_3" type="TextureRect" parent="CornerB3x3"]
+margin_left = 576.0
+margin_top = 576.0
+margin_right = 864.0
+margin_bottom = 864.0
+texture = ExtResource( 3 )
