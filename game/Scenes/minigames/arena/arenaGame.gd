@@ -60,7 +60,7 @@ func _process(_delta): #change to delta if used
 * @return None
 */
 """
-func _input(ev):
+func _input(_ev):
 	#DEBUG PURPOSES - REMOVE FOR FINAL GAME!!!
 	#IF YOU PRESS P -> TIMER WILL REDUCE TO 3 SECONDS
 	if Input.is_action_just_pressed("timer_debug_key",false):

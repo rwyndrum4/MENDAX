@@ -3,7 +3,7 @@ var direction
 
 	
 	
-func _process(delta):
+func _process(_delta):
 	if Input.is_action_just_pressed("mouse_click_left", false):
 		if direction == "right":
 			$AnimationPlayer.play("slash")
