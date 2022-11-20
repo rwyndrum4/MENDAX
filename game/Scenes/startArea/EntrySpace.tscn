@@ -69,22 +69,6 @@ occluder = SubResource( 6 )
 [node name="Camera2D" type="Camera2D" parent="Player"]
 current = true
 
-[node name="colliders" type="StaticBody2D" parent="."]
-collision_layer = 2
-
-[node name="leftWallSpace" type="CollisionPolygon2D" parent="colliders"]
-polygon = PoolVector2Array( 576, 576, -576, 576, -576, 2568, -1152, 2568, -1390.57, 2568.18, -1368, 0, 384, 0, 384, -832, 576, -832 )
-
-[node name="rightWallSpace" type="CollisionPolygon2D" parent="colliders"]
-polygon = PoolVector2Array( 1440, 4576, 1440, 4008, 3168, 4008, 3168, 3432, 3456, 3432, 3456, 3144, 3752, 3144, 3752, 2288, 3168, 2280, 3168, 1704, 2304, 1704, 2304, 2280, 1152, 2280, 1152, 1152, 2304, 1152, 2304, 0, 1152, 0, 1152, -576, 576, -576, 576, -832, 4352, -824, 4352, 4712 )
-
-[node name="well" type="CollisionPolygon2D" parent="colliders"]
-position = Vector2( 0, -4 )
-polygon = PoolVector2Array( 392, 4152, 408, 4040, 472, 3944, 544, 3880, 640, 3840, 712, 3832, 808, 3840, 904, 3888, 968, 3936, 1024, 4016, 1056, 4128, 1048, 4232, 1008, 4328, 944, 4408, 872, 4456, 808, 4480, 744, 4488, 640, 4480, 560, 4448, 496, 4400, 448, 4344, 424, 4304, 400, 4240 )
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="colliders"]
-polygon = PoolVector2Array( 1432, 4576, 1512, 4576, 1512, 4656, 208, 4656, -896, 4656, -1344, 4656, -1336, 3432, 288, 3432, 288, 4576, 296, 4576 )
-
 [node name="GUI" type="CanvasLayer" parent="."]
 
 [node name="SettingsMenu" parent="GUI" instance=ExtResource( 5 )]
