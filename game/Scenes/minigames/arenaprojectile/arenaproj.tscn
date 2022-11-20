@@ -1,10 +1,9 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Scenes/minigames/arenaprojectile/arenaproj.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/player/player.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Scenes/minigames/arenaprojectile/Node2D.gd" type="Script" id=3]
 [ext_resource path="res://Scenes/minigames/arenaprojectile/Enemy.tscn" type="PackedScene" id=4]
-[ext_resource path="res://Scenes/minigames/arenaprojectile/Enemy.gd" type="Script" id=5]
 
 [sub_resource type="OccluderPolygon2D" id=1]
 polygon = PoolVector2Array( -48.9833, -45.9201, -50.0482, 47.9166, -50.0482, 47.9166, 50.0482, 46.9184, 50.0482, 46.9184, 48.9833, -48.9149, 47.9185, -50.9114 )
@@ -28,4 +27,3 @@ script = ExtResource( 3 )
 position = Vector2( 100, 5 )
 
 [node name="Enemy" parent="." instance=ExtResource( 4 )]
-script = ExtResource( 5 )
