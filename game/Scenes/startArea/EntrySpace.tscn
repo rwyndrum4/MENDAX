@@ -47,6 +47,12 @@ margin_top = 1088.0
 margin_right = 802.0
 margin_bottom = 1088.0
 
+[node name="worldMap2" parent="." instance=ExtResource( 1 )]
+margin_left = 802.0
+margin_top = 1088.0
+margin_right = 802.0
+margin_bottom = 1088.0
+
 [node name="Light2D" type="Light2D" parent="."]
 position = Vector2( 1060, 1600 )
 rotation = -4.70422
