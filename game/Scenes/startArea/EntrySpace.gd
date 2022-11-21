@@ -239,7 +239,8 @@ func control_steam():
 		steam_modulate += 0.5
 		if int(steam_modulate) % 2 == 0:
 			$fogSprite.modulate.a8 = steam_modulate
-	elif not steam_active and fog_modulate != 0:
+	"""		
+f not steam_active and fog_modulate != 0:
 		steam_modulate -= 0.5
 		if int(steam_modulate) % 2 == 0:
 			$fogSprite.modulate.a8 = steam_modulate
