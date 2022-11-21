@@ -21,6 +21,7 @@ onready var myTimer: Timer = $GUI/Timer
 onready var timerText: Label = $GUI/Timer/timerText
 onready var textBox = $GUI/textBox
 onready var secretPanel = $worldMap/Node2D_1/Wall3x3_6
+onready var secretPanelCollider = $worldMap/Node2D_1/colliders/secretDoor
 onready var ladder = $worldMap/Node2D_1/Ladder1x1
 onready var pitfall = $worldMap/Node2D_1/Pitfall1x1_2
 
@@ -76,6 +77,8 @@ func _input(ev):
 		if Input.is_action_just_pressed("ui_accept",false) and not Input.is_action_just_pressed("ui_enter_chat"):
 			if is_instance_valid(secretPanel):
 				secretPanel.queue_free()
+			if is_instance_valid(secretPanelCollider):
+				secretPanelCollider.queue_free()
 	if at_ladder:
 		if Input.is_action_just_pressed("ui_accept",false) and not Input.is_action_just_pressed("ui_enter_chat"):
 			ladder.texture = $root/Assets/tiles/TilesCorrected/WallTile_Tilt_Horizontal

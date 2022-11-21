@@ -2026,64 +2026,185 @@ __meta__ = {
 }
 
 [node name="1_1" type="TextureRect" parent="Wall3x3_2"]
-margin_right = 288.0
+margin_right = 1152.0
 margin_bottom = 288.0
 texture = ExtResource( 5 )
 flip_h = true
 flip_v = true
 
 [node name="1_2" type="TextureRect" parent="Wall3x3_2"]
-margin_left = 288.0
-margin_right = 576.0
+margin_left = 1152.0
+margin_right = 1440.0
 margin_bottom = 288.0
 texture = ExtResource( 5 )
 flip_h = true
 
 [node name="1_3" type="TextureRect" parent="Wall3x3_2"]
-margin_left = 576.0
-margin_right = 864.0
+margin_left = 1440.0
+margin_right = 1728.0
 margin_bottom = 288.0
 texture = ExtResource( 4 )
 
 [node name="2_1" type="TextureRect" parent="Wall3x3_2"]
 margin_top = 288.0
-margin_right = 288.0
+margin_right = 1152.0
 margin_bottom = 576.0
 texture = ExtResource( 5 )
 
 [node name="2_2" type="TextureRect" parent="Wall3x3_2"]
-margin_left = 288.0
+margin_left = 1152.0
 margin_top = 288.0
-margin_right = 576.0
+margin_right = 1440.0
 margin_bottom = 576.0
 texture = ExtResource( 5 )
 
 [node name="2_3" type="TextureRect" parent="Wall3x3_2"]
-margin_left = 576.0
+margin_left = 1440.0
 margin_top = 288.0
-margin_right = 864.0
+margin_right = 1728.0
 margin_bottom = 576.0
 texture = ExtResource( 4 )
 
 [node name="2_4" type="TextureRect" parent="Wall3x3_2"]
 margin_top = 576.0
-margin_right = 288.0
+margin_right = 1152.0
 margin_bottom = 864.0
 texture = ExtResource( 5 )
 
 [node name="3_2" type="TextureRect" parent="Wall3x3_2"]
-margin_left = 288.0
+margin_left = 1152.0
 margin_top = 576.0
-margin_right = 576.0
+margin_right = 1440.0
 margin_bottom = 864.0
 texture = ExtResource( 5 )
 
 [node name="3_3" type="TextureRect" parent="Wall3x3_2"]
+margin_left = 1440.0
+margin_top = 576.0
+margin_right = 1728.0
+margin_bottom = 864.0
+texture = ExtResource( 4 )
+
+[node name="SecretRoom4x4" type="GridContainer" parent="Wall3x3_2"]
+margin_top = 864.0
+margin_right = 1152.0
+margin_bottom = 2016.0
+custom_constants/vseparation = 0
+custom_constants/hseparation = 0
+columns = 4
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="TextureRect" type="TextureRect" parent="Wall3x3_2/SecretRoom4x4"]
+margin_right = 288.0
+margin_bottom = 288.0
+texture = ExtResource( 6 )
+
+[node name="TextureRect2" type="TextureRect" parent="Wall3x3_2/SecretRoom4x4"]
+margin_left = 288.0
+margin_right = 576.0
+margin_bottom = 288.0
+texture = ExtResource( 6 )
+
+[node name="TextureRect3" type="TextureRect" parent="Wall3x3_2/SecretRoom4x4"]
+margin_left = 576.0
+margin_right = 864.0
+margin_bottom = 288.0
+texture = ExtResource( 6 )
+
+[node name="TextureRect4" type="TextureRect" parent="Wall3x3_2/SecretRoom4x4"]
+margin_left = 864.0
+margin_right = 1152.0
+margin_bottom = 288.0
+texture = ExtResource( 15 )
+flip_v = true
+
+[node name="TextureRect5" type="TextureRect" parent="Wall3x3_2/SecretRoom4x4"]
+margin_top = 288.0
+margin_right = 288.0
+margin_bottom = 576.0
+texture = ExtResource( 3 )
+
+[node name="TextureRect6" type="TextureRect" parent="Wall3x3_2/SecretRoom4x4"]
+margin_left = 288.0
+margin_top = 288.0
+margin_right = 576.0
+margin_bottom = 576.0
+texture = ExtResource( 3 )
+
+[node name="TextureRect7" type="TextureRect" parent="Wall3x3_2/SecretRoom4x4"]
+margin_left = 576.0
+margin_top = 288.0
+margin_right = 864.0
+margin_bottom = 576.0
+texture = ExtResource( 3 )
+
+[node name="TextureRect8" type="TextureRect" parent="Wall3x3_2/SecretRoom4x4"]
+margin_left = 864.0
+margin_top = 288.0
+margin_right = 1152.0
+margin_bottom = 576.0
+texture = ExtResource( 4 )
+flip_h = true
+
+[node name="TextureRect9" type="TextureRect" parent="Wall3x3_2/SecretRoom4x4"]
+margin_top = 576.0
+margin_right = 288.0
+margin_bottom = 864.0
+texture = ExtResource( 3 )
+
+[node name="TextureRect10" type="TextureRect" parent="Wall3x3_2/SecretRoom4x4"]
+margin_left = 288.0
+margin_top = 576.0
+margin_right = 576.0
+margin_bottom = 864.0
+texture = ExtResource( 3 )
+
+[node name="TextureRect11" type="TextureRect" parent="Wall3x3_2/SecretRoom4x4"]
 margin_left = 576.0
 margin_top = 576.0
 margin_right = 864.0
 margin_bottom = 864.0
+texture = ExtResource( 3 )
+
+[node name="TextureRect12" type="TextureRect" parent="Wall3x3_2/SecretRoom4x4"]
+margin_left = 864.0
+margin_top = 576.0
+margin_right = 1152.0
+margin_bottom = 864.0
 texture = ExtResource( 4 )
+flip_h = true
+
+[node name="TextureRect13" type="TextureRect" parent="Wall3x3_2/SecretRoom4x4"]
+margin_top = 864.0
+margin_right = 288.0
+margin_bottom = 1152.0
+texture = ExtResource( 6 )
+flip_v = true
+
+[node name="TextureRect14" type="TextureRect" parent="Wall3x3_2/SecretRoom4x4"]
+margin_left = 288.0
+margin_top = 864.0
+margin_right = 576.0
+margin_bottom = 1152.0
+texture = ExtResource( 6 )
+flip_v = true
+
+[node name="TextureRect15" type="TextureRect" parent="Wall3x3_2/SecretRoom4x4"]
+margin_left = 576.0
+margin_top = 864.0
+margin_right = 864.0
+margin_bottom = 1152.0
+texture = ExtResource( 6 )
+flip_v = true
+
+[node name="TextureRect16" type="TextureRect" parent="Wall3x3_2/SecretRoom4x4"]
+margin_left = 864.0
+margin_top = 864.0
+margin_right = 1152.0
+margin_bottom = 1152.0
+texture = ExtResource( 15 )
 
 [node name="Wall3x3_3" type="GridContainer" parent="."]
 margin_left = -1152.0
@@ -4129,17 +4250,22 @@ collision_layer = 2
 polygon = PoolVector2Array( 576, 576, -576, 576, -576, 2568, -1152, 2568, -1390.57, 2568.18, -1368, 0, 384, 0, 384, -832, 576, -832 )
 
 [node name="rightWallSpace" type="CollisionPolygon2D" parent="colliders"]
-polygon = PoolVector2Array( 1440, 4576, 1440, 4008, 3168, 4008, 3168, 3432, 3456, 3432, 3456, 3144, 3752, 3144, 3752, 2288, 3168, 2280, 3168, 1704, 2304, 1704, 2304, 2280, 1152, 2280, 1152, 1152, 2304, 1152, 2304, 0, 1152, 0, 1152, -576, 576, -576, 576, -832, 4352, -824, 4352, 4712 )
+polygon = PoolVector2Array( 3747, 2286, 3168, 2280, 3168, 1704, 2304, 1704, 2304, 2280, 1152, 2280, 1152, 1152, 2304, 1152, 2304, 0, 1152, 0, 1152, -576, 576, -576, 576, -832, 4352, -824, 4623, 2287, 3814, 2286, 3816, 2861, 3747, 2863 )
 
 [node name="well" type="CollisionPolygon2D" parent="colliders"]
 position = Vector2( 0, -4 )
 polygon = PoolVector2Array( 392, 4152, 408, 4040, 472, 3944, 544, 3880, 640, 3840, 712, 3832, 808, 3840, 904, 3888, 968, 3936, 1024, 4016, 1056, 4128, 1048, 4232, 1008, 4328, 944, 4408, 872, 4456, 808, 4480, 744, 4488, 640, 4480, 560, 4448, 496, 4400, 448, 4344, 424, 4304, 400, 4240 )
 
 [node name="bottomWallSpace" type="CollisionPolygon2D" parent="colliders"]
-polygon = PoolVector2Array( 1432, 4576, 1512, 4576, 1512, 4656, 208, 4656, -896, 4656, -1344, 4656, -1336, 3432, 288, 3432, 288, 4576, 296, 4576 )
+polygon = PoolVector2Array( 1437, 4574, 1440, 4005, 3170, 4010, 3169, 3427, 3454, 3428, 3457, 3146, 3745, 3146, 4096, 3145, 4610, 3148, 3942, 3443, 3880, 3574, 3246, 4076, 1507, 4080, 1512, 4656, 208, 4656, -896, 4656, -1344, 4656, -1336, 3432, 288, 3432, 288, 4576, 296, 4576 )
 
 [node name="TunnelTop" type="CollisionPolygon2D" parent="colliders"]
 polygon = PoolVector2Array( -1392, 2488, -6408, 2488, -6408, 2784, -6624, 2784, -6624, 2852, -6336, 2852, -6336, 2568, -1392, 2568 )
 
 [node name="TunnelBottom" type="CollisionPolygon2D" parent="colliders"]
 polygon = PoolVector2Array( -1336, 3504, -6264, 3512, -6256, 4296, -6334, 4296, -6334, 3431, -1336, 3432 )
+
+[node name="secretDoor" type="CollisionPolygon2D" parent="colliders"]
+position = Vector2( 3804, 3012 )
+scale = Vector2( 9.5316, 25.3365 )
+polygon = PoolVector2Array( -6.18997, -5.8019, 1.67859, -5.8019, 1.88843, 5.24934, -6.18997, 5.20987 )
