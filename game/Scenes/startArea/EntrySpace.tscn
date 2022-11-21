@@ -1,12 +1,45 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=39 format=2]
 
 [ext_resource path="res://Scenes/startArea/worldMap.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Scenes/player/player.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Scenes/startArea/fog.gdshader" type="Shader" id=3]
 [ext_resource path="res://Scenes/startArea/EntrySpace.gd" type="Script" id=4]
-[ext_resource path="res://Scenes/SettingsMenu/settingsMenu.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Assets/Teko-Light.ttf" type="DynamicFontData" id=6]
 [ext_resource path="res://Scenes/textBox/textBox.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Assets/background.png" type="Texture" id=8]
+[ext_resource path="res://Assets/mist/frame0017.png" type="Texture" id=9]
+[ext_resource path="res://Assets/mist/frame0010.png" type="Texture" id=11]
+[ext_resource path="res://Assets/mist/frame0004.png" type="Texture" id=18]
+[ext_resource path="res://Assets/mist/frame0018.png" type="Texture" id=19]
+[ext_resource path="res://Assets/mist/frame0019.png" type="Texture" id=21]
+[ext_resource path="res://Assets/mist/frame0006.png" type="Texture" id=24]
+[ext_resource path="res://Assets/mist/frame0020.png" type="Texture" id=25]
+[ext_resource path="res://Assets/mist/frame0007.png" type="Texture" id=27]
+[ext_resource path="res://Assets/mist/frame0009.png" type="Texture" id=28]
+[ext_resource path="res://Assets/mist/frame0011.png" type="Texture" id=31]
+[ext_resource path="res://Assets/mist/frame0001.png" type="Texture" id=36]
+[ext_resource path="res://Assets/mist/frame0016.png" type="Texture" id=37]
+[ext_resource path="res://Assets/mist/frame0005.png" type="Texture" id=39]
+[ext_resource path="res://Assets/mist/frame0002.png" type="Texture" id=41]
+[ext_resource path="res://Assets/mist/frame0003.png" type="Texture" id=48]
+[ext_resource path="res://Assets/mist/frame0008.png" type="Texture" id=52]
+[ext_resource path="res://Assets/mist/frame0014.png" type="Texture" id=53]
+[ext_resource path="res://Assets/mist/frame0015.png" type="Texture" id=59]
+[ext_resource path="res://Assets/mist/frame0012.png" type="Texture" id=60]
+[ext_resource path="res://Assets/mist/frame0013.png" type="Texture" id=61]
+[ext_resource path="res://Assets/mist/frame0000.png" type="Texture" id=63]
+
+[sub_resource type="ShaderMaterial" id=11]
+shader = ExtResource( 3 )
+shader_param/color = Vector3( 1, 1, 1 )
+shader_param/OCTAVES = 4
+
+[sub_resource type="Gradient" id=12]
+offsets = PoolRealArray( 0, 0.0183299, 1 )
+colors = PoolColorArray( 0, 0, 0, 1, 0.780392, 0.780392, 0.780392, 1, 1, 1, 1, 1 )
+
+[sub_resource type="GradientTexture" id=13]
+gradient = SubResource( 12 )
 
 [sub_resource type="StreamTexture" id=3]
 flags = 4
@@ -27,6 +60,17 @@ extra_spacing_char = 15
 extra_spacing_space = 15
 font_data = ExtResource( 6 )
 
+[sub_resource type="SpriteFrames" id=9]
+animations = [ {
+"frames": [ ExtResource( 63 ), ExtResource( 36 ), ExtResource( 41 ), ExtResource( 48 ), ExtResource( 18 ), ExtResource( 39 ), ExtResource( 24 ), ExtResource( 27 ), ExtResource( 52 ), ExtResource( 28 ), ExtResource( 11 ), ExtResource( 31 ), ExtResource( 60 ), ExtResource( 61 ), ExtResource( 53 ), ExtResource( 59 ), ExtResource( 37 ), ExtResource( 9 ), ExtResource( 19 ), ExtResource( 21 ), ExtResource( 25 ) ],
+"loop": true,
+"name": "mist",
+"speed": 5.0
+} ]
+
+[sub_resource type="RectangleShape2D" id=8]
+extents = Vector2( 43.375, 556 )
+
 [node name="EntrySpace" type="Control"]
 script = ExtResource( 4 )
 
@@ -44,6 +88,13 @@ margin_top = 1088.0
 margin_right = 802.0
 margin_bottom = 1088.0
 
+[node name="fogSprite" type="Sprite" parent="."]
+visible = false
+material = SubResource( 11 )
+position = Vector2( -3566, 3001 )
+scale = Vector2( 4.84362, -4055.78 )
+texture = SubResource( 13 )
+
 [node name="Light2D" type="Light2D" parent="."]
 position = Vector2( 1060, 1600 )
 rotation = -4.70422
@@ -54,7 +105,7 @@ shadow_enabled = true
 shadow_color = Color( 0.686275, 0.0901961, 0.0901961, 0 )
 
 [node name="Player" parent="." instance=ExtResource( 2 )]
-position = Vector2( 888, 1584 )
+position = Vector2( 869, 1552 )
 collision_layer = 1
 __meta__ = {
 "_edit_group_": true
@@ -83,16 +134,6 @@ polygon = PoolVector2Array( 392, 4152, 408, 4040, 472, 3944, 544, 3880, 640, 384
 polygon = PoolVector2Array( 1432, 4576, 1512, 4576, 1512, 4656, 208, 4656, -896, 4656, -1344, 4656, -1336, 3432, 288, 3432, 288, 4576, 296, 4576 )
 
 [node name="GUI" type="CanvasLayer" parent="."]
-
-[node name="SettingsMenu" parent="GUI" instance=ExtResource( 5 )]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -640.0
-margin_top = -360.0
-margin_right = -640.0
-margin_bottom = -360.0
 
 [node name="Timer" type="Timer" parent="GUI"]
 
@@ -134,6 +175,104 @@ text = "Press Enter
 to exit cave"
 align = 1
 
+[node name="steamControl" type="Node" parent="."]
+
+[node name="steamAnimations" type="Node" parent="steamControl"]
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="steamControl/steamAnimations"]
+visible = false
+position = Vector2( -1580, 2723 )
+scale = Vector2( 6, 6 )
+frames = SubResource( 9 )
+animation = "mist"
+
+[node name="AnimatedSprite2" type="AnimatedSprite" parent="steamControl/steamAnimations"]
+visible = false
+position = Vector2( -1885, 3281 )
+rotation = 3.13913
+scale = Vector2( 6, 6 )
+frames = SubResource( 9 )
+animation = "mist"
+
+[node name="AnimatedSprite3" type="AnimatedSprite" parent="steamControl/steamAnimations"]
+visible = false
+position = Vector2( -2731, 2720 )
+scale = Vector2( 6, 6 )
+frames = SubResource( 9 )
+animation = "mist"
+
+[node name="AnimatedSprite4" type="AnimatedSprite" parent="steamControl/steamAnimations"]
+visible = false
+position = Vector2( -3039, 3277 )
+rotation = 3.13307
+scale = Vector2( 6, 6 )
+frames = SubResource( 9 )
+animation = "mist"
+
+[node name="AnimatedSprite5" type="AnimatedSprite" parent="steamControl/steamAnimations"]
+visible = false
+position = Vector2( -3321, 3278 )
+rotation = 3.13857
+scale = Vector2( 6, 6 )
+frames = SubResource( 9 )
+animation = "mist"
+
+[node name="AnimatedSprite6" type="AnimatedSprite" parent="steamControl/steamAnimations"]
+visible = false
+position = Vector2( -4172, 2722 )
+scale = Vector2( 6, 6 )
+frames = SubResource( 9 )
+animation = "mist"
+
+[node name="AnimatedSprite7" type="AnimatedSprite" parent="steamControl/steamAnimations"]
+visible = false
+position = Vector2( -4479, 3277 )
+rotation = 3.13735
+scale = Vector2( 6, 6 )
+frames = SubResource( 9 )
+animation = "mist"
+
+[node name="AnimatedSprite8" type="AnimatedSprite" parent="steamControl/steamAnimations"]
+visible = false
+position = Vector2( -5322, 2722 )
+scale = Vector2( 6, 6 )
+frames = SubResource( 9 )
+animation = "mist"
+
+[node name="AnimatedSprite9" type="AnimatedSprite" parent="steamControl/steamAnimations"]
+visible = false
+position = Vector2( -5630, 3280 )
+rotation = 3.1366
+scale = Vector2( 6, 6 )
+frames = SubResource( 9 )
+animation = "mist"
+
+[node name="AnimatedSprite10" type="AnimatedSprite" parent="steamControl/steamAnimations"]
+visible = false
+position = Vector2( -5922, 3278 )
+rotation = 3.13277
+scale = Vector2( 6, 6 )
+frames = SubResource( 9 )
+animation = "mist"
+
+[node name="enrtyAreas" type="Node" parent="steamControl"]
+
+[node name="right_side" type="Area2D" parent="steamControl/enrtyAreas"]
+position = Vector2( -1272, 2993 )
+
+[node name="right_side_collider" type="CollisionShape2D" parent="steamControl/enrtyAreas/right_side"]
+position = Vector2( 0, 3 )
+shape = SubResource( 8 )
+
+[node name="left_side" type="Area2D" parent="steamControl/enrtyAreas"]
+position = Vector2( -5832, 2993 )
+
+[node name="left_side_collider" type="CollisionShape2D" parent="steamControl/enrtyAreas/left_side"]
+position = Vector2( 0, 3 )
+shape = SubResource( 8 )
+
 [connection signal="timeout" from="GUI/Timer" to="." method="_on_Timer_timeout"]
 [connection signal="body_entered" from="exitCaveArea" to="." method="_on_exitCaveArea_body_entered"]
 [connection signal="body_exited" from="exitCaveArea" to="." method="_on_exitCaveArea_body_exited"]
+[connection signal="area_entered" from="steamControl/enrtyAreas/right_side" to="." method="_on_right_side_area_entered"]
+[connection signal="area_entered" from="steamControl/enrtyAreas/left_side" to="." method="_on_left_side_area_entered"]

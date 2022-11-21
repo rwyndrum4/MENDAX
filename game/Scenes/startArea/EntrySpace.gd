@@ -11,14 +11,14 @@ extends Control
 # Member Variables
 var in_exit = false
 var in_menu = false
+var steam_active = false #variable to tell if steam in passage is active
+var stop_steam_control = false #variable to tell whether process function needs to check steam
+var steam_modulate:float = 0 #modualte value that is gradually added to modulate of steam
 onready var instructions: Label = $exitCaveArea/exitDirections
-onready var settingsMenu = $GUI/SettingsMenu
 onready var myTimer: Timer = $GUI/Timer
 onready var timerText: Label = $GUI/Timer/timerText
 onready var textBox = $GUI/textBox
-
-
-
+onready var steamAnimations = $steamControl/steamAnimations
 
 
 """
@@ -33,8 +33,10 @@ func _ready():
 	#hide cave instructions at start
 	instructions.hide()
 	myTimer.start(90)
+	$fogSprite.modulate.a8 = 0
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("openChatbox", self, "chatbox_use")
+	
 
 
 """
@@ -47,10 +49,9 @@ func _ready():
 """
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta): #change to delta if used
-	check_settings()
 	timerText.text = convert_time(myTimer.time_left)
-
-
+	if not stop_steam_control:
+		control_steam()
 
 """
 /*
@@ -60,7 +61,7 @@ func _process(_delta): #change to delta if used
 * @return None
 */
 """
-func _input(ev):
+func _input(_ev):
 	if in_exit:
 		if Input.is_action_just_pressed("ui_accept",false) and not Input.is_action_just_pressed("ui_enter_chat"):
 			# warning-ignore:return_value_discarded
@@ -98,22 +99,6 @@ func _on_exitCaveArea_body_entered(_body: PhysicsBody2D): #change to body if wan
 func _on_exitCaveArea_body_exited(_body: PhysicsBody2D): #change to body if want to use
 	in_exit = false
 	instructions.hide()
-
-"""
-/*
-* @pre Called for every frame inside process function
-* @post Opens and closes settings when escape is pressed
-* @param None
-* @return None
-*/
-"""
-func check_settings():
-	if Input.is_action_just_pressed("ui_cancel",false) and not in_menu:
-		settingsMenu.popup_centered_ratio()
-		in_menu = true
-	elif Input.is_action_just_pressed("ui_cancel",false) and in_menu:
-		settingsMenu.hide()
-		in_menu = false
 
 """
 /*
@@ -158,3 +143,87 @@ func _on_Timer_timeout():
 func chatbox_use(value):
 	if value:
 		in_menu = true
+
+"""
+/*
+* @pre Fog is enterred from the right side of the passage
+* @post activates/deactivates steam based on side entered from
+* @param _area -> Area2D node
+* @return None
+*/
+"""
+func _on_right_side_area_entered(_area):
+	var pos = $Player.position
+	if pos.x > -1200.0:
+		steam_area_activated()
+	else:
+		steam_area_deactivated()
+
+"""
+/*
+* @pre Fog is enterred from the left side of the passage
+* @post activates/deactivates steam based on side entered from
+* @param _area -> Area2D node
+* @return None
+*/
+"""
+func _on_left_side_area_entered(_area):
+	var pos = $Player.position
+	if pos.x < -5800:
+		steam_area_activated()
+	else:
+		steam_area_deactivated()
+
+"""
+/*
+* @pre None
+* @post turns on and shows animations
+* @param None
+* @return None
+*/
+"""
+func steam_area_activated():
+	$fogSprite.show()
+	steam_active = true
+	stop_steam_control = false
+	steam_modulate = 0.0
+	for object in steamAnimations.get_children():
+		object.show()
+		object.play("mist")
+
+"""
+/*
+* @pre None
+* @post turns off and hides animations
+* @param None
+* @return None
+*/
+"""
+func steam_area_deactivated():
+	steam_active = false
+	for object in steamAnimations.get_children():
+		object.hide()
+		object.stop()
+
+"""
+/*
+* @pre None
+* @post function to gradually make fog come into view
+* @param None
+* @return None
+*/
+"""
+func control_steam():
+	var fog_modulate = $fogSprite.modulate.a8
+	if steam_active and fog_modulate != 128:
+		steam_modulate += 0.5
+		if int(steam_modulate) % 2 == 0:
+			$fogSprite.modulate.a8 = steam_modulate
+	elif not steam_active and fog_modulate != 0:
+		steam_modulate -= 0.5
+		if int(steam_modulate) % 2 == 0:
+			$fogSprite.modulate.a8 = steam_modulate
+	elif fog_modulate == 0 and not steam_active:
+		$fogSprite.hide()
+		stop_steam_control = true
+		

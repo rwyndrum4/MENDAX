@@ -13,7 +13,6 @@ extends Control
 var in_cave = false
 onready var player_one = $Player
 onready var instructions: Label = $enterCaveArea/enterDirections
-onready var settingsMenu = $GUI/SettingsMenu
 onready var textBox = $GUI/textBox
 
 var normal_player = "res://Scenes/player/player.tscn"

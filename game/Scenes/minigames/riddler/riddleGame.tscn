@@ -1,9 +1,8 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://Assets/Teko-Light.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://Scenes/minigames/riddler/riddleGame.gd" type="Script" id=2]
 [ext_resource path="res://Scenes/player/player.tscn" type="PackedScene" id=3]
-[ext_resource path="res://Scenes/SettingsMenu/settingsMenu.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Scenes/minigames/riddler/riddlerMap.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Scenes/textBox/textBox.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Scenes/Jester/jester.tscn" type="PackedScene" id=7]
@@ -108,16 +107,6 @@ custom_fonts/font = SubResource( 7 )
 text = "Letters:"
 
 [node name="GUI" type="CanvasLayer" parent="."]
-
-[node name="SettingsMenu" parent="GUI" instance=ExtResource( 4 )]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -640.0
-margin_top = -360.0
-margin_right = -640.0
-margin_bottom = -360.0
 
 [node name="Timer" type="Timer" parent="GUI"]
 
