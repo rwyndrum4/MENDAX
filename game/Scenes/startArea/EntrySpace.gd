@@ -239,8 +239,7 @@ func control_steam():
 		steam_modulate += 0.5
 		if int(steam_modulate) % 2 == 0:
 			$fogSprite.modulate.a8 = steam_modulate
-	"""		
-f not steam_active and fog_modulate != 0:
+	elif not steam_active and fog_modulate != 0:
 		steam_modulate -= 0.5
 		if int(steam_modulate) % 2 == 0:
 			$fogSprite.modulate.a8 = steam_modulate
@@ -248,6 +247,7 @@ f not steam_active and fog_modulate != 0:
 		$fogSprite.hide()
 		stop_steam_control = true
 		
+"""	
 * @pre Called when player enters the lever's Area2D zone
 * @post sets at_lever to true (for interactability purposes)
 * @param _body -> body of the player
