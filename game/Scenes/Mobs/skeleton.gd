@@ -54,9 +54,25 @@ func take_damage(amount: int) -> void:
 func defer_disabling_skeleton():
 	skeleBox.disabled = true
 
+"""
+/*
+* @pre Called when player enters the Skeleton's search radius
+* @post sets targetFound to true so the Skeleton can begin moving towards the player in its physics process
+* @param _body -> body of the player (unused)
+* @return None
+*/
+"""
 func _on_mySearchBox_body_entered(_body:PhysicsBody2D):
 	targetFound = true
 
+"""
+/*
+* @pre Called when player exits the Skeleton's anti-search radius
+* @post sets targetFound to false so the Skeleton will no longer move towards the player in its physics process
+* @param _body -> body of the player (unused)
+* @return None
+*/
+"""
 func _on_myLostBox_body_exited(_body:PhysicsBody2D):
 	targetFound = false
 
