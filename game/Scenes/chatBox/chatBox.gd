@@ -98,11 +98,11 @@ func _input(event):
 					playerInput.text = "/clear"
 					playerInput.set_cursor_position(len(playerInput.text) +1)
 				#Auto fill for current players
-				elif "/whisper " in playerInput.text and Global.current_players.size() > 0:
-					playerInput.text = "/whisper " + Global.current_players.keys()[current_usr] + " "
+				elif "/whisper " in playerInput.text and ServerConnection.get_chatroom_players().size() > 0:
+					playerInput.text = "/whisper " + ServerConnection.get_chatroom_players().keys()[current_usr] + " "
 					playerInput.set_cursor_position(len(playerInput.text) +1)
 					current_usr += 1
-					if current_usr == Global.current_players.size():
+					if current_usr == ServerConnection.get_chatroom_players().size():
 						current_usr = 0
 
 """
@@ -114,9 +114,15 @@ func _input(event):
 */
 """
 func add_message(text:String,type:String,user_sent:String,from_user:String):
-	if "MATCH_RECEIVED" in text:
-		var match_dict = text.replace("MATCH_RECEIVED","")
-		Global.current_matches = parse_json(match_dict)
+	if "MATCH_RECEIVED " in text:
+		#clean the string of match received
+		var clean_data = text.replace("MATCH_RECEIVED ","")
+		#get a dictionary from the string
+		var match_dict:Dictionary = parse_json(clean_data)
+		#add matches to current dictionary if not already in there
+		for key in match_dict.keys():
+			if not Global.match_exists(key):
+				Global.add_match(key, match_dict[key])
 		return
 	var user = from_user
 	var color:String = get_chat_color(type)

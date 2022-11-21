@@ -15,7 +15,6 @@ onready var player_one = $Player
 onready var instructions: Label = $enterCaveArea/enterDirections
 onready var textBox = $GUI/textBox
 
-var normal_player = "res://Scenes/player/player.tscn"
 var other_player = "res://Scenes/player/other_players/other_players.tscn"
 
 
@@ -29,7 +28,7 @@ var other_player = "res://Scenes/player/other_players/other_players.tscn"
 """
 func _ready():
 	#If there is a server connection, spawn all players
-	if ServerConnection.get_server_status():
+	if ServerConnection.match_exists():
 		spawn_players()
 	#This is how you queue text to the textbox queue
 	textBox.queue_text("If you're ready to begin your challenge, press enter")
@@ -89,6 +88,7 @@ func spawn_players():
 		var num = int(num_str)
 		if num == ServerConnection._player_num:
 			player_one.position = Global.player_positions[str(num)]
+			player_one.set_color(num)
 		else:
 			var new_player:KinematicBody2D = load(other_player).instance()
 			new_player.set_player_id(num)
@@ -97,3 +97,5 @@ func spawn_players():
 			new_player.position = Global.player_positions[str(num)]
 			#Add child to the scene
 			add_child(new_player)
+		#Set initial input vectors to zero
+		Global.player_input_vectors[str(num)] = Vector2.ZERO

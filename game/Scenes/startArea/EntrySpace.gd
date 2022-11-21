@@ -27,10 +27,9 @@ onready var secretPanel = $worldMap/Node2D_1/Wall3x3_6
 onready var secretPanelCollider = $worldMap/Node2D_1/colliders/secretDoor
 onready var ladder = $worldMap/Node2D_1/Ladder1x1
 onready var pitfall = $worldMap/Node2D_1/Pitfall1x1_2
+onready var player = $Player
 
-
-
-
+var other_player = "res://Scenes/player/other_players/other_players.tscn"
 
 """
 /*
@@ -41,6 +40,9 @@ onready var pitfall = $worldMap/Node2D_1/Pitfall1x1_2
 */
 """
 func _ready():
+	#Spawn the players if a match is ongoing
+	if ServerConnection.match_exists():
+		spawn_players()
 	#hide cave instructions at start
 	instructions.hide()
 	myTimer.start(90)
@@ -225,6 +227,29 @@ func steam_area_deactivated():
 		object.hide()
 		object.stop()
 
+func spawn_players():
+	#set initial position the players should be on spawn
+	set_init_player_pos()
+	#num_str is the player number (1,2,3,4)
+	for num_str in Global.player_positions:
+		#Add animated player to scene
+		var num = int(num_str)
+		#if player is YOUR player (aka player you control)
+		if num == ServerConnection._player_num:
+			player.position = Global.player_positions[str(num)]
+			player.set_color(num)
+		#if the player is another online player
+		else:
+			var new_player:KinematicBody2D = load(other_player).instance()
+			new_player.set_player_id(num)
+			new_player.set_color(num)
+			#Change size and pos of sprite
+			new_player.position = Global.player_positions[str(num)]
+			#Add child to the scene
+			add_child(new_player)
+		#Set initial input vectors to zero
+		Global.player_input_vectors[str(num)] = Vector2.ZERO
+
 """
 /*
 * @pre None
@@ -300,3 +325,13 @@ func _on_ladderArea_body_exited(_body: PhysicsBody2D): #change to body if want t
 """
 func _on_pitfallArea_body_entered(_body: PhysicsBody2D): #change to body if want to use
 	pitfall.texture = $root/Assets/tiles/TilesCorrected/BlankTile
+func set_init_player_pos():
+	#num_str is the player number (1,2,3,4)
+	for num_str in Global.player_positions:
+		var num = int(num_str)
+		match num:
+			1: Global._player_positions_updated(num,Vector2(800,1550))
+			2: Global._player_positions_updated(num,Vector2(880,1550))
+			3: Global._player_positions_updated(num,Vector2(800,1450))
+			4: Global._player_positions_updated(num,Vector2(880,1450))
+			_: printerr("THERE ARE MORE THAN 4 PLAYERS TRYING TO BE SPAWNED IN EntrySpace.gd")

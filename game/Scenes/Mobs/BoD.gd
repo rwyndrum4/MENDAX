@@ -42,11 +42,11 @@ func take_damage(amount: int) -> void:
 	print(healthbar.value)
 	if healthbar.value == 0:
 		skeletonAnim.play("death")
-		skeleBox.disabled = true
+		call_deferred("defer_disabling_BoD")
 		isDead = 1
 		
-	
-
+func defer_disabling_BoD():
+	skeleBox.disabled = true
 
 """
 /*

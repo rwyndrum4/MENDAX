@@ -504,7 +504,6 @@ anims/walk = SubResource( 48 )
 position = Vector2( 67, -3 )
 shape = SubResource( 46 )
 
-[connection signal="body_entered" from="MyHitBox" to="." method="_on_MyHitBox_body_entered"]
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]
 [connection signal="body_entered" from="detector" to="." method="_on_detector_body_entered"]
 [connection signal="body_exited" from="detector" to="." method="_on_detector_body_exited"]

@@ -26,18 +26,13 @@ var velocity = Vector2.ZERO
 """
 /*
 * @pre Called once when player is initialized
-* @post Connects the "textbox_shift" and "openMnu" signals to the player
+* @post Connects the "textbox_shift" and "openMnu" signals to the playerw
 * @param None
 * @return None
 */
 """
 func _ready():
-	#Connects singal to GlobalSignals, will stop/unstop player when called from "textbBox.gd"
-	# warning-ignore:return_value_discarded
-	GlobalSignals.connect("textbox_shift",self,"stop_go_player")
-	# warning-ignore:return_value_discarded
-	GlobalSignals.connect("openMenu",self,"stop_go_player")
-	character.play("idle")
+	character.play("idle_" + player_color)
 	last_position = self.position
 
 """
@@ -48,50 +43,47 @@ func _ready():
 * @return None
 */
 """
-func _physics_process(delta):
-	#don't move player if textbox is playing or options are open
-	
-	
-	# Initialize input velocity
-	
-	#Check previous position and check if it has changed since last frame
-	
-	self.position  = Global.get_player_pos(player_id)
-	
-	control_animations(velocity)
-
-"""
-/*
-* @pre Called when signal is received from GlobalSignals
-* @post updates is_stopped to whatever value is passed in (true = stopped, false = can move)
-* @param value -> boolean
-* @return None
-*/
-"""
-func stop_go_player(value:bool):
-	is_stopped = value
+func _physics_process(_delta):
+	self.position = Global.get_player_pos(player_id)
+	control_animations(Global.get_player_input_vec(player_id))
+	last_position = self.position
 
 """
 /*
 * @pre None
 * @post updates the character's animations
-* @param vel -> int
+* @param vel -> Vector2
 * @return None
 */
 """
 func control_animations(vel):
-	if vel.x > 0:
+	#Character moves NorthEast
+	if vel.y < 0 and vel.x > 0:
+		char_pos.scale.x = -1
+		character.play("roll_northwest_" + player_color)
+	#Character moves NorthWest
+	elif vel.y < 0 and vel.x < 0:
 		char_pos.scale.x = 1
-		character.play("roll")
+		character.play("roll_northwest_" + player_color)
+	#Character moves East or SouthEast
+	elif vel.x > 0:
+		char_pos.scale.x = 1
+		character.play("roll_southeast_" + player_color)
+	#Character moves West or SoutWest
 	elif vel.x < 0:
 		char_pos.scale.x = -1
-		character.play("roll")
-	elif vel.y != 0:
-		character.play("roll")
+		character.play("roll_southeast_" + player_color)
+	#Character moves North
+	elif vel.y < 0:
+		character.play("roll_north_" + player_color)
+	#Character moves South
+	elif vel.y > 0:
+		character.play("roll_south_" + player_color)
+	#Character not moving (idle)
 	else:
-		character.play("idle")
+		character.play("idle_" + player_color)
 
-"""
+"""	
 /*
 * @pre None
 * @post sets player id to what was passed int
