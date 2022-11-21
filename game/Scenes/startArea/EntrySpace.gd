@@ -81,7 +81,7 @@ func _input(ev):
 				secretPanelCollider.queue_free()
 	if at_ladder:
 		if Input.is_action_just_pressed("ui_accept",false) and not Input.is_action_just_pressed("ui_enter_chat"):
-			ladder.texture = $root/Assets/tiles/TilesCorrected/WallTile_Tilt_Horizontal
+			ladder.texture = $root/Assets/tiles/TilesCorrected/WallTile_Tilt_Horiz
 	#DEBUG PURPOSES - REMOVE FOR FINAL GAME!!!
 	#IF YOU PRESS P -> TIMER WILL REDUCE TO 3 SECONDS
 	if Input.is_action_just_pressed("debug_key",false):
