@@ -9,6 +9,7 @@
 	10/1/2022 - Added the ability to move with keyboard in settings menu
 	10/1/2022 - Fixed options menu movment
 	11/4/2022 - Adding server functionality 
+	11/13/2022 - add test functionality
 """
 extends Control
 
@@ -112,13 +113,13 @@ func _on_Market_pressed():
 """
 /*
 * @pre Tests Button is pressed
-* @post not yet implemented
+* @post directly load the cave (for debug purposes)
 * @param None
 * @return None
 */
 """
 func _on_Tests_pressed():
-	pass # Replace with function body.
+	Global.state = Global.scenes.CAVE
 
 """
 /*

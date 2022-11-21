@@ -11,7 +11,6 @@ extends Control
 
 # Member Variables
 var in_menu = false
-onready var settingsMenu = $GUI/SettingsMenu
 onready var myTimer: Timer = $GUI/Timer
 onready var timerText: Label = $GUI/Timer/timerText
 onready var textBox = $GUI/textBox
@@ -125,7 +124,6 @@ func _ready():
 """
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta): #change to delta if used
-	check_settings()
 	timerText.text = convert_time(myTimer.time_left)
 
 """
@@ -177,21 +175,13 @@ func _input(ev):
 			emit_signal("textWait")
 	if Input.is_key_pressed(KEY_SEMICOLON):
 		PlayerInventory.add_item("Coin", 1)
-"""
-/*
-* @pre Called for every frame inside process function
-* @post Opens and closes settings when escape is pressed
-* @param None
-* @return None
-*/
-"""
-func check_settings():
-	if Input.is_action_just_pressed("ui_cancel",false) and not in_menu:
-		settingsMenu.popup_centered_ratio()
-		in_menu = true
-	elif Input.is_action_just_pressed("ui_cancel",false) and in_menu:
-		settingsMenu.hide()
-		in_menu = false
+	#DEBUG PURPOSES - REMOVE FOR FINAL GAME!!!
+	#IF YOU PRESS P -> TIMER WILL REDUCE TO 3 SECONDS
+	if Input.is_action_just_pressed("timer_debug_key",false):
+		myTimer.start(3)
+	#IF YOU PRESS Q -> TIMER WILL INCREASE TO ARBITRARILY MANY SECONDS
+	if Input.is_action_just_pressed("extend_timer_debug_key",false):
+		myTimer.start(30000)
 
 """
 /*

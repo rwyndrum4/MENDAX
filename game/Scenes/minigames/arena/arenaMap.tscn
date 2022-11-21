@@ -10,6 +10,7 @@
 [node name="Node2D" type="Control"]
 
 [node name="collisionElements" type="StaticBody2D" parent="."]
+collision_mask = 2
 
 [node name="northWall" type="CollisionPolygon2D" parent="collisionElements"]
 polygon = PoolVector2Array( 0, 0, 0, 288, 3744, 288, 3744, 0 )
