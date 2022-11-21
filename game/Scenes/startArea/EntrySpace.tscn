@@ -111,7 +111,7 @@ shadow_enabled = true
 shadow_color = Color( 0.686275, 0.0901961, 0.0901961, 0 )
 
 [node name="Player" parent="." instance=ExtResource( 2 )]
-position = Vector2( -913, 2994 )
+position = Vector2( 855, 1540 )
 collision_layer = 1
 __meta__ = {
 "_edit_group_": true
