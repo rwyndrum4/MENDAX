@@ -525,10 +525,10 @@ margin_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="CornerB3x3_1" type="GridContainer" parent="."]
-margin_left = 288.0
+margin_left = 289.0
 margin_top = -863.0
-margin_right = 1152.0
-margin_bottom = 1.0
+margin_right = 1153.0
+margin_bottom = 0.999756
 custom_constants/vseparation = 0
 custom_constants/hseparation = 0
 columns = 3
@@ -2733,3 +2733,100 @@ margin_top = 3431.0
 margin_right = 3819.0
 margin_bottom = 3719.0
 texture = ExtResource( 5 )
+
+[node name="wallTiltHoriz1x1_1" type="TextureRect" parent="."]
+margin_left = 213.844
+margin_top = -575.058
+margin_right = 501.844
+margin_bottom = -287.058
+texture = ExtResource( 9 )
+
+[node name="WallTiltVert1x1_1" type="TextureRect" parent="."]
+margin_left = -574.942
+margin_top = 213.157
+margin_right = -286.942
+margin_bottom = 501.157
+texture = ExtResource( 11 )
+flip_v = true
+
+[node name="CornerB3x3" type="GridContainer" parent="."]
+margin_left = -575.156
+margin_top = -574.843
+margin_right = 288.844
+margin_bottom = 289.157
+custom_constants/vseparation = 0
+custom_constants/hseparation = 0
+columns = 3
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="1_1" type="TextureRect" parent="CornerB3x3"]
+margin_right = 288.0
+margin_bottom = 288.0
+texture = ExtResource( 15 )
+flip_h = true
+flip_v = true
+
+[node name="1_2" type="TextureRect" parent="CornerB3x3"]
+margin_left = 288.0
+margin_right = 576.0
+margin_bottom = 288.0
+texture = ExtResource( 8 )
+flip_h = true
+
+[node name="1_3" type="TextureRect" parent="CornerB3x3"]
+margin_left = 576.0
+margin_right = 864.0
+margin_bottom = 288.0
+texture = ExtResource( 8 )
+flip_h = true
+
+[node name="2_1" type="TextureRect" parent="CornerB3x3"]
+margin_top = 288.0
+margin_right = 288.0
+margin_bottom = 576.0
+texture = ExtResource( 11 )
+
+[node name="2_2" type="TextureRect" parent="CornerB3x3"]
+margin_left = 288.0
+margin_top = 288.0
+margin_right = 576.0
+margin_bottom = 576.0
+texture = ExtResource( 3 )
+
+[node name="2_3" type="TextureRect" parent="CornerB3x3"]
+margin_left = 576.0
+margin_top = 288.0
+margin_right = 864.0
+margin_bottom = 576.0
+texture = ExtResource( 3 )
+
+[node name="2_4" type="TextureRect" parent="CornerB3x3"]
+margin_top = 576.0
+margin_right = 288.0
+margin_bottom = 864.0
+texture = ExtResource( 11 )
+
+[node name="3_2" type="TextureRect" parent="CornerB3x3"]
+margin_left = 288.0
+margin_top = 576.0
+margin_right = 576.0
+margin_bottom = 864.0
+texture = ExtResource( 3 )
+
+[node name="3_3" type="TextureRect" parent="CornerB3x3"]
+margin_left = 576.0
+margin_top = 576.0
+margin_right = 864.0
+margin_bottom = 864.0
+texture = ExtResource( 3 )
+
+[node name="colliders" type="StaticBody2D" parent="."]
+collision_layer = 2
+
+[node name="topWallSpace" type="CollisionPolygon2D" parent="colliders"]
+polygon = PoolVector2Array( 871.824, -648.237, 1231.82, -648.336, 1231.98, -80.3355, 2383.98, -80.6493, 2384.34, 1231.35, 1520.33, 1223.59, 1520.41, 1519.59, 1224.41, 1519.67, 1224.6, 2207.67, 2224.6, 2199.39, 2224.44, 1623.39, 3248.44, 1631.12, 3248.6, 2207.12, 3824.6, 2206.96, 3824.88, 3222.96, 3536.88, 3223.04, 3536.95, 3503.04, 3248.95, 3503.12, 3247.07, 3916.12, 3206.07, 3922.13, 3169.07, 3944.14, 3168.93, 3431.14, 3456.93, 3431.06, 3456.86, 3143.06, 3744.86, 3142.98, 3744.62, 2286.98, 3168.62, 2287.14, 3168.46, 1703.14, 2304.46, 1703.37, 2304.62, 2279.37, 1152.62, 2279.69, 1152.39, 1439.69, 1432.39, 1439.61, 1432.39, 1431.61, 1432.32, 1159.61, 2296.31, 1151.37, 2304, -0.627493, 1152, -0.313746, 1151.84, -576.314, 871.843, -576.237 )
+
+[node name="bottomWallSpace" type="CollisionPolygon2D" parent="colliders"]
+polygon = PoolVector2Array( 871.824, -648.237, 871.843, -576.237, 575.843, -576.157, 575.922, -288.157, -280.078, -287.924, -279.843, 576.076, -575.843, 576.157, -575.301, 2568.16, -1156.3, 2570.32, -1151.07, 3426.31, 288.935, 3431.92, 289.246, 4575.92, 769.246, 4575.79, 1441.24, 4567.61, 1441.09, 4007.61, 2017.09, 4005.45, 2017.12, 4111.45, 1513.11, 4079.59, 1513.27, 4655.59, 769.268, 4655.79, 217.268, 4655.94, -1226.73, 4645.33, -1242.1, -379.662, 879.813, -688.24 )

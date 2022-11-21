@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=2]
+[gd_scene load_steps=41 format=2]
 
 [ext_resource path="res://Scenes/startArea/worldMap.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Scenes/player/player.tscn" type="PackedScene" id=2]
@@ -71,6 +71,12 @@ animations = [ {
 [sub_resource type="RectangleShape2D" id=8]
 extents = Vector2( 43.375, 556 )
 
+[sub_resource type="RectangleShape2D" id=14]
+extents = Vector2( 42, 532 )
+
+[sub_resource type="RectangleShape2D" id=10]
+extents = Vector2( 23, 19 )
+
 [node name="EntrySpace" type="Control"]
 script = ExtResource( 4 )
 
@@ -105,7 +111,7 @@ shadow_enabled = true
 shadow_color = Color( 0.686275, 0.0901961, 0.0901961, 0 )
 
 [node name="Player" parent="." instance=ExtResource( 2 )]
-position = Vector2( 869, 1552 )
+position = Vector2( -913, 2994 )
 collision_layer = 1
 __meta__ = {
 "_edit_group_": true
@@ -116,22 +122,6 @@ occluder = SubResource( 6 )
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 current = true
-
-[node name="colliders" type="StaticBody2D" parent="."]
-collision_layer = 2
-
-[node name="leftWallSpace" type="CollisionPolygon2D" parent="colliders"]
-polygon = PoolVector2Array( 576, 576, -576, 576, -576, 2568, -1152, 2568, -1390.57, 2568.18, -1368, 0, 384, 0, 384, -832, 576, -832 )
-
-[node name="rightWallSpace" type="CollisionPolygon2D" parent="colliders"]
-polygon = PoolVector2Array( 1440, 4576, 1440, 4008, 3168, 4008, 3168, 3432, 3456, 3432, 3456, 3144, 3752, 3144, 3752, 2288, 3168, 2280, 3168, 1704, 2304, 1704, 2304, 2280, 1152, 2280, 1152, 1152, 2304, 1152, 2304, 0, 1152, 0, 1152, -576, 576, -576, 576, -832, 4352, -824, 4352, 4712 )
-
-[node name="well" type="CollisionPolygon2D" parent="colliders"]
-position = Vector2( 0, -4 )
-polygon = PoolVector2Array( 392, 4152, 408, 4040, 472, 3944, 544, 3880, 640, 3840, 712, 3832, 808, 3840, 904, 3888, 968, 3936, 1024, 4016, 1056, 4128, 1048, 4232, 1008, 4328, 944, 4408, 872, 4456, 808, 4480, 744, 4488, 640, 4480, 560, 4448, 496, 4400, 448, 4344, 424, 4304, 400, 4240 )
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="colliders"]
-polygon = PoolVector2Array( 1432, 4576, 1512, 4576, 1512, 4656, 208, 4656, -896, 4656, -1344, 4656, -1336, 3432, 288, 3432, 288, 4576, 296, 4576 )
 
 [node name="GUI" type="CanvasLayer" parent="."]
 
@@ -268,11 +258,55 @@ shape = SubResource( 8 )
 position = Vector2( -5832, 2993 )
 
 [node name="left_side_collider" type="CollisionShape2D" parent="steamControl/enrtyAreas/left_side"]
-position = Vector2( 0, 3 )
-shape = SubResource( 8 )
+position = Vector2( -32, 6 )
+shape = SubResource( 14 )
+
+[node name="leverArea" type="Area2D" parent="."]
+position = Vector2( 3744, 2720 )
+rotation = -1.5562
+scale = Vector2( 2.81069, 2.75853 )
+collision_layer = 4
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="leverOval" type="CollisionShape2D" parent="leverArea"]
+scale = Vector2( 2.12582, 2.45751 )
+shape = SubResource( 5 )
+
+[node name="ladderArea" type="Area2D" parent="."]
+position = Vector2( 960, -568 )
+rotation = -1.5562
+scale = Vector2( 2.81069, 2.75853 )
+collision_layer = 4
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="ladderOval" type="CollisionShape2D" parent="ladderArea"]
+scale = Vector2( 2.12582, 2.45751 )
+shape = SubResource( 5 )
+
+[node name="pitfallArea" type="Area2D" parent="."]
+position = Vector2( 1297, 2423 )
+scale = Vector2( 2.81069, 2.75853 )
+collision_layer = 4
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="pitfallSquare" type="CollisionShape2D" parent="pitfallArea"]
+scale = Vector2( 2.12582, 2.45751 )
+shape = SubResource( 10 )
 
 [connection signal="timeout" from="GUI/Timer" to="." method="_on_Timer_timeout"]
 [connection signal="body_entered" from="exitCaveArea" to="." method="_on_exitCaveArea_body_entered"]
 [connection signal="body_exited" from="exitCaveArea" to="." method="_on_exitCaveArea_body_exited"]
 [connection signal="area_entered" from="steamControl/enrtyAreas/right_side" to="." method="_on_right_side_area_entered"]
 [connection signal="area_entered" from="steamControl/enrtyAreas/left_side" to="." method="_on_left_side_area_entered"]
+[connection signal="body_entered" from="leverArea" to="." method="_on_leverArea_body_entered"]
+[connection signal="body_exited" from="leverArea" to="." method="_on_leverArea_body_exited"]
+[connection signal="body_entered" from="ladderArea" to="." method="_on_ladderArea_body_entered"]
+[connection signal="body_exited" from="ladderArea" to="." method="_on_ladderArea_body_exited"]
+[connection signal="body_entered" from="pitfallArea" to="." method="_on_pitfallArea_body_entered"]
+[connection signal="body_exited" from="pitfallArea" to="." method="_on_pitfallArea_body_exited"]
