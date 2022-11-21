@@ -129,7 +129,14 @@ func control_animations(vel:Vector2):
 	else:
 		character.play("idle")
 
-
+"""
+/*
+* @pre Called by when it detects a "hit" from a hitbox
+* @post Mob takes damage and is reflected by the healthbar
+* @param Takes in a damage value
+* @return None
+*/
+"""
 func take_damage(amount: int) -> void:
 	
 	healthbar.value = healthbar.value - amount

@@ -1,9 +1,13 @@
 """
-Revision date: 11/12/2022 - Freeman added physics process
+* Programmer Name - Jason Truong and Freeman Spray
+* Description - Code that designates mob animations
+* Date Created - 11/11/2022
+* Revision date: 11/12/2022 - Freeman added physics process
 			   11/13/2022 - Moved all of physics process except member variables to arenaGame
 			   11/15/2022 - Improved targeting system with addition of a second Area2D radius.
 							Moved Skeleton physics process back into this file
 			   11/19/2022 - Changed signal names to not cause errors anymore
+			
 """
 
 
@@ -20,6 +24,14 @@ var isDead = 0
 var velocity = Vector2.ZERO
 var targetFound = true
 
+"""
+/*
+* @pre Called once when mob is initialized
+* @post Makes idle animation loop and initializes the health
+* @param None
+* @return None
+*/
+"""
 func _ready():
 	var anim = get_node("skeletonAnimationPlayer").get_animation("idle")
 	anim.set_loop(true)
@@ -40,6 +52,15 @@ func _physics_process(delta):
 	else:
 		velocity = move_and_slide(velocity.move_toward(0.7*Vector2.ZERO, 500*delta))
 
+
+"""
+/*
+* @pre Called by when it detects a "hit" from a hitbox
+* @post Mob takes damage and is reflected by the healthbar
+* @param Takes in a damage value
+* @return None
+*/
+"""
 func take_damage(amount: int) -> void:
 	healthbar.value = healthbar.value - amount
 	skeletonAnim.play("hit")
@@ -59,14 +80,37 @@ func _on_mySearchBox_body_entered(_body:PhysicsBody2D):
 
 func _on_myLostBox_body_exited(_body:PhysicsBody2D):
 	targetFound = false
-
+"""
+/*
+* @pre Called when it detects a body entering its 2D area
+* @post isIn is set to true
+* @param None
+* @return None
+*/
+"""
 func _on_detector_body_entered(_body):
 	isIn = true
 	skeletonAnim.play("attack1")
-	
+
+"""
+/*
+* @pre Called once a body leaves the 2D area
+* @post isIn is set to false
+* @param None
+* @return None
+*/
+"""
 func _on_detector_body_exited(_body):
 	isIn = false
 
+"""
+/*
+* @pre Called once animation is finished
+* @post Dequeue's the mob if isDead is true otherwise plays an animation
+* @param None
+* @return None
+*/
+"""
 func _on_skeletonAnimationPlayer_animation_finished(_anim_name):
 	if !isDead:
 		if !isIn:			

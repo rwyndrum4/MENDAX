@@ -1,8 +1,21 @@
+"""
+* Programmer Name - Jason Truong
+* Description - Code for player's sword
+* Date Created - 11/20/2022
+			
+"""
 extends Node
 var direction
 
 	
-	
+"""
+/*
+* @pre Called for every frame
+* @post Does actions according to inputs detected
+* @param _delta -> time variable that can be optionally used
+* @return None
+*/
+"""
 func _process(_delta):
 	if Input.is_action_just_pressed("mouse_click_left", false):
 		if direction == "right":
