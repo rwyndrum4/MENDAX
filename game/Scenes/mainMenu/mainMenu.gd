@@ -53,6 +53,7 @@ func _ready():
 	ServerConnection.connect("character_spawned",self,"spawn_character")
 	# warning-ignore:return_value_discarded
 	ServerConnection.connect("character_despawned",self,"despawn_character")
+
 """
 /*
 * @pre called for every frame inside of the game

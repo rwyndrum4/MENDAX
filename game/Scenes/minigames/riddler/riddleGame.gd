@@ -81,15 +81,15 @@ func init_riddle(file):
 """
 func _ready():
 	GlobalSignals.connect("answer_received",self,"_check_answer")
+	ServerConnection.connect( "riddle_received", self, "set_riddle_from_server")
 	#myTimer.start(90)
 	init_playerpos=$Player.position
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("openChatbox", self, "chatbox_use")
 	if ServerConnection.match_exists():
 		spawn_players()
-	
-	
-	
+		if ServerConnection._player_num != 1:
+			yield(self, "riddle_received_from_server")
 	#scene animation for entering cave(for first time)
 	if Global.entry == 0:
 	#Insert Dialogue: "Oh who do we have here?" or something similar
@@ -97,7 +97,6 @@ func _ready():
 		t.set_wait_time(1)
 		t.set_one_shot(false)
 		self.add_child(t)
-		
 		Global.entry = 1
 		transCam.current = true
 		$Player.set_physics_process(false)
@@ -353,6 +352,19 @@ func enterarea(spritepath,itemnumber):
 		itemsleft=itemsleft-1;#one item has been found
 		itemarray[itemnumber-1]=1; #item has been found
 
+"""
+/*
+* @pre Called when you received riddle from other player
+* @post Set the riddle and answer
+* @param riddle_in -> String, answer_in -> String
+* @return None
+*/
+"""
+func set_riddle_from_server(riddle_in:String, answer_in:String) -> void:
+	riddle = riddle_in
+	hint = riddle_in
+	answer = answer_in
+	emit_signal("riddle_received_from_server")
 
 """
 /*

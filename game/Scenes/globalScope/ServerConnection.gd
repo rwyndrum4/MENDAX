@@ -18,7 +18,8 @@ enum OpCodes {
 	DO_SPAWN,
 	UPDATE_COLOR,
 	INITIAL_STATE,
-	MATCHES_LIST
+	MATCHES_LIST,
+	UPDATE_RIDDLE
 }
 
 #Variable that checks if connected to server
@@ -29,6 +30,7 @@ signal state_updated(id, position) #state of game has been updated
 signal input_updated(id, vec) #input of player has changed and received
 signal character_spawned(char_name) #singal to tell if someone has spawned
 signal character_despawned(char_name) #signal to tell if someone has despawned
+signal riddle_received(riddle) #signal to tell game it has received a riddle from server
 
 #Other signals
 signal chat_message_received(msg,type,user_sent,from_user) #signal to tell game a chat message has come in
@@ -334,6 +336,19 @@ func send_spawn(char_name: String) -> void:
 
 """
 /*
+* @pre called when Player 1 needs to communicate to other players what riddle is
+* @post tells server what riddle to send to others is
+* @param riddle -> String
+* @return None
+*/
+"""
+func send_ridlle(riddle_in: String, answer_in:String) -> void:
+	if _socket:
+		var payload := {riddle = riddle_in, answer = answer_in}
+		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_RIDDLE, JSON.print(payload))
+
+"""
+/*
 * @pre called when a message is received from Nakama server
 * @post emits signal that the message has been received
 * @param message -> NakamaAPI.APIChannelMessage
@@ -408,7 +423,7 @@ func _on_NakamaSocket_received_match_state(match_state: NakamaRTAPI.MatchData) -
 	var raw := match_state.data
 	
 	match code:
-		OpCodes.UPDATE_POSITION:
+		OpCodes.UPDATE_POSITION: #Received position of a player
 			var decoded: Dictionary = JSON.parse(raw).result
 			
 			var id: int = int(decoded.id)
@@ -416,7 +431,7 @@ func _on_NakamaSocket_received_match_state(match_state: NakamaRTAPI.MatchData) -
 			var position: Vector2 = Vector2(int(position_decoded.x),int(position_decoded.y))
 			
 			emit_signal("state_updated", id, position)
-		OpCodes.UPDATE_INPUT:
+		OpCodes.UPDATE_INPUT: #Received that a player has changed directions
 			var decoded: Dictionary = JSON.parse(raw).result
 			
 			var id:int = int(decoded.id)
@@ -425,3 +440,10 @@ func _on_NakamaSocket_received_match_state(match_state: NakamaRTAPI.MatchData) -
 			var out_vec: Vector2 = Vector2(x,y)
 			
 			emit_signal("input_updated", id, out_vec)
+		OpCodes.UPDATE_RIDDLE: #Received riddle from player one
+			var decoded: Dictionary = JSON.parse(raw).result
+			
+			var riddle: String = decoded.riddle
+			var answer: String = decoded.answer
+			
+			emit_signal("riddle_received", riddle, answer)
