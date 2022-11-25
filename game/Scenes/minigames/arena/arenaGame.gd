@@ -19,6 +19,12 @@ onready var playerHealth = $Player/ProgressBar
 #Scene for players that online oppenents use
 var other_player = "res://Scenes/player/other_players/other_players.tscn"
 
+enum EnemyTypes {
+	SKELETON = 1,
+	CHANDELIER,
+	BOD
+}
+
 """
 /*
 * @pre Called when the node enters the scene tree for the first time.
@@ -38,6 +44,9 @@ func _ready():
 	#If there is a server connection, spawn all players
 	if ServerConnection.match_exists():
 		spawn_players()
+		ServerConnection.connect("arena_enemy_hit",self,"")
+		ServerConnection.connect("arena_player_lost_health",self,"")
+		ServerConnection.connect("arena_player_swung_sword",self,"")
 
 """
 /*
@@ -150,3 +159,36 @@ func set_init_player_pos():
 			3: Global._player_positions_updated(num,Vector2(800,1250))
 			4: Global._player_positions_updated(num,Vector2(880,1250))
 			_: printerr("THERE ARE MORE THAN 4 PLAYERS TRYING TO BE SPAWNED IN arenaGame.gd")
+
+"""
+/*
+* @pre received update from server
+* @post game sets player to swing their sword
+* @param player_id -> int (number of player to be updated)
+* @return None
+*/
+"""
+func player_swung_sword(player_id: int):
+	pass
+
+"""
+/*
+* @pre received update from server
+* @post updates the health of player that was hit
+* @param player_id -> int (id of player hit), player_health -> int (new health value)
+* @return None
+*/
+"""
+func player_hit(player_id: int, player_health: int):
+	pass
+
+"""
+/*
+* @pre received update from server
+* @post updates the health of enemy hit
+* @param enemy_id -> int (enum value of enemy to edit), dmg_taken
+* @return None
+*/
+"""
+func enemy_hit(enemy_id: int, dmg_taken: int):
+	pass

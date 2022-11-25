@@ -13,13 +13,10 @@ extends Node
 enum OpCodes {
 	UPDATE_POSITION = 1,
 	UPDATE_INPUT,
-	UPDATE_STATE,
-	UPDATE_JUMP,
-	DO_SPAWN,
-	UPDATE_COLOR,
-	INITIAL_STATE,
-	MATCHES_LIST,
-	UPDATE_RIDDLE
+	UPDATE_RIDDLER_RIDDLE,
+	UPDATE_ARENA_SWORD,
+	UPDATE_ARENA_PLAYER_HEALTH,
+	UPDATE_ARENA_ENEMY_HIT,
 }
 
 #Variable that checks if connected to server
@@ -31,6 +28,9 @@ signal input_updated(id, vec) #input of player has changed and received
 signal character_spawned(char_name) #singal to tell if someone has spawned
 signal character_despawned(char_name) #signal to tell if someone has despawned
 signal riddle_received(riddle) #signal to tell game it has received a riddle from server
+signal arena_player_swung_sword(id) #signal to tell arena minigame someone swung sword
+signal arena_player_lost_health(id, health) #signal to tell if player has lost health
+signal arena_enemy_hit(enemmy_hit, damage_taken) #signal to tell if an enemy has been hit
 
 #Other signals
 signal chat_message_received(msg,type,user_sent,from_user) #signal to tell game a chat message has come in
@@ -345,7 +345,46 @@ func send_spawn(char_name: String) -> void:
 func send_ridlle(riddle_in: String, answer_in:String) -> void:
 	if _socket:
 		var payload := {riddle = riddle_in, answer = answer_in}
-		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_RIDDLE, JSON.print(payload))
+		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_RIDDLER_RIDDLE, JSON.print(payload))
+
+"""
+/*
+* @pre called when player attempts to hit someone in arena minigame
+* @post tells server which player swung their sword
+* @param None
+* @return None
+*/
+"""
+func send_arena_sword():
+	if _socket:
+		var payload := {id = _player_num}
+		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_ARENA_SWORD, JSON.print(payload))
+
+"""
+/*
+* @pre called when player gets hit in arena minigame
+* @post tells server which player got hit and sends their current health
+* @param health_in -> int
+* @return None
+*/
+"""
+func send_arena_player_health(health_in: int):
+	if _socket:
+		var payload := {id = _player_num, health = health_in}
+		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_ARENA_PLAYER_HEALTH, JSON.print(payload))
+
+"""
+/*
+* @pre called when enemy gets hit in a minigame
+* @post tells server which enemy got hit and how much damage it took
+* @param damage -> int (how much damage enemy took), enemy_hit -> int (enum value)
+* @return None
+*/
+"""
+func send_arena_enemy_hit(damage: int, enemy_hit: int):
+	if _socket:
+		var payload := {enemy = enemy_hit, dmg = damage}
+		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_ARENA_ENEMY_HIT, JSON.print(payload))
 
 """
 /*
@@ -434,16 +473,36 @@ func _on_NakamaSocket_received_match_state(match_state: NakamaRTAPI.MatchData) -
 		OpCodes.UPDATE_INPUT: #Received that a player has changed directions
 			var decoded: Dictionary = JSON.parse(raw).result
 			
-			var id:int = int(decoded.id)
+			var id: int = int(decoded.id)
 			var x = decoded.x_in
 			var y = decoded.y_in
 			var out_vec: Vector2 = Vector2(x,y)
 			
 			emit_signal("input_updated", id, out_vec)
-		OpCodes.UPDATE_RIDDLE: #Received riddle from player one
+		OpCodes.UPDATE_RIDDLER_RIDDLE: #Received riddle from player one
 			var decoded: Dictionary = JSON.parse(raw).result
 			
 			var riddle: String = decoded.riddle
 			var answer: String = decoded.answer
 			
 			emit_signal("riddle_received", riddle, answer)
+		OpCodes.UPDATE_ARENA_SWORD:
+			var decoded: Dictionary = JSON.parse(raw).result
+			
+			var id: int = int(decoded.id)
+			
+			emit_signal("arena_player_swung_sword", id)
+		OpCodes.UPDATE_ARENA_PLAYER_HEALTH:
+			var decoded: Dictionary = JSON.parse(raw).result
+			
+			var id: int = int(decoded.id)
+			var health: int = int(decoded.health)
+			
+			emit_signal("arena_player_lost_health", id, health)
+		OpCodes.UPDATE_ARENA_ENEMY_HIT:
+			var decoded: Dictionary = JSON.parse(raw).result
+			
+			var enemy: int = int(decoded.enemy)
+			var dmg_taken: int = int(decoded.dmg)
+			
+			emit_signal("arena_enemy_hit", enemy, dmg_taken)
