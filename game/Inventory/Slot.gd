@@ -16,6 +16,7 @@ var empty_style: StyleBoxTexture = null
 
 var item = null
 var ItemClass = preload("res://Inventory/Item.tscn")
+var slot_index
 
 func refresh_style(): # useful for having a new empty inventory slot icon
 	pass
@@ -40,7 +41,6 @@ func putIntoSlot(new_item):
 	var inventoryNode = find_parent("Inventory")
 	inventoryNode.remove_child(item)
 	add_child(item)
-	item = null
 	refresh_style()	
 
 func initialize_item(name, amount):

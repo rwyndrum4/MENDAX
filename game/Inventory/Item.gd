@@ -7,7 +7,7 @@ func _ready():
 	item_name = "Coin"
 	var stack_size = int(INV.item_data[item_name]["StackSize"])
 	
-	item_quantity = randi() % stack_size
+	item_quantity = (randi() % stack_size)
 	
 	if stack_size == 1:
 		$Label.visible = false
