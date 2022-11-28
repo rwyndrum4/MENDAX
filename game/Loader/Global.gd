@@ -40,7 +40,8 @@ enum scenes {
 	START_AREA,
 	CAVE,
 	RIDDLER_MINIGAME,
-	ARENA_MINIGAME
+	ARENA_MINIGAME,
+	GAMEOVER
 }
 
 # Hold dictionary of player positions

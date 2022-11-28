@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Assets/gameOver.png" type="Texture" id=1]
+
+[node name="Node2D" type="Control"]
+
+[node name="TextureRect" type="TextureRect" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+rect_scale = Vector2( 2.24469, 1.93705 )
+texture = ExtResource( 1 )

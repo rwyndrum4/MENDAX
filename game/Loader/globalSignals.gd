@@ -6,6 +6,7 @@
 	10/14/2022 - Added the openMenu signal
 	10/16/2022 - Added the inputText signal
 	10/28/2022 - Added server control signals
+	11/28/2022 - Added player death signal
 """
 
 extends Node
@@ -49,3 +50,11 @@ signal inputText(inText)
 """
 # warning-ignore:unused_signal
 signal answer_received(answer)
+
+"""
+* Purpose - Send a signal when a player's hit points are reduced to 0
+* Used in - playerScript.gd
+* Parameter - playerID -> denotes which player has died (for use in multiplayer setting)
+"""
+# warning-ignore:unused_signal
+signal playerDeath(playerID)

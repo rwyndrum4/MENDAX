@@ -42,8 +42,11 @@ func _ready():
 	# if server wasnt' connected
 	if player_color == "":
 		player_color = "blue"
+	# Connect alive checker
+	GlobalSignals.connect("playerDeath",self,"_game_over")
 	#Initially have character idle
 	character.play("idle_" + player_color)
+	
 
 """
 /*
@@ -152,7 +155,7 @@ func take_damage(amount: int) -> void:
 	healthbar.value = healthbar.value - amount
 	print(healthbar.value)
 	if healthbar.value == 0:
-		print("you dead")
+		GlobalSignals.emit_signal("playerDeath", 0) #replace 0 with indication of player ID later
 
 func set_color(player_num:int):
 	match player_num:
@@ -166,3 +169,6 @@ func set_color(player_num:int):
 			player_color = "orange"
 		_:
 			player_color = "blue"
+			
+func _game_over(answer_in:int):
+		Global.state = Global.scenes.GAMEOVER
