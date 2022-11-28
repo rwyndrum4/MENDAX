@@ -80,7 +80,9 @@ func init_riddle(file):
 */
 """
 func _ready():
+	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("answer_received",self,"_check_answer")
+	# warning-ignore:return_value_discarded
 	ServerConnection.connect( "riddle_received", self, "set_riddle_from_server")
 	#myTimer.start(90)
 	init_playerpos=$Player.position
@@ -114,6 +116,7 @@ func _ready():
 		#textBox.queue_text("What walks on four legs in the morning, two legs in the afternoon, and three in the evening?")
 		textBox.queue_text(riddle)
 		textBox.queue_text("Please enter the answer in the chat once you have it, there are hints hidden here if you need them (:")
+		# warning-ignore:return_value_discarded
 		connect("textWait", self, "_finish_anim")
 		Global.in_anim = 1;
 	else:
@@ -211,7 +214,9 @@ func _check_answer(answer_in:String):
 func convert_time(time_in:float) -> String:
 	var rounded_time = int(time_in)
 	var minutes: int = rounded_time/60
-	var seconds: int = rounded_time - (minutes*60)
+	var seconds = rounded_time - (minutes*60)
+	if seconds < 10:
+		seconds = str(0) + str(seconds)
 	return str(minutes,":",seconds)
 
 """

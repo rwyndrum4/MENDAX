@@ -133,7 +133,9 @@ func _on_exitCaveArea_body_exited(_body: PhysicsBody2D): #change to body if want
 func convert_time(time_in:float) -> String:
 	var rounded_time = int(time_in)
 	var minutes: int = rounded_time/60
-	var seconds: int = rounded_time - (minutes*60)
+	var seconds = rounded_time - (minutes*60)
+	if seconds < 10:
+		seconds = str(0) + str(seconds)
 	return str(minutes,":",seconds)
 
 """

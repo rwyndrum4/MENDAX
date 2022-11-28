@@ -323,19 +323,6 @@ func send_input_update(in_vec:Vector2) -> void:
 
 """
 /*
-* @pre called when you want to tell server you have spawned (aka entered world)
-* @post tells server and other players you are in the game
-* @param name -> String
-* @return None
-*/
-"""
-func send_spawn(char_name: String) -> void:
-	if _socket:
-		var payload := {id = _player_num, nm = char_name}
-		_socket.send_match_state_async(_match_id, OpCodes.DO_SPAWN,JSON.print(payload))
-
-"""
-/*
 * @pre called when Player 1 needs to communicate to other players what riddle is
 * @post tells server what riddle to send to others is
 * @param riddle -> String

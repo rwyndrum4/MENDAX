@@ -16,14 +16,19 @@ onready var player = $Player
 onready var swordPivot = $Player/Sword/pivot
 onready var sword = $Player/Sword
 onready var playerHealth = $Player/ProgressBar
+onready var SkeletonEnemy = $Skeleton
+onready var BodEnemy = $BoD
 #Scene for players that online oppenents use
-var other_player = "res://Scenes/player/other_players/other_players.tscn"
+var online_players = "res://Scenes/player/arena_player/arena_player.tscn"
 
+#Enemy Types in terms of numbers, used with server code
 enum EnemyTypes {
 	SKELETON = 1,
 	CHANDELIER,
 	BOD
 }
+#Array to hold objects of other players (not your own player)
+var server_players: Array = []
 
 """
 /*
@@ -44,9 +49,9 @@ func _ready():
 	#If there is a server connection, spawn all players
 	if ServerConnection.match_exists():
 		spawn_players()
-		ServerConnection.connect("arena_enemy_hit",self,"")
-		ServerConnection.connect("arena_player_lost_health",self,"")
-		ServerConnection.connect("arena_player_swung_sword",self,"")
+		ServerConnection.connect("arena_enemy_hit",self,"other_player_hit")
+		ServerConnection.connect("arena_player_lost_health",self,"someone_hit_enemy")
+		ServerConnection.connect("arena_player_swung_sword",self,"other_player_swung_sword")
 
 """
 /*
@@ -92,7 +97,9 @@ func _input(_ev):
 func convert_time(time_in:float) -> String:
 	var rounded_time = int(time_in)
 	var minutes: int = rounded_time/60
-	var seconds: int = rounded_time - (minutes*60)
+	var seconds = rounded_time - (minutes*60)
+	if seconds < 10:
+		seconds = str(0) + str(seconds)
 	return str(minutes,":",seconds)
 
 """
@@ -104,7 +111,13 @@ func convert_time(time_in:float) -> String:
 */
 """
 func _on_Timer_timeout():
+	#Turn off player healthbar
 	playerHealth.visible = false
+	#Delete online player objects if they have not already died
+	for player in online_players:
+		var obj = player.get('player_obj')
+		if obj != null:
+			obj.queue_free()
 	Global.state = Global.scenes.CAVE
 
 func chatbox_use(value):
@@ -121,7 +134,7 @@ func chatbox_use(value):
 """
 func spawn_players():
 	set_init_player_pos()
-	#num_str = player number (1,2,3,4)
+	#num_str -> player number (1,2,3,4)
 	for num_str in Global.player_positions:
 		#Add animated player to scene
 		var num = int(num_str)
@@ -131,13 +144,17 @@ func spawn_players():
 			player.set_color(num)
 		#if the player is another online player
 		else:
-			var new_player:KinematicBody2D = load(other_player).instance()
+			var new_player:KinematicBody2D = load(online_players).instance()
 			new_player.set_player_id(num)
 			new_player.set_color(num)
 			#Change size and pos of sprite
 			new_player.position = Global.player_positions[str(num)]
 			#Add child to the scene
 			add_child(new_player)
+			server_players.append({
+				'num': num,
+				'player_obj': new_player
+			})
 		#Set initial input vectors to zero
 		Global.player_input_vectors[str(num)] = Vector2.ZERO
 
@@ -158,18 +175,6 @@ func set_init_player_pos():
 			2: Global._player_positions_updated(num,Vector2(880,1350))
 			3: Global._player_positions_updated(num,Vector2(800,1250))
 			4: Global._player_positions_updated(num,Vector2(880,1250))
-			_: printerr("THERE ARE MORE THAN 4 PLAYERS TRYING TO BE SPAWNED IN arenaGame.gd")
-
-"""
-/*
-* @pre received update from server
-* @post game sets player to swing their sword
-* @param player_id -> int (number of player to be updated)
-* @return None
-*/
-"""
-func player_swung_sword(player_id: int):
-	pass
 
 """
 /*
@@ -179,8 +184,11 @@ func player_swung_sword(player_id: int):
 * @return None
 */
 """
-func player_hit(player_id: int, player_health: int):
-	pass
+func other_player_hit(player_id: int, player_health: int):
+	for player in online_players:
+		if player_id == player.get('num'):
+			player.get('player_obj').healthbar.value = player_health
+			break
 
 """
 /*
@@ -190,5 +198,21 @@ func player_hit(player_id: int, player_health: int):
 * @return None
 */
 """
-func enemy_hit(enemy_id: int, dmg_taken: int):
+func someone_hit_enemy(enemy_id: int, dmg_taken: int):
+	if enemy_id == EnemyTypes.SKELETON:
+		SkeletonEnemy.take_damage(dmg_taken)
+	elif enemy_id == EnemyTypes.BOD:
+		BodEnemy.take_damage(dmg_taken)
+	elif enemy_id == EnemyTypes.CHANDELIER:
+		pass #implement when chandelier is ready
+
+"""
+/*
+* @pre received update from server
+* @post game sets player who swung to swing their sword
+* @param player_id -> int (number of player to be updated)
+* @return None
+*/
+"""
+func other_player_swung_sword(player_id: int):
 	pass

@@ -37,6 +37,7 @@ func _ready():
 	anim.set_loop(true)
 	skeletonAnim.play("idle")
 	healthbar.value = 100;
+	ServerConnection.connect("arena_enemy_hit",self, "took_damage_from_server")
 	
 """
 /*
