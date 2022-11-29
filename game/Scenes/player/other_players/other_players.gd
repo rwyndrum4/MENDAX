@@ -13,7 +13,6 @@ onready var char_pos = $position
 var player_color: String = ""
 var is_stopped = false
 var player_id: int = 0
-var last_position:Vector2 = Vector2.ZERO
 
 # Player physics constants
 const ACCELERATION = 25000
@@ -33,7 +32,6 @@ var velocity = Vector2.ZERO
 """
 func _ready():
 	character.play("idle_" + player_color)
-	last_position = self.position
 
 """
 /*
@@ -46,7 +44,6 @@ func _ready():
 func _physics_process(_delta):
 	self.position = Global.get_player_pos(player_id)
 	control_animations(Global.get_player_input_vec(player_id))
-	last_position = self.position
 
 """
 /*

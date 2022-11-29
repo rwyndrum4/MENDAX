@@ -13,7 +13,6 @@ var money = 0
 var player_inventory = preload("res://Inventory/Inventory.tscn").instance()
 
 #Entry First Time
-var entry = 0
 var in_anim = 0
 
 #track minigame

@@ -80,47 +80,41 @@ func init_riddle(file):
 */
 """
 func _ready():
+	init_playerpos=$Player.position
+	init_riddle(riddlefile) #initalizes riddle randomly
+	init_hiddenitems() #initalizes hidden items array and other things needed
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("answer_received",self,"_check_answer")
 	# warning-ignore:return_value_discarded
 	ServerConnection.connect( "riddle_received", self, "set_riddle_from_server")
-	#myTimer.start(90)
-	init_playerpos=$Player.position
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("openChatbox", self, "chatbox_use")
 	if ServerConnection.match_exists():
 		spawn_players()
 		if ServerConnection._player_num != 1:
 			yield(self, "riddle_received_from_server")
-	#scene animation for entering cave(for first time)
-	if Global.entry == 0:
-	#Insert Dialogue: "Oh who do we have here?" or something similar
-		var t = Timer.new()
-		t.set_wait_time(1)
-		t.set_one_shot(false)
-		self.add_child(t)
-		Global.entry = 1
-		transCam.current = true
-		$Player.set_physics_process(false)
-		#Begin scene dialogue
-		textBox.queue_text("Oh who do we have here?")
-		t.start()
-		yield(t, "timeout")
-		t.queue_free()
-		$Path2D/AnimationPlayer.play("BEGIN")
-		yield($Path2D/AnimationPlayer, "animation_finished")
-		#This is how you queue text to the textbox queue
-		textBox.queue_text("In order to pass you must solve this riddle...")
-		init_riddle(riddlefile) #initalizes riddle randomly
-		init_hiddenitems() #initalizes hidden items array and other things needed
-		#textBox.queue_text("What walks on four legs in the morning, two legs in the afternoon, and three in the evening?")
-		textBox.queue_text(riddle)
-		textBox.queue_text("Please enter the answer in the chat once you have it, there are hints hidden here if you need them (:")
-		# warning-ignore:return_value_discarded
-		connect("textWait", self, "_finish_anim")
-		Global.in_anim = 1;
-	else:
-		myTimer.start(90)
+		else:
+			ServerConnection.send_ridlle(riddle,answer)
+	#play riddle animations
+	var t = Timer.new()
+	t.set_wait_time(1)
+	t.set_one_shot(false)
+	self.add_child(t)
+	transCam.current = true
+	$Player.set_physics_process(false)
+	#Begin scene dialogue
+	textBox.queue_text("Oh who do we have here?")
+	t.start()
+	yield(t, "timeout")
+	t.queue_free()
+	$Path2D/AnimationPlayer.play("BEGIN")
+	yield($Path2D/AnimationPlayer, "animation_finished")
+	textBox.queue_text("In order to pass you must solve this riddle...")
+	textBox.queue_text(riddle)
+	textBox.queue_text("Please enter the answer in the chat once you have it, there are hints hidden here if you need them (:")
+	# warning-ignore:return_value_discarded
+	connect("textWait", self, "_finish_anim")
+	Global.in_anim = 1;
 
 """
 /*
@@ -177,10 +171,9 @@ func _finish_anim():
 */
 """
 func _input(ev):
-	if Input.is_key_pressed(KEY_ENTER) and not ev.echo and textBox.queue_text_length() == 0:
-		if Global.in_anim == 1:
-			Global.in_anim = 0
-			emit_signal("textWait")
+	if textBox.queue_text_length() == 0 and Global.in_anim == 1:
+		Global.in_anim = 0
+		emit_signal("textWait")
 	if Input.is_key_pressed(KEY_SEMICOLON):
 		PlayerInventory.add_item("Coin", 1)
 	#DEBUG PURPOSES - REMOVE FOR FINAL GAME!!!

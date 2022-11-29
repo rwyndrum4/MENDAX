@@ -148,11 +148,11 @@ func control_animations(vel:Vector2):
 */
 """
 func take_damage(amount: int) -> void:
-	
-	healthbar.value = healthbar.value - amount
-	print(healthbar.value)
+	var new_health = healthbar.value - amount
+	ServerConnection.send_arena_player_health(new_health)
+	healthbar.value = new_health
 	if healthbar.value == 0:
-		print("you dead")
+		queue_free()
 
 func set_color(player_num:int):
 	match player_num:

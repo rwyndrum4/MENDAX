@@ -63,9 +63,19 @@ func _physics_process(delta):
 */
 """
 func take_damage(amount: int) -> void:
+	ServerConnection.send_arena_enemy_hit(amount,1) #1 is the type of enemy, reference EnemyTypes in arenaGame.gd
 	healthbar.value = healthbar.value - amount
 	skeletonAnim.play("hit")
-	print(healthbar.value)
+	if healthbar.value == 0:
+		skeletonAnim.play("death")
+		#have to defer disabling the skeleton, got an error otherwise
+		#put the line of code in function below since call_deferred only takes functions as input
+		call_deferred("defer_disabling_skeleton")
+		isDead = 1
+
+func take_damage_server(amount: int):
+	healthbar.value = healthbar.value - amount
+	skeletonAnim.play("hit")
 	if healthbar.value == 0:
 		skeletonAnim.play("death")
 		#have to defer disabling the skeleton, got an error otherwise

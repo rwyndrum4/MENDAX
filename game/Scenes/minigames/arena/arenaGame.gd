@@ -12,7 +12,7 @@ extends Control
 var in_menu = false
 onready var myTimer: Timer = $GUI/Timer
 onready var timerText: Label = $GUI/Timer/timerText
-onready var player = $Player
+onready var main_player = $Player
 onready var swordPivot = $Player/Sword/pivot
 onready var sword = $Player/Sword
 onready var playerHealth = $Player/ProgressBar
@@ -45,7 +45,7 @@ func _ready():
 	playerHealth.visible = true
 	playerHealth.value = 100
 	sword.direction = "right"
-	swordPivot.position = player.position + Vector2(60,20)
+	swordPivot.position = main_player.position + Vector2(60,20)
 	#If there is a server connection, spawn all players
 	if ServerConnection.match_exists():
 		spawn_players()
@@ -65,10 +65,10 @@ func _ready():
 func _process(_delta): #change to delta if used
 	timerText.text = convert_time(myTimer.time_left)
 	if sword.direction == "right":
-		swordPivot.position = player.position + Vector2(60,0)
-	if sword.direction == "left":
-		swordPivot.position = player.position + Vector2(-60,0)
-		
+		swordPivot.position = main_player.position + Vector2(60,0)
+	elif sword.direction == "left":
+		swordPivot.position = main_player.position + Vector2(-60,0)
+
 """
 /*
 * @pre An input of any sort
@@ -114,8 +114,8 @@ func _on_Timer_timeout():
 	#Turn off player healthbar
 	playerHealth.visible = false
 	#Delete online player objects if they have not already died
-	for player in online_players:
-		var obj = player.get('player_obj')
+	for o_player in online_players:
+		var obj = o_player.get('player_obj')
 		if obj != null:
 			obj.queue_free()
 	Global.state = Global.scenes.CAVE
@@ -140,8 +140,8 @@ func spawn_players():
 		var num = int(num_str)
 		#if player is YOUR player (aka player you control)
 		if num == ServerConnection._player_num:
-			player.position = Global.player_positions[str(num)]
-			player.set_color(num)
+			main_player.position = Global.player_positions[str(num)]
+			main_player.set_color(num)
 		#if the player is another online player
 		else:
 			var new_player:KinematicBody2D = load(online_players).instance()
@@ -153,7 +153,8 @@ func spawn_players():
 			add_child(new_player)
 			server_players.append({
 				'num': num,
-				'player_obj': new_player
+				'player_obj': new_player,
+				'sword_dir': "right"
 			})
 		#Set initial input vectors to zero
 		Global.player_input_vectors[str(num)] = Vector2.ZERO
@@ -185,9 +186,9 @@ func set_init_player_pos():
 */
 """
 func other_player_hit(player_id: int, player_health: int):
-	for player in online_players:
-		if player_id == player.get('num'):
-			player.get('player_obj').healthbar.value = player_health
+	for o_player in online_players:
+		if player_id == o_player.get('num'):
+			o_player.get('player_obj').healthbar.value = player_health
 			break
 
 """
@@ -200,7 +201,7 @@ func other_player_hit(player_id: int, player_health: int):
 """
 func someone_hit_enemy(enemy_id: int, dmg_taken: int):
 	if enemy_id == EnemyTypes.SKELETON:
-		SkeletonEnemy.take_damage(dmg_taken)
+		SkeletonEnemy.take_damage_server(dmg_taken)
 	elif enemy_id == EnemyTypes.BOD:
 		BodEnemy.take_damage(dmg_taken)
 	elif enemy_id == EnemyTypes.CHANDELIER:
@@ -214,5 +215,9 @@ func someone_hit_enemy(enemy_id: int, dmg_taken: int):
 * @return None
 */
 """
-func other_player_swung_sword(player_id: int):
-	pass
+func other_player_swung_sword(player_id: int, direction: String):
+	for o_player in online_players:
+		if player_id == o_player.get('num'):
+			o_player['sword_dir'] = direction
+			o_player.swing_sword(direction)
+			break

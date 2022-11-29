@@ -28,7 +28,7 @@ signal input_updated(id, vec) #input of player has changed and received
 signal character_spawned(char_name) #singal to tell if someone has spawned
 signal character_despawned(char_name) #signal to tell if someone has despawned
 signal riddle_received(riddle) #signal to tell game it has received a riddle from server
-signal arena_player_swung_sword(id) #signal to tell arena minigame someone swung sword
+signal arena_player_swung_sword(id, direction) #signal to tell arena minigame someone swung sword
 signal arena_player_lost_health(id, health) #signal to tell if player has lost health
 signal arena_enemy_hit(enemmy_hit, damage_taken) #signal to tell if an enemy has been hit
 
@@ -36,7 +36,7 @@ signal arena_enemy_hit(enemmy_hit, damage_taken) #signal to tell if an enemy has
 signal chat_message_received(msg,type,user_sent,from_user) #signal to tell game a chat message has come in
 
 const KEY := "nakama_mendax" #key that is stored in the server
-var IP_ADDRESS: String = "18.118.82.24" #ip address of server
+var IP_ADDRESS: String = "3.143.227.34" #ip address of server
 
 var _session: NakamaSession #user session
 
@@ -342,9 +342,9 @@ func send_ridlle(riddle_in: String, answer_in:String) -> void:
 * @return None
 */
 """
-func send_arena_sword():
+func send_arena_sword(direction: String):
 	if _socket:
-		var payload := {id = _player_num}
+		var payload := {id = _player_num, dir = direction}
 		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_ARENA_SWORD, JSON.print(payload))
 
 """
@@ -477,8 +477,9 @@ func _on_NakamaSocket_received_match_state(match_state: NakamaRTAPI.MatchData) -
 			var decoded: Dictionary = JSON.parse(raw).result
 			
 			var id: int = int(decoded.id)
+			var direction: String = decoded.dir
 			
-			emit_signal("arena_player_swung_sword", id)
+			emit_signal("arena_player_swung_sword", id, direction)
 		OpCodes.UPDATE_ARENA_PLAYER_HEALTH:
 			var decoded: Dictionary = JSON.parse(raw).result
 			

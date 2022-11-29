@@ -11,10 +11,13 @@ extends KinematicBody2D
 onready var character = $position/animated_sprite
 onready var char_pos = $position
 onready var healthbar = $ProgressBar
+onready var p_sword = $Sword
+onready var _pivot = $Sword/pivot
+onready var _anim_player = $Sword/AnimationPlayer
+var _global_sword_dir = "right"
 var player_color: String = ""
 var is_stopped = false
 var player_id: int = 0
-var last_position:Vector2 = Vector2.ZERO
 
 # Player physics constants
 const ACCELERATION = 25000
@@ -34,7 +37,6 @@ var velocity = Vector2.ZERO
 """
 func _ready():
 	character.play("idle_" + player_color)
-	last_position = self.position
 
 """
 /*
@@ -47,7 +49,11 @@ func _ready():
 func _physics_process(_delta):
 	self.position = Global.get_player_pos(player_id)
 	control_animations(Global.get_player_input_vec(player_id))
-	last_position = self.position
+	#Control sword position
+	if _global_sword_dir == "right":
+		p_sword.position = position + Vector2(60,0)
+	elif _global_sword_dir == "left":
+		p_sword.position = position + Vector2(-60,0)
 
 """
 /*
@@ -96,6 +102,33 @@ func take_damage(amount: int) -> void:
 	healthbar.value = healthbar.value - amount
 	if healthbar.value == 0:
 		queue_free()
+
+"""
+/*
+* @pre called when server says a player has swung their sword
+* @post plays the correct animation for the player's sword
+* @param sword_direction -> String (direction player should swing)
+* @return None
+*/
+"""
+func swing_sword(sword_direction: String):
+	if sword_direction == "right":
+		if _global_sword_dir != "right":
+			_anim_player.play("RESET")
+			yield(_anim_player, 'animation_finished')
+			_pivot.scale.x = 1
+		_anim_player.play("slash")
+		yield(_anim_player, 'animation_finished')
+		_anim_player.play("slash_rev")
+		yield(_anim_player, 'animation_finished')
+	elif sword_direction == "left":
+		if _global_sword_dir != "left":
+			_anim_player.play("RESET2")
+			yield(_anim_player, 'animation_finished')
+			_pivot.scale.x = -1
+		_anim_player.play("slashLeft")
+		yield(_anim_player, 'animation_finished')
+	_global_sword_dir = sword_direction
 
 """	
 /*

@@ -5,10 +5,10 @@
 * Date Revisions:
 """
 extends KinematicBody2D
-onready var skeletonAnim = $AnimationPlayer
+onready var BodAnim = $AnimationPlayer
 onready var healthbar = $ProgressBar
-onready var skeleBox = $MyHurtBox/hitbox
-onready var skeleAtkBox = $MyHitBox/CollisionShape2D
+onready var BodBox = $MyHurtBox/hitbox
+onready var BodAtkBox = $MyHitBox/CollisionShape2D
 
 var isIn = false
 var isDead = 0
@@ -24,7 +24,7 @@ var isDead = 0
 func _ready():
 	var anim = get_node("AnimationPlayer").get_animation("idle")
 	anim.set_loop(true)
-	skeletonAnim.play("idle")
+	BodAnim.play("idle")
 	healthbar.value = 200;
 
 """
@@ -36,17 +36,25 @@ func _ready():
 */
 """
 func take_damage(amount: int) -> void:
-	
+	ServerConnection.send_arena_enemy_hit(amount,2) #2 is the type of enemy, reference EnemyTypes in arenaGame.gd
 	healthbar.value = healthbar.value - amount
-	skeletonAnim.play("hit")
-	print(healthbar.value)
+	BodAnim.play("hit")
 	if healthbar.value == 0:
-		skeletonAnim.play("death")
+		BodAnim.play("death")
 		call_deferred("defer_disabling_BoD")
 		isDead = 1
 		
 func defer_disabling_BoD():
-	skeleBox.disabled = true
+	BodBox.disabled = true
+
+#Same as above function except it doesn't send data to server
+func take_damage_server(amount: int):
+	healthbar.value = healthbar.value - amount
+	BodAnim.play("hit")
+	if healthbar.value == 0:
+		BodAnim.play("death")
+		call_deferred("defer_disabling_BoD")
+		isDead = 1
 
 """
 /*
@@ -60,9 +68,9 @@ func _on_AnimationPlayer_animation_finished(_anim_name):
 		
 	if !isDead:
 		if !isIn:			
-			skeletonAnim.play("idle")
+			BodAnim.play("idle")
 		else:
-			skeletonAnim.play("attack1")
+			BodAnim.play("attack1")
 	else:
 		queue_free()
 
@@ -76,7 +84,7 @@ func _on_AnimationPlayer_animation_finished(_anim_name):
 """
 func _on_detector_body_entered(_body):
 	isIn = true
-	skeletonAnim.play("attack1")
+	BodAnim.play("attack1")
 	
 
 

@@ -19,15 +19,15 @@ var direction
 func _process(_delta):
 	if Input.is_action_just_pressed("mouse_click_left", false):
 		if direction == "right":
+			ServerConnection.send_arena_sword("right")
 			$AnimationPlayer.play("slash")
 			yield($AnimationPlayer, 'animation_finished')
 			$AnimationPlayer.play("slash_rev")
 			yield($AnimationPlayer, 'animation_finished')
 		else:
+			ServerConnection.send_arena_sword("left")
 			$AnimationPlayer.play("slashLeft")
 			yield($AnimationPlayer, 'animation_finished')
-
-			
 	
 	if Input.is_action_just_pressed("ui_left", false):
 		$AnimationPlayer.play("RESET2")
