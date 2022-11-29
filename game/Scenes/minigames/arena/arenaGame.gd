@@ -14,6 +14,7 @@ var in_menu = false
 var enemies_remaining = 2
 onready var myTimer: Timer = $GUI/Timer
 onready var timerText: Label = $GUI/Timer/timerText
+onready var textBox = $textBox
 onready var player = $Player
 onready var swordPivot = $Player/Sword/pivot
 onready var sword = $Player/Sword
@@ -30,7 +31,7 @@ var other_player = "res://Scenes/player/other_players/other_players.tscn"
 */
 """
 func _ready():
-	myTimer.start(90)
+	myTimer.start(60)
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("openChatbox", self, "chatbox_use")
 	playerHealth.visible = true
@@ -42,6 +43,12 @@ func _ready():
 		spawn_players()
 	# Add signal-catching function to check for win condition after each enemy is defetaed
 	GlobalSignals.connect("enemyDefeated",self,"_enemy_defeated")
+	$Skeleton.set_physics_process(false)
+	textBox.queue_text("You have a minute to defeat all enemies.")
+	textBox.queue_text("Each enemy will become stronger once this time has passed.")
+	textBox.queue_text("If any one of you dies, I will reset the timer.")
+	textBox.queue_text("Let the strongest among you prevail.")
+	$Skeleton.set_physics_process(true)
 
 """
 /*
@@ -99,8 +106,7 @@ func convert_time(time_in:float) -> String:
 */
 """
 func _on_Timer_timeout():
-	playerHealth.visible = false
-	Global.state = Global.scenes.CAVE
+	textBox.queue_text("OUT OF TIME. NOW PERISH.")
 
 func chatbox_use(value):
 	if value:
@@ -158,7 +164,7 @@ func set_init_player_pos():
 """
 /*
 * @pre Called when an enemy signals that it has been killed
-* @post scene transitions back to cave
+* @post makes announcement, hides player health, and transitions scene back to cave
 * @param Takes an enemyID value (not used)
 * @return None
 */
@@ -166,4 +172,17 @@ func set_init_player_pos():
 func _enemy_defeated(_enemyID:int):
 	enemies_remaining = enemies_remaining - 1
 	if enemies_remaining == 0:
+		textBox.queue_text("Those strongest among you who remain have leave to prepare for the next trial.")
+		
+		# Wait 5 seconds
+		var t = Timer.new()
+		t.set_wait_time(5)
+		t.set_one_shot(false)
+		self.add_child(t)
+		t.start()
+		yield(t, "timeout")
+		t.queue_free()
+		
+		# Transition back to 
+		playerHealth.visible = false
 		Global.state = Global.scenes.CAVE
