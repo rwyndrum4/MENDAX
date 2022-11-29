@@ -36,6 +36,7 @@ var velocity = Vector2.ZERO
 */
 """
 func _ready():
+	healthbar.value = 100
 	character.play("idle_" + player_color)
 
 """
@@ -51,9 +52,9 @@ func _physics_process(_delta):
 	control_animations(Global.get_player_input_vec(player_id))
 	#Control sword position
 	if _global_sword_dir == "right":
-		p_sword.position = position + Vector2(60,0)
+		p_sword.position = (self.position/40) + Vector2(30,-60)
 	elif _global_sword_dir == "left":
-		p_sword.position = position + Vector2(-60,0)
+		p_sword.position = (self.position/40) + Vector2(-60,-60)
 
 """
 /*
@@ -112,23 +113,23 @@ func take_damage(amount: int) -> void:
 */
 """
 func swing_sword(sword_direction: String):
+	_global_sword_dir = sword_direction
 	if sword_direction == "right":
 		if _global_sword_dir != "right":
+			_pivot.scale.x = 1
 			_anim_player.play("RESET")
 			yield(_anim_player, 'animation_finished')
-			_pivot.scale.x = 1
 		_anim_player.play("slash")
 		yield(_anim_player, 'animation_finished')
 		_anim_player.play("slash_rev")
 		yield(_anim_player, 'animation_finished')
 	elif sword_direction == "left":
 		if _global_sword_dir != "left":
+			_pivot.scale.x = -1
 			_anim_player.play("RESET2")
 			yield(_anim_player, 'animation_finished')
-			_pivot.scale.x = -1
 		_anim_player.play("slashLeft")
 		yield(_anim_player, 'animation_finished')
-	_global_sword_dir = sword_direction
 
 """	
 /*

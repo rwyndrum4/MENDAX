@@ -92,7 +92,8 @@ func _ready():
 	if ServerConnection.match_exists():
 		spawn_players()
 		if ServerConnection._player_num != 1:
-			yield(self, "riddle_received_from_server")
+			#yield(self, "riddle_received_from_server")
+			pass
 		else:
 			ServerConnection.send_ridlle(riddle,answer)
 	#play riddle animations

@@ -49,8 +49,8 @@ func _ready():
 	#If there is a server connection, spawn all players
 	if ServerConnection.match_exists():
 		spawn_players()
-		ServerConnection.connect("arena_enemy_hit",self,"other_player_hit")
-		ServerConnection.connect("arena_player_lost_health",self,"someone_hit_enemy")
+		ServerConnection.connect("arena_enemy_hit",self,"someone_hit_enemy")
+		ServerConnection.connect("arena_player_lost_health",self,"other_player_hit")
 		ServerConnection.connect("arena_player_swung_sword",self,"other_player_swung_sword")
 
 """
@@ -186,7 +186,7 @@ func set_init_player_pos():
 */
 """
 func other_player_hit(player_id: int, player_health: int):
-	for o_player in online_players:
+	for o_player in server_players:
 		if player_id == o_player.get('num'):
 			o_player.get('player_obj').healthbar.value = player_health
 			break
@@ -203,7 +203,7 @@ func someone_hit_enemy(enemy_id: int, dmg_taken: int):
 	if enemy_id == EnemyTypes.SKELETON:
 		SkeletonEnemy.take_damage_server(dmg_taken)
 	elif enemy_id == EnemyTypes.BOD:
-		BodEnemy.take_damage(dmg_taken)
+		BodEnemy.take_damage_server(dmg_taken)
 	elif enemy_id == EnemyTypes.CHANDELIER:
 		pass #implement when chandelier is ready
 
@@ -216,8 +216,8 @@ func someone_hit_enemy(enemy_id: int, dmg_taken: int):
 */
 """
 func other_player_swung_sword(player_id: int, direction: String):
-	for o_player in online_players:
+	for o_player in server_players:
 		if player_id == o_player.get('num'):
 			o_player['sword_dir'] = direction
-			o_player.swing_sword(direction)
+			o_player.get('player_obj').swing_sword(direction)
 			break
