@@ -7,6 +7,7 @@
 			   11/15/2022 - Improved targeting system with addition of a second Area2D radius.
 							Moved Skeleton physics process back into this file
 			   11/19/2022 - Changed signal names to not cause errors anymore
+			   11/28/2022 - Added death signal
 			
 """
 
@@ -134,4 +135,5 @@ func _on_skeletonAnimationPlayer_animation_finished(_anim_name):
 		else:
 			skeletonAnim.play("attack1")
 	else:
+		GlobalSignals.emit_signal("enemyDefeated", 0) #replace 0 with indication of enemy ID later
 		queue_free()

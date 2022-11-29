@@ -6,7 +6,7 @@
 	10/14/2022 - Added the openMenu signal
 	10/16/2022 - Added the inputText signal
 	10/28/2022 - Added server control signals
-	11/28/2022 - Added player death signal
+	11/28/2022 - Added player and enemy death signals
 """
 
 extends Node
@@ -54,7 +54,15 @@ signal answer_received(answer)
 """
 * Purpose - Send a signal when a player's hit points are reduced to 0
 * Used in - playerScript.gd
-* Parameter - playerID -> denotes which player has died (for use in multiplayer setting)
+* Parameter - playerID -> denotes which player has died (for potential use in multiplayer setting)
 """
 # warning-ignore:unused_signal
 signal playerDeath(playerID)
+
+"""
+* Purpose - Send a signal when an enemy's hit points are reduced to 0
+* Used in - arenaGame.gd
+* Parameter - enemyID -> denotes which enemy has died (not necessary at this point)
+"""
+# warning-ignore:unused_signal
+signal enemyDefeated(enemyID)

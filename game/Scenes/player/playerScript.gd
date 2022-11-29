@@ -7,6 +7,7 @@
 	10/2/2022 - Improved movement to feel more natural
 	10/14/2022 - Added signals to stop player when in options or textbox scene
 	10/27/2022 - Added character animation
+	11/28/2022 - Added death handling
 """
 extends KinematicBody2D
 
@@ -169,6 +170,14 @@ func set_color(player_num:int):
 			player_color = "orange"
 		_:
 			player_color = "blue"
-			
-func _game_over(answer_in:int):
+
+"""
+/*
+* @pre Called when the player's health bar is reduced to 0
+* @post scene transitions to game over screen
+* @param Takes a playerID value (not used)
+* @return None
+*/
+"""	
+func _game_over(_playerID:int):
 		Global.state = Global.scenes.GAMEOVER

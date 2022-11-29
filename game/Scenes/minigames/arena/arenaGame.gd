@@ -5,11 +5,13 @@
 * Date Revisions: 11/12/2022 - added physics process to manage Skeleton positioning
 *				  11/13/2022 - got Skeleton to track a player
 * 				  11/15/2022 - move physics process to Skeleton.gd
+				  11/28/2022 - add win condition in form of transition back to cave
 """
 extends Control
 
 # Member Variables
 var in_menu = false
+var enemies_remaining = 2
 onready var myTimer: Timer = $GUI/Timer
 onready var timerText: Label = $GUI/Timer/timerText
 onready var player = $Player
@@ -38,6 +40,8 @@ func _ready():
 	#If there is a server connection, spawn all players
 	if ServerConnection.match_exists():
 		spawn_players()
+	# Add signal-catching function to check for win condition after each enemy is defetaed
+	GlobalSignals.connect("enemyDefeated",self,"_enemy_defeated")
 
 """
 /*
@@ -150,3 +154,16 @@ func set_init_player_pos():
 			3: Global._player_positions_updated(num,Vector2(800,1250))
 			4: Global._player_positions_updated(num,Vector2(880,1250))
 			_: printerr("THERE ARE MORE THAN 4 PLAYERS TRYING TO BE SPAWNED IN arenaGame.gd")
+			
+"""
+/*
+* @pre Called when an enemy signals that it has been killed
+* @post scene transitions back to cave
+* @param Takes an enemyID value (not used)
+* @return None
+*/
+"""	
+func _enemy_defeated(_enemyID:int):
+	enemies_remaining = enemies_remaining - 1
+	if enemies_remaining == 0:
+		Global.state = Global.scenes.CAVE

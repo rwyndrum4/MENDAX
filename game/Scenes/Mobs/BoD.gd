@@ -2,7 +2,7 @@
 * Programmer Name - Jason Truong
 * Description - Code that designates mob animations
 * Date Created - 11/20/2022
-* Date Revisions:
+* Date Revisions: - 11/28/2022 - add death signal
 """
 extends KinematicBody2D
 onready var skeletonAnim = $AnimationPlayer
@@ -64,6 +64,7 @@ func _on_AnimationPlayer_animation_finished(_anim_name):
 		else:
 			skeletonAnim.play("attack1")
 	else:
+		GlobalSignals.emit_signal("enemyDefeated", 0) #replace 0 with indication of enemy ID later
 		queue_free()
 
 """
