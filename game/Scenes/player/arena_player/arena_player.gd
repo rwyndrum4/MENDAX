@@ -67,18 +67,26 @@ func _physics_process(_delta):
 func control_animations(vel):
 	#Character moves NorthEast
 	if vel.y < 0 and vel.x > 0:
+		_global_sword_dir = "right"
+		_pivot.scale.x = 1
 		char_pos.scale.x = -1
 		character.play("roll_northwest_" + player_color)
 	#Character moves NorthWest
 	elif vel.y < 0 and vel.x < 0:
+		_global_sword_dir = "left"
+		_pivot.scale.x = -1
 		char_pos.scale.x = 1
 		character.play("roll_northwest_" + player_color)
 	#Character moves East or SouthEast
 	elif vel.x > 0:
+		_global_sword_dir = "right"
+		_pivot.scale.x = 1
 		char_pos.scale.x = 1
 		character.play("roll_southeast_" + player_color)
 	#Character moves West or SoutWest
 	elif vel.x < 0:
+		_global_sword_dir = "left"
+		_pivot.scale.x = -1
 		char_pos.scale.x = -1
 		character.play("roll_southeast_" + player_color)
 	#Character moves North

@@ -36,7 +36,7 @@ func _ready():
 */
 """
 func take_damage(amount: int) -> void:
-	ServerConnection.send_arena_enemy_hit(amount,2) #2 is the type of enemy, reference EnemyTypes in arenaGame.gd
+	ServerConnection.send_arena_enemy_hit(amount,3) #3 is the type of enemy, reference EnemyTypes in arenaGame.gd
 	healthbar.value = healthbar.value - amount
 	BodAnim.play("hit")
 	if healthbar.value == 0:
