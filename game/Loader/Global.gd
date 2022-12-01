@@ -9,14 +9,15 @@
 extends Node
 
 # Player's balance
-var money = 0
+var money: int = 0
 var player_inventory = preload("res://Inventory/Inventory.tscn").instance()
 
 #Entry First Time
-var in_anim = 0
+var in_anim: int = 0
 
 #track minigame
-var minigame = 0
+var minigame: int = 0
+var players_in_minigame: int = 0
 
 """
 -----------------------------SCENE LOADER INSTRUCTION-------------------------------------
@@ -62,6 +63,8 @@ func _ready():
 	ServerConnection.connect("state_updated",self,"_player_positions_updated")
 	# warning-ignore:return_value_discarded
 	ServerConnection.connect("input_updated",self,"_player_input_updated")
+	# warning-ignore:return_value_discarded
+	ServerConnection.connect("minigame_player_spawned",self, "_minigame_player_spawn")
 
 """
 /*
@@ -133,6 +136,51 @@ func get_player_input_vec(player_id:int) -> Vector2:
 """
 func get_num_players() -> int:
 	return len(player_positions)
+
+"""
+/*
+* @pre None
+* @post returns number of players in the minigame
+* @param None
+* @return None
+*/
+"""
+func get_minigame_players() -> int:
+	return players_in_minigame
+
+"""
+/*
+* @pre None
+* @post adds a player to the global var
+* @param None
+* @return None
+*/
+"""
+func increment_minigame_player():
+	players_in_minigame += 1
+
+"""
+/*
+* @pre None
+* @post resets player counter to 0
+* @param None
+* @return None
+*/
+"""
+func reset_minigame_players():
+	players_in_minigame = 0
+
+"""
+/*
+* @pre None
+* @post resets player counter to 0
+* @param None
+* @return None
+*/
+"""
+func _minigame_player_spawn(id: int, current_num_players: int):
+	players_in_minigame = current_num_players + 1
+	ServerConnection.send_spawn_notif(players_in_minigame)
 
 """
 /*

@@ -13,7 +13,6 @@ extends Control
 var in_menu = false
 var answer = ""#set in init riddle
 var riddle_dict = {} #stores riddles and their answers
-var _players_in_game: int = 0
 var item = null
 var ItemClass = preload("res://Inventory/Item.tscn")
 var other_player = "res://Scenes/player/other_players/other_players.tscn" #Scene for players that online oppenents use
@@ -66,7 +65,7 @@ func _ready():
 	GlobalSignals.connect("openChatbox", self, "chatbox_use")
 	#If there is a multiplayer match
 	if ServerConnection.match_exists() and ServerConnection.get_server_status():
-		ServerConnection.send_spawn_notif(_players_in_game)
+		ServerConnection.send_spawn_notif(Global.get_minigame_players())
 		spawn_players()
 		#Send riddle if player is player 1
 		if ServerConnection._player_num == 1:
@@ -227,8 +226,8 @@ func set_riddle_from_server(riddle_in:String, answer_in:String) -> void:
 */
 """
 func _player_arrived_to_riddler(_id: int, current_num: int):
-	_players_in_game = current_num + 1
-	if _players_in_game == Global.get_num_players() - 1 and ServerConnection._player_num == 1:
+	Global.increment_minigame_player()
+	if Global.get_minigame_players() == Global.get_num_players() - 1 and ServerConnection._player_num == 1:
 		ServerConnection.send_riddle(riddle,answer)
 		start_riddle_game()
 
@@ -268,6 +267,7 @@ func init_riddle(file):
 """
 func _check_answer(answer_in:String):
 	if answer == answer_in:
+		Global.reset_minigame_players()
 		Global.state = Global.scenes.CAVE
 
 """
@@ -295,6 +295,7 @@ func convert_time(time_in:float) -> String:
 */
 """
 func _on_Timer_timeout():
+	Global.reset_minigame_players()
 	Global.state = Global.scenes.CAVE
 
 func chatbox_use(value):
