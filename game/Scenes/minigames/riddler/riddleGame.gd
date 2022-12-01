@@ -73,8 +73,11 @@ func _ready():
 		else:
 			#If player doesn't receive riddle from server in 5 seconds, they get their own riddle
 			#If they got the riddle successfully nothing else will happen
-			var wait_for_riddle_timer: Timer = Timer.new().start(5)
-			wait_for_riddle_timer.connect("timeout",self,"_riddle_timer_expired")
+			var wait_for_riddle_timer: Timer = Timer.new()
+			wait_for_riddle_timer.wait_time = 5
+			wait_for_riddle_timer.one_shot = true
+			wait_for_riddle_timer.start()
+			wait_for_riddle_timer.connect("timeout",self, "_riddle_timer_expired", [wait_for_riddle_timer])
 	#If there is a single player game, start game right away
 	else:
 		init_riddle(riddlefile) #initalizes riddle randomly
@@ -185,13 +188,14 @@ func start_riddle_game():
 * @return None
 */
 """
-func _riddle_timer_expired():
+func _riddle_timer_expired(timer:Timer):
 	if riddle == "":
 		init_riddle(riddlefile) #initalizes riddle randomly
 		textBox.queue_text("Never received riddle from server, you have your own riddle")
 		start_riddle_game()
 		#Make it so server can't change riddle anymore
 		ServerConnection.disconnect( "riddle_received", self, "set_riddle_from_server")
+	timer.queue_free()
 
 """
 /*

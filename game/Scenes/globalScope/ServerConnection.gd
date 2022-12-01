@@ -36,7 +36,7 @@ signal arena_enemy_hit(enemmy_hit, damage_taken) #signal to tell if an enemy has
 signal chat_message_received(msg,type,user_sent,from_user) #signal to tell game a chat message has come in
 
 const KEY := "nakama_mendax" #key that is stored in the server
-var IP_ADDRESS: String = "3.143.227.34" #ip address of server
+var IP_ADDRESS: String = "3.143.144.60" #ip address of server
 
 var _session: NakamaSession #user session
 
