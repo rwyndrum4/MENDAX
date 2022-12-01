@@ -40,7 +40,7 @@ onready var playerCam = $Player/Camera2D
 onready var player_one = $Player #Player object of player YOU control
 
 #Inventory changes - perhaps this should move somewhere more general
-#onready var inv = get_node("/root/global/")
+onready var inv = get_node("/root/global/")
 
 #signals
 signal textWait()

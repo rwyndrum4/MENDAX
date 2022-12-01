@@ -183,7 +183,7 @@ func reset_minigame_players():
 """
 func _minigame_player_spawn(_id: int):
 	players_in_minigame += 1
-	if players_in_minigame == get_num_players() - 1:
+	if players_in_minigame == get_num_players() - 1 and ServerConnection._player_num == 1:
 		emit_signal("all_players_arrived")
 
 """
