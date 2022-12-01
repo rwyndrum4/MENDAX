@@ -33,7 +33,6 @@ onready var transCam = $Path2D/PathFollow2D/camTrans
 onready var riddler = $riddler
 onready var playerCam = $Player/Camera2D
 onready var player_one = $Player #Player object of player YOU control
-var got_riddle = false
 
 #Scene for players that online oppenents use
 var other_player = "res://Scenes/player/other_players/other_players.tscn"
@@ -82,7 +81,6 @@ func init_riddle(file):
 """
 func _ready():
 	init_playerpos=$Player.position
-	init_riddle(riddlefile) #initalizes riddle randomly
 	init_hiddenitems() #initalizes hidden items array and other things needed
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("answer_received",self,"_check_answer")
@@ -90,33 +88,23 @@ func _ready():
 	ServerConnection.connect( "riddle_received", self, "set_riddle_from_server")
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("openChatbox", self, "chatbox_use")
-	if ServerConnection.match_exists():
+	#If there is a multiplayer match
+	if ServerConnection.match_exists() and ServerConnection.get_server_status():
 		spawn_players()
-		if ServerConnection._player_num != 1:
-			while(not got_riddle):
-				pass
-		else:
+		#Send riddle if player is player 1
+		if ServerConnection._player_num == 1:
+			init_riddle(riddlefile) #initalizes riddle randomly
 			ServerConnection.send_ridlle(riddle,answer)
-	#play riddle animations
-	var t = Timer.new()
-	t.set_wait_time(1)
-	t.set_one_shot(false)
-	self.add_child(t)
-	transCam.current = true
-	$Player.set_physics_process(false)
-	#Begin scene dialogue
-	textBox.queue_text("Oh who do we have here?")
-	t.start()
-	yield(t, "timeout")
-	t.queue_free()
-	$Path2D/AnimationPlayer.play("BEGIN")
-	yield($Path2D/AnimationPlayer, "animation_finished")
-	textBox.queue_text("In order to pass you must solve this riddle...")
-	textBox.queue_text(riddle)
-	textBox.queue_text("Please enter the answer in the chat once you have it, there are hints hidden here if you need them (:")
-	# warning-ignore:return_value_discarded
-	connect("textWait", self, "_finish_anim")
-	Global.in_anim = 1;
+			start_riddle_game()
+		else:
+			#If player doesn't receive riddle from server in 5 seconds, they get their own riddle
+			#If they got the riddle successfully nothing else will happen
+			var wait_for_riddle_timer: Timer = Timer.new().start(5)
+			wait_for_riddle_timer.connect("timeout",self,"_riddle_timer_expired")
+	#If there is a single player game, start game right away
+	else:
+		init_riddle(riddlefile) #initalizes riddle randomly
+		start_riddle_game()
 
 """
 /*
@@ -163,6 +151,51 @@ func _finish_anim():
 	$Player.set_physics_process(true)
 	playerCam.current = true
 
+"""
+/*
+* @pre None
+* @post starts the game and opening animations
+* @param None
+* @return None
+*/
+"""
+func start_riddle_game():
+	#play riddle animations
+	var t = Timer.new()
+	t.set_wait_time(1)
+	t.set_one_shot(false)
+	self.add_child(t)
+	transCam.current = true
+	$Player.set_physics_process(false)
+	#Begin scene dialogue
+	textBox.queue_text("Oh who do we have here?")
+	t.start()
+	yield(t, "timeout")
+	t.queue_free()
+	$Path2D/AnimationPlayer.play("BEGIN")
+	yield($Path2D/AnimationPlayer, "animation_finished")
+	textBox.queue_text("In order to pass you must solve this riddle...")
+	textBox.queue_text(riddle)
+	textBox.queue_text("Please enter the answer in the chat once you have it, there are hints hidden here if you need them (:")
+	# warning-ignore:return_value_discarded
+	connect("textWait", self, "_finish_anim")
+	Global.in_anim = 1;
+
+"""
+/*
+* @pre wait_for_riddle_timer expired
+* @post If player hasn't got a riddle from the server, give them their own
+* @param None
+* @return None
+*/
+"""
+func _riddle_timer_expired():
+	if riddle == "":
+		init_riddle(riddlefile) #initalizes riddle randomly
+		textBox.queue_text("Never received riddle from server, you have your own riddle")
+		start_riddle_game()
+		#Make it so server can't change riddle anymore
+		ServerConnection.disconnect( "riddle_received", self, "set_riddle_from_server")
 
 """
 /*
@@ -364,7 +397,7 @@ func set_riddle_from_server(riddle_in:String, answer_in:String) -> void:
 	riddle = riddle_in
 	hint = riddle_in
 	answer = answer_in
-	got_riddle = true
+	start_riddle_game()
 
 """
 /*
