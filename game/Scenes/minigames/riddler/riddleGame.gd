@@ -74,6 +74,7 @@ func _ready():
 			#If player doesn't receive riddle from server in 5 seconds, they get their own riddle
 			#If they got the riddle successfully nothing else will happen
 			var wait_for_riddle_timer: Timer = Timer.new()
+			add_child(wait_for_riddle_timer)
 			wait_for_riddle_timer.wait_time = 5
 			wait_for_riddle_timer.one_shot = true
 			wait_for_riddle_timer.start()
