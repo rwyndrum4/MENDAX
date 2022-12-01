@@ -60,12 +60,12 @@ func _ready():
 	# warning-ignore:return_value_discarded
 	ServerConnection.connect( "riddle_received", self, "set_riddle_from_server")
 	# warning-ignore:return_value_discarded
-	ServerConnection.connect("player_spawned", self, "_player_arrived_to_riddler")
+	Global.connect("all_players_arrived", self, "_can_send_riddle")
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("openChatbox", self, "chatbox_use")
 	#If there is a multiplayer match
 	if ServerConnection.match_exists() and ServerConnection.get_server_status():
-		ServerConnection.send_spawn_notif(Global.get_minigame_players())
+		ServerConnection.send_spawn_notif()
 		spawn_players()
 		#Send riddle if player is player 1
 		if ServerConnection._player_num == 1:
@@ -225,11 +225,9 @@ func set_riddle_from_server(riddle_in:String, answer_in:String) -> void:
 * @return None
 */
 """
-func _player_arrived_to_riddler(_id: int, current_num: int):
-	Global.increment_minigame_player()
-	if Global.get_minigame_players() == Global.get_num_players() - 1 and ServerConnection._player_num == 1:
-		ServerConnection.send_riddle(riddle,answer)
-		start_riddle_game()
+func _can_send_riddle():
+	ServerConnection.send_riddle(riddle,answer)
+	start_riddle_game()
 
 """
 /*

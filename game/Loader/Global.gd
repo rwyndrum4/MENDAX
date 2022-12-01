@@ -19,6 +19,9 @@ var in_anim: int = 0
 var minigame: int = 0
 var players_in_minigame: int = 0
 
+# Singals
+signal all_players_arrived()
+
 """
 -----------------------------SCENE LOADER INSTRUCTION-------------------------------------
 - state -> this is the variable that tracks what scene the game is currently in
@@ -178,9 +181,10 @@ func reset_minigame_players():
 * @return None
 */
 """
-func _minigame_player_spawn(id: int, current_num_players: int):
-	players_in_minigame = current_num_players + 1
-	ServerConnection.send_spawn_notif(players_in_minigame)
+func _minigame_player_spawn(_id: int):
+	players_in_minigame += 1
+	if players_in_minigame == get_num_players() - 1:
+		emit_signal("all_players_arrived")
 
 """
 /*
