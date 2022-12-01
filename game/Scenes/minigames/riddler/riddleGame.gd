@@ -1,11 +1,11 @@
 """
-* Programmer Name - Freeman Spray and Mohit Garg
+* Programmer Name - Freeman Spray, Mohit Garg, Ben Moeller
 * Description - Code for controlling the Riddle minigame
 * Date Created - 10/14/2022
 * Date Revisions:
-	10/16/2022 - 
 	10/19/2022 -Added hidden item detector functionality -Mohit Garg
-	10/22/2022-Added hidden item detector for multiple hints-Mohit Garg
+	10/22/2022 -Added hidden item detector for multiple hints-Mohit Garg
+	11/30/2022 -Added changes to sync riddles between the players -Ben Moeller
 """
 extends Control
 
@@ -56,7 +56,6 @@ signal textWait()
 """
 func _ready():
 	init_playerpos=$Player.position
-	init_hiddenitems() #initalizes hidden items array and other things needed
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("answer_received",self,"_check_answer")
 	# warning-ignore:return_value_discarded
@@ -72,6 +71,7 @@ func _ready():
 		#Send riddle if player is player 1
 		if ServerConnection._player_num == 1:
 			init_riddle(riddlefile) #initalizes riddle randomly
+			init_hiddenitems() #initalizes hidden items array and other things needed
 			#Sends the riddle to other players once all are present
 		else:
 			#If player doesn't receive riddle from server in 5 seconds, they get their own riddle
@@ -81,10 +81,12 @@ func _ready():
 			wait_for_riddle_timer.wait_time = 5
 			wait_for_riddle_timer.one_shot = true
 			wait_for_riddle_timer.start()
+			# warning-ignore:return_value_discarded
 			wait_for_riddle_timer.connect("timeout",self, "_riddle_timer_expired", [wait_for_riddle_timer])
 	#If there is a single player game, start game right away
 	else:
 		init_riddle(riddlefile) #initalizes riddle randomly
+		init_hiddenitems() #initalizes hidden items array and other things needed
 		start_riddle_game()
 
 """
@@ -107,7 +109,7 @@ func _process(_delta): #change to delta if used
 * @return None
 */
 """
-func _input(ev):
+func _input(_ev):
 	if textBox.queue_text_length() == 0 and Global.in_anim == 1:
 		Global.in_anim = 0
 		emit_signal("textWait")
@@ -195,6 +197,7 @@ func start_riddle_game():
 func _riddle_timer_expired(timer:Timer):
 	if riddle == "":
 		init_riddle(riddlefile) #initalizes riddle randomly
+		init_hiddenitems() #initalizes hidden items array and other things needed
 		textBox.queue_text("Never received riddle from server, you have your own riddle")
 		start_riddle_game()
 		#Make it so server can't change riddle anymore
@@ -239,7 +242,7 @@ func _player_arrived_to_riddler(_id: int, current_num: int):
 """
 func init_riddle(file):
 	var f = File.new()
-	var err=f.open(file, File.READ)
+	var _err=f.open(file, File.READ)
 	var key=1
 	while !f.eof_reached():
 		var line=f.get_line()
@@ -251,7 +254,6 @@ func init_riddle(file):
 		randomize()
 		number = randi() % key 
 	if(number%2==1): #inidcates line contains hint
-		#print(number)
 		riddle= str(riddle_dict[number])
 		hint=str(riddle_dict[number+1])
 		answer=hint
@@ -309,7 +311,6 @@ func chatbox_use(value):
 """
 func init_hiddenitems():
 	hintlength=hint.length()
-	print(hintlength)
 	answerlength=answer.length()
 	lettersleft=answer.length()
 	for i in 6:
@@ -318,7 +319,7 @@ func init_hiddenitems():
 	for i in range(0,7):
 		x_overlap.append([])
 		y_overlap.append([])
-		for j in range(0,2):
+		for _j in range(0,2):
 			x_overlap[i].append(0)
 			y_overlap[i].append(0)
 	x_overlap[0][0]=init_playerpos.x-10; #left endpoint of player_pos
@@ -352,7 +353,6 @@ func init_hiddenitems():
 		x_overlap[hintcounter][1]=x+150;# right endpoint of hint area box
 		y_overlap[hintcounter][0]=init_playerpos.y-150;
 		y_overlap[hintcounter][1]=init_playerpos.y+150;
-		#print(hint.position)
 		hintcounter=hintcounter+1
 	$item1area.position=$item1.position
 	$item2area.position=$item2.position
@@ -380,7 +380,6 @@ func enterarea(spritepath,itemnumber):
 		if(answerlength>=6):
 			while(lettersleft>=itemsleft and lettercount<=2):
 				randomize()
-				#print(hintlength)
 				var random=hintlength-1;
 				var index
 				if(random!=0):
@@ -388,7 +387,6 @@ func enterarea(spritepath,itemnumber):
 				else:
 					index=0
 				letter=hint[index];#get random letter
-				#print(index)
 				letters=letters+str(letter);# add letter to hints
 				lettercount+=1;#update lettercount
 				lettersleft=lettersleft-1;#update letters left that can be given
@@ -396,8 +394,6 @@ func enterarea(spritepath,itemnumber):
 				hint.erase(index,1)
 				if hintlength!=0:#checks if any letters left in hint
 					hintlength=hintlength-1;#hintlength decreased as one letter given as hint
-				#print(letters)
-				#print(hint)
 		else:
 			randomize()
 			var random=hintlength-1;

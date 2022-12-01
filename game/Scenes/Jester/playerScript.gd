@@ -92,7 +92,7 @@ func stop_go_player(value:bool):
 * @return None
 */
 """
-func control_animations(vel):
+func control_animations(_vel):
 		character.play("idle")
 
 

@@ -165,7 +165,7 @@ func change_state(next_state):
 """
 func queue_file(file_name: String):
 	var f = File.new()
-	var err = f.open(file_name, File.READ)
+	f.open(file_name, File.READ)
 	while not f.eof_reached():
 		var line = f.get_line()
 		if line != "":
