@@ -71,6 +71,9 @@ func _ready():
 		if ServerConnection._player_num == 1:
 			init_riddle(riddlefile) #initalizes riddle randomly
 			init_hiddenitems() #initalizes hidden items array and other things needed
+			if Global.get_minigame_players() == Global.get_num_players() - 1:
+				ServerConnection.send_riddle(riddle,answer)
+				start_riddle_game()
 			#Sends the riddle to other players once all are present
 		else:
 			#If player doesn't receive riddle from server in 5 seconds, they get their own riddle
