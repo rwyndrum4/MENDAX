@@ -216,8 +216,9 @@ func _riddle_timer_expired(timer:Timer):
 """
 func set_riddle_from_server(riddle_in:String, answer_in:String) -> void:
 	riddle = riddle_in
-	hint = riddle_in
+	hint = answer_in
 	answer = answer_in
+	init_hiddenitems()
 	start_riddle_game()
 
 """
