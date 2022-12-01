@@ -331,7 +331,7 @@ func send_input_update(in_vec:Vector2) -> void:
 * @return None
 */
 """
-func send_ridlle(riddle_in: String, answer_in:String) -> void:
+func send_riddle(riddle_in: String, answer_in:String) -> void:
 	if _socket:
 		var payload := {riddle = riddle_in, answer = answer_in}
 		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_RIDDLER_RIDDLE, JSON.print(payload))

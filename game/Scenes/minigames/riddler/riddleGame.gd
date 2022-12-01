@@ -215,10 +215,18 @@ func set_riddle_from_server(riddle_in:String, answer_in:String) -> void:
 	answer = answer_in
 	start_riddle_game()
 
-func _player_arrived_to_riddler(id: int, current_num: int):
+"""
+/*
+* @pre Called when someone spawns into the minigame
+* @post update player count and send riddle if all players are here
+* @param _id -> int (player id, not needed), current_num -> int (current number of players in minigame)
+* @return None
+*/
+"""
+func _player_arrived_to_riddler(_id: int, current_num: int):
 	_players_in_game = current_num + 1
-	if _players_in_game == Global.get_num_players() - 1:
-		ServerConnection.send_ridlle(riddle,answer)
+	if _players_in_game == Global.get_num_players() - 1 and ServerConnection._player_num == 1:
+		ServerConnection.send_riddle(riddle,answer)
 		start_riddle_game()
 
 """
