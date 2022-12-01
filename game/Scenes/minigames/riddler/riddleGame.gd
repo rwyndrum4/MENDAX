@@ -44,32 +44,6 @@ onready var inv = get_node("/root/global/")
 
 #signals
 signal textWait()
-"""
-/*
-* @pre Called when the node enters the scene tree for the first time.
-* @post Updates riddle answer and riddle hint
-* @param None
-* @return None
-*/
-"""
-func init_riddle(file):
-	var f = File.new()
-	var err=f.open(file, File.READ)
-	var key=1
-	while !f.eof_reached():
-		var line=f.get_line()
-		riddle_dict[key]=line
-		key=key+1
-	f.close()
-	var number=0
-	while number==0 or number%2==0:
-		randomize()
-		number = randi() % key 
-	if(number%2==1): #inidcates line contains hint
-		#print(number)
-		riddle= str(riddle_dict[number])
-		hint=str(riddle_dict[number+1])
-		answer=hint
 	
 """
 /*
@@ -117,6 +91,28 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta): #change to delta if used
 	timerText.text = convert_time(myTimer.time_left)
+
+"""
+/*
+* @pre An input of any sort
+* @post None
+* @param Takes in an event
+* @return None
+*/
+"""
+func _input(ev):
+	if textBox.queue_text_length() == 0 and Global.in_anim == 1:
+		Global.in_anim = 0
+		emit_signal("textWait")
+	if Input.is_key_pressed(KEY_SEMICOLON):
+		PlayerInventory.add_item("Coin", 1)
+	#DEBUG PURPOSES - REMOVE FOR FINAL GAME!!!
+	#IF YOU PRESS P -> TIMER WILL REDUCE TO 3 SECONDS
+	if Input.is_action_just_pressed("timer_debug_key",false):
+		myTimer.start(3)
+	#IF YOU PRESS Q -> TIMER WILL INCREASE TO ARBITRARILY MANY SECONDS
+	if Input.is_action_just_pressed("extend_timer_debug_key",false):
+		myTimer.start(30000)
 
 """
 /*
@@ -199,25 +195,44 @@ func _riddle_timer_expired():
 
 """
 /*
-* @pre An input of any sort
-* @post None
-* @param Takes in an event
+* @pre Called when you received riddle from other player
+* @post Set the riddle and answer
+* @param riddle_in -> String, answer_in -> String
 * @return None
 */
 """
-func _input(ev):
-	if textBox.queue_text_length() == 0 and Global.in_anim == 1:
-		Global.in_anim = 0
-		emit_signal("textWait")
-	if Input.is_key_pressed(KEY_SEMICOLON):
-		PlayerInventory.add_item("Coin", 1)
-	#DEBUG PURPOSES - REMOVE FOR FINAL GAME!!!
-	#IF YOU PRESS P -> TIMER WILL REDUCE TO 3 SECONDS
-	if Input.is_action_just_pressed("timer_debug_key",false):
-		myTimer.start(3)
-	#IF YOU PRESS Q -> TIMER WILL INCREASE TO ARBITRARILY MANY SECONDS
-	if Input.is_action_just_pressed("extend_timer_debug_key",false):
-		myTimer.start(30000)
+func set_riddle_from_server(riddle_in:String, answer_in:String) -> void:
+	riddle = riddle_in
+	hint = riddle_in
+	answer = answer_in
+	start_riddle_game()
+
+"""
+/*
+* @pre Called when the node enters the scene tree for the first time.
+* @post Updates riddle answer and riddle hint
+* @param None
+* @return None
+*/
+"""
+func init_riddle(file):
+	var f = File.new()
+	var err=f.open(file, File.READ)
+	var key=1
+	while !f.eof_reached():
+		var line=f.get_line()
+		riddle_dict[key]=line
+		key=key+1
+	f.close()
+	var number=0
+	while number==0 or number%2==0:
+		randomize()
+		number = randi() % key 
+	if(number%2==1): #inidcates line contains hint
+		#print(number)
+		riddle= str(riddle_dict[number])
+		hint=str(riddle_dict[number+1])
+		answer=hint
 
 """
 /*
@@ -384,20 +399,6 @@ func enterarea(spritepath,itemnumber):
 		hintbox.popup()
 		itemsleft=itemsleft-1;#one item has been found
 		itemarray[itemnumber-1]=1; #item has been found
-
-"""
-/*
-* @pre Called when you received riddle from other player
-* @post Set the riddle and answer
-* @param riddle_in -> String, answer_in -> String
-* @return None
-*/
-"""
-func set_riddle_from_server(riddle_in:String, answer_in:String) -> void:
-	riddle = riddle_in
-	hint = riddle_in
-	answer = answer_in
-	start_riddle_game()
 
 """
 /*
