@@ -33,6 +33,7 @@ onready var transCam = $Path2D/PathFollow2D/camTrans
 onready var riddler = $riddler
 onready var playerCam = $Player/Camera2D
 onready var player_one = $Player #Player object of player YOU control
+var got_riddle = false
 
 #Scene for players that online oppenents use
 var other_player = "res://Scenes/player/other_players/other_players.tscn"
@@ -92,8 +93,8 @@ func _ready():
 	if ServerConnection.match_exists():
 		spawn_players()
 		if ServerConnection._player_num != 1:
-			#yield(self, "riddle_received_from_server")
-			pass
+			while(not got_riddle):
+				pass
 		else:
 			ServerConnection.send_ridlle(riddle,answer)
 	#play riddle animations
@@ -363,7 +364,7 @@ func set_riddle_from_server(riddle_in:String, answer_in:String) -> void:
 	riddle = riddle_in
 	hint = riddle_in
 	answer = answer_in
-	emit_signal("riddle_received_from_server")
+	got_riddle = true
 
 """
 /*
