@@ -11,16 +11,22 @@ extends Control
 
 # Member Variables
 var in_menu = false
+var answer = ""#set in init riddle
+var riddle_dict = {} #stores riddles and their answers
+var _players_in_game: int = 0
+var item = null
+var ItemClass = preload("res://Inventory/Item.tscn")
+var other_player = "res://Scenes/player/other_players/other_players.tscn" #Scene for players that online oppenents use
+
+# Scene Nodes
 onready var myTimer: Timer = $GUI/Timer
 onready var timerText: Label = $GUI/Timer/timerText
 onready var textBox = $GUI/textBox
 onready var hintbox=$GUI/show_letter
 onready var itemarray=[] #determines if items have been found
 onready var hint="";# set in init riddle
-var answer = ""#set in init riddle
 onready var riddle="";#set in init riddle
 onready var riddlefile = 'res://Assets/riddle_jester/riddles.txt'
-var riddle_dict = {} #stores riddles and their answers
 onready var currenthints=""; #keeps track of currenhints found
 onready var hintlength=0#keeps track of hintlength to give random letter clues
 onready var answerlength=0 #keeps track of asnwer length is constant
@@ -34,13 +40,8 @@ onready var riddler = $riddler
 onready var playerCam = $Player/Camera2D
 onready var player_one = $Player #Player object of player YOU control
 
-#Scene for players that online oppenents use
-var other_player = "res://Scenes/player/other_players/other_players.tscn"
-
 #Inventory changes - perhaps this should move somewhere more general
-var item = null
-var ItemClass = preload("res://Inventory/Item.tscn")
-onready var inv = get_node("/root/global/")
+#onready var inv = get_node("/root/global/")
 
 #signals
 signal textWait()
@@ -61,15 +62,17 @@ func _ready():
 	# warning-ignore:return_value_discarded
 	ServerConnection.connect( "riddle_received", self, "set_riddle_from_server")
 	# warning-ignore:return_value_discarded
+	ServerConnection.connect("player_spawned", self, "_player_arrived_to_riddler")
+	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("openChatbox", self, "chatbox_use")
 	#If there is a multiplayer match
 	if ServerConnection.match_exists() and ServerConnection.get_server_status():
+		ServerConnection.send_spawn_notif(_players_in_game)
 		spawn_players()
 		#Send riddle if player is player 1
 		if ServerConnection._player_num == 1:
 			init_riddle(riddlefile) #initalizes riddle randomly
-			ServerConnection.send_ridlle(riddle,answer)
-			start_riddle_game()
+			#Sends the riddle to other players once all are present
 		else:
 			#If player doesn't receive riddle from server in 5 seconds, they get their own riddle
 			#If they got the riddle successfully nothing else will happen
@@ -211,6 +214,12 @@ func set_riddle_from_server(riddle_in:String, answer_in:String) -> void:
 	hint = riddle_in
 	answer = answer_in
 	start_riddle_game()
+
+func _player_arrived_to_riddler(id: int, current_num: int):
+	_players_in_game = current_num + 1
+	if _players_in_game == Global.get_num_players() - 1:
+		ServerConnection.send_ridlle(riddle,answer)
+		start_riddle_game()
 
 """
 /*

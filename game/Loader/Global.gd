@@ -126,6 +126,17 @@ func get_player_input_vec(player_id:int) -> Vector2:
 """
 /*
 * @pre None
+* @post returns number of players in the game
+* @param None
+* @return int (number of current players)
+*/
+"""
+func get_num_players() -> int:
+	return len(player_positions)
+
+"""
+/*
+* @pre None
 * @post update a players position for a given id (their player number)
 * @param id -> int, position -> vector 2
 * @return None
