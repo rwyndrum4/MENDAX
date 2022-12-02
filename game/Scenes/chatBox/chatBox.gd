@@ -27,6 +27,7 @@ var channel_colors:Dictionary = {
 	"Green": "#51f538",
 	"Blue": "#6aeaff",
 	"White": "#ffffff",
+	"Pink": "#f06eee",
 	"Red": "#fa2a1b"
 }
 #Placeholder texts [aka everything for controlling autofill stuff]
@@ -52,6 +53,7 @@ var placeholder_texts = [
 func _ready():
 	playerInput.placeholder_text = "SHIFT+ENTER to chat, Esc to exit"
 	modulate.a8 = MODULATE_MIN
+	$textHolder/pastText.scroll_following = true
 
 """
 /*
@@ -151,6 +153,21 @@ func add_err_message():
 
 """
 /*
+* @pre something has happened with the chat
+* @post adds chat message to let user know what happened with the chat
+* @param event_message -> String (message to print)
+* @return None
+*/
+"""
+func chat_event_message(event_message: String):
+	var color: String = get_chat_color("chat_event")
+	var event_msg = "[color=" + color + "]"
+	event_msg += event_message
+	chatLog.bbcode_text += event_msg
+	chatLog.bbcode_text += "\n"
+
+"""
+/*
 * @pre called when player hits enter inside of textbox
 * @post sends message to add_message function and clears textbox
 * @param new_text -> String
@@ -234,6 +251,8 @@ func get_chat_color(type:String) -> String:
 		return channel_colors['Blue']
 	elif type == "error":
 		return channel_colors['Red']
+	elif type == "chat_event":
+		return channel_colors['Pink']
 	else:
 		return channel_colors['White']
 

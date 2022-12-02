@@ -9,7 +9,6 @@
 extends Control
 
 # Member Variables
-var in_menu = false
 onready var myTimer: Timer = $GUI/Timer
 onready var timerText: Label = $GUI/Timer/timerText
 onready var main_player = $Player
@@ -29,6 +28,8 @@ enum EnemyTypes {
 }
 #Array to hold objects of other players (not your own player)
 var server_players: Array = []
+var in_menu = false
+var EXTRA_TIME: float = 20.0
 
 """
 /*
@@ -47,10 +48,13 @@ func _ready():
 	sword.direction = "right"
 	swordPivot.position = main_player.position + Vector2(60,20)
 	#If there is a server connection, spawn all players
-	if ServerConnection.match_exists():
+	if ServerConnection.match_exists() and ServerConnection.get_server_status():
 		spawn_players()
+		# warning-ignore:return_value_discarded
 		ServerConnection.connect("arena_enemy_hit",self,"someone_hit_enemy")
+		# warning-ignore:return_value_discarded
 		ServerConnection.connect("arena_player_lost_health",self,"other_player_hit")
+		# warning-ignore:return_value_discarded
 		ServerConnection.connect("arena_player_swung_sword",self,"other_player_swung_sword")
 
 """
@@ -151,6 +155,8 @@ func spawn_players():
 			new_player.position = Global.player_positions[str(num)]
 			#Add child to the scene
 			add_child(new_player)
+			# warning-ignore:return_value_discarded
+			new_player.connect("player_died", self, "_extend_timer")
 			server_players.append({
 				'num': num,
 				'player_obj': new_player,
@@ -221,3 +227,15 @@ func other_player_swung_sword(player_id: int, direction: String):
 			o_player['sword_dir'] = direction
 			o_player.get('player_obj').swing_sword(direction)
 			break
+
+"""
+/*
+* @pre a player (who is not the player playing) has died
+* @post timer gains more time
+* @param None
+* @return None
+*/
+"""
+func _extend_timer():
+	var new_time: float = myTimer.time_left + EXTRA_TIME
+	myTimer.start(new_time)

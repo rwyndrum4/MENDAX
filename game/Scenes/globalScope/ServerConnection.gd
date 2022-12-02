@@ -38,7 +38,7 @@ signal minigame_player_spawned(id) #signal to tell if a player has arrived to a 
 signal chat_message_received(msg,type,user_sent,from_user) #signal to tell game a chat message has come in
 
 const KEY := "nakama_mendax" #key that is stored in the server
-var IP_ADDRESS: String = "3.143.144.60" #ip address of server
+var IP_ADDRESS: String = "18.222.217.58" #ip address of server
 
 var _session: NakamaSession #user session
 
@@ -53,6 +53,7 @@ var _world_id: String = "" #id of the world you are currently in
 var _device_id: String = "" #id of the user's computer generated id
 var _match_id: String = "" #String to hold match id
 var _player_num: int = 0 #Number of the player
+var _group_id: String = "" #id of the match's private group chat
 var chatroom_users: Dictionary = {} #chatroom users
 var connected_opponents: Dictionary = {} #opponents currently in match (including you)
 var game_match = null #holds the current game match information once created
@@ -202,6 +203,46 @@ func join_chat_async_whisper(input:String, has_id_already:bool) -> int:
 		return ERR_CONNECTION_ERROR
 	else:
 		return OK
+
+"""
+/*
+* @pre None
+* @post creates group in the server
+* @param group_name -> String
+* @return None
+*/
+"""
+func create_match_group(group_name: String):
+	var group: NakamaAPI.ApiGroup = yield(_client.create_group_async(_session, group_name), "completed")
+	_group_id = group.id
+	if group.is_exception():
+		print("Group was not formed: %s" % group)
+
+"""
+/*
+* @pre None
+* @post joins a group that has already been made
+* @param None
+* @return None
+*/
+"""
+func join_match_group():
+	var join: NakamaAsyncResult = yield(_client.join_group_async(_session, _group_id), "completed")
+	if join.is_exception():
+		print("An error occurred: %s" % join)
+
+"""
+/*
+* @pre None
+* @post leaves the match group
+* @param None
+* @return None
+*/
+"""
+func leave_match_group():
+	var leave : NakamaAsyncResult = yield(_client.leave_group_async(_session, _group_id), "completed")
+	if leave.is_exception():
+		print("An error occurred: %s" % leave)
 
 
 """
