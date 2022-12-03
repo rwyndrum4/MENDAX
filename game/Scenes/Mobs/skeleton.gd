@@ -8,6 +8,8 @@
 							Moved Skeleton physics process back into this file
 			   11/19/2022 - Changed signal names to not cause errors anymore
 			   12/3/2022 - removed player search feature in favor of constant targetting
+			   11/28/2022 - Added death signal
+			
 """
 
 
@@ -42,6 +44,8 @@ func _ready():
 	healthbar.value = 100;
 	# warning-ignore:return_value_discarded
 	ServerConnection.connect("arena_enemy_hit",self, "took_damage_from_server")
+	# warning-ignore:return_value_discarded
+	GlobalSignals.connect("textbox_empty",self,"turn_on_physics")
 	
 """
 /*
@@ -69,6 +73,9 @@ func _physics_process(delta):
 		pos2d.scale.x = 1
 		player_detector_box.position = Vector2(50,0)
 		skeleAtkBox.position = Vector2(60,0)
+
+func turn_on_physics():
+	set_physics_process(true)
 
 """
 /*
@@ -140,6 +147,7 @@ func _on_skeletonAnimationPlayer_animation_finished(_anim_name):
 		else:
 			skeletonAnim.play("attack1")
 	else:
+		GlobalSignals.emit_signal("enemyDefeated", 0) #replace 0 with indication of enemy ID later
 		queue_free()
 
 """
