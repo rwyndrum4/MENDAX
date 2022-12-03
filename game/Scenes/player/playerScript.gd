@@ -17,8 +17,8 @@ onready var char_pos = $position
 onready var healthbar = $ProgressBar
 var is_stopped = false
 #bullet variables
-onready var bullet=preload("res://Scenes/bullet/bullet.tscn")
-
+onready var bulletplayer=preload("res://Scenes/bullet/bulletplayer.tscn")
+onready var bulletenemy=preload("res://Scenes/bullet/bulletenemy.tscn")
 # Player physics constants
 const ACCELERATION = 25000
 const MAX_SPEED = 500
@@ -152,10 +152,11 @@ func take_damage(amount: int) -> void:
 ##will customize later
 func fire():
 	print("shoot")
-	var bullet_instance=bullet.instance()
-	get_parent().add_child(bullet_instance)
-	bullet_instance.position=$Node2D/Position2D.global_position
-	bullet_instance.velocity= get_global_mouse_position()-bullet_instance.position
+	var bulletp_instance=bulletplayer.instance()
+	var bullete_instance=bulletenemy.instance()
+	get_parent().add_child(bulletp_instance)
+	bulletp_instance.position=$Node2D/Position2D.global_position
+	bulletp_instance.velocity= get_global_mouse_position()-bulletp_instance.position
 	##bullet_instance.position=get_global_position()
 	##bullet_instance.rotation_degrees=rotation_degrees
 	##bullet_instance.apply_impulse(Vector2(),Vector2(bullet_speed,0).rotated(rotation))

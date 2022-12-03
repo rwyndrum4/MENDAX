@@ -17,9 +17,13 @@ func _physics_process(delta):
 #	pass
 
 
+
+	
+
+
 func _on_Area2D_body_entered(body):
-	##if "Enemy" in body.name:
-		##queue_free()
-	if "Player" in body.name:
+	if "Enemy" in body.name:
 		queue_free()
+	#if "Player" in body.name:
+		#queue_free()
 	pass # Replace with function body.

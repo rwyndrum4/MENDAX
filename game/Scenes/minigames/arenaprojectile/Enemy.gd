@@ -3,6 +3,7 @@ extends KinematicBody2D
 #motion vector for enemy
 var motion=Vector2()
 var timer=0;
+
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
@@ -15,8 +16,9 @@ func _ready():
 pre 
 """
 func _physics_process(delta):
+	##position +=(Player.position-position)/50 #enemy moves toward player
 	var Player=get_parent().get_node("Player")
-	position +=(Player.position-position)/50 #enemy moves toward player
+	position=Vector2(500,500)
 	look_at(Player.position)
 	move_and_collide(motion)
 	timer+=delta
@@ -30,15 +32,19 @@ func _physics_process(delta):
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
-var bullet = preload("res://Scenes/bullet/bullet.tscn")
+var bulletp = preload("res://Scenes/bullet/bulletplayer.tscn")
+var bullete =preload("res://Scenes/bullet/bulletenemy.tscn")
 func fire():
-	var bul = bullet.instance()
-	get_tree().get_root().add_child(bul)
-	bul.global_position = global_position
+	var Player=get_parent().get_node("Player")
+	var bulenemy = bullete.instance()
+	#get_tree().get_root().add_child(bulenemy)
+	get_parent().add_child(bulenemy)
+	bulenemy.global_position = global_position
+	bulenemy.velocity=Player.position-bulenemy.position
 """
 pre 
 """
 func _on_Area2D_body_entered(body):
-	if "bullet" in body.name:
-		print ("hello")
-		##queue_free() 
+	if "bulletplayer" in body.name:
+		print ("jello")
+		queue_free() 

@@ -1,6 +1,5 @@
 extends Node2D
 var proj=false;
-
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
@@ -8,7 +7,6 @@ var proj=false;
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	
 	pass # Replace with function body.
 		#bullet stuff
 
