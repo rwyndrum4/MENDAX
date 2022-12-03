@@ -43,8 +43,6 @@ func _ready():
 	skeletonAnim.play("idle")
 	healthbar.value = 100;
 	# warning-ignore:return_value_discarded
-	ServerConnection.connect("arena_enemy_hit",self, "took_damage_from_server")
-	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("textbox_empty",self,"turn_on_physics")
 	
 """

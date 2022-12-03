@@ -309,4 +309,3 @@ shape = SubResource( 10 )
 [connection signal="body_entered" from="ladderArea" to="." method="_on_ladderArea_body_entered"]
 [connection signal="body_exited" from="ladderArea" to="." method="_on_ladderArea_body_exited"]
 [connection signal="body_entered" from="pitfallArea" to="." method="_on_pitfallArea_body_entered"]
-[connection signal="body_exited" from="pitfallArea" to="." method="_on_pitfallArea_body_exited"]
