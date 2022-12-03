@@ -47,11 +47,11 @@ func _physics_process(_delta):
 	if player_pos.x < position.x:
 		pos2d.scale.x = 1
 		player_detector_box.position = Vector2(-70,-6)
-		BodAtkBox.position = Vector2(-60,-5)
+		BodAtkBox.position = Vector2(-135,-3)
 	else:
 		pos2d.scale.x = -1
 		player_detector_box.position = Vector2(70,-5)
-		BodAtkBox.position = Vector2(80,-6)
+		BodAtkBox.position = Vector2(5,-3)
 
 """
 /*
@@ -124,3 +124,14 @@ func _on_detector_body_entered(_body):
 """
 func _on_detector_body_exited(_body):
 	isIn = false
+
+"""
+/*
+* @pre timer in arenaGame has expired
+* @post make BoD tougher
+* @param None
+* @return None
+*/
+"""
+func level_up():
+	pass

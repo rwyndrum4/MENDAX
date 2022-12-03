@@ -97,6 +97,7 @@ visible = false
 
 [node name="littleGuy" type="KinematicBody2D" parent="."]
 position = Vector2( 1440, 866 )
+collision_layer = 8
 script = ExtResource( 10 )
 __meta__ = {
 "_edit_group_": true
@@ -115,3 +116,4 @@ scale = Vector2( 3, 3 )
 
 [connection signal="body_entered" from="Skeleton/mySearchBox" to="Skeleton" method="_on_mySearchBox_body_entered"]
 [connection signal="body_exited" from="Skeleton/myLostBox" to="Skeleton" method="_on_myLostBox_body_exited"]
+[connection signal="timeout" from="GUI/Timer" to="." method="_on_Timer_timeout"]

@@ -41,7 +41,7 @@ var _player_dead = false #variable to track if player 1 has died
 */
 """
 func _ready():
-	myTimer.start(90)
+	myTimer.start(30)
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("openChatbox", self, "chatbox_use")
 	playerHealth.visible = true
@@ -114,10 +114,24 @@ func convert_time(time_in:float) -> String:
 * @pre Called when the timer hits 0
 * @post Changes scene to minigame
 * @param None
-* @return String (text of current time left)
+* @return None
 */
 """
 func _on_Timer_timeout():
+	#Make players harder
+	SkeletonEnemy.level_up()
+	BodEnemy.level_up()
+	myTimer.start(30)
+
+"""
+/*
+* @pre all enemies have died
+* @post sends players back to the cave
+* @param None
+* @return String (text of current time left)
+*/
+"""
+func _end_game():
 	#Turn off player healthbar
 	playerHealth.visible = false
 	#Delete online player objects if they have not already died

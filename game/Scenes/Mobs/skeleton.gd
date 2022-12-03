@@ -24,6 +24,7 @@ var isDead = 0
 
 # Global velocity
 var velocity = Vector2.ZERO
+var BASE_SPEED = 0.7
 var targetFound = true
 
 """
@@ -56,22 +57,23 @@ func _physics_process(delta):
 	if not get_parent()._player_dead:
 		player_pos = get_parent().get_node("Player").position
 	else:
-		velocity = move_and_slide(velocity.move_toward(0.7*Vector2.ZERO, 500*delta))
+		velocity = move_and_slide(velocity.move_toward(BASE_SPEED*Vector2.ZERO, 500*delta))
 		return
-	#Handle chasing down player
-	if targetFound:
-		velocity = move_and_slide(velocity.move_toward(0.7*(player_pos - position), 500*delta))
-	else:
-		velocity = move_and_slide(velocity.move_toward(0.7*Vector2.ZERO, 500*delta))
+#	#Handle chasing down player
+#	if targetFound:
+#		velocity = move_and_slide(velocity.move_toward(BASE_SPEED*(player_pos - position), 500*delta))
+#	else:
+#		velocity = move_and_slide(velocity.move_toward(BASE_SPEED*Vector2.ZERO, 500*delta))
+	velocity = move_and_slide(velocity.move_toward(BASE_SPEED*(player_pos - position), 500*delta))
 	#Handle making skeleton turn around
 	if player_pos.x < position.x:
 		pos2d.scale.x = -1
-		player_detector_box.position = Vector2(-50,-6)
-		skeleAtkBox.position = Vector2(-40,-5)
+		player_detector_box.position = Vector2(-50,0)
+		skeleAtkBox.position = Vector2(-40,0)
 	else:
 		pos2d.scale.x = 1
-		player_detector_box.position = Vector2(50,-5)
-		skeleAtkBox.position = Vector2(60,-6)
+		player_detector_box.position = Vector2(50,0)
+		skeleAtkBox.position = Vector2(60,0)
 
 """
 /*
@@ -165,3 +167,14 @@ func _on_skeletonAnimationPlayer_animation_finished(_anim_name):
 			skeletonAnim.play("attack1")
 	else:
 		queue_free()
+
+"""
+/*
+* @pre timer in arenaGame has expired
+* @post make Skeleton tougher
+* @param None
+* @return None
+*/
+"""
+func level_up():
+	healthbar.value = healthbar.value + 40

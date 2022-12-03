@@ -19,7 +19,7 @@ anti_aliasing_size = 0.235
 extents = Vector2( 21.0625, 27 )
 
 [sub_resource type="RectangleShape2D" id=40]
-extents = Vector2( 42.25, 33.5 )
+extents = Vector2( 42.25, 32.75 )
 
 [sub_resource type="Animation" id=41]
 resource_name = "RESET"
@@ -447,6 +447,7 @@ tracks/3/keys = {
 extents = Vector2( 42.5, 33 )
 
 [node name="BoD" type="KinematicBody2D"]
+collision_layer = 4
 script = ExtResource( 2 )
 
 [node name="Position2D" type="Position2D" parent="."]
@@ -481,11 +482,11 @@ position = Vector2( 1.0625, 1 )
 shape = SubResource( 1 )
 
 [node name="MyHitBox" type="Area2D" parent="."]
-position = Vector2( -10, 1 )
+position = Vector2( 64, -3 )
 script = ExtResource( 10 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="MyHitBox"]
-position = Vector2( 76, -5 )
+position = Vector2( 3, 0.25 )
 shape = SubResource( 40 )
 disabled = true
 

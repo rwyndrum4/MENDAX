@@ -7,7 +7,6 @@
 extends Node
 var direction
 
-	
 """
 /*
 * @pre Called for every frame
@@ -17,7 +16,7 @@ var direction
 */
 """
 func _process(_delta):
-	if Input.is_action_just_pressed("mouse_click_left", false):
+	if Input.is_action_just_pressed("mouse_click_left", false) or Input.is_action_just_pressed("jump", false):
 		if direction == "right":
 			ServerConnection.send_arena_sword("right")
 			$AnimationPlayer.play("slash")
@@ -31,14 +30,14 @@ func _process(_delta):
 	
 	if Input.is_action_just_pressed("ui_left", false):
 		$AnimationPlayer.play("RESET2")
+		yield($AnimationPlayer, 'animation_finished')
 		$pivot.scale.x = -1
-		
+
 		direction = "left"
-		
+
 	if Input.is_action_just_pressed("ui_right", false):
 		$AnimationPlayer.play("RESET")
+		yield($AnimationPlayer, 'animation_finished')
 		$pivot.scale.x = 1
 		
 		direction = "right"
-
-
