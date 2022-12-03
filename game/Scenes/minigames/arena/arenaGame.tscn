@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://Scenes/minigames/arena/arenaGame.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/minigames/arena/arenaMap.tscn" type="PackedScene" id=2]
@@ -16,8 +16,6 @@ polygon = PoolVector2Array( -48.9833, -45.9201, -50.0482, 47.9166, -50.0482, 47.
 
 [sub_resource type="RectangleShape2D" id=5]
 extents = Vector2( 3.66668, 17.6191 )
-
-[sub_resource type="CircleShape2D" id=7]
 
 [sub_resource type="DynamicFont" id=4]
 size = 40
@@ -67,18 +65,6 @@ rotation = 1.5708
 scale = Vector2( 0.5, 0.7 )
 shape = SubResource( 5 )
 
-[node name="mySearchBox" type="Area2D" parent="Skeleton"]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Skeleton/mySearchBox"]
-scale = Vector2( 20, 20 )
-shape = SubResource( 7 )
-
-[node name="myLostBox" type="Area2D" parent="Skeleton"]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Skeleton/myLostBox"]
-scale = Vector2( 40, 40 )
-shape = SubResource( 7 )
-
 [node name="GUI" type="CanvasLayer" parent="."]
 
 [node name="Timer" type="Timer" parent="GUI"]
@@ -114,6 +100,4 @@ animation = "crawl"
 position = Vector2( 1594, 825 )
 scale = Vector2( 3, 3 )
 
-[connection signal="body_entered" from="Skeleton/mySearchBox" to="Skeleton" method="_on_mySearchBox_body_entered"]
-[connection signal="body_exited" from="Skeleton/myLostBox" to="Skeleton" method="_on_myLostBox_body_exited"]
 [connection signal="timeout" from="GUI/Timer" to="." method="_on_Timer_timeout"]
