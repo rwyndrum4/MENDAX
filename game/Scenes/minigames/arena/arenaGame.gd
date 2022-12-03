@@ -41,7 +41,7 @@ var _player_dead = false #variable to track if player 1 has died
 */
 """
 func _ready():
-	myTimer.start(30)
+	myTimer.start(90)
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("openChatbox", self, "chatbox_use")
 	playerHealth.visible = true
