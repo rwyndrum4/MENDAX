@@ -7,6 +7,7 @@
 			   11/15/2022 - Improved targeting system with addition of a second Area2D radius.
 							Moved Skeleton physics process back into this file
 			   11/19/2022 - Changed signal names to not cause errors anymore
+			   11/28/2022 - Added death signal
 			
 """
 
@@ -25,6 +26,7 @@ var isDead = 0
 # Global velocity
 var velocity = Vector2.ZERO
 var BASE_SPEED = 0.7
+var BASE_ACCEL = 500
 var targetFound = true
 
 """
@@ -42,6 +44,8 @@ func _ready():
 	healthbar.value = 100;
 	# warning-ignore:return_value_discarded
 	ServerConnection.connect("arena_enemy_hit",self, "took_damage_from_server")
+	# warning-ignore:return_value_discarded
+	GlobalSignals.connect("textbox_empty",self,"turn_on_physics")
 	
 """
 /*
@@ -57,14 +61,14 @@ func _physics_process(delta):
 	if not get_parent()._player_dead:
 		player_pos = get_parent().get_node("Player").position
 	else:
-		velocity = move_and_slide(velocity.move_toward(BASE_SPEED*Vector2.ZERO, 500*delta))
+		velocity = move_and_slide(velocity.move_toward(BASE_SPEED*Vector2.ZERO, BASE_ACCEL*delta))
 		return
 #	#Handle chasing down player
 #	if targetFound:
 #		velocity = move_and_slide(velocity.move_toward(BASE_SPEED*(player_pos - position), 500*delta))
 #	else:
 #		velocity = move_and_slide(velocity.move_toward(BASE_SPEED*Vector2.ZERO, 500*delta))
-	velocity = move_and_slide(velocity.move_toward(BASE_SPEED*(player_pos - position), 500*delta))
+	velocity = move_and_slide(velocity.move_toward(BASE_SPEED*(player_pos - position), BASE_ACCEL*delta))
 	#Handle making skeleton turn around
 	if player_pos.x < position.x:
 		pos2d.scale.x = -1
@@ -74,6 +78,9 @@ func _physics_process(delta):
 		pos2d.scale.x = 1
 		player_detector_box.position = Vector2(50,0)
 		skeleAtkBox.position = Vector2(60,0)
+
+func turn_on_physics():
+	set_physics_process(true)
 
 """
 /*
@@ -166,6 +173,7 @@ func _on_skeletonAnimationPlayer_animation_finished(_anim_name):
 		else:
 			skeletonAnim.play("attack1")
 	else:
+		GlobalSignals.emit_signal("enemyDefeated", 0) #replace 0 with indication of enemy ID later
 		queue_free()
 
 """
@@ -178,3 +186,6 @@ func _on_skeletonAnimationPlayer_animation_finished(_anim_name):
 """
 func level_up():
 	healthbar.value = healthbar.value + 40
+	BASE_SPEED = 1.6
+	BASE_ACCEL = 1000
+	$MyHitBox.damage = 30

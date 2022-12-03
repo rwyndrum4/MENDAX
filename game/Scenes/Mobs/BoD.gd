@@ -2,7 +2,7 @@
 * Programmer Name - Jason Truong
 * Description - Code that designates mob animations
 * Date Created - 11/20/2022
-* Date Revisions:
+* Date Revisions: - 11/28/2022 - add death signal
 """
 extends KinematicBody2D
 onready var BodAnim = $AnimationPlayer
@@ -28,6 +28,10 @@ func _ready():
 	anim.set_loop(true)
 	BodAnim.play("idle")
 	healthbar.value = 200;
+	# warning-ignore:return_value_discarded
+	#ServerConnection.connect("arena_enemy_hit",self, "took_damage_from_server")
+	# warning-ignore:return_value_discarded
+	GlobalSignals.connect("textbox_empty",self,"turn_on_physics")
 
 """
 /*
@@ -52,6 +56,9 @@ func _physics_process(_delta):
 		pos2d.scale.x = -1
 		player_detector_box.position = Vector2(70,-5)
 		BodAtkBox.position = Vector2(5,-3)
+
+func turn_on_physics():
+	set_physics_process(true)
 
 """
 /*
@@ -98,6 +105,7 @@ func _on_AnimationPlayer_animation_finished(_anim_name):
 		else:
 			BodAnim.play("attack1")
 	else:
+		GlobalSignals.emit_signal("enemyDefeated", 0) #replace 0 with indication of enemy ID later
 		queue_free()
 
 """
