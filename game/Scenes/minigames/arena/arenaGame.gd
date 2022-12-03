@@ -226,9 +226,8 @@ func set_init_player_pos():
 func other_player_hit(player_id: int, player_health: int):
 	for o_player in server_players:
 		if player_id == o_player.get('num'):
-			o_player.get('player_obj').healthbar.value = player_health
-			if player_health <= 0:
-				o_player.get('player_obj').queue_free()
+			var p_obj = o_player.get('player_obj')
+			p_obj.take_damage(player_health)
 			break
 
 """

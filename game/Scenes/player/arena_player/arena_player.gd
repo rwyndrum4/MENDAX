@@ -110,9 +110,9 @@ func control_animations(vel):
 * @return None
 */
 """
-func take_damage(amount: int) -> void:
-	healthbar.value = healthbar.value - amount
-	if healthbar.value == 0:
+func take_damage(new_health) -> void:
+	healthbar.value = new_health
+	if healthbar.value <= 0:
 		emit_signal("player_died")
 		queue_free()
 
