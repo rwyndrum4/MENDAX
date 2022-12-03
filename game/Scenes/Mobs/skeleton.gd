@@ -16,6 +16,8 @@ onready var skeletonAnim = $skeletonAnimationPlayer
 onready var healthbar = $ProgressBar
 onready var skeleBox = $MyHurtBox/hitbox
 onready var skeleAtkBox = $MyHitBox/CollisionShape2D
+onready var pos2d = $Position2D
+onready var player_detector_box = $detector/box
 
 var isIn = false
 var isDead = 0
@@ -49,11 +51,27 @@ func _ready():
 */
 """		
 func _physics_process(delta):
-	if targetFound:
-		velocity = move_and_slide(velocity.move_toward(0.7*(get_parent().get_node("Player").position - position), 500*delta))
+	var player_pos = null
+	#Check if player 1 is there
+	if not get_parent()._player_dead:
+		player_pos = get_parent().get_node("Player").position
 	else:
 		velocity = move_and_slide(velocity.move_toward(0.7*Vector2.ZERO, 500*delta))
-
+		return
+	#Handle chasing down player
+	if targetFound:
+		velocity = move_and_slide(velocity.move_toward(0.7*(player_pos - position), 500*delta))
+	else:
+		velocity = move_and_slide(velocity.move_toward(0.7*Vector2.ZERO, 500*delta))
+	#Handle making skeleton turn around
+	if player_pos.x < position.x:
+		pos2d.scale.x = -1
+		player_detector_box.position = Vector2(-50,-6)
+		skeleAtkBox.position = Vector2(-40,-5)
+	else:
+		pos2d.scale.x = 1
+		player_detector_box.position = Vector2(50,-5)
+		skeleAtkBox.position = Vector2(60,-6)
 
 """
 /*

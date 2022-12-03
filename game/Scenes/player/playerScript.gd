@@ -152,6 +152,7 @@ func take_damage(amount: int) -> void:
 	ServerConnection.send_arena_player_health(new_health)
 	healthbar.value = new_health
 	if healthbar.value == 0:
+		get_parent().player_dead = true
 		queue_free()
 
 func set_color(player_num:int):

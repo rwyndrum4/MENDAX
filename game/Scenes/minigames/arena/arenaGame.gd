@@ -30,6 +30,7 @@ enum EnemyTypes {
 var server_players: Array = []
 var in_menu = false
 var EXTRA_TIME: float = 20.0
+var _player_dead = false #variable to track if player 1 has died
 
 """
 /*
@@ -68,6 +69,8 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta): #change to delta if used
 	timerText.text = convert_time(myTimer.time_left)
+	if not is_instance_valid(main_player):
+		return
 	if sword.direction == "right":
 		swordPivot.position = main_player.position + Vector2(60,0)
 	elif sword.direction == "left":

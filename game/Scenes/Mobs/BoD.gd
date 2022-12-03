@@ -9,6 +9,8 @@ onready var BodAnim = $AnimationPlayer
 onready var healthbar = $ProgressBar
 onready var BodBox = $MyHurtBox/hitbox
 onready var BodAtkBox = $MyHitBox/CollisionShape2D
+onready var pos2d = $Position2D
+onready var player_detector_box = $detector/box
 
 var isIn = false
 var isDead = 0
@@ -26,6 +28,30 @@ func _ready():
 	anim.set_loop(true)
 	BodAnim.play("idle")
 	healthbar.value = 200;
+
+"""
+/*
+* @pre Called every frame
+* @post x an y velocity of the Skeleton is updated to move towards the player (if the player is within it's Search range)
+* @param delta : elapsed time (in seconds) since previous frame. Should be constant across sequential calls
+* @return None
+*/
+"""		
+func _physics_process(_delta):
+	var player_pos = null
+	if not get_parent()._player_dead:
+		player_pos = get_parent().get_node("Player").position
+	else:
+		return
+	#Handle making skeleton turn around
+	if player_pos.x < position.x:
+		pos2d.scale.x = 1
+		player_detector_box.position = Vector2(-70,-6)
+		BodAtkBox.position = Vector2(-60,-5)
+	else:
+		pos2d.scale.x = -1
+		player_detector_box.position = Vector2(70,-5)
+		BodAtkBox.position = Vector2(80,-6)
 
 """
 /*
