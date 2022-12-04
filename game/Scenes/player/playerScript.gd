@@ -167,3 +167,9 @@ func set_color(player_num:int):
 			player_color = "orange"
 		_:
 			player_color = "blue"
+
+#for bullets
+func _on_MyHurtBox_body_entered(body):
+	#if "bulletenemy" in body.name:
+		#queue_free()
+	pass # Replace with function body.

@@ -19,10 +19,11 @@ func _physics_process(delta):
 	##position +=(Player.position-position)/50 #enemy moves toward player
 	var Player=get_parent().get_node("Player")
 	position=Vector2(500,500)
-	look_at(Player.position)
+	if get_parent()._player_dead == false:
+		look_at(Player.position)
 	move_and_collide(motion)
 	timer+=delta
-	print(timer)
+	#print(timer)
 	if timer>3:
 		fire();
 		timer=0;
@@ -38,12 +39,15 @@ func fire():
 	var bulenemy = bullete.instance()
 	#get_tree().get_root().add_child(bulenemy)
 	get_parent().add_child(bulenemy)
-	bulenemy.global_position = global_position
-	bulenemy.velocity=Player.position-bulenemy.position
+	if get_parent()._player_dead == false:
+		bulenemy.global_position = global_position
+		bulenemy.velocity=bulenemy.global_position.direction_to(Player.global_position)
+	print(bulenemy.velocity)
+	#bulenemy.global_position = global_position
+	#bulenemy.velocity=Player.position-bulenemy.position
 """
 pre 
 """
-
 
 
 

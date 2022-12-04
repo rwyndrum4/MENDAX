@@ -246,7 +246,7 @@ anti_aliasing_size = 0.235
 [sub_resource type="CircleShape2D" id=4]
 radius = 39.0128
 
-[node name="KinematicBody2D" type="KinematicBody2D"]
+[node name="Player" type="KinematicBody2D"]
 collision_layer = 3
 script = ExtResource( 2 )
 
@@ -279,3 +279,5 @@ script = ExtResource( 126 )
 [node name="hitbox" type="CollisionShape2D" parent="MyHurtBox"]
 position = Vector2( -1, 0 )
 shape = SubResource( 4 )
+
+[connection signal="body_entered" from="MyHurtBox" to="." method="_on_MyHurtBox_body_entered"]
