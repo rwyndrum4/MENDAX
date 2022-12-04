@@ -119,8 +119,10 @@ func convert_time(time_in:float) -> String:
 """
 func _on_Timer_timeout():
 	#Make players harder
-	SkeletonEnemy.level_up()
-	BodEnemy.level_up()
+	if is_instance_valid(SkeletonEnemy):	
+		SkeletonEnemy.level_up()
+	if is_instance_valid(BodEnemy):
+		BodEnemy.level_up()
 	myTimer.start(30)
 
 """

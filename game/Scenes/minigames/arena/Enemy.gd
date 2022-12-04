@@ -37,6 +37,7 @@ var bullete =preload("res://Scenes/bullet/bulletenemy.tscn")
 func fire():
 	var Player=get_parent().get_node("Player")
 	var bulenemy = bullete.instance()
+	
 	#get_tree().get_root().add_child(bulenemy)
 	get_parent().add_child(bulenemy)
 	if get_parent()._player_dead == false:

@@ -225,6 +225,7 @@ tracks/2/keys = {
 extents = Vector2( 125.25, 99.5 )
 
 [node name="chandelier" type="KinematicBody2D"]
+collision_layer = 4
 script = ExtResource( 1 )
 
 [node name="Position2D" type="Position2D" parent="."]
