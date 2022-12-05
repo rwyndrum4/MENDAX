@@ -3,5 +3,16 @@
 	"ItemCategory": "Coin",
 	"StackSize": 100,
 	"Description": "Money! Spend at the store"
+	},
+	"Torch": {
+		"ItemCategory": "Equipment",
+		"TimeTilBurnt": 120,
+		"StackSize": 1,
+		"Description": "A simple, weildable lightsource"
+	},
+	"Ladder": {
+		"ItemCategory": "Equipment",
+		"StackSize": 1,
+		"Description": "With this I can reach new heights"
 	}
 }
