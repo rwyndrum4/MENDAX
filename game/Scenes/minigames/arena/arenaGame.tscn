@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://Scenes/minigames/arena/arenaGame.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/minigames/arena/arenaMap.tscn" type="PackedScene" id=2]
@@ -104,6 +104,4 @@ scale = Vector2( 3, 3 )
 [node name="chandelier" parent="." instance=ExtResource( 12 )]
 scale = Vector2( 3, 3 )
 
-[connection signal="body_entered" from="Skeleton/mySearchBox" to="Skeleton" method="_on_mySearchBox_body_entered"]
-[connection signal="body_exited" from="Skeleton/myLostBox" to="Skeleton" method="_on_myLostBox_body_exited"]
 [connection signal="timeout" from="GUI/Timer" to="." method="_on_Timer_timeout"]

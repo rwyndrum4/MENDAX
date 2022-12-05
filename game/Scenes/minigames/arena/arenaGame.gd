@@ -10,7 +10,7 @@
 extends Control
 
 # Member Variables
-var enemies_remaining = 2
+var enemies_remaining = 3
 onready var myTimer: Timer = $GUI/Timer
 onready var timerText: Label = $GUI/Timer/timerText
 onready var textBox = $textBox

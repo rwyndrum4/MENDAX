@@ -77,9 +77,14 @@ func take_damage(amount: int) -> void:
 	print(healthbar.value)
 	if healthbar.value == 0:
 		chandelierAnim.play("death")
-		chandelierBox.disabled = true
 		isDead = 1
-		
+		#have to defer disabling the skeleton, got an error otherwise
+		#put the line of code in function below since call_deferred only takes functions as input
+		call_deferred("defer_disabling_chandelier")
+		isDead = 1
+
+func defer_disabling_chandelier():
+	chandelierBox.disabled = true		
 	
 
 
@@ -100,6 +105,7 @@ func _on_AnimationPlayer_animation_finished(_anim_name):
 		#	chandelierAnim.play("attack1")
 		pass
 	else:
+		GlobalSignals.emit_signal("enemyDefeated", 0) #replace 0 with indication of enemy ID later
 		queue_free()
 
 """
