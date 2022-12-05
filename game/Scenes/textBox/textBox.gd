@@ -152,13 +152,25 @@ func display_text():
 """
 func change_state(next_state):
 	current_state = next_state
-#	match current_state:
-#		State.READY:
-#			print("Changing state to: State.READY")
-#		State.READING:
-#			print("Changing state to: State.READING")
-#		State.FINISHED:
-#			print("Changing state to: State.FINISHED")
+
+"""
+/*
+* @pre None
+* @post Will take all lines inside of a text file and apply queue_text to them
+* @param file_name -> String (name of the file in terms of godot)
+* EXAMPLE: "res://Scenes/startArea/test.txt"
+* You won't be able to see text file in godot but its there
+* @return None
+*/
+"""
+func queue_file(file_name: String):
+	var f = File.new()
+	f.open(file_name, File.READ)
+	while not f.eof_reached():
+		var line = f.get_line()
+		if line != "":
+			queue_text(line)
+	f.close()
 
 """
 /*

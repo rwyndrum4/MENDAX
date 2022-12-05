@@ -9,6 +9,7 @@
 	10/1/2022 - Added the ability to move with keyboard in settings menu
 	10/1/2022 - Fixed options menu movment
 	11/4/2022 - Adding server functionality 
+	11/13/2022 - add test functionality
 """
 extends Control
 
@@ -52,6 +53,7 @@ func _ready():
 	ServerConnection.connect("character_spawned",self,"spawn_character")
 	# warning-ignore:return_value_discarded
 	ServerConnection.connect("character_despawned",self,"despawn_character")
+
 """
 /*
 * @pre called for every frame inside of the game
@@ -79,6 +81,8 @@ func _on_Start_pressed():
 	#delete player objects
 	for player in player_objects:
 		delete_player_obj(player['player_obj'],player['text_obj'])
+	if ServerConnection.match_exists() and ServerConnection.get_server_status():
+		get_parent().chat_box.chat_event_message("Switched from global chat to match chat")
 	#change scene to start area
 	SceneTrans.change_scene(Global.scenes.START_AREA)
 
@@ -112,13 +116,13 @@ func _on_Market_pressed():
 """
 /*
 * @pre Tests Button is pressed
-* @post not yet implemented
+* @post directly load the cave (for debug purposes)
 * @param None
 * @return None
 */
 """
 func _on_Tests_pressed():
-	pass # Replace with function body.
+	Global.state = Global.scenes.CAVE
 
 """
 /*
@@ -258,17 +262,18 @@ func no_game_created():
 			"Multiplayer not available, you are not connected to a game"
 		)
 	else:
-		var current_players = yield(ServerConnection.create_match(code), "completed")
+		yield(ServerConnection.create_match(code), "completed")
+		yield(ServerConnection.create_match_group(code), "completed")
 		create_game_init_window(
 			"New game created!",
 			"Your code is: " + code + "\nPlease share it with your friends!"
 		)
-		print("current players: ", current_players)
 		$showLobbyCode/code.text = code
 		$createGameButton.text = "Leave match"
 
 func game_already_created():
 	yield(ServerConnection.leave_match(ServerConnection._match_id), "completed")
+	yield(ServerConnection.leave_match_group(), "completed")
 	despawn_character(Save.game_data.username)
 	$createGameButton.text = "Create match"
 	$showLobbyCode/code.text = "XXXX"
@@ -314,17 +319,22 @@ func _on_enterLobbyCode_text_entered(new_text):
 		)
 	else:
 		if ServerConnection.get_server_status():
-			if ServerConnection.match_exists():
-				yield(ServerConnection.leave_match(ServerConnection._match_id), "completed")
-			var users_in_menu = yield(ServerConnection.join_match(Global.current_matches[match_code]), "completed")
-			#Spawn users that are currently in game and you
-			for user in users_in_menu:
-				spawn_character(user.username)
-			$showLobbyCode/code.text = match_code
-			$createGameButton.text = "Leave match"
-			create_game_init_window(
-				"Joined match " + match_code,
-				"Start the game with your friends when you want"
+			if Global.match_exists(match_code) and not ServerConnection.match_exists():
+				#yield(ServerConnection.leave_match(ServerConnection._match_id), "completed")
+				var users_in_menu = yield(ServerConnection.join_match(Global.get_match(match_code)), "completed")
+				#Spawn users that are currently in game and you
+				for user in users_in_menu:
+					spawn_character(user.username)
+				$showLobbyCode/code.text = match_code
+				$createGameButton.text = "Leave match"
+				create_game_init_window(
+					"Joined match " + match_code,
+					"Start the game with your friends when you want"
+				)
+			else:
+				create_game_init_window(
+					"Match not available",
+					"Please try retyping the code or start a new game"
 			)
 		else:
 			create_game_init_window(

@@ -13,7 +13,9 @@ extends KinematicBody2D
 # Member Variables
 onready var character = $position/animated_sprite
 onready var char_pos = $position
+onready var healthbar = $ProgressBar
 var is_stopped = false
+var player_color:String = ""
 
 # Player physics constants
 const ACCELERATION = 25000
@@ -37,8 +39,11 @@ func _ready():
 	GlobalSignals.connect("textbox_shift",self,"stop_go_player")
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("openMenu",self,"stop_go_player")
+	# if server wasnt' connected
+	if player_color == "":
+		player_color = "blue"
 	#Initially have character idle
-	character.play("idle")
+	character.play("idle_" + player_color)
 
 """
 /*
@@ -75,8 +80,14 @@ func _physics_process(delta):
 	else:
 		velocity = input_velocity.move_toward(0.7*input_velocity*MAX_SPEED, ACCELERATION*delta)
 	
-	var position : Vector2 = self.position
-	ServerConnection.send_position_update(position)
+	#Send current player position to server if server and match is up
+	if ServerConnection.get_server_status() and ServerConnection.match_exists():
+		#Send position and input to other players (if has changed!)
+		ServerConnection.send_position_update(position)
+		ServerConnection.send_input_update(velocity.normalized())
+		#Store new position and input in order to check if has changed next time (if has changed!)
+		Global._player_positions_updated(ServerConnection._player_num, self.position)
+		Global._player_input_updated(ServerConnection._player_num, velocity.normalized())
 	# Factor in collisions
 	velocity = move_and_slide(velocity)
 	#Animate character
@@ -105,25 +116,60 @@ func control_animations(vel:Vector2):
 	#Character moves NorthEast
 	if vel.y < 0 and vel.x > 0:
 		char_pos.scale.x = -1
-		character.play("roll_northwest")
+		character.play("roll_northwest_" + player_color)
 	#Character moves NorthWest
 	elif vel.y < 0 and vel.x < 0:
 		char_pos.scale.x = 1
-		character.play("roll_northwest")
+		character.play("roll_northwest_" + player_color)
 	#Character moves East or SouthEast
 	elif vel.x > 0:
 		char_pos.scale.x = 1
-		character.play("roll_southeast")
+		character.play("roll_southeast_" + player_color)
 	#Character moves West or SoutWest
 	elif vel.x < 0:
 		char_pos.scale.x = -1
-		character.play("roll_southeast")
+		character.play("roll_southeast_" + player_color)
 	#Character moves North
 	elif vel.y < 0:
-		character.play("roll_north")
+		character.play("roll_north_" + player_color)
 	#Character moves South
 	elif vel.y > 0:
-		character.play("roll_south")
+		character.play("roll_south_" + player_color)
 	#Character not moving (idle)
 	else:
-		character.play("idle")
+		character.play("idle_" + player_color)
+
+"""
+/*
+* @pre Called by when it detects a "hit" from a hitbox
+* @post Mob takes damage and is reflected by the healthbar
+* @param Takes in a damage value
+* @return None
+*/
+"""
+func take_damage(amount: int) -> void:
+	var new_health = healthbar.value - amount
+	ServerConnection.send_arena_player_health(new_health)
+	healthbar.value = new_health
+	if healthbar.value == 0:
+		get_parent()._player_dead = true
+		queue_free()
+
+func set_color(player_num:int):
+	match player_num:
+		1:
+			player_color = "blue"
+		2:
+			player_color = "red"
+		3:
+			player_color = "green"
+		4:
+			player_color = "orange"
+		_:
+			player_color = "blue"
+
+#for bullets
+func _on_MyHurtBox_body_entered(body):
+	#if "bulletenemy" in body.name:
+		#queue_free()
+	pass # Replace with function body.

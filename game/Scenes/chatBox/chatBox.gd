@@ -27,6 +27,7 @@ var channel_colors:Dictionary = {
 	"Green": "#51f538",
 	"Blue": "#6aeaff",
 	"White": "#ffffff",
+	"Pink": "#f06eee",
 	"Red": "#fa2a1b"
 }
 #Placeholder texts [aka everything for controlling autofill stuff]
@@ -52,6 +53,7 @@ var placeholder_texts = [
 func _ready():
 	playerInput.placeholder_text = "SHIFT+ENTER to chat, Esc to exit"
 	modulate.a8 = MODULATE_MIN
+	$textHolder/pastText.scroll_following = true
 
 """
 /*
@@ -98,11 +100,11 @@ func _input(event):
 					playerInput.text = "/clear"
 					playerInput.set_cursor_position(len(playerInput.text) +1)
 				#Auto fill for current players
-				elif "/whisper " in playerInput.text and Global.current_players.size() > 0:
-					playerInput.text = "/whisper " + Global.current_players.keys()[current_usr] + " "
+				elif "/whisper " in playerInput.text and ServerConnection.get_chatroom_players().size() > 0:
+					playerInput.text = "/whisper " + ServerConnection.get_chatroom_players().keys()[current_usr] + " "
 					playerInput.set_cursor_position(len(playerInput.text) +1)
 					current_usr += 1
-					if current_usr == Global.current_players.size():
+					if current_usr == ServerConnection.get_chatroom_players().size():
 						current_usr = 0
 
 """
@@ -114,9 +116,15 @@ func _input(event):
 */
 """
 func add_message(text:String,type:String,user_sent:String,from_user:String):
-	if "MATCH_RECEIVED" in text:
-		var match_dict = text.replace("MATCH_RECEIVED","")
-		Global.current_matches = parse_json(match_dict)
+	if "MATCH_RECEIVED " in text:
+		#clean the string of match received
+		var clean_data = text.replace("MATCH_RECEIVED ","")
+		#get a dictionary from the string
+		var match_dict:Dictionary = parse_json(clean_data)
+		#add matches to current dictionary if not already in there
+		for key in match_dict.keys():
+			if not Global.match_exists(key):
+				Global.add_match(key, match_dict[key])
 		return
 	var user = from_user
 	var color:String = get_chat_color(type)
@@ -141,6 +149,21 @@ func add_err_message():
 	var err_msg = "[color=" + color + "]"
 	err_msg += "Not connected to server, please wait[/color]"
 	chatLog.bbcode_text += err_msg
+	chatLog.bbcode_text += "\n"
+
+"""
+/*
+* @pre something has happened with the chat
+* @post adds chat message to let user know what happened with the chat
+* @param event_message -> String (message to print)
+* @return None
+*/
+"""
+func chat_event_message(event_message: String):
+	var color: String = get_chat_color("chat_event")
+	var event_msg = "[color=" + color + "]"
+	event_msg += event_message
+	chatLog.bbcode_text += event_msg
 	chatLog.bbcode_text += "\n"
 
 """
@@ -228,6 +251,8 @@ func get_chat_color(type:String) -> String:
 		return channel_colors['Blue']
 	elif type == "error":
 		return channel_colors['Red']
+	elif type == "chat_event":
+		return channel_colors['Pink']
 	else:
 		return channel_colors['White']
 

@@ -1,27 +1,31 @@
 """
-* Programmer Name - Freeman Spray and Mohit Garg
+* Programmer Name - Freeman Spray, Mohit Garg, Ben Moeller
 * Description - Code for controlling the Riddle minigame
 * Date Created - 10/14/2022
 * Date Revisions:
-	10/16/2022 - 
 	10/19/2022 -Added hidden item detector functionality -Mohit Garg
-	10/22/2022-Added hidden item detector for multiple hints-Mohit Garg
+	10/22/2022 -Added hidden item detector for multiple hints-Mohit Garg
+	11/30/2022 -Added changes to sync riddles between the players -Ben Moeller
 """
 extends Control
 
 # Member Variables
 var in_menu = false
-onready var settingsMenu = $GUI/SettingsMenu
+var answer = ""#set in init riddle
+var riddle_dict = {} #stores riddles and their answers
+var item = null
+var ItemClass = preload("res://Inventory/Item.tscn")
+var other_player = "res://Scenes/player/other_players/other_players.tscn" #Scene for players that online oppenents use
+
+# Scene Nodes
 onready var myTimer: Timer = $GUI/Timer
 onready var timerText: Label = $GUI/Timer/timerText
 onready var textBox = $GUI/textBox
 onready var hintbox=$GUI/show_letter
 onready var itemarray=[] #determines if items have been found
 onready var hint="";# set in init riddle
-var answer = ""#set in init riddle
 onready var riddle="";#set in init riddle
 onready var riddlefile = 'res://Assets/riddle_jester/riddles.txt'
-var riddle_dict = {} #stores riddles and their answers
 onready var currenthints=""; #keeps track of currenhints found
 onready var hintlength=0#keeps track of hintlength to give random letter clues
 onready var answerlength=0 #keeps track of asnwer length is constant
@@ -33,40 +37,13 @@ onready var init_playerpos; #initial player position helps with hint placement
 onready var transCam = $Path2D/PathFollow2D/camTrans
 onready var riddler = $riddler
 onready var playerCam = $Player/Camera2D
+onready var player_one = $Player #Player object of player YOU control
 
 #Inventory changes - perhaps this should move somewhere more general
-var item = null
-var ItemClass = preload("res://Inventory/Item.tscn")
 onready var inv = get_node("/root/global/")
 
 #signals
 signal textWait()
-"""
-/*
-* @pre Called when the node enters the scene tree for the first time.
-* @post Updates riddle answer and riddle hint
-* @param None
-* @return None
-*/
-"""
-func init_riddle(file):
-	var f = File.new()
-	var err=f.open(file, File.READ)
-	var key=1
-	while !f.eof_reached():
-		var line=f.get_line()
-		riddle_dict[key]=line
-		key=key+1
-	f.close()
-	var number=0
-	while number==0 or number%2==0:
-		randomize()
-		number = randi() % key 
-	if(number%2==1): #inidcates line contains hint
-		#print(number)
-		riddle= str(riddle_dict[number])
-		hint=str(riddle_dict[number+1])
-		answer=hint
 	
 """
 /*
@@ -77,43 +54,42 @@ func init_riddle(file):
 */
 """
 func _ready():
-	GlobalSignals.connect("answer_received",self,"_check_answer")
-	#myTimer.start(90)
 	init_playerpos=$Player.position
 	# warning-ignore:return_value_discarded
+	GlobalSignals.connect("answer_received",self,"_check_answer")
+	# warning-ignore:return_value_discarded
+	ServerConnection.connect( "riddle_received", self, "set_riddle_from_server")
+	# warning-ignore:return_value_discarded
+	Global.connect("all_players_arrived", self, "_can_send_riddle")
+	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("openChatbox", self, "chatbox_use")
-	
-	
-	
-	#scene animation for entering cave(for first time)
-	if Global.entry == 0:
-	#Insert Dialogue: "Oh who do we have here?" or something similar
-		var t = Timer.new()
-		t.set_wait_time(1)
-		t.set_one_shot(false)
-		self.add_child(t)
-		
-		Global.entry = 1
-		transCam.current = true
-		$Player.set_physics_process(false)
-		#Begin scene dialogue
-		textBox.queue_text("Oh who do we have here?")
-		t.start()
-		yield(t, "timeout")
-		t.queue_free()
-		$Path2D/AnimationPlayer.play("BEGIN")
-		yield($Path2D/AnimationPlayer, "animation_finished")
-		#This is how you queue text to the textbox queue
-		textBox.queue_text("In order to pass you must solve this riddle...")
+	#If there is a multiplayer match
+	if ServerConnection.match_exists() and ServerConnection.get_server_status():
+		ServerConnection.send_spawn_notif()
+		spawn_players()
+		#Send riddle if player is player 1
+		if ServerConnection._player_num == 1:
+			init_riddle(riddlefile) #initalizes riddle randomly
+			init_hiddenitems() #initalizes hidden items array and other things needed
+			if Global.get_minigame_players() == Global.get_num_players() - 1:
+				ServerConnection.send_riddle(riddle,answer)
+				start_riddle_game()
+			#Sends the riddle to other players once all are present
+		else:
+			#If player doesn't receive riddle from server in 5 seconds, they get their own riddle
+			#If they got the riddle successfully nothing else will happen
+			var wait_for_riddle_timer: Timer = Timer.new()
+			add_child(wait_for_riddle_timer)
+			wait_for_riddle_timer.wait_time = 5
+			wait_for_riddle_timer.one_shot = true
+			wait_for_riddle_timer.start()
+			# warning-ignore:return_value_discarded
+			wait_for_riddle_timer.connect("timeout",self, "_riddle_timer_expired", [wait_for_riddle_timer])
+	#If there is a single player game, start game right away
+	else:
 		init_riddle(riddlefile) #initalizes riddle randomly
 		init_hiddenitems() #initalizes hidden items array and other things needed
-		#textBox.queue_text("What walks on four legs in the morning, two legs in the afternoon, and three in the evening?")
-		textBox.queue_text(riddle)
-		textBox.queue_text("Please enter the answer in the chat once you have it, there are hints hidden here if you need them (:")
-		connect("textWait", self, "_finish_anim")
-		Global.in_anim = 1;
-	else:
-		myTimer.start(90)
+		start_riddle_game()
 
 """
 /*
@@ -125,8 +101,29 @@ func _ready():
 """
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta): #change to delta if used
-	check_settings()
 	timerText.text = convert_time(myTimer.time_left)
+
+"""
+/*
+* @pre An input of any sort
+* @post None
+* @param Takes in an event
+* @return None
+*/
+"""
+func _input(_ev):
+	if textBox.queue_text_length() == 0 and Global.in_anim == 1:
+		Global.in_anim = 0
+		emit_signal("textWait")
+	if Input.is_key_pressed(KEY_SEMICOLON):
+		PlayerInventory.add_item("Coin", 1)
+	#DEBUG PURPOSES - REMOVE FOR FINAL GAME!!!
+	#IF YOU PRESS P -> TIMER WILL REDUCE TO 3 SECONDS
+	if Input.is_action_just_pressed("timer_debug_key",false):
+		myTimer.start(3)
+	#IF YOU PRESS Q -> TIMER WILL INCREASE TO ARBITRARILY MANY SECONDS
+	if Input.is_action_just_pressed("extend_timer_debug_key",false):
+		myTimer.start(30000)
 
 """
 /*
@@ -161,37 +158,106 @@ func _finish_anim():
 	$Player.set_physics_process(true)
 	playerCam.current = true
 
-
 """
 /*
-* @pre An input of any sort
-* @post None
-* @param Takes in an event
-* @return None
-*/
-"""
-func _input(ev):
-	if Input.is_key_pressed(KEY_ENTER) and not ev.echo and textBox.queue_text_length() == 0:
-		if Global.in_anim == 1:
-			Global.in_anim = 0
-			emit_signal("textWait")
-	if Input.is_key_pressed(KEY_SEMICOLON):
-		PlayerInventory.add_item("Coin", 1)
-"""
-/*
-* @pre Called for every frame inside process function
-* @post Opens and closes settings when escape is pressed
+* @pre None
+* @post starts the game and opening animations
 * @param None
 * @return None
 */
 """
-func check_settings():
-	if Input.is_action_just_pressed("ui_cancel",false) and not in_menu:
-		settingsMenu.popup_centered_ratio()
-		in_menu = true
-	elif Input.is_action_just_pressed("ui_cancel",false) and in_menu:
-		settingsMenu.hide()
-		in_menu = false
+func start_riddle_game():
+	#play riddle animations
+	var t = Timer.new()
+	t.set_wait_time(1)
+	t.set_one_shot(false)
+	self.add_child(t)
+	transCam.current = true
+	$Player.set_physics_process(false)
+	#Begin scene dialogue
+	textBox.queue_text("Oh who do we have here?")
+	t.start()
+	yield(t, "timeout")
+	t.queue_free()
+	$Path2D/AnimationPlayer.play("BEGIN")
+	yield($Path2D/AnimationPlayer, "animation_finished")
+	textBox.queue_text("In order to pass you must solve this riddle...")
+	textBox.queue_text(riddle)
+	textBox.queue_text("Please enter the answer in the chat once you have it, there are hints hidden here if you need them (:")
+	# warning-ignore:return_value_discarded
+	connect("textWait", self, "_finish_anim")
+	Global.in_anim = 1;
+
+"""
+/*
+* @pre wait_for_riddle_timer expired
+* @post If player hasn't got a riddle from the server, give them their own
+* @param None
+* @return None
+*/
+"""
+func _riddle_timer_expired(timer:Timer):
+	if riddle == "":
+		init_riddle(riddlefile) #initalizes riddle randomly
+		init_hiddenitems() #initalizes hidden items array and other things needed
+		textBox.queue_text("Never received riddle from server, you have your own riddle")
+		start_riddle_game()
+		#Make it so server can't change riddle anymore
+		ServerConnection.disconnect( "riddle_received", self, "set_riddle_from_server")
+	timer.queue_free()
+
+"""
+/*
+* @pre Called when you received riddle from other player
+* @post Set the riddle and answer
+* @param riddle_in -> String, answer_in -> String
+* @return None
+*/
+"""
+func set_riddle_from_server(riddle_in:String, answer_in:String) -> void:
+	riddle = riddle_in
+	hint = answer_in
+	answer = answer_in
+	init_hiddenitems()
+	start_riddle_game()
+
+"""
+/*
+* @pre Called when someone spawns into the minigame
+* @post update player count and send riddle if all players are here
+* @param _id -> int (player id, not needed), current_num -> int (current number of players in minigame)
+* @return None
+*/
+"""
+func _can_send_riddle():
+	ServerConnection.send_riddle(riddle,answer)
+	start_riddle_game()
+
+"""
+/*
+* @pre Called when the node enters the scene tree for the first time.
+* @post Updates riddle answer and riddle hint
+* @param None
+* @return None
+*/
+"""
+func init_riddle(file):
+	var f = File.new()
+	var _err=f.open(file, File.READ)
+	var key=1
+	while !f.eof_reached():
+		var line=f.get_line()
+		riddle_dict[key]=line
+		key=key+1
+	f.close()
+	var number=0
+	while number==0 or number%2==0:
+		randomize()
+		number = randi() % key 
+	if(number%2==1): #inidcates line contains hint
+		riddle= str(riddle_dict[number])
+		hint=str(riddle_dict[number+1])
+		answer=hint
 
 """
 /*
@@ -203,6 +269,7 @@ func check_settings():
 """
 func _check_answer(answer_in:String):
 	if answer == answer_in:
+		Global.reset_minigame_players()
 		Global.state = Global.scenes.CAVE
 
 """
@@ -216,7 +283,9 @@ func _check_answer(answer_in:String):
 func convert_time(time_in:float) -> String:
 	var rounded_time = int(time_in)
 	var minutes: int = rounded_time/60
-	var seconds: int = rounded_time - (minutes*60)
+	var seconds = rounded_time - (minutes*60)
+	if seconds < 10:
+		seconds = str(0) + str(seconds)
 	return str(minutes,":",seconds)
 
 """
@@ -228,6 +297,7 @@ func convert_time(time_in:float) -> String:
 */
 """
 func _on_Timer_timeout():
+	Global.reset_minigame_players()
 	Global.state = Global.scenes.CAVE
 
 func chatbox_use(value):
@@ -244,7 +314,6 @@ func chatbox_use(value):
 """
 func init_hiddenitems():
 	hintlength=hint.length()
-	print(hintlength)
 	answerlength=answer.length()
 	lettersleft=answer.length()
 	for i in 6:
@@ -253,7 +322,7 @@ func init_hiddenitems():
 	for i in range(0,7):
 		x_overlap.append([])
 		y_overlap.append([])
-		for j in range(0,2):
+		for _j in range(0,2):
 			x_overlap[i].append(0)
 			y_overlap[i].append(0)
 	x_overlap[0][0]=init_playerpos.x-10; #left endpoint of player_pos
@@ -287,7 +356,6 @@ func init_hiddenitems():
 		x_overlap[hintcounter][1]=x+150;# right endpoint of hint area box
 		y_overlap[hintcounter][0]=init_playerpos.y-150;
 		y_overlap[hintcounter][1]=init_playerpos.y+150;
-		#print(hint.position)
 		hintcounter=hintcounter+1
 	$item1area.position=$item1.position
 	$item2area.position=$item2.position
@@ -315,7 +383,6 @@ func enterarea(spritepath,itemnumber):
 		if(answerlength>=6):
 			while(lettersleft>=itemsleft and lettercount<=2):
 				randomize()
-				#print(hintlength)
 				var random=hintlength-1;
 				var index
 				if(random!=0):
@@ -323,7 +390,6 @@ func enterarea(spritepath,itemnumber):
 				else:
 					index=0
 				letter=hint[index];#get random letter
-				#print(index)
 				letters=letters+str(letter);# add letter to hints
 				lettercount+=1;#update lettercount
 				lettersleft=lettersleft-1;#update letters left that can be given
@@ -331,8 +397,6 @@ func enterarea(spritepath,itemnumber):
 				hint.erase(index,1)
 				if hintlength!=0:#checks if any letters left in hint
 					hintlength=hintlength-1;#hintlength decreased as one letter given as hint
-				#print(letters)
-				#print(hint)
 		else:
 			randomize()
 			var random=hintlength-1;
@@ -356,7 +420,6 @@ func enterarea(spritepath,itemnumber):
 		hintbox.popup()
 		itemsleft=itemsleft-1;#one item has been found
 		itemarray[itemnumber-1]=1; #item has been found
-
 
 """
 /*
@@ -479,3 +542,52 @@ func _on_item5_body_exited(_body:PhysicsBody2D)->void:
 func _on_item6_body_exited(_body):
 	$item6/Sprite.hide()
 	hintbox.hide()
+
+"""
+/*
+* @pre called when players need to be spawned in (assuming server is online)
+* @post Spawns players that move with server input and sets position regular player
+* @param None
+* @return None
+*/
+"""
+func spawn_players():
+	set_init_player_pos()
+	#num_str = player number (1,2,3,4)
+	for num_str in Global.player_positions:
+		#Add animated player to scene
+		var num = int(num_str)
+		#if player is YOUR player (aka player you control)
+		if num == ServerConnection._player_num:
+			player_one.position = Global.player_positions[str(num)]
+			player_one.set_color(num)
+		#if the player is another online player
+		else:
+			var new_player:KinematicBody2D = load(other_player).instance()
+			new_player.set_player_id(num)
+			new_player.set_color(num)
+			#Change size and pos of sprite
+			new_player.position = Global.player_positions[str(num)]
+			#Add child to the scene
+			add_child(new_player)
+		#Set initial input vectors to zero
+		Global.player_input_vectors[str(num)] = Vector2.ZERO
+
+"""
+/*
+* @pre None
+* @post Sets players to intial positions by cave entrance
+* @param None
+* @return None
+*/
+"""
+func set_init_player_pos():
+	#num_str is the player number (1,2,3,4)
+	for num_str in Global.player_positions:
+		var num = int(num_str)
+		match num:
+			1: Global._player_positions_updated(num,Vector2(800,1350))
+			2: Global._player_positions_updated(num,Vector2(880,1350))
+			3: Global._player_positions_updated(num,Vector2(800,1250))
+			4: Global._player_positions_updated(num,Vector2(880,1250))
+			_: printerr("THERE ARE MORE THAN 4 PLAYERS TRYING TO BE SPAWNED IN riddleGame.gd")

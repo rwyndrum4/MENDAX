@@ -13,12 +13,11 @@ extends Node
 enum OpCodes {
 	UPDATE_POSITION = 1,
 	UPDATE_INPUT,
-	UPDATE_STATE,
-	UPDATE_JUMP,
-	DO_SPAWN,
-	UPDATE_COLOR,
-	INITIAL_STATE,
-	MATCHES_LIST
+	UPDATE_RIDDLER_RIDDLE,
+	UPDATE_ARENA_SWORD,
+	UPDATE_ARENA_PLAYER_HEALTH,
+	UPDATE_ARENA_ENEMY_HIT,
+	SPAWNED
 }
 
 #Variable that checks if connected to server
@@ -26,31 +25,38 @@ var server_status: bool = false
 
 #Signals for recieving game state data from server (from  the .lua files)
 signal state_updated(id, position) #state of game has been updated
-signal initial_state_received(positions, inputs, names) #first state of game
+signal input_updated(id, vec) #input of player has changed and received
 signal character_spawned(char_name) #singal to tell if someone has spawned
 signal character_despawned(char_name) #signal to tell if someone has despawned
+signal riddle_received(riddle) #signal to tell game it has received a riddle from server
+signal arena_player_swung_sword(id, direction) #signal to tell arena minigame someone swung sword
+signal arena_player_lost_health(id, health) #signal to tell if player has lost health
+signal arena_enemy_hit(enemmy_hit, damage_taken) #signal to tell if an enemy has been hit
+signal minigame_player_spawned(id) #signal to tell if a player has arrived to a scene
 
 #Other signals
 signal chat_message_received(msg,type,user_sent,from_user) #signal to tell game a chat message has come in
 
-const KEY := "nakama_mendax" #Key that is stored in the server
+const KEY := "nakama_mendax" #key that is stored in the server
+var IP_ADDRESS: String = "18.222.217.58" #ip address of server
 
-var _session: NakamaSession #User session
+var _session: NakamaSession #user session
 
 #bens server: 18.118.82.24
 #jasons server: 52.205.252.95
-var _client := Nakama.create_client(KEY, "18.118.82.24", 7350, "http")
-var _socket : NakamaSocket
+var _client := Nakama.create_client(KEY, IP_ADDRESS, 7350, "http") #server client
+var _socket : NakamaSocket #server socket connection
 
 var _general_chat_id = "" #id for communicating in general room
 var _current_whisper_id = "" #id for person you want to whisper
 var _world_id: String = "" #id of the world you are currently in
 var _device_id: String = "" #id of the user's computer generated id
-var room_users: Dictionary = {} #chatroom users
 var _match_id: String = "" #String to hold match id
 var _player_num: int = 0 #Number of the player
+var _group_id: String = "" #id of the match's private group chat
+var chatroom_users: Dictionary = {} #chatroom users
 var connected_opponents: Dictionary = {} #opponents currently in match (including you)
-var game_match
+var game_match = null #holds the current game match information once created
 
 """
 /*
@@ -73,6 +79,17 @@ func set_server_status(status: bool):
 """
 func get_server_status() -> bool:
 	return server_status
+
+"""
+/*
+* @pre called when game wants users in chatroom (global)
+* @post returns the chatroom dictionary
+* @param None
+* @return Dictionary
+*/
+"""
+func get_chatroom_players() -> Dictionary:
+	return chatroom_users
 
 """
 /*
@@ -117,7 +134,7 @@ func connect_to_server_async() -> int:
 		_socket.connect("received_channel_message", self, "_on_Nakama_Socket_received_channel_message")
 		#get user who joins
 		# warning-ignore:return_value_discarded
-		_socket.connect("received_channel_presence", self, "_on_channel_presence")
+		_socket.connect("received_channel_presence", self, "_on_channel_presence_general")
 		#get a notification
 		# warning-ignore:return_value_discarded
 		_socket.connect("received_notification", self, "_on_notification")
@@ -153,12 +170,10 @@ func join_chat_async_general() -> int:
 	)
 	if not chat_join_result.is_exception():
 		for p in chat_join_result.presences:
-			room_users[p.username] = p.user_id
+			chatroom_users[p.username] = p.user_id
 		_general_chat_id = chat_join_result.id
-		print("Chat joined")
 		return OK
 	else:
-		print("Chat NOT joined")
 		return ERR_CONNECTION_ERROR
 
 """
@@ -176,7 +191,7 @@ func join_chat_async_whisper(input:String, has_id_already:bool) -> int:
 	if has_id_already:
 		user_id = input
 	else:
-		user_id = room_users[input]
+		user_id = chatroom_users[input]
 	if user_id == "ERROR":
 		return ERR_CONNECTION_ERROR
 	var type = NakamaSocket.ChannelType.DirectMessage
@@ -188,6 +203,46 @@ func join_chat_async_whisper(input:String, has_id_already:bool) -> int:
 		return ERR_CONNECTION_ERROR
 	else:
 		return OK
+
+"""
+/*
+* @pre None
+* @post creates group in the server
+* @param group_name -> String
+* @return None
+*/
+"""
+func create_match_group(group_name: String):
+	var group: NakamaAPI.ApiGroup = yield(_client.create_group_async(_session, group_name), "completed")
+	_group_id = group.id
+	if group.is_exception():
+		print("Group was not formed: %s" % group)
+
+"""
+/*
+* @pre None
+* @post joins a group that has already been made
+* @param None
+* @return None
+*/
+"""
+func join_match_group():
+	var join: NakamaAsyncResult = yield(_client.join_group_async(_session, _group_id), "completed")
+	if join.is_exception():
+		print("An error occurred: %s" % join)
+
+"""
+/*
+* @pre None
+* @post leaves the match group
+* @param None
+* @return None
+*/
+"""
+func leave_match_group():
+	var leave : NakamaAsyncResult = yield(_client.leave_group_async(_session, _group_id), "completed")
+	if leave.is_exception():
+		print("An error occurred: %s" % leave)
 
 
 """
@@ -202,9 +257,6 @@ func send_text_async_general(text: String) -> int:
 	if not _socket:
 		return ERR_UNAVAILABLE
 	
-	if _general_chat_id == "":
-		printerr("Can't send a message to chat: _channel_id is missing")
-	
 	var msg_result = yield(
 		_socket.write_chat_message_async(_general_chat_id, 
 		{"msg": text, 
@@ -217,9 +269,6 @@ func send_text_async_general(text: String) -> int:
 func send_text_async_whisper(text: String,user_sent_to:String) -> int:
 	if not _socket:
 		return ERR_UNAVAILABLE
-	
-	if _general_chat_id == "":
-		printerr("Can't send a message to chat: _channel_id is missing")
 	
 	var msg_result = yield(
 		_socket.write_chat_message_async(_current_whisper_id, 
@@ -240,7 +289,7 @@ func send_text_async_whisper(text: String,user_sent_to:String) -> int:
 """
 func create_match(lobby_name:String) -> Array:
 	game_match = yield(_socket.create_match_async(lobby_name), "completed")
-	Global.current_matches[lobby_name] = game_match.match_id
+	Global.add_match(lobby_name,game_match.match_id)
 	_match_id = game_match.match_id
 	send_text_async_general("MATCH_RECEIVED " + JSON.print(Global.current_matches))
 	return game_match.presences
@@ -287,26 +336,6 @@ func leave_match(id:String) -> int:
 func match_exists():
 	return _match_id != ""
 
-
-
-"""
-/*
-* @pre None
-* @post returns the current matches in the server
-* @param None
-* @return Array 
-*/
-"""
-func current_matches(match_code:String) -> String:
-	var min_players = 2
-	var max_players = 4
-	var limit = 10
-	var authoritative = true
-	var label = match_code
-	var query = ""
-	var result = yield(_client.list_matches_async(_session,min_players, max_players, limit, authoritative, label, query), "completed")
-	return result.matches
-
 """
 /*
 * @pre called when you want to send your position to the server
@@ -316,8 +345,8 @@ func current_matches(match_code:String) -> String:
 */
 """
 func send_position_update(position: Vector2) -> void:
-	if _socket:
-		print("my x:", position.x, "my y:", position.y)
+	#if socket is in place and player is moving
+	if _socket and position != Global.get_player_pos(_player_num):
 		var payload = {id = _player_num, pos = {x=position.x, y = position.y}}
 		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_POSITION,JSON.print(payload))
 
@@ -329,24 +358,76 @@ func send_position_update(position: Vector2) -> void:
 * @return None
 */
 """
-func send_input_update(inputx: float, inputy: float) -> void:
-	if _socket:
-		var payload := {id = _device_id, inpx = inputx, inpy = inputy}
+func send_input_update(in_vec:Vector2) -> void:
+	#if socket is in place and player is moving
+	if _socket and in_vec != Global.get_player_input_vec(_player_num):
+		var payload := {id = _player_num, x_in = in_vec.x, y_in = in_vec.y}
 		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_INPUT,JSON.print(payload))
 
 """
 /*
-* @pre called when you want to tell server you have spawned (aka entered world)
-* @post tells server and other players you are in the game
-* @param name -> String
+* @pre called when Player 1 needs to communicate to other players what riddle is
+* @post tells server what riddle to send to others is
+* @param riddle -> String
 * @return None
 */
 """
-func send_spawn(char_name: String) -> void:
+func send_riddle(riddle_in: String, answer_in:String) -> void:
 	if _socket:
-		var payload := {id = _device_id, nm = char_name}
-		_socket.send_match_state_async(_match_id, OpCodes.DO_SPAWN,JSON.print(payload))
+		var payload := {riddle = riddle_in, answer = answer_in}
+		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_RIDDLER_RIDDLE, JSON.print(payload))
 
+"""
+/*
+* @pre called when player attempts to hit someone in arena minigame
+* @post tells server which player swung their sword
+* @param None
+* @return None
+*/
+"""
+func send_arena_sword(direction: String):
+	if _socket:
+		var payload := {id = _player_num, dir = direction}
+		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_ARENA_SWORD, JSON.print(payload))
+
+"""
+/*
+* @pre called when player gets hit in arena minigame
+* @post tells server which player got hit and sends their current health
+* @param health_in -> int
+* @return None
+*/
+"""
+func send_arena_player_health(health_in: int):
+	if _socket:
+		var payload := {id = _player_num, health = health_in}
+		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_ARENA_PLAYER_HEALTH, JSON.print(payload))
+
+"""
+/*
+* @pre called when enemy gets hit in a minigame
+* @post tells server which enemy got hit and how much damage it took
+* @param damage -> int (how much damage enemy took), enemy_hit -> int (enum value)
+* @return None
+*/
+"""
+func send_arena_enemy_hit(damage: int, enemy_hit: int):
+	if _socket:
+		var payload := {enemy = enemy_hit, dmg = damage}
+		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_ARENA_ENEMY_HIT, JSON.print(payload))
+
+"""
+/*
+* @pre called when player spawns in an area
+* @post tells other players they are there, used for syncing players together
+* @param None
+* @return None
+*/
+"""
+func send_spawn_notif():
+	if _socket:
+		var payload := {id = _player_num}
+		_socket.send_match_state_async(_match_id, OpCodes.SPAWNED, JSON.print(payload))
 
 """
 /*
@@ -373,16 +454,15 @@ func _on_Nakama_Socket_received_channel_message(message: NakamaAPI.ApiChannelMes
 * @return None
 */
 """
-func _on_channel_presence(p_presence : NakamaRTAPI.ChannelPresenceEvent):
+func _on_channel_presence_general(p_presence : NakamaRTAPI.ChannelPresenceEvent):
+	send_text_async_general("MATCH_RECEIVED " + JSON.print(Global.current_matches))
 	for p in p_presence.joins:
-		room_users[p.username] = p.user_id
-		send_text_async_general("MATCH_RECEIVED " + JSON.print(Global.current_matches))
+		chatroom_users[p.username] = p.user_id
 		
 	for p in p_presence.leaves:
 		# warning-ignore:return_value_discarded
-		room_users.erase(p.username)
-	print("users in room: ",room_users)
-	Global.current_players = room_users
+		chatroom_users.erase(p.username)
+	print("users in room: ",chatroom_users)
 
 """
 /*
@@ -410,10 +490,7 @@ func _on_NakamaSocket_received_match_precence(p_match_presence_event : NakamaRTA
 	for p in p_match_presence_event.leaves:
 		emit_signal("character_despawned", p.username)
 		# warning-ignore:return_value_discarded
-		
 		connected_opponents.erase(p.user_id)
-
-	print("Connected opponents: %s" % [connected_opponents])
 
 """
 /*
@@ -424,12 +501,11 @@ func _on_NakamaSocket_received_match_precence(p_match_presence_event : NakamaRTA
 */
 """
 func _on_NakamaSocket_received_match_state(match_state: NakamaRTAPI.MatchData) -> void:
-	print("Received match state with opcode %s, data %s" % [match_state.op_code, parse_json(match_state.data)])
 	var code := match_state.op_code
 	var raw := match_state.data
 	
 	match code:
-		OpCodes.UPDATE_POSITION:
+		OpCodes.UPDATE_POSITION: #Received position of a player
 			var decoded: Dictionary = JSON.parse(raw).result
 			
 			var id: int = int(decoded.id)
@@ -437,19 +513,46 @@ func _on_NakamaSocket_received_match_state(match_state: NakamaRTAPI.MatchData) -
 			var position: Vector2 = Vector2(int(position_decoded.x),int(position_decoded.y))
 			
 			emit_signal("state_updated", id, position)
-		OpCodes.INITIAL_STATE:
+		OpCodes.UPDATE_INPUT: #Received that a player has changed directions
 			var decoded: Dictionary = JSON.parse(raw).result
 			
-			var positions: Dictionary = decoded.pos
-			var inputs: Dictionary = decoded.inp
-			var names: Dictionary = decoded.nms
+			var id: int = int(decoded.id)
+			var x = decoded.x_in
+			var y = decoded.y_in
+			var out_vec: Vector2 = Vector2(x,y)
 			
-			emit_signal("initial_state_received", positions, inputs, names)
-		OpCodes.DO_SPAWN:
+			emit_signal("input_updated", id, out_vec)
+		OpCodes.UPDATE_RIDDLER_RIDDLE: #Received riddle from player one
 			var decoded: Dictionary = JSON.parse(raw).result
 			
-			var _id: String = decoded.id
-			var _char_name: String = decoded.nm
+			var riddle: String = decoded.riddle
+			var answer: String = decoded.answer
 			
-			emit_signal("character_spawned", room_users)
-
+			emit_signal("riddle_received", riddle, answer)
+		OpCodes.UPDATE_ARENA_SWORD:
+			var decoded: Dictionary = JSON.parse(raw).result
+			
+			var id: int = int(decoded.id)
+			var direction: String = decoded.dir
+			
+			emit_signal("arena_player_swung_sword", id, direction)
+		OpCodes.UPDATE_ARENA_PLAYER_HEALTH:
+			var decoded: Dictionary = JSON.parse(raw).result
+			
+			var id: int = int(decoded.id)
+			var health: int = int(decoded.health)
+			
+			emit_signal("arena_player_lost_health", id, health)
+		OpCodes.UPDATE_ARENA_ENEMY_HIT:
+			var decoded: Dictionary = JSON.parse(raw).result
+			
+			var enemy: int = int(decoded.enemy)
+			var dmg_taken: int = int(decoded.dmg)
+			
+			emit_signal("arena_enemy_hit", enemy, dmg_taken)
+		OpCodes.SPAWNED:
+			var decoded: Dictionary = JSON.parse(raw).result
+			
+			var id: int = int(decoded.id)
+			
+			emit_signal("minigame_player_spawned", id)

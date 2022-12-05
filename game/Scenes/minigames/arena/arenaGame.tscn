@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://Scenes/minigames/arena/arenaGame.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/minigames/arena/arenaMap.tscn" type="PackedScene" id=2]
@@ -6,8 +6,11 @@
 [ext_resource path="res://Scenes/textBox/textBox.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Scenes/Mobs/skeleton.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Scenes/player/player.tscn" type="PackedScene" id=6]
-[ext_resource path="res://Scenes/SettingsMenu/settingsMenu.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Scenes/player/Sword/Sword.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Scenes/minigames/arena/littleGuy.png" type="Texture" id=9]
+[ext_resource path="res://Scenes/minigames/arena/littleGuy.gd" type="Script" id=10]
+[ext_resource path="res://Scenes/Mobs/BoD.tscn" type="PackedScene" id=11]
+[ext_resource path="res://Scenes/Mobs/chandelier.tscn" type="PackedScene" id=12]
 
 [sub_resource type="OccluderPolygon2D" id=1]
 polygon = PoolVector2Array( -48.9833, -45.9201, -50.0482, 47.9166, -50.0482, 47.9166, 50.0482, 46.9184, 50.0482, 46.9184, 48.9833, -48.9149, 47.9185, -50.9114 )
@@ -15,9 +18,24 @@ polygon = PoolVector2Array( -48.9833, -45.9201, -50.0482, 47.9166, -50.0482, 47.
 [sub_resource type="RectangleShape2D" id=5]
 extents = Vector2( 3.66668, 17.6191 )
 
+[sub_resource type="CircleShape2D" id=7]
+
 [sub_resource type="DynamicFont" id=4]
 size = 40
 font_data = ExtResource( 3 )
+
+[sub_resource type="SpriteFrames" id=6]
+animations = [ {
+"frames": [ ExtResource( 9 ), null ],
+"loop": true,
+"name": "crawl",
+"speed": 5.0
+}, {
+"frames": [  ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
 
 [node name="arenaGame" type="Control"]
 script = ExtResource( 1 )
@@ -38,7 +56,7 @@ current = true
 [node name="Skeleton" parent="." instance=ExtResource( 5 )]
 position = Vector2( 475, 432 )
 scale = Vector2( 3, 3 )
-collision_layer = 262144
+collision_layer = 262148
 collision_mask = 262144
 
 [node name="StaticBody2D" type="StaticBody2D" parent="Skeleton"]
@@ -50,17 +68,19 @@ rotation = 1.5708
 scale = Vector2( 0.5, 0.7 )
 shape = SubResource( 5 )
 
-[node name="GUI" type="CanvasLayer" parent="."]
+[node name="mySearchBox" type="Area2D" parent="Skeleton"]
 
-[node name="SettingsMenu" parent="GUI" instance=ExtResource( 7 )]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -640.0
-margin_top = -360.0
-margin_right = -640.0
-margin_bottom = -360.0
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Skeleton/mySearchBox"]
+scale = Vector2( 20, 20 )
+shape = SubResource( 7 )
+
+[node name="myLostBox" type="Area2D" parent="Skeleton"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Skeleton/myLostBox"]
+scale = Vector2( 40, 40 )
+shape = SubResource( 7 )
+
+[node name="GUI" type="CanvasLayer" parent="."]
 
 [node name="Timer" type="Timer" parent="GUI"]
 
@@ -75,3 +95,29 @@ custom_fonts/font = SubResource( 4 )
 
 [node name="textBox" parent="." instance=ExtResource( 4 )]
 visible = false
+
+[node name="littleGuy" type="KinematicBody2D" parent="."]
+position = Vector2( 1440, 866 )
+collision_layer = 8
+script = ExtResource( 10 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="guyHitbox" type="CollisionShape2D" parent="littleGuy"]
+shape = SubResource( 5 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="littleGuy"]
+frames = SubResource( 6 )
+animation = "crawl"
+
+[node name="BoD" parent="." instance=ExtResource( 11 )]
+position = Vector2( 1594, 825 )
+scale = Vector2( 3, 3 )
+
+[node name="chandelier" parent="." instance=ExtResource( 12 )]
+scale = Vector2( 3, 3 )
+
+[connection signal="body_entered" from="Skeleton/mySearchBox" to="Skeleton" method="_on_mySearchBox_body_entered"]
+[connection signal="body_exited" from="Skeleton/myLostBox" to="Skeleton" method="_on_myLostBox_body_exited"]
+[connection signal="timeout" from="GUI/Timer" to="." method="_on_Timer_timeout"]

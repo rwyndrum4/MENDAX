@@ -5,21 +5,31 @@
 * Date Revisions:
 	10/8/2022 - Added the ability to go into settings from scene with enter key
 	11/5/2022 - Added ability to transition to further minigames after the first
+* Citations: https://godotengine.org/qa/33196/how-are-you-supposed-to-handle-null-objects
+	for handling deleted tiles
 """
 extends Control
 
 # Member Variables
 var in_exit = false
 var in_menu = false
+var steam_active = false #variable to tell if steam in passage is active
+var stop_steam_control = false #variable to tell whether process function needs to check steam
+var steam_modulate:float = 0 #modualte value that is gradually added to modulate of steam
+var at_lever = false
+var at_ladder = false
 onready var instructions: Label = $exitCaveArea/exitDirections
-onready var settingsMenu = $GUI/SettingsMenu
 onready var myTimer: Timer = $GUI/Timer
 onready var timerText: Label = $GUI/Timer/timerText
 onready var textBox = $GUI/textBox
+onready var steamAnimations = $steamControl/steamAnimations
+onready var secretPanel = $worldMap/Node2D_1/Wall3x3_6
+onready var secretPanelCollider = $worldMap/Node2D_1/colliders/secretDoor
+onready var ladder = $worldMap/Node2D_1/Ladder1x1
+onready var pitfall = $worldMap/Node2D_1/Pitfall1x1_2
+onready var player = $Player
 
-
-
-
+var other_player = "res://Scenes/player/other_players/other_players.tscn"
 
 """
 /*
@@ -30,11 +40,16 @@ onready var textBox = $GUI/textBox
 */
 """
 func _ready():
+	#Spawn the players if a match is ongoing
+	if ServerConnection.match_exists():
+		spawn_players()
 	#hide cave instructions at start
 	instructions.hide()
 	myTimer.start(90)
+	$fogSprite.modulate.a8 = 0
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("openChatbox", self, "chatbox_use")
+	
 
 
 """
@@ -47,10 +62,9 @@ func _ready():
 """
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta): #change to delta if used
-	check_settings()
 	timerText.text = convert_time(myTimer.time_left)
-
-
+	if not stop_steam_control:
+		control_steam()
 
 """
 /*
@@ -60,15 +74,30 @@ func _process(_delta): #change to delta if used
 * @return None
 */
 """
-func _input(ev):
+func _input(_ev):
 	if in_exit:
 		if Input.is_action_just_pressed("ui_accept",false) and not Input.is_action_just_pressed("ui_enter_chat"):
 			# warning-ignore:return_value_discarded
 			Global.state = Global.scenes.MAIN_MENU #change scene to main menu
+	if at_lever:
+		if Input.is_action_just_pressed("ui_accept",false) and not Input.is_action_just_pressed("ui_enter_chat"):
+			if is_instance_valid(secretPanel):
+				secretPanel.queue_free()
+			if is_instance_valid(secretPanelCollider):
+				secretPanelCollider.queue_free()
+	if at_ladder:
+		if Input.is_action_just_pressed("ui_accept",false) and not Input.is_action_just_pressed("ui_enter_chat"):
+			ladder.texture = $root/Assets/tiles/TilesCorrected/WallTile_Tilt_Horiz
 	#DEBUG PURPOSES - REMOVE FOR FINAL GAME!!!
 	#IF YOU PRESS P -> TIMER WILL REDUCE TO 3 SECONDS
-	if Input.is_action_just_pressed("debug_key",false):
+	if Input.is_action_just_pressed("timer_debug_key",false):
 		myTimer.start(3)
+	#IF YOU PRESS O (capital 'o') -> TIMER WILL INCREASE TO ARBITRARILY MANY SECONDS
+	if Input.is_action_just_pressed("minigame_debug_key",false):
+		Global.minigame = Global.minigame + 1
+	#IF YOU PRESS Q -> MINIGAME COUNTER WILL INCREASE BY 1 (1 press at start will set next to Arena, > 1 will prevent minigame from loading
+	if Input.is_action_just_pressed("extend_timer_debug_key",false):
+		myTimer.start(30000)
 """
 /*
 * @pre Ca	velocity = move_and_slide(velocity)lled when player enters the Area2D zone
@@ -92,23 +121,7 @@ func _on_exitCaveArea_body_entered(_body: PhysicsBody2D): #change to body if wan
 func _on_exitCaveArea_body_exited(_body: PhysicsBody2D): #change to body if want to use
 	in_exit = false
 	instructions.hide()
-
-"""
-/*
-* @pre Called for every frame inside process function
-* @post Opens and closes settings when escape is pressed
-* @param None
-* @return None
-*/
-"""
-func check_settings():
-	if Input.is_action_just_pressed("ui_cancel",false) and not in_menu:
-		settingsMenu.popup_centered_ratio()
-		in_menu = true
-	elif Input.is_action_just_pressed("ui_cancel",false) and in_menu:
-		settingsMenu.hide()
-		in_menu = false
-
+	
 """
 /*
 * @pre Called when need to convert seconds to MIN:SEC format
@@ -120,7 +133,9 @@ func check_settings():
 func convert_time(time_in:float) -> String:
 	var rounded_time = int(time_in)
 	var minutes: int = rounded_time/60
-	var seconds: int = rounded_time - (minutes*60)
+	var seconds = rounded_time - (minutes*60)
+	if seconds < 10:
+		seconds = str(0) + str(seconds)
 	return str(minutes,":",seconds)
 
 """
@@ -152,3 +167,173 @@ func _on_Timer_timeout():
 func chatbox_use(value):
 	if value:
 		in_menu = true
+
+"""
+/*
+* @pre Fog is enterred from the right side of the passage
+* @post activates/deactivates steam based on side entered from
+* @param _area -> Area2D node
+* @return None
+*/
+"""
+func _on_right_side_area_entered(_area):
+	var pos = $Player.position
+	if pos.x > -1200.0:
+		steam_area_activated()
+	else:
+		steam_area_deactivated()
+
+"""
+/*
+* @pre Fog is enterred from the left side of the passage
+* @post activates/deactivates steam based on side entered from
+* @param _area -> Area2D node
+* @return None
+*/
+"""
+func _on_left_side_area_entered(_area):
+	var pos = $Player.position
+	if pos.x < -5800:
+		steam_area_activated()
+	else:
+		steam_area_deactivated()
+
+"""
+/*
+* @pre None
+* @post turns on and shows animations
+* @param None
+* @return None
+*/
+"""
+func steam_area_activated():
+	$fogSprite.show()
+	steam_active = true
+	stop_steam_control = false
+	steam_modulate = 0.0
+	for object in steamAnimations.get_children():
+		object.show()
+		object.play("mist")
+
+"""
+/*
+* @pre None
+* @post turns off and hides animations
+* @param None
+* @return None
+*/
+"""
+func steam_area_deactivated():
+	steam_active = false
+	for object in steamAnimations.get_children():
+		object.hide()
+		object.stop()
+
+func spawn_players():
+	#set initial position the players should be on spawn
+	set_init_player_pos()
+	#num_str is the player number (1,2,3,4)
+	for num_str in Global.player_positions:
+		#Add animated player to scene
+		var num = int(num_str)
+		#if player is YOUR player (aka player you control)
+		if num == ServerConnection._player_num:
+			player.position = Global.player_positions[str(num)]
+			player.set_color(num)
+		#if the player is another online player
+		else:
+			var new_player:KinematicBody2D = load(other_player).instance()
+			new_player.set_player_id(num)
+			new_player.set_color(num)
+			#Change size and pos of sprite
+			new_player.position = Global.player_positions[str(num)]
+			#Add child to the scene
+			add_child(new_player)
+		#Set initial input vectors to zero
+		Global.player_input_vectors[str(num)] = Vector2.ZERO
+
+"""
+/*
+* @pre None
+* @post function to gradually make fog come into view
+* @param None
+* @return None
+*/
+"""
+func control_steam():
+	var fog_modulate = $fogSprite.modulate.a8
+	if steam_active and fog_modulate != 128:
+		steam_modulate += 0.5
+		if int(steam_modulate) % 2 == 0:
+			$fogSprite.modulate.a8 = steam_modulate
+	elif not steam_active and fog_modulate != 0:
+		steam_modulate -= 0.5
+		if int(steam_modulate) % 2 == 0:
+			$fogSprite.modulate.a8 = steam_modulate
+	elif fog_modulate == 0 and not steam_active:
+		$fogSprite.hide()
+		stop_steam_control = true
+		
+"""	
+* @pre Called when player enters the lever's Area2D zone
+* @post sets at_lever to true (for interactability purposes)
+* @param _body -> body of the player
+* @return None
+*/
+"""
+func _on_leverArea_body_entered(_body: PhysicsBody2D): #change to body if want to use
+	at_lever = true
+
+"""
+/*
+* @pre Called when player exits the lever's Area2D zone
+* @post sets at_lever to false (for interactability purposes)
+* @param _body -> body of the player
+* @return None
+*/
+"""
+func _on_leverArea_body_exited(_body: PhysicsBody2D): #change to body if want to use
+	at_lever = false
+
+"""
+/*
+* @pre Called when player enters the ladder's Area2D zone
+* @post sets at_ladder to true (for interactability purposes)
+* @param _body -> body of the player
+* @return None
+*/
+"""
+func _on_ladderArea_body_entered(_body: PhysicsBody2D): #change to body if want to use
+	at_ladder = true
+
+"""
+/*
+* @pre Called when player exits the ladder's Area2D zone
+* @post sets at_ladder to false (for interactability purposes)
+* @param _body -> body of the player
+* @return None
+*/
+"""
+func _on_ladderArea_body_exited(_body: PhysicsBody2D): #change to body if want to use
+	at_ladder = false
+
+"""
+/*
+* @pre Called when player enters the pitfall's Area2D zone
+* @post replaces the tile with a pit (blank tile)
+* @param _body -> body of the player
+* @return None
+*/
+"""
+func _on_pitfallArea_body_entered(_body: PhysicsBody2D): #change to body if want to use
+	pitfall.texture = $root/Assets/tiles/TilesCorrected/BlankTile
+func set_init_player_pos():
+	#num_str is the player number (1,2,3,4)
+	for num_str in Global.player_positions:
+		var num = int(num_str)
+		match num:
+			1: Global._player_positions_updated(num,Vector2(800,1550))
+			2: Global._player_positions_updated(num,Vector2(880,1550))
+			3: Global._player_positions_updated(num,Vector2(800,1450))
+			4: Global._player_positions_updated(num,Vector2(880,1450))
+			_: printerr("THERE ARE MORE THAN 4 PLAYERS TRYING TO BE SPAWNED IN EntrySpace.gd")
