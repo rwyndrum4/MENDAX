@@ -451,7 +451,7 @@ tracks/0/keys = {
 "values": [ 92.0, -18.0 ]
 }
 
-[node name="KinematicBody2D" type="KinematicBody2D"]
+[node name="Player" type="KinematicBody2D"]
 script = ExtResource( 125 )
 
 [node name="playerHitbox" type="CollisionShape2D" parent="."]

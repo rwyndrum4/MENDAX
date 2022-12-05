@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://Scenes/minigames/arena/arenaGame.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/minigames/arena/arenaMap.tscn" type="PackedScene" id=2]
@@ -10,6 +10,7 @@
 [ext_resource path="res://Scenes/minigames/arena/littleGuy.png" type="Texture" id=9]
 [ext_resource path="res://Scenes/minigames/arena/littleGuy.gd" type="Script" id=10]
 [ext_resource path="res://Scenes/Mobs/BoD.tscn" type="PackedScene" id=11]
+[ext_resource path="res://Scenes/Mobs/chandelier.tscn" type="PackedScene" id=12]
 
 [sub_resource type="OccluderPolygon2D" id=1]
 polygon = PoolVector2Array( -48.9833, -45.9201, -50.0482, 47.9166, -50.0482, 47.9166, 50.0482, 46.9184, 50.0482, 46.9184, 48.9833, -48.9149, 47.9185, -50.9114 )
@@ -53,7 +54,7 @@ current = true
 [node name="Skeleton" parent="." instance=ExtResource( 5 )]
 position = Vector2( 475, 432 )
 scale = Vector2( 3, 3 )
-collision_layer = 262144
+collision_layer = 262148
 collision_mask = 262144
 
 [node name="StaticBody2D" type="StaticBody2D" parent="Skeleton"]
@@ -100,4 +101,9 @@ animation = "crawl"
 position = Vector2( 1594, 825 )
 scale = Vector2( 3, 3 )
 
+[node name="chandelier" parent="." instance=ExtResource( 12 )]
+scale = Vector2( 3, 3 )
+
+[connection signal="body_entered" from="Skeleton/mySearchBox" to="Skeleton" method="_on_mySearchBox_body_entered"]
+[connection signal="body_exited" from="Skeleton/myLostBox" to="Skeleton" method="_on_myLostBox_body_exited"]
 [connection signal="timeout" from="GUI/Timer" to="." method="_on_Timer_timeout"]

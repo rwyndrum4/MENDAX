@@ -3,16 +3,20 @@
 * Description - Code that designates mob animations
 * Date Created - 11/20/2022
 * Date Revisions:
+	12/3/2022 - Chandelier can shoot fireballs
 """
 extends KinematicBody2D
-onready var skeletonAnim = $AnimationPlayer
+onready var chandelierAnim = $AnimationPlayer
 onready var healthbar = $ProgressBar
-onready var skeleBox = $MyHurtBox/hitbox
-onready var skeleAtkBox = $MyHitBox/CollisionShape2D
+onready var chandelierBox = $MyHurtBox/hitbox
+onready var chandelierAtkBox = $MyHitBox/CollisionShape2D
 
 var isIn = false
 var isDead = 0
 
+#motion vector for enemy
+var motion=Vector2()
+var timer=0;
 """
 /*
 * @pre Called once when mob is initialized
@@ -24,8 +28,39 @@ var isDead = 0
 func _ready():
 	var anim = get_node("AnimationPlayer").get_animation("idle")
 	anim.set_loop(true)
-	skeletonAnim.play("idle")
+	chandelierAnim.play("idle")
 	healthbar.value = 200;
+
+
+func _physics_process(delta):
+	##position +=(Player.position-position)/50 #enemy moves toward player
+	position=Vector2(500,500)
+	
+	#move_and_collide(motion)
+	timer+=delta
+	#print(timer)
+	if timer>4:
+		timer=0;
+		chandelierAnim.play("attack1")
+		yield(chandelierAnim, "animation_finished")
+		fire();
+		chandelierAnim.play("idle")
+		
+		
+
+var bullete =preload("res://Scenes/bullet/bulletenemy.tscn")
+func fire():
+	if get_parent()._player_dead:
+		return
+	var Player=get_parent().get_node("Player")
+	var bulenemy = bullete.instance()
+	
+	#get_tree().get_root().add_child(bulenemy)
+	get_parent().add_child(bulenemy)
+	if get_parent()._player_dead == false:
+		bulenemy.global_position = global_position + Vector2(0, -90)
+		bulenemy.velocity=bulenemy.global_position.direction_to(Player.global_position)
+	print(bulenemy.velocity)
 
 """
 /*
@@ -38,11 +73,11 @@ func _ready():
 func take_damage(amount: int) -> void:
 	
 	healthbar.value = healthbar.value - amount
-	skeletonAnim.play("hit")
+	chandelierAnim.play("hit")
 	print(healthbar.value)
 	if healthbar.value == 0:
-		skeletonAnim.play("death")
-		skeleBox.disabled = true
+		chandelierAnim.play("death")
+		chandelierBox.disabled = true
 		isDead = 1
 		
 	
@@ -59,10 +94,11 @@ func take_damage(amount: int) -> void:
 func _on_AnimationPlayer_animation_finished(_anim_name):
 		
 	if !isDead:
-		if !isIn:			
-			skeletonAnim.play("idle")
-		else:
-			skeletonAnim.play("attack1")
+		#if !isIn:			
+		#	chandelierAnim.play("idle")
+		#else:
+		#	chandelierAnim.play("attack1")
+		pass
 	else:
 		queue_free()
 
@@ -76,7 +112,7 @@ func _on_AnimationPlayer_animation_finished(_anim_name):
 """
 func _on_detector_body_entered(_body):
 	isIn = true
-	skeletonAnim.play("attack1")
+	#chandelierAnim.play("attack1")
 	
 
 

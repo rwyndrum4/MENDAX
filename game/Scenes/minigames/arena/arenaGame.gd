@@ -131,10 +131,12 @@ func convert_time(time_in:float) -> String:
 """
 func _on_Timer_timeout():
 	#Make players harder
-	SkeletonEnemy.level_up()
-	BodEnemy.level_up()
-	SkeletonEnemy.set_physics_process(false)
-	BodEnemy.set_physics_process(false)
+	if is_instance_valid(SkeletonEnemy):	
+		SkeletonEnemy.level_up()
+		SkeletonEnemy.set_physics_process(false)
+	if is_instance_valid(BodEnemy):
+		BodEnemy.level_up()
+		BodEnemy.set_physics_process(false)
 	textBox.queue_text("OUT OF TIME. NOW PERISH.")
 	myTimer.queue_free()
 
