@@ -7,6 +7,7 @@
 	10/2/2022 - Improved movement to feel more natural
 	10/14/2022 - Added signals to stop player when in options or textbox scene
 	10/27/2022 - Added character animation
+	11/28/2022 - Added death handling
 """
 extends KinematicBody2D
 
@@ -44,6 +45,7 @@ func _ready():
 		player_color = "blue"
 	#Initially have character idle
 	character.play("idle_" + player_color)
+	
 
 """
 /*
@@ -153,6 +155,7 @@ func take_damage(amount: int) -> void:
 	healthbar.value = new_health
 	if healthbar.value == 0:
 		get_parent()._player_dead = true
+		_game_over()
 		queue_free()
 
 func set_color(player_num:int):
@@ -168,8 +171,13 @@ func set_color(player_num:int):
 		_:
 			player_color = "blue"
 
-#for bullets
-func _on_MyHurtBox_body_entered(body):
-	#if "bulletenemy" in body.name:
-		#queue_free()
-	pass # Replace with function body.
+"""
+/*
+* @pre Called when the player's health bar is reduced to 0
+* @post scene transitions to game over screen
+* @param Takes a playerID value (not used)
+* @return None
+*/
+"""	
+func _game_over():
+		Global.state = Global.scenes.GAMEOVER

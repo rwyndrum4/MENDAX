@@ -7,6 +7,8 @@
 			   11/15/2022 - Improved targeting system with addition of a second Area2D radius.
 							Moved Skeleton physics process back into this file
 			   11/19/2022 - Changed signal names to not cause errors anymore
+			   12/3/2022 - removed player search feature in favor of constant targetting
+			   11/28/2022 - Added death signal
 			
 """
 
@@ -25,7 +27,7 @@ var isDead = 0
 # Global velocity
 var velocity = Vector2.ZERO
 var BASE_SPEED = 0.7
-var targetFound = true
+var BASE_ACCELERATION = 500
 
 """
 /*
@@ -41,7 +43,7 @@ func _ready():
 	skeletonAnim.play("idle")
 	healthbar.value = 100;
 	# warning-ignore:return_value_discarded
-	ServerConnection.connect("arena_enemy_hit",self, "took_damage_from_server")
+	GlobalSignals.connect("textbox_empty",self,"turn_on_physics")
 	
 """
 /*
@@ -57,14 +59,9 @@ func _physics_process(delta):
 	if not get_parent()._player_dead:
 		player_pos = get_parent().get_node("Player").position
 	else:
-		velocity = move_and_slide(velocity.move_toward(BASE_SPEED*Vector2.ZERO, 500*delta))
+		velocity = move_and_slide(velocity.move_toward(BASE_SPEED*Vector2.ZERO, BASE_ACCELERATION*delta))
 		return
-#	#Handle chasing down player
-#	if targetFound:
-#		velocity = move_and_slide(velocity.move_toward(BASE_SPEED*(player_pos - position), 500*delta))
-#	else:
-#		velocity = move_and_slide(velocity.move_toward(BASE_SPEED*Vector2.ZERO, 500*delta))
-	velocity = move_and_slide(velocity.move_toward(BASE_SPEED*(player_pos - position), 500*delta))
+	velocity = move_and_slide(velocity.move_toward(BASE_SPEED*(player_pos - position), BASE_ACCELERATION*delta))
 	#Handle making skeleton turn around
 	if player_pos.x < position.x:
 		pos2d.scale.x = -1
@@ -74,6 +71,9 @@ func _physics_process(delta):
 		pos2d.scale.x = 1
 		player_detector_box.position = Vector2(50,0)
 		skeleAtkBox.position = Vector2(60,0)
+
+func turn_on_physics():
+	set_physics_process(true)
 
 """
 /*
@@ -107,27 +107,6 @@ func take_damage_server(amount: int):
 func defer_disabling_skeleton():
 	skeleBox.disabled = true
 
-"""
-/*
-* @pre Called when player enters the Skeleton's search radius
-* @post sets targetFound to true so the Skeleton can begin moving towards the player in its physics process
-* @param _body -> body of the player (unused)
-* @return None
-*/
-"""
-func _on_mySearchBox_body_entered(_body:PhysicsBody2D):
-	targetFound = true
-
-"""
-/*
-* @pre Called when player exits the Skeleton's anti-search radius
-* @post sets targetFound to false so the Skeleton will no longer move towards the player in its physics process
-* @param _body -> body of the player (unused)
-* @return None
-*/
-"""
-func _on_myLostBox_body_exited(_body:PhysicsBody2D):
-	targetFound = false
 """
 /*
 * @pre Called when it detects a body entering its 2D area
@@ -166,6 +145,7 @@ func _on_skeletonAnimationPlayer_animation_finished(_anim_name):
 		else:
 			skeletonAnim.play("attack1")
 	else:
+		GlobalSignals.emit_signal("enemyDefeated", 0) #replace 0 with indication of enemy ID later
 		queue_free()
 
 """
@@ -178,3 +158,6 @@ func _on_skeletonAnimationPlayer_animation_finished(_anim_name):
 """
 func level_up():
 	healthbar.value = healthbar.value + 40
+	BASE_SPEED = 1.6
+	BASE_ACCELERATION = 1000
+	$MyHitBox.damage = 30

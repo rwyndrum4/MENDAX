@@ -5,12 +5,15 @@
 * Date Revisions: 11/12/2022 - added physics process to manage Skeleton positioning
 *				  11/13/2022 - got Skeleton to track a player
 * 				  11/15/2022 - move physics process to Skeleton.gd
+				  11/28/2022 - add win condition in form of transition back to cave
 """
 extends Control
 
 # Member Variables
+var enemies_remaining = 2
 onready var myTimer: Timer = $GUI/Timer
 onready var timerText: Label = $GUI/Timer/timerText
+onready var textBox = $textBox
 onready var main_player = $Player
 onready var swordPivot = $Player/Sword/pivot
 onready var sword = $Player/Sword
@@ -41,7 +44,7 @@ var _player_dead = false #variable to track if player 1 has died
 */
 """
 func _ready():
-	myTimer.start(90)
+	myTimer.start(60)
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("openChatbox", self, "chatbox_use")
 	playerHealth.visible = true
@@ -57,6 +60,14 @@ func _ready():
 		ServerConnection.connect("arena_player_lost_health",self,"other_player_hit")
 		# warning-ignore:return_value_discarded
 		ServerConnection.connect("arena_player_swung_sword",self,"other_player_swung_sword")
+	# Add signal-catching function to check for win condition after each enemy is defetaed
+	GlobalSignals.connect("enemyDefeated",self,"_enemy_defeated")
+	$Skeleton.set_physics_process(false)
+	$BoD.set_physics_process(false)
+	textBox.queue_text("You have a minute to defeat all enemies.")
+	textBox.queue_text("Each enemy will become stronger once this time has passed.")
+	textBox.queue_text("If any one of you dies, I will reset the timer.")
+	textBox.queue_text("Let the strongest among you prevail.")
 
 """
 /*
@@ -68,7 +79,8 @@ func _ready():
 """
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta): #change to delta if used
-	timerText.text = convert_time(myTimer.time_left)
+	if is_instance_valid(myTimer):
+		timerText.text = convert_time(myTimer.time_left)
 	if not is_instance_valid(main_player):
 		return
 	if sword.direction == "right":
@@ -121,9 +133,12 @@ func _on_Timer_timeout():
 	#Make players harder
 	if is_instance_valid(SkeletonEnemy):	
 		SkeletonEnemy.level_up()
+		SkeletonEnemy.set_physics_process(false)
 	if is_instance_valid(BodEnemy):
 		BodEnemy.level_up()
-	myTimer.start(30)
+		BodEnemy.set_physics_process(false)
+	textBox.queue_text("OUT OF TIME. NOW PERISH.")
+	myTimer.queue_free()
 
 """
 /*
@@ -213,7 +228,8 @@ func set_init_player_pos():
 func other_player_hit(player_id: int, player_health: int):
 	for o_player in server_players:
 		if player_id == o_player.get('num'):
-			o_player.get('player_obj').healthbar.value = player_health
+			var p_obj = o_player.get('player_obj')
+			p_obj.take_damage(player_health)
 			break
 
 """
@@ -258,3 +274,29 @@ func other_player_swung_sword(player_id: int, direction: String):
 func _extend_timer():
 	var new_time: float = myTimer.time_left + EXTRA_TIME
 	myTimer.start(new_time)
+			
+"""
+/*
+* @pre Called when an enemy signals that it has been killed
+* @post makes announcement, hides player health, and transitions scene back to cave
+* @param Takes an enemyID value (not used)
+* @return None
+*/
+"""	
+func _enemy_defeated(_enemyID:int):
+	enemies_remaining = enemies_remaining - 1
+	if enemies_remaining == 0:
+		textBox.queue_text("Those strongest among you who remain have leave to prepare for the next trial.")
+		
+		# Wait 5 seconds
+		var t = Timer.new()
+		t.set_wait_time(5)
+		t.set_one_shot(false)
+		self.add_child(t)
+		t.start()
+		yield(t, "timeout")
+		t.queue_free()
+		
+		# Transition back to 
+		playerHealth.visible = false
+		Global.state = Global.scenes.CAVE

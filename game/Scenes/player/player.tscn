@@ -279,5 +279,3 @@ script = ExtResource( 126 )
 [node name="hitbox" type="CollisionShape2D" parent="MyHurtBox"]
 position = Vector2( -1, 0 )
 shape = SubResource( 4 )
-
-[connection signal="body_entered" from="MyHurtBox" to="." method="_on_MyHurtBox_body_entered"]

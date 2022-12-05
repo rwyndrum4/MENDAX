@@ -71,6 +71,25 @@ func _process(_delta): #change to delta if used
 				change_state(State.READY)
 				hide_textbox()
 				GlobalSignals.emit_signal("textbox_shift",false)
+				if text_queue.empty():
+					GlobalSignals.emit_signal("textbox_empty")
+"""
+/*
+* @pre None
+* @post returns the current state of the textbox
+* @param None
+* @return None
+*/
+"""
+func get_state() -> String:
+	if current_state == State.READY:
+		return "ready"
+	elif current_state == State.READING:
+		return "reading"
+	elif current_state == State.FINISHED:
+		return "finished"
+	else:
+		return ""
 
 """
 /*

@@ -326,7 +326,7 @@ func _on_ladderArea_body_exited(_body: PhysicsBody2D): #change to body if want t
 */
 """
 func _on_pitfallArea_body_entered(_body: PhysicsBody2D): #change to body if want to use
-	pitfall.texture = $root/Assets/tiles/TilesCorrected/BlankTile
+	pitfall.texture = load("res://Assets/tiles/TilesCorrected/BlankTile.png")
 func set_init_player_pos():
 	#num_str is the player number (1,2,3,4)
 	for num_str in Global.player_positions:

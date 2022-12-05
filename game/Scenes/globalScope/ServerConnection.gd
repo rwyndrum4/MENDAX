@@ -38,7 +38,7 @@ signal minigame_player_spawned(id) #signal to tell if a player has arrived to a 
 signal chat_message_received(msg,type,user_sent,from_user) #signal to tell game a chat message has come in
 
 const KEY := "nakama_mendax" #key that is stored in the server
-var IP_ADDRESS: String = "18.222.217.58" #ip address of server
+var IP_ADDRESS: String = "18.218.153.28" #ip address of server
 
 var _session: NakamaSession #user session
 
