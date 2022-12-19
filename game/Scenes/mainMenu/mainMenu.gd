@@ -231,9 +231,8 @@ func despawn_character(player_name:String):
 	for dict in player_objects:
 		if dict['name'] != player_name:
 			player_names_copy.append(dict['name'])
-	#delete player objects
-	for p in player_names_copy:
-		delete_player_obj(p['player_obj'],p['text_obj'])
+		else:
+			delete_player_obj(dict['player_obj'],dict['text_obj'])
 	#respawn players again with the one deleted
 	player_objects = []
 	for _name in player_names_copy:
