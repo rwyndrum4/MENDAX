@@ -201,7 +201,7 @@ func spawn_character(player_name:String):
 	if num_players == MAX_PLAYERS:
 		return
 	#Add animated player to scene
-	var char_pos = get_char_pos(len(player_objects))
+	var char_pos = get_char_pos(num_players)
 	var obj_arr = create_spawn_player(char_pos,player_name)
 	var spawned_player = obj_arr[0]
 	var text_name = obj_arr[1]
@@ -231,9 +231,9 @@ func despawn_character(player_name:String):
 	for dict in player_objects:
 		if dict['name'] != player_name:
 			player_names_copy.append(dict['name'])
-		else:
-			delete_player_obj(dict['player_obj'],dict['text_obj'])
 	#respawn players again with the one deleted
+	for player in player_objects:
+		delete_player_obj(player['player_obj'],player['text_obj'])
 	player_objects = []
 	for _name in player_names_copy:
 		spawn_character(_name)
@@ -267,9 +267,11 @@ func no_game_created():
 		$createGameButton.text = "Leave match"
 
 func game_already_created():
+	num_players = 0
 	yield(ServerConnection.leave_match(ServerConnection._match_id), "completed")
 	yield(ServerConnection.leave_match_group(), "completed")
-	despawn_character(Save.game_data.username)
+	for p in player_objects:
+		delete_player_obj(p['player_obj'],p["text_obj"])
 	$createGameButton.text = "Create match"
 	$showLobbyCode/code.text = "XXXX"
 
