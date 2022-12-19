@@ -69,6 +69,9 @@ var game_match = null #holds the current game match information once created
 func set_server_status(status: bool):
 	server_status = status
 
+func set_general_chat_id(new_id: String):
+	_general_chat_id = new_id
+
 """
 /*
 * @pre called when game wants server status
@@ -289,7 +292,7 @@ func send_text_async_whisper(text: String,user_sent_to:String) -> int:
 """
 func create_match(lobby_name:String) -> Array:
 	game_match = yield(_socket.create_match_async(lobby_name), "completed")
-	Global.add_match(lobby_name,game_match.match_id)
+	Global.add_match(lobby_name,game_match.match_id, _group_id)
 	_match_id = game_match.match_id
 	send_text_async_general("MATCH_RECEIVED " + JSON.print(Global.current_matches))
 	return game_match.presences

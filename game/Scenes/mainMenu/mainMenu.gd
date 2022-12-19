@@ -30,6 +30,8 @@ var animation_names: Array = ["blue_idle","red_idle","green_idle","orange_idle"]
 var num_players: int = 0
 #max players allowed
 const MAX_PLAYERS: int = 4
+#code for multiplayer match
+var _match_code = ""
 
 ### Member Variables ###
 #popup that is displayed when creating a new game
@@ -82,7 +84,8 @@ func _on_Start_pressed():
 	for player in player_objects:
 		delete_player_obj(player['player_obj'],player['text_obj'])
 	if ServerConnection.match_exists() and ServerConnection.get_server_status():
-		get_parent().chat_box.chat_event_message("Switched from global chat to match chat")
+		get_parent().chat_box.chat_event_message("Switched from global chat to match chat", "pink")
+		ServerConnection.set_general_chat_id(Global.get_match_group_chat(_match_code))
 	#change scene to start area
 	SceneTrans.change_scene(Global.scenes.START_AREA)
 
@@ -255,19 +258,13 @@ func _on_createGameButton_pressed():
 
 func no_game_created():
 	var code: String = generate_random_code()
-	game_init_popup = AcceptDialog.new()
+	_match_code = code
 	if not ServerConnection.get_server_status():
-		create_game_init_window(
-			"Server not available",
-			"Multiplayer not available, you are not connected to a game"
-		)
+		get_parent().chat_box.chat_event_message("Server not available", "red")
 	else:
-		yield(ServerConnection.create_match(code), "completed")
 		yield(ServerConnection.create_match_group(code), "completed")
-		create_game_init_window(
-			"New game created!",
-			"Your code is: " + code + "\nPlease share it with your friends!"
-		)
+		yield(ServerConnection.create_match(code), "completed")
+		get_parent().chat_box.chat_event_message("New game created!", "white")
 		$showLobbyCode/code.text = code
 		$createGameButton.text = "Leave match"
 
@@ -311,36 +308,25 @@ func _on_enterLobbyCode_focus_entered():
 */
 """
 func _on_enterLobbyCode_text_entered(new_text):
-	var match_code = new_text.to_upper()
-	if len(match_code) != 4:
-		create_game_init_window(
-			"Invalid code",
-			"Please enter an alphabetical code with a length of 4"
-		)
+	var code = new_text.to_upper()
+	if len(code) != 4:
+		get_parent().chat_box.chat_event_message("Invalid code", "pink")
 	else:
 		if ServerConnection.get_server_status():
-			if Global.match_exists(match_code) and not ServerConnection.match_exists():
+			if Global.match_exists(code) and not ServerConnection.match_exists():
 				#yield(ServerConnection.leave_match(ServerConnection._match_id), "completed")
-				var users_in_menu = yield(ServerConnection.join_match(Global.get_match(match_code)), "completed")
+				var users_in_menu = yield(ServerConnection.join_match(Global.get_match(code)), "completed")
 				#Spawn users that are currently in game and you
 				for user in users_in_menu:
 					spawn_character(user.username)
-				$showLobbyCode/code.text = match_code
+				$showLobbyCode/code.text = code
 				$createGameButton.text = "Leave match"
-				create_game_init_window(
-					"Joined match " + match_code,
-					"Start the game with your friends when you want"
-				)
+				_match_code = code
+				get_parent().chat_box.chat_event_message("Joined match", "white")
 			else:
-				create_game_init_window(
-					"Match not available",
-					"Please try retyping the code or start a new game"
-			)
+				get_parent().chat_box.chat_event_message("Match not available", "red")
 		else:
-			create_game_init_window(
-				"Server not available",
-				"Multiplayer not available, you are not connected to a game"
-			)
+			get_parent().chat_box.chat_event_message("Server not available", "red")
 			code_line_edit.text = ""
 			code_line_edit.hide()
 

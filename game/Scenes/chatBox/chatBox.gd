@@ -124,7 +124,7 @@ func add_message(text:String,type:String,user_sent:String,from_user:String):
 		#add matches to current dictionary if not already in there
 		for key in match_dict.keys():
 			if not Global.match_exists(key):
-				Global.add_match(key, match_dict[key])
+				Global.add_match(key, match_dict[key][0],match_dict[key][1])
 		return
 	var user = from_user
 	var color:String = get_chat_color(type)
@@ -159,12 +159,24 @@ func add_err_message():
 * @return None
 */
 """
-func chat_event_message(event_message: String):
-	var color: String = get_chat_color("chat_event")
-	var event_msg = "[color=" + color + "]"
+func chat_event_message(event_message: String, color:String):
+	var _color: String = get_chat_color(color)
+	var event_msg = "[color=" + _color + "]"
 	event_msg += event_message
 	chatLog.bbcode_text += event_msg
 	chatLog.bbcode_text += "\n"
+	modulate.a8 = MODULATE_MAX
+	var mod_timer: Timer = Timer.new()
+	add_child(mod_timer)
+	mod_timer.wait_time = 3
+	mod_timer.one_shot = true
+	mod_timer.start()
+	# warning-ignore:return_value_discarded
+	mod_timer.connect("timeout",self, "_chat_timer_expired", [mod_timer])
+
+func _chat_timer_expired(timer_in):
+	timer_in.queue_free()
+	modulate.a8 = MODULATE_MIN
 
 """
 /*
@@ -245,13 +257,14 @@ func array_to_string(arr_in:Array) -> String:
 */
 """
 func get_chat_color(type:String) -> String:
-	if type == "general":
+	type = type.to_lower()
+	if type == "general" or type == "green":
 		return channel_colors['Green']
-	elif type == "whisper":
+	elif type == "whisper" or type == "blue":
 		return channel_colors['Blue']
-	elif type == "error":
+	elif type == "error" or type == "red":
 		return channel_colors['Red']
-	elif type == "chat_event":
+	elif type == "chat_event" or type == "pink":
 		return channel_colors['Pink']
 	else:
 		return channel_colors['White']

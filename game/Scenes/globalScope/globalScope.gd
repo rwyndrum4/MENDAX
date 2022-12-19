@@ -34,6 +34,7 @@ var local_state = null
 var in_popup: bool = false
 #Bools to tell if in chatbox or not, work like a locking mechanism
 var in_chatbox: bool = false
+#Bools to tell if you can open the settings or not
 var can_open_settings: bool = false
 
 """

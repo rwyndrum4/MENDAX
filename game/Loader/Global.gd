@@ -52,6 +52,7 @@ var player_positions:Dictionary = {}
 # Hold dictionary of player input vectors
 var player_input_vectors:Dictionary = {}
 # Hold current matches, for joining matches
+# Example: "random_match_code": [nakama_code, group_chat_code]
 var current_matches: Dictionary = {}
 
 """
@@ -74,13 +75,13 @@ func _ready():
 /*
 * @pre None
 * @post adds a match to the current_matches variable
-* @param lobby_name -> String, match_id -> String
+* @param lobby_name -> String, match_id -> String, private_chat_id -> String
 * @return None
 */
 """
-func add_match(lobby_name:String,match_id:String):
+func add_match(lobby_name:String,match_id:String,private_chat_id:String):
 	#adds to dictionary
-	current_matches[lobby_name] = match_id
+	current_matches[lobby_name] = [match_id, private_chat_id]
 
 """
 /*
@@ -92,7 +93,18 @@ func add_match(lobby_name:String,match_id:String):
 """
 func get_match(lobby_name:String) -> String:
 	#returns the really long match id
-	return current_matches[lobby_name]
+	return current_matches[lobby_name][0]
+
+"""
+/*
+* @pre None
+* @post returns the group chat id for the match needed
+* @param lobby_name -> String
+* @return String
+*/
+"""
+func get_match_group_chat(lobby_name: String) -> String:
+	return current_matches[lobby_name][1]
 
 """
 /*
