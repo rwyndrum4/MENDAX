@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Scenes/minigames/rhythm/hit_buttons.gd" type="Script" id=1]
+
+[node name="AnimatedSprite" type="AnimatedSprite"]
+script = ExtResource( 1 )

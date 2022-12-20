@@ -10,6 +10,7 @@
 	10/1/2022 - Fixed options menu movment
 	11/4/2022 - Adding server functionality 
 	11/13/2022 - add test functionality
+	12/19/2022 - fixed bugs dealing with players spawning
 """
 extends Control
 
@@ -30,8 +31,7 @@ var animation_names: Array = ["blue_idle","red_idle","green_idle","orange_idle"]
 var num_players: int = 0
 #max players allowed
 const MAX_PLAYERS: int = 4
-#code for multiplayer match
-var _match_code = ""
+
 
 ### Member Variables ###
 #popup that is displayed when creating a new game
@@ -40,6 +40,8 @@ var game_init_popup:AcceptDialog
 var get_user_input:AcceptDialog
 #bool to let menu know if player is typing code
 var typing_code: bool = false
+#code for multiplayer match
+var _match_code: String = ""
 
 """
 /*
@@ -101,6 +103,7 @@ func _on_Start_pressed():
 */
 """
 func _on_Options_pressed():
+	#Open the options pop-up menu
 	Global.state = Global.scenes.OPTIONS_FROM_MAIN
 
 """
@@ -112,8 +115,8 @@ func _on_Options_pressed():
 * @knownFaults resets join code to default (XXXX)
 */
 """
-#When button pressed switches to Store scene
 func _on_Market_pressed():
+	#When button pressed switches to Store scene
 	Global.state = Global.scenes.MARKET
 
 """
@@ -125,6 +128,7 @@ func _on_Market_pressed():
 */
 """
 func _on_Tests_pressed():
+	#Change scene to cave
 	Global.state = Global.scenes.CAVE
 
 """
@@ -136,6 +140,11 @@ func _on_Tests_pressed():
 */
 """
 func _on_Quit_pressed():
+	#If player was in a lobby, force them to leave
+	if ServerConnection.match_exists():
+		ServerConnection.leave_match(ServerConnection._match_id)
+		ServerConnection.leave_match_group()
+	#Quit out of the game
 	get_tree().quit()
 
 """
@@ -181,12 +190,35 @@ func getRandAlphInd(rng):
 func initialize_menu():
 	#Grab focus on start button so keys can be used to navigate buttons
 	startButton.grab_focus()
+	#reset any online stuff if they came from a previous game
+	reset_multiplayer()
 	#check if there is a username
 	if Save.game_data.username == "":
 		var win_text = "Welcome to Mendax!"
 		var d_text = "Username required!\nPlease enter username:\n"
 		d_text += "(Single word, you can change it afterward in settings)"
 		create_get_user_window(win_text,d_text)
+
+"""
+/*
+* @pre Called on main menu initialization
+* @post Resets any of the multiplayer parts of the game
+* @param None
+* @return None
+*/
+"""
+func reset_multiplayer():
+	#Reset multiplayer match
+	if ServerConnection.match_exists():
+		ServerConnection.leave_match(_match_code)
+		ServerConnection.leave_match_group()
+	_match_code = ""
+	#Delete any leftover objects
+	for player in player_objects:
+		delete_player_obj(player['player_obj'],player['text_obj'])
+	#Reset player trackers
+	player_objects = []
+	num_players = 0
 
 """
 /*

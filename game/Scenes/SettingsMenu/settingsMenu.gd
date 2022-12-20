@@ -244,6 +244,9 @@ func _on_SfxVolSlider_value_changed(value):
 */
 """
 func _on_quitButton_pressed():
+	if ServerConnection.match_exists():
+		ServerConnection.leave_match(ServerConnection._match_id)
+		ServerConnection.leave_match_group()
 	get_tree().quit()
 
 """
