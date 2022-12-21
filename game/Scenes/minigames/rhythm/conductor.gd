@@ -1,5 +1,4 @@
-#Conductor class gotten from link below
-#https://www.youtube.com/watch?v=_FRiPPbJsFQ
+#Inspired by https://github.com/LegionGames/Conductor-Example/blob/master/Scripts/Conductor.gd
 
 extends AudioStreamPlayer
 

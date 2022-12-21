@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://Scenes/minigames/rhythm/conductor.gd" type="Script" id=1]
-[ext_resource path="res://Assets/SFX/tavern.mp3" type="AudioStream" id=2]
+[ext_resource path="res://Assets/rhythm/test_song.mp3" type="AudioStream" id=2]
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer"]
 stream = ExtResource( 2 )
