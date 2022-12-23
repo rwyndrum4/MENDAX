@@ -38,12 +38,13 @@ animations = [ {
 } ]
 
 [sub_resource type="CircleShape2D" id=2]
+radius = 6.0
 
 [sub_resource type="CircleShape2D" id=3]
 radius = 20.025
 
 [sub_resource type="CircleShape2D" id=4]
-radius = 34.1321
+radius = 39.0128
 
 [node name="AnimatedSprite" type="AnimatedSprite"]
 frames = SubResource( 1 )

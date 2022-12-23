@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Scenes/minigames/rhythm/rhythm.gd" type="Script" id=1]
 [ext_resource path="res://Assets/Silver.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://Scenes/minigames/rhythm/conductor.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Scenes/minigames/rhythm/hit_buttons.tscn" type="PackedScene" id=4]
 
 [sub_resource type="DynamicFont" id=1]
 size = 60
@@ -10,7 +11,27 @@ outline_size = 1
 outline_color = Color( 0.141176, 0.2, 0.839216, 1 )
 font_data = ExtResource( 2 )
 
-[node name="Node2D" type="Node2D"]
+[sub_resource type="DynamicFont" id=2]
+size = 32
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 24
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=4]
+size = 24
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=5]
+size = 24
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=6]
+size = 24
+font_data = ExtResource( 2 )
+
+[node name="RhythmGame" type="Node2D"]
 script = ExtResource( 1 )
 
 [node name="Scores" type="VBoxContainer" parent="."]
@@ -23,4 +44,59 @@ margin_bottom = 67.0
 custom_fonts/font = SubResource( 1 )
 text = "Scores"
 
+[node name="Combo" type="VBoxContainer" parent="."]
+margin_left = 1176.0
+margin_right = 1216.0
+margin_bottom = 165.0
+
+[node name="combo_count" type="Label" parent="Combo"]
+margin_right = 40.0
+margin_bottom = 37.0
+custom_colors/font_color = Color( 0.113725, 0.905882, 0.0666667, 1 )
+custom_fonts/font = SubResource( 2 )
+
+[node name="perfect_count" type="Label" parent="Combo"]
+margin_top = 41.0
+margin_right = 40.0
+margin_bottom = 69.0
+custom_colors/font_color = Color( 0.435294, 0.921569, 1, 1 )
+custom_fonts/font = SubResource( 3 )
+
+[node name="good_count" type="Label" parent="Combo"]
+margin_top = 73.0
+margin_right = 40.0
+margin_bottom = 101.0
+custom_colors/font_color = Color( 0.435294, 0.921569, 1, 1 )
+custom_fonts/font = SubResource( 4 )
+
+[node name="okay_count" type="Label" parent="Combo"]
+margin_top = 105.0
+margin_right = 40.0
+margin_bottom = 133.0
+custom_colors/font_color = Color( 0.435294, 0.921569, 1, 1 )
+custom_fonts/font = SubResource( 5 )
+
+[node name="misses_count" type="Label" parent="Combo"]
+margin_top = 137.0
+margin_right = 40.0
+margin_bottom = 165.0
+custom_colors/font_color = Color( 0.435294, 0.921569, 1, 1 )
+custom_fonts/font = SubResource( 6 )
+
 [node name="Conductor" parent="." instance=ExtResource( 3 )]
+
+[node name="blue" parent="." instance=ExtResource( 4 )]
+position = Vector2( 420, 600 )
+_color_animation = "blue_rhythm"
+
+[node name="green" parent="." instance=ExtResource( 4 )]
+position = Vector2( 550, 600 )
+_color_animation = "green_rhythm"
+
+[node name="orange" parent="." instance=ExtResource( 4 )]
+position = Vector2( 680, 600 )
+_color_animation = "orange_rhythm"
+
+[node name="red" parent="." instance=ExtResource( 4 )]
+position = Vector2( 810, 600 )
+_color_animation = "red_rhythm"

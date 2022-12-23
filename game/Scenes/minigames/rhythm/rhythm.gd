@@ -1,5 +1,6 @@
 """
 * Programmer Name - Ben Moeller
+* Also partially inspired by https://github.com/LegionGames/Conductor-Example/blob/master/Scripts/Game.gd
 * Description - File for controlling what happens in the rythtm game
 * Date Created - 12/20/2022
 * Date Revisions: 12/21/2022 - Adding support for other files
@@ -10,8 +11,15 @@ extends Node2D
 # Member Variables
 onready var scores_tab = $Scores
 onready var conductor = $Conductor
+onready var combo_count = $Combo/combo_count
+onready var perfect_count = $Combo/perfect_count
+onready var good_count = $Combo/good_count
+onready var okay_count = $Combo/okay_count
+onready var misses_count = $Combo/misses_count
 
-# Global Variables
+## Global Variables ##
+
+# Score variables
 var _score_dict: Dictionary = {} #hold the dictionary of all the player's scores
 var _max_combo = 0 #current combo that the player holds
 var _perfect_counter = 0 #variable to count how many greats player gets
@@ -19,7 +27,31 @@ var _good_counter = 0 #variable to count how many goods player gets
 var _okay_counter = 0 #variable to count how many okays player gets
 var _missed_counter = 0 #variable to count how many notes missed
 
-var NOTE = load("res://Scenes/minigames/rhythm/note.tscn")
+# Song variables
+var _song_position_in_beats = 0 #Tracks where the song is in terms of beats
+
+# Lane variables
+var lane = 0 #Lane to spawn a note in
+var rand = 0 #Random number global
+var note = load("res://Scenes/minigames/rhythm/note.tscn") #Note class
+var note_instance #Global instance of node to be spawned into the game
+
+# Note speeds
+const SLOW = 500
+const MEDIUM = 750
+const FAST = 1000
+const GODLIKE = 1500
+
+# Beat variables
+################################################################################
+# The way it works is that for every four beats there is a measure. After this
+# measure, the measure will reset and another four beats will play, continuing 
+# on until the song ends
+################################################################################
+var _measure_one_beat = 1 #First beat
+var _measure_two_beat = 0 #Second beat
+var _measure_three_beat = 0 #Third beat
+var _measure_four_beat = 1 #Fourth beat
 
 """
 /*
@@ -35,6 +67,14 @@ func _ready():
 	randomize()
 	conductor.play_with_beat_offset(8)
 	add_player_score(Save.game_data.username)
+	initialize_combo_scores()
+
+func initialize_combo_scores():
+	combo_count.text = "Combo: 0"
+	perfect_count.text = "Perfect: 0"
+	good_count.text = "Good: 0"
+	okay_count.text = "Okay: 0"
+	misses_count.text = "Misses: 0"
 
 """
 /*
@@ -76,28 +116,6 @@ func change_score(p_name: String, new_points: int):
 
 """
 /*
-* @pre Called when Conductor class sends a measure signal
-* @post TODO
-* @param measure_position -> Number
-* @return None
-*/
-"""
-func _on_Conductor_measure(measure_position):
-	pass
-
-"""
-/*
-* @pre Called when Conductor class sends a beat signal
-* @post TODO
-* @param beat_position -> Number
-* @return None
-*/
-"""
-func _on_Conductor_beat(beat_position):
-	pass
-
-"""
-/*
 * @pre None
 * @post Increments or resets the combo counter, plus type counters
 * @param type -> Int (Type of not hit, aka perfect, good, okay, etc)
@@ -109,13 +127,23 @@ func increment_counters(type: int):
 	match type:
 		0: _max_combo = 0
 		_: _max_combo += 1
+	#Update combo counter label text
+	combo_count.text = "Combo: " + str(_max_combo)
 	
 	#Increment the correct type of hit/miss
 	match type:
-		0: _missed_counter += 1
-		1: _okay_counter += 1
-		2: _good_counter += 1
-		3: _perfect_counter += 1
+		0: 
+			_missed_counter += 1
+			misses_count.text = "Misses: " + str(_missed_counter)
+		1: 
+			_okay_counter += 1
+			okay_count.text = "Okay: " + str(_okay_counter)
+		2: 
+			_good_counter += 1
+			good_count.text = "Good: " + str(_good_counter)
+		3: 
+			_perfect_counter += 1
+			perfect_count.text = "Perfect: " + str(_perfect_counter)
 
 """
 /*
@@ -127,3 +155,98 @@ func increment_counters(type: int):
 """
 func reset_combo():
 	_max_combo = 0
+
+"""
+/*
+* @pre Called when Conductor class sends a measure signal
+* @post TODO
+* @param measure_position -> Number
+* @return None
+*/
+"""
+func _on_Conductor_measure(measure_position):
+	match measure_position:
+		1: _spawn_notes(_measure_one_beat)
+		2: _spawn_notes(_measure_two_beat)
+		3: _spawn_notes(_measure_three_beat)
+		4: _spawn_notes(_measure_four_beat)
+
+"""
+/*
+* @pre Called when Conductor class sends a beat signal
+* @post TODO
+* @param beat_position -> Number
+* @return None
+*/
+"""
+func _on_Conductor_beat(beat_position):
+	_song_position_in_beats = beat_position
+	if _song_position_in_beats > 36:
+		_measure_one_beat = 1 
+		_measure_two_beat = 1 
+		_measure_three_beat = 1 
+		_measure_four_beat = 1 
+	if _song_position_in_beats > 98:
+		_measure_one_beat = 2
+		_measure_two_beat = 0 
+		_measure_three_beat = 1 
+		_measure_four_beat = 0 
+	if _song_position_in_beats > 132:
+		_measure_one_beat = 0
+		_measure_two_beat = 2
+		_measure_three_beat = 0
+		_measure_four_beat = 2
+	if _song_position_in_beats > 162:
+		_measure_one_beat = 2 
+		_measure_two_beat = 2 
+		_measure_three_beat = 1 
+		_measure_four_beat = 1 
+	if _song_position_in_beats > 194:
+		_measure_one_beat = 2
+		_measure_two_beat = 2 
+		_measure_three_beat = 1 
+		_measure_four_beat = 2 
+	if _song_position_in_beats > 228:
+		_measure_one_beat = 0 
+		_measure_two_beat = 2 
+		_measure_three_beat = 1 
+		_measure_four_beat = 2 
+	if _song_position_in_beats > 258:
+		_measure_one_beat = 1 
+		_measure_two_beat = 2 
+		_measure_three_beat = 1 
+		_measure_four_beat = 2
+	if _song_position_in_beats > 288:
+		_measure_one_beat = 0 
+		_measure_two_beat = 2 
+		_measure_three_beat = 0
+		_measure_four_beat = 2
+	if _song_position_in_beats > 322:
+		_measure_one_beat = 3
+		_measure_two_beat = 2 
+		_measure_three_beat = 2 
+		_measure_four_beat = 1 
+	if _song_position_in_beats > 388:
+		_measure_one_beat = 1 
+		_measure_two_beat = 0 
+		_measure_three_beat = 0 
+		_measure_four_beat = 0 
+	if _song_position_in_beats > 396:
+		_measure_one_beat = 0 
+		_measure_two_beat = 0 
+		_measure_three_beat = 0 
+		_measure_four_beat = 0 
+
+func _spawn_notes(to_spawn: int):
+	if to_spawn > 0:
+		lane = randi() % 3
+		note_instance = note.instance()
+		note_instance.initialize(lane, FAST)
+		add_child(note_instance)
+	if to_spawn > 1:
+		while rand == lane:
+			rand = randi() % 3
+		lane = rand
+		note_instance = note.instance()
+		note_instance.initialize(lane, FAST)
+		add_child(note_instance)

@@ -4,7 +4,7 @@
 [ext_resource path="res://Assets/rhythm/note.png" type="Texture" id=2]
 
 [sub_resource type="CircleShape2D" id=1]
-radius = 35.0143
+radius = 8.06226
 
 [node name="Area2D" type="Area2D"]
 script = ExtResource( 1 )
@@ -13,7 +13,7 @@ script = ExtResource( 1 )
 texture = ExtResource( 2 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2( 1, 2 )
+position = Vector2( 1, 1 )
 shape = SubResource( 1 )
 
 [node name="label_holder" type="Node2D" parent="."]

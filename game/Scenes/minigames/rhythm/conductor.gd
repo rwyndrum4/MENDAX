@@ -1,4 +1,4 @@
-#Inspired by https://github.com/LegionGames/Conductor-Example/blob/master/Scripts/Conductor.gd
+#From https://github.com/LegionGames/Conductor-Example/blob/master/Scripts/Conductor.gd
 
 extends AudioStreamPlayer
 

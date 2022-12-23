@@ -141,3 +141,4 @@ func reset():
 	_perfect = false
 	_good = false
 	_okay = false
+	frame = 0
