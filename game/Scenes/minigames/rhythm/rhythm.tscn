@@ -12,23 +12,23 @@ outline_color = Color( 0.141176, 0.2, 0.839216, 1 )
 font_data = ExtResource( 2 )
 
 [sub_resource type="DynamicFont" id=2]
-size = 32
+size = 50
 font_data = ExtResource( 2 )
 
 [sub_resource type="DynamicFont" id=3]
-size = 24
+size = 32
 font_data = ExtResource( 2 )
 
 [sub_resource type="DynamicFont" id=4]
-size = 24
+size = 32
 font_data = ExtResource( 2 )
 
 [sub_resource type="DynamicFont" id=5]
-size = 24
+size = 32
 font_data = ExtResource( 2 )
 
 [sub_resource type="DynamicFont" id=6]
-size = 24
+size = 32
 font_data = ExtResource( 2 )
 
 [node name="RhythmGame" type="Node2D"]
@@ -37,7 +37,7 @@ script = ExtResource( 1 )
 [node name="ColorRect" type="ColorRect" parent="."]
 margin_right = 1280.0
 margin_bottom = 720.0
-color = Color( 0.737255, 0.752941, 0.847059, 0.701961 )
+color = Color( 0.658824, 0.658824, 0.658824, 0.411765 )
 
 [node name="Scores" type="VBoxContainer" parent="."]
 margin_left = 16.0
@@ -51,42 +51,42 @@ custom_fonts/font = SubResource( 1 )
 text = "Scores"
 
 [node name="Combo" type="VBoxContainer" parent="."]
-margin_left = 1176.0
-margin_right = 1216.0
-margin_bottom = 165.0
+margin_left = 1128.0
+margin_right = 1168.0
+margin_bottom = 220.0
 
 [node name="combo_count" type="Label" parent="Combo"]
 margin_right = 40.0
-margin_bottom = 37.0
-custom_colors/font_color = Color( 0.113725, 0.905882, 0.0666667, 1 )
+margin_bottom = 56.0
+custom_colors/font_color = Color( 0.576471, 0.972549, 0.552941, 1 )
 custom_fonts/font = SubResource( 2 )
 
 [node name="perfect_count" type="Label" parent="Combo"]
-margin_top = 41.0
+margin_top = 60.0
 margin_right = 40.0
-margin_bottom = 69.0
-custom_colors/font_color = Color( 0.435294, 0.921569, 1, 1 )
+margin_bottom = 97.0
+custom_colors/font_color = Color( 0.25098, 0.929412, 0.72549, 1 )
 custom_fonts/font = SubResource( 3 )
 
 [node name="good_count" type="Label" parent="Combo"]
-margin_top = 73.0
+margin_top = 101.0
 margin_right = 40.0
-margin_bottom = 101.0
-custom_colors/font_color = Color( 0.435294, 0.921569, 1, 1 )
+margin_bottom = 138.0
+custom_colors/font_color = Color( 0.32549, 0.498039, 0.929412, 1 )
 custom_fonts/font = SubResource( 4 )
 
 [node name="okay_count" type="Label" parent="Combo"]
-margin_top = 105.0
+margin_top = 142.0
 margin_right = 40.0
-margin_bottom = 133.0
-custom_colors/font_color = Color( 0.435294, 0.921569, 1, 1 )
+margin_bottom = 179.0
+custom_colors/font_color = Color( 0.858824, 0.921569, 0.301961, 1 )
 custom_fonts/font = SubResource( 5 )
 
 [node name="misses_count" type="Label" parent="Combo"]
-margin_top = 137.0
+margin_top = 183.0
 margin_right = 40.0
-margin_bottom = 165.0
-custom_colors/font_color = Color( 0.435294, 0.921569, 1, 1 )
+margin_bottom = 220.0
+custom_colors/font_color = Color( 0.878431, 0.203922, 0.258824, 1 )
 custom_fonts/font = SubResource( 6 )
 
 [node name="Conductor" parent="." instance=ExtResource( 3 )]
@@ -106,3 +106,26 @@ _color_animation = "orange_rhythm"
 [node name="red" parent="." instance=ExtResource( 4 )]
 position = Vector2( 810, 600 )
 _color_animation = "red_rhythm"
+
+[node name="Frame" type="CanvasLayer" parent="."]
+
+[node name="top_of_buttons" type="Line2D" parent="Frame"]
+points = PoolVector2Array( 360, 552, 872, 552 )
+default_color = Color( 0.4, 0.501961, 1, 1 )
+
+[node name="bottom_of_buttons" type="Line2D" parent="Frame"]
+points = PoolVector2Array( 344, 648, 888, 648 )
+default_color = Color( 0.4, 0.501961, 1, 1 )
+
+[node name="middle_divider" type="Line2D" parent="Frame"]
+points = PoolVector2Array( 616, -16, 616, 736 )
+default_color = Color( 0.4, 0.501961, 1, 1 )
+
+[node name="left_divider" type="Line2D" parent="Frame"]
+points = PoolVector2Array( 456, -8, 328, 752 )
+default_color = Color( 0.968627, 0.4, 1, 1 )
+
+[node name="right_divider" type="Line2D" parent="Frame"]
+position = Vector2( -48, 0 )
+points = PoolVector2Array( 824, -8, 952, 752 )
+default_color = Color( 0.968627, 0.4, 1, 1 )

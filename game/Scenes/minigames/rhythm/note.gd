@@ -7,13 +7,15 @@ onready var text_label = $label_holder/hit_type
 
 const MODULATE_VALUE = 8
 const SPAWN_Y = -20
-const LANE_ONE_SPAWN = Vector2(420, SPAWN_Y)
-const LANE_TWO_SPAWN = Vector2(550, SPAWN_Y)
-const LANE_THREE_SPAWN = Vector2(680, SPAWN_Y)
-const LANE_FOUR_SPAWN = Vector2(810, SPAWN_Y)
+const ANGLE_HIGH = 130
+const ANGLE_LOW = 30
+const LANE_ONE_SPAWN = Vector2(500, SPAWN_Y)
+const LANE_TWO_SPAWN = Vector2(570, SPAWN_Y)
+const LANE_THREE_SPAWN = Vector2(660, SPAWN_Y)
+const LANE_FOUR_SPAWN = Vector2(730, SPAWN_Y)
 
 const LABEL_SPEED = 650 #Speed of the label saying what type of score a note was
-var _speed = 800 #speed of the note
+var _speed: Vector2 = Vector2(0,800) #speed of the note
 var _hit = false #track whether the note was hit or not
 
 func _ready():
@@ -21,21 +23,28 @@ func _ready():
 
 func _physics_process(delta):
 	if not _hit:
-		position.y += _speed * delta
+		position += _speed * delta
 		if position.y > 800:
+			get_parent().increment_counters(0)
 			destroy(0)
-			get_parent().reset_combo()
 	else:
 		$label_holder.position.y -= LABEL_SPEED * delta
 		$label_holder.modulate.a8 -= MODULATE_VALUE
 
 func initialize(lane: int, new_speed: int):
-	_speed = new_speed
 	match lane:
-		0: position = LANE_ONE_SPAWN
-		1: position = LANE_TWO_SPAWN
-		2: position = LANE_THREE_SPAWN
-		3: position = LANE_FOUR_SPAWN
+		0: 
+			position = LANE_ONE_SPAWN
+			_speed = Vector2(-ANGLE_HIGH, new_speed)
+		1: 
+			position = LANE_TWO_SPAWN
+			_speed = Vector2(-ANGLE_LOW, new_speed)
+		2: 
+			position = LANE_THREE_SPAWN
+			_speed = Vector2(ANGLE_LOW, new_speed)
+		3: 
+			position = LANE_FOUR_SPAWN
+			_speed = Vector2(ANGLE_HIGH, new_speed)
 		_: 
 			printerr("Invalid lane set for a note: " + str(lane))
 			return

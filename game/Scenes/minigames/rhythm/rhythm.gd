@@ -21,11 +21,13 @@ onready var misses_count = $Combo/misses_count
 
 # Score variables
 var _score_dict: Dictionary = {} #hold the dictionary of all the player's scores
-var _max_combo = 0 #current combo that the player holds
+var _current_combo = 0 #current combo that the player holds
+var _max_combo = 0 #max combo player gets (for stats purposes)
 var _perfect_counter = 0 #variable to count how many greats player gets
 var _good_counter = 0 #variable to count how many goods player gets
 var _okay_counter = 0 #variable to count how many okays player gets
 var _missed_counter = 0 #variable to count how many notes missed
+var _combo_multiplier = 1 #variable to track how much to multiply points by
 
 # Song variables
 var _song_position_in_beats = 0 #Tracks where the song is in terms of beats
@@ -35,6 +37,7 @@ var lane = 0 #Lane to spawn a note in
 var rand = 0 #Random number global
 var note = load("res://Scenes/minigames/rhythm/note.tscn") #Note class
 var note_instance #Global instance of node to be spawned into the game
+const MAX_LANES = 4
 
 # Note speeds
 const SLOW = 500
@@ -107,12 +110,13 @@ func add_player_score(p_name: String):
 */
 """
 func change_score(p_name: String, new_points: int):
+	var added_score = new_points * _combo_multiplier
 	if _score_dict.has(p_name):
 		#get the current score as a string
 		var label_txt = _score_dict.get(p_name).text
 		var current_score = label_txt.get_slice(" ",1)
 		var cleaned_data = label_txt.replace(current_score,"")
-		_score_dict.get(p_name).text = cleaned_data + str(int(current_score) + new_points)
+		_score_dict.get(p_name).text = cleaned_data + str(int(current_score) + added_score)
 
 """
 /*
@@ -125,10 +129,16 @@ func change_score(p_name: String, new_points: int):
 func increment_counters(type: int):
 	#Increment combo if player hits, else reset combo
 	match type:
-		0: _max_combo = 0
-		_: _max_combo += 1
+		0: 
+			_current_combo = 0
+			_combo_multiplier = 1
+		_: 
+			_current_combo += 1
+			_combo_multiplier += 0.05
+			if _current_combo > _max_combo:
+				_max_combo = _current_combo
 	#Update combo counter label text
-	combo_count.text = "Combo: " + str(_max_combo)
+	combo_count.text = "Combo: " + str(_current_combo)
 	
 	#Increment the correct type of hit/miss
 	match type:
@@ -144,17 +154,6 @@ func increment_counters(type: int):
 		3: 
 			_perfect_counter += 1
 			perfect_count.text = "Perfect: " + str(_perfect_counter)
-
-"""
-/*
-* @pre None
-* @post resets the combo to zero
-* @param None
-* @return None
-*/
-"""
-func reset_combo():
-	_max_combo = 0
 
 """
 /*
@@ -239,13 +238,13 @@ func _on_Conductor_beat(beat_position):
 
 func _spawn_notes(to_spawn: int):
 	if to_spawn > 0:
-		lane = randi() % 3
+		lane = randi() % MAX_LANES
 		note_instance = note.instance()
 		note_instance.initialize(lane, FAST)
 		add_child(note_instance)
 	if to_spawn > 1:
 		while rand == lane:
-			rand = randi() % 3
+			rand = randi() % MAX_LANES
 		lane = rand
 		note_instance = note.instance()
 		note_instance.initialize(lane, FAST)
