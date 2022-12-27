@@ -36,6 +36,7 @@ var _song_position_in_beats = 0 #Tracks where the song is in terms of beats
 var lane = 0 #Lane to spawn a note in
 var rand = 0 #Random number global
 var note = load("res://Scenes/minigames/rhythm/note.tscn") #Note class
+var hold_note = load("res://Scenes/minigames/rhythm/hold_note.tscn") #Hold Note class
 var note_instance #Global instance of node to be spawned into the game
 const MAX_LANES = 4
 
@@ -237,15 +238,16 @@ func _on_Conductor_beat(beat_position):
 		_measure_four_beat = 0 
 
 func _spawn_notes(to_spawn: int):
+	var local_note = hold_note
 	if to_spawn > 0:
 		lane = randi() % MAX_LANES
-		note_instance = note.instance()
+		note_instance = local_note.instance()
 		note_instance.initialize(lane, FAST)
 		add_child(note_instance)
 	if to_spawn > 1:
 		while rand == lane:
 			rand = randi() % MAX_LANES
 		lane = rand
-		note_instance = note.instance()
+		note_instance = local_note.instance()
 		note_instance.initialize(lane, FAST)
 		add_child(note_instance)

@@ -21,6 +21,9 @@ var _hit = false #track whether the note was hit or not
 func _ready():
 	add_to_group("note")
 
+func get_type() -> String:
+	return "note"
+
 func _physics_process(delta):
 	if not _hit:
 		position += _speed * delta

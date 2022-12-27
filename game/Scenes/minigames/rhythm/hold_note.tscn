@@ -1,0 +1,53 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Assets/rhythm/note.png" type="Texture" id=1]
+[ext_resource path="res://Scenes/minigames/rhythm/hold_note.gd" type="Script" id=2]
+
+[sub_resource type="CircleShape2D" id=1]
+radius = 11.0454
+
+[node name="Area2D" type="Area2D"]
+script = ExtResource( 2 )
+
+[node name="hold_pivot_node" type="Node2D" parent="."]
+
+[node name="hold_zone" type="ColorRect" parent="hold_pivot_node"]
+modulate = Color( 1, 1, 1, 0.294118 )
+margin_left = 37.0
+margin_right = 109.0
+grow_horizontal = 2
+grow_vertical = 2
+rect_rotation = -180.0
+color = Color( 1, 0, 0, 1 )
+
+[node name="first_sprite" type="Sprite" parent="."]
+modulate = Color( 1, 1, 1, 0.294118 )
+texture = ExtResource( 1 )
+
+[node name="first_collider" type="CollisionShape2D" parent="."]
+position = Vector2( 1, 1 )
+shape = SubResource( 1 )
+
+[node name="first_label" type="Node2D" parent="."]
+
+[node name="hit_type" type="Label" parent="first_label"]
+margin_left = -20.0
+margin_top = -7.0
+margin_right = 20.0
+margin_bottom = 7.0
+
+[node name="second_sprite" type="Sprite" parent="."]
+modulate = Color( 1, 1, 1, 0.294118 )
+texture = ExtResource( 1 )
+
+[node name="second_collider" type="CollisionShape2D" parent="."]
+position = Vector2( 1, 1 )
+shape = SubResource( 1 )
+
+[node name="second_label" type="Node2D" parent="."]
+
+[node name="hit_type" type="Label" parent="second_label"]
+margin_left = -20.0
+margin_top = -7.0
+margin_right = 20.0
+margin_bottom = 7.0
