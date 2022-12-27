@@ -29,31 +29,84 @@ var _first_hit = false #track whether the first note was hit or not
 var _second_hit = false #track whether the secpnd note was hit or not
 var _in_hold_phase = false #track if in the holding phase
 
+"""
+/*
+* @pre Called when the object is added to scene
+* @post sets randome seed and finished setting up object
+* @param None
+* @return None
+*/
+"""
 func _ready():
 	randomize()
 	_hold_height = randi() % MAX_HOLD_ZONE_HEIGHT + MIN_HOLD_ZONE_HEIGHT
 	finish_object(_hold_height)
 	add_to_group("note")
 
+"""
+/*
+* @pre None
+* @post returns the node type
+* @param None
+* @return String
+*/
+"""
 func get_type() -> String:
 	return "hold_note"
 
+"""
+/*
+* @pre None
+* @post increases the modulate of the hold zone so user knows they are holding it down
+* @param None
+* @return None
+*/
+"""
 func brighten_hold_zone():
-	hold_zone.modulate.a8 = 180
+	if _in_hold_phase:
+		hold_zone.modulate.a8 = 180
+		second_sprite.modulate.a8 = 200
 
+"""
+/*
+* @pre None
+* @post called when user lets go of the hold zone (goes back to normal)
+* @param None
+* @return None
+*/
+"""
 func reset_hold_zone():
-	hold_zone.modulate.a8 = 75
+	if _in_hold_phase:
+		hold_zone.modulate.a8 = 75
+		second_sprite.modulate.a8 = 75
 
+"""
+/*
+* @pre Called for every frame of the game
+* @post moves the note object and feedback text
+* @param None
+* @return None
+*/
+"""
 func _physics_process(delta):
 	if not (_first_hit and _second_hit):
 		position += _speed * delta
 		if position.y > 1400:
 			get_parent().increment_counters(0)
-			destroy(0)
+			if not _second_hit:
+				destroy(0)
 	else:
 		_current_label.position.y -= LABEL_SPEED * delta
 		_current_label.modulate.a8 -= MODULATE_VALUE
 
+"""
+/*
+* @pre Called before ready function even fires
+* @post sets position, speed, and key that is being held down
+* @param lane -> int (lane to spawn in), new_speed -> int (y axis speed)
+* @return None
+*/
+"""
 func initialize(lane: int, new_speed: int):
 	match lane:
 		0: 
@@ -76,6 +129,14 @@ func initialize(lane: int, new_speed: int):
 			printerr("Invalid lane set for a note: " + str(lane))
 			return
 
+"""
+/*
+* @pre Called inside of the ready function
+* @post finished setting angles, heights, and widths of various objects
+* @param zone_height -> int (how high the hold note should be)
+* @return None
+*/
+"""
 func finish_object(zone_height: int):
 	hold_zone.rect_size.y = zone_height
 	var zone_degree = $hold_pivot_node.rotation_degrees + get_angle()
@@ -88,6 +149,14 @@ func finish_object(zone_height: int):
 	$second_label.position.x = x_result
 	$second_label.position.y -= zone_height
 
+"""
+/*
+* @pre Called when note wants to be destroyed (needs to be called twice )
+* @post performs various tasks depending on if it is the first or second time called
+* @param score -> int (score type, perfect good etc)
+* @return None
+*/
+"""
 func destroy(score: int):
 	var text_label
 	#Change parameters based on if it is on the first or second note
@@ -106,6 +175,14 @@ func destroy(score: int):
 		hold_zone.queue_free()
 		$first_sprite.queue_free()
 		$second_sprite.queue_free()
+		#Destroy the note when hit based on a timer
+		var destroy_timer: Timer = Timer.new()
+		destroy_timer.one_shot = true
+		destroy_timer.wait_time = 3
+		add_child(destroy_timer)
+		destroy_timer.start()
+		# warning-ignore: return_value_discarded
+		destroy_timer.connect("timeout", self, "_delete_node", [destroy_timer])
 	#Give a score for the hit
 	match score:
 		3:
@@ -123,19 +200,27 @@ func destroy(score: int):
 		0:
 			text_label.text = "MISSED"
 			text_label.modulate = Color("#e03442")
-	#Destroy the note when hit based on a timer
-	var destroy_timer: Timer = Timer.new()
-	destroy_timer.one_shot = true
-	destroy_timer.wait_time = 3
-	add_child(destroy_timer)
-	destroy_timer.start()
-	# warning-ignore: return_value_discarded
-	destroy_timer.connect("timeout", self, "_delete_node", [destroy_timer])
 
+"""
+/*
+* @pre Called when the timer goes off
+* @post deletes the timer and note object
+* @param None
+* @return None
+*/
+"""
 func _delete_node(timer_var: Timer):
 	timer_var.queue_free()
 	queue_free()
 
+"""
+/*
+* @pre None
+* @post returns the angle that the hold_note should be angled at
+* @param None
+* @return int
+*/
+"""
 func get_angle() -> int:
 	var s = _speed.x
 	if s == ANGLE_HIGH:
@@ -149,5 +234,16 @@ func get_angle() -> int:
 	else:
 		return 0
 
+"""
+/*
+* @pre None
+* @post returns the x distance that the second note should move so that it
+* can align where the new final destination should be. This has to be done 
+* because the distance changes when angle is adjusted
+* @param deg -> int (degree that the not changed to), 
+* height -> int (height that the note has)
+* @return int
+*/
+"""
 func calc_change(deg, height) -> int:
 	return height * sin(PI * 2 * deg/360)

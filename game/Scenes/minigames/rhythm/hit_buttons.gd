@@ -40,6 +40,7 @@ func _ready():
 """
 func _unhandled_input(event):
 	if event.is_action(_color_animation):
+		#When key is pressed down (for both note and hold_note)
 		if event.is_action_pressed(_color_animation, false):
 			if _current_note != null:
 				if _perfect:
@@ -59,6 +60,7 @@ func _unhandled_input(event):
 				elif _note_type == "hold_note":
 					_current_note.brighten_hold_zone()
 					reset_no_null()
+		#When a key is released (ONLY FOR HOLD_NOTE)
 		elif event.is_action_released(_color_animation, false) and _note_type == "hold_note":
 			if _current_note != null:
 				if _perfect:
@@ -75,6 +77,8 @@ func _unhandled_input(event):
 					_current_note.destroy(1)
 			else:
 				get_parent().increment_counters(0)
+				if is_instance_valid(_save_node):
+					_save_node.reset_hold_zone()
 
 """
 /*
@@ -156,7 +160,7 @@ func _on_okay_area_area_exited(area):
 /*
 * @pre Called inside of input function
 * @post resets all current parameters
-* @param area -> Area2D
+* @param None
 * @return None
 */
 """
@@ -167,6 +171,14 @@ func reset():
 	_okay = false
 	frame = 0
 
+"""
+/*
+* @pre Called inside of input function
+* @post resets all current parameters, but only for hold_notes
+* @param None
+* @return None
+*/
+"""
 func reset_no_null():
 	_perfect = false
 	_good = false

@@ -18,12 +18,36 @@ const LABEL_SPEED = 650 #Speed of the label saying what type of score a note was
 var _speed: Vector2 = Vector2(0,800) #speed of the note
 var _hit = false #track whether the note was hit or not
 
+"""
+/*
+* @pre Called when the rhythm game starts
+* @post adds the object to the note group
+* @param None
+* @return None
+*/
+"""
 func _ready():
 	add_to_group("note")
 
+"""
+/*
+* @pre None
+* @post returns the type of the note
+* @param None
+* @return None
+*/
+"""
 func get_type() -> String:
 	return "note"
 
+"""
+/*
+* @pre Called for every frame in the game
+* @post moves the object and feedback text
+* @param None
+* @return None
+*/
+"""
 func _physics_process(delta):
 	if not _hit:
 		position += _speed * delta
@@ -34,6 +58,14 @@ func _physics_process(delta):
 		$label_holder.position.y -= LABEL_SPEED * delta
 		$label_holder.modulate.a8 -= MODULATE_VALUE
 
+"""
+/*
+* @pre First function that is called even before ready function
+* @post sets the starting position and speed of the note
+* @param lane -> int (lane to spawn in), new_speed -> int (y axis speed)
+* @return None
+*/
+"""
 func initialize(lane: int, new_speed: int):
 	match lane:
 		0: 
@@ -52,6 +84,14 @@ func initialize(lane: int, new_speed: int):
 			printerr("Invalid lane set for a note: " + str(lane))
 			return
 
+"""
+/*
+* @pre Called when a note is to be destroyed
+* @post Sets the text for the feedback and starts a timer to delete the whole note object
+* @param score -> int (type of hit that user inputted, aka perfect good etc)
+* @return None
+*/
+"""
 func destroy(score: int):
 	_hit = true
 	match score:
@@ -81,6 +121,14 @@ func destroy(score: int):
 	# warning-ignore: return_value_discarded
 	destroy_timer.connect("timeout", self, "_delete_node", [destroy_timer])
 
+"""
+/*
+* @pre Called when the timer goes off
+* @post deletes the timer and note object
+* @param None
+* @return None
+*/
+"""
 func _delete_node(timer_var: Timer):
 	timer_var.queue_free()
 	queue_free()

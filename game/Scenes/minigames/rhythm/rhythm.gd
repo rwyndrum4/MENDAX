@@ -6,6 +6,17 @@
 * Date Revisions: 12/21/2022 - Adding support for other files
 """
 
+## TODO ##
+################################################
+# Map notes to song
+# Handle notes being spawned on top of eachother
+# Online functionality
+# Sabatoge mechanic
+# Beginning and end screen
+# Handle multiple players joining
+# Multiple Difficulties?
+################################################
+
 extends Node2D
 
 # Member Variables
@@ -66,13 +77,21 @@ var _measure_four_beat = 1 #Fourth beat
 */
 """
 func _ready():
+	randomize()
 	conductor.connect("measure", self, "_on_Conductor_measure")
 	conductor.connect("beat", self, "_on_Conductor_beat")
-	randomize()
 	conductor.play_with_beat_offset(8)
 	add_player_score(Save.game_data.username)
 	initialize_combo_scores()
 
+"""
+/*
+* @pre Called in ready function
+* @post initializes the combo text on the right hand side
+* @param None
+* @return None
+*/
+"""
 func initialize_combo_scores():
 	combo_count.text = "Combo: 0"
 	perfect_count.text = "Perfect: 0"
@@ -174,13 +193,18 @@ func _on_Conductor_measure(measure_position):
 """
 /*
 * @pre Called when Conductor class sends a beat signal
-* @post TODO
+* @post Helps say how the song should play out according to the beat position
 * @param beat_position -> Number
 * @return None
 */
 """
 func _on_Conductor_beat(beat_position):
 	_song_position_in_beats = beat_position
+	if _song_position_in_beats > 0:
+		_measure_one_beat = 1 
+		_measure_two_beat = 1 
+		_measure_three_beat = 1
+		_measure_four_beat = 1
 	if _song_position_in_beats > 36:
 		_measure_one_beat = 1 
 		_measure_two_beat = 1 
@@ -237,6 +261,14 @@ func _on_Conductor_beat(beat_position):
 		_measure_three_beat = 0 
 		_measure_four_beat = 0 
 
+"""
+/*
+* @pre Called for each beat that is called with a note
+* @post Helps spawn in the notes to the game
+* @param to_spawn -> int (number of notes to spawn)
+* @return None
+*/
+"""
 func _spawn_notes(to_spawn: int):
 	var local_note = gen_rand_note()
 	if to_spawn > 0:
@@ -245,16 +277,25 @@ func _spawn_notes(to_spawn: int):
 		note_instance.initialize(lane, FAST)
 		add_child(note_instance)
 	if to_spawn > 1:
-		while rand == lane:
-			rand = randi() % MAX_LANES
-		lane = rand
-		note_instance = local_note.instance()
-		note_instance.initialize(lane, FAST)
-		add_child(note_instance)
+		for _i in range(0, to_spawn):
+			while rand == lane:
+				rand = randi() % MAX_LANES
+			lane = rand
+			note_instance = local_note.instance()
+			note_instance.initialize(lane, FAST)
+			add_child(note_instance)
 
-func gen_rand_note():
-	var r = randi() % 100
-	if r > 25:
+"""
+/*
+* @pre None
+* @post Picks whether a normal or hold not is spawned
+* 75% chance for a normal note, 25% for a hold
+* @param None
+* @return Note Object
+*/
+"""
+func gen_rand_note() -> Object:
+	if (randi() % 100) > 25:
 		return note
 	else:
 		return hold_note
