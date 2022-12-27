@@ -16,10 +16,10 @@ const ANGLE_HIGH = 130
 const ANGLE_LOW = 30
 const MAX_HOLD_ZONE_HEIGHT = 400
 const MIN_HOLD_ZONE_HEIGHT = 300
-const LANE_ONE_SPAWN = Vector2(500, SPAWN_Y)
-const LANE_TWO_SPAWN = Vector2(570, SPAWN_Y)
+const LANE_ONE_SPAWN = Vector2(503, SPAWN_Y)
+const LANE_TWO_SPAWN = Vector2(568, SPAWN_Y)
 const LANE_THREE_SPAWN = Vector2(660, SPAWN_Y)
-const LANE_FOUR_SPAWN = Vector2(730, SPAWN_Y)
+const LANE_FOUR_SPAWN = Vector2(725, SPAWN_Y)
 
 const LABEL_SPEED = 650 #Speed of the label saying what type of score a note was
 var _hold_height = 0 #keep track of how high the hold zone should be
@@ -37,6 +37,12 @@ func _ready():
 
 func get_type() -> String:
 	return "hold_note"
+
+func brighten_hold_zone():
+	hold_zone.modulate.a8 = 180
+
+func reset_hold_zone():
+	hold_zone.modulate.a8 = 75
 
 func _physics_process(delta):
 	if not (_first_hit and _second_hit):

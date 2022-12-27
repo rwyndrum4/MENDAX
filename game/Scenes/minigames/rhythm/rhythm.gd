@@ -238,7 +238,7 @@ func _on_Conductor_beat(beat_position):
 		_measure_four_beat = 0 
 
 func _spawn_notes(to_spawn: int):
-	var local_note = hold_note
+	var local_note = gen_rand_note()
 	if to_spawn > 0:
 		lane = randi() % MAX_LANES
 		note_instance = local_note.instance()
@@ -251,3 +251,10 @@ func _spawn_notes(to_spawn: int):
 		note_instance = local_note.instance()
 		note_instance.initialize(lane, FAST)
 		add_child(note_instance)
+
+func gen_rand_note():
+	var r = randi() % 100
+	if r > 25:
+		return note
+	else:
+		return hold_note

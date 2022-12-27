@@ -8,7 +8,11 @@ var _perfect = false #tracks if a perfect is possible
 var _good = false #tracks if a good is possible
 var _okay = false #tracks if an okay is possible
 var _current_note = null #tracks if a note is currently in scope
+var _save_node = null #note to act upon
 var _note_type = "" #keep track of what a note was
+
+#Variables to help track if it is a hold note, what has been hit
+var first_hit = false
 
 """
 /*
@@ -53,6 +57,7 @@ func _unhandled_input(event):
 				if _note_type == "note":
 					reset()
 				elif _note_type == "hold_note":
+					_current_note.brighten_hold_zone()
 					reset_no_null()
 		elif event.is_action_released(_color_animation, false) and _note_type == "hold_note":
 			if _current_note != null:
@@ -68,7 +73,8 @@ func _unhandled_input(event):
 					play()
 					get_parent().increment_counters(1)
 					_current_note.destroy(1)
-				reset()
+			else:
+				get_parent().increment_counters(0)
 
 """
 /*
@@ -81,8 +87,6 @@ func _unhandled_input(event):
 func _on_perfect_area_area_entered(area):
 	if area.is_in_group("note"):
 		_perfect = true
-		_current_note = area
-		_note_type = _current_note.get_type()
 
 """
 /*
@@ -130,6 +134,9 @@ func _on_good_area_area_exited(area):
 """
 func _on_okay_area_area_entered(area):
 	if area.is_in_group("note"):
+		_current_note = area
+		_save_node = area
+		_note_type = _current_note.get_type()
 		_okay = true
 
 """
@@ -142,8 +149,8 @@ func _on_okay_area_area_entered(area):
 """
 func _on_okay_area_area_exited(area):
 	if area.is_in_group("note"):
-		_okay = false
 		_current_note = null
+		_okay = false
 
 """
 /*

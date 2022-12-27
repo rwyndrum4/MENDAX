@@ -22,6 +22,7 @@ signal measure(position)
 
 
 func _ready():
+	volume_db = -15.0
 	sec_per_beat = 60.0 / bpm
 
 
