@@ -39,7 +39,8 @@ var _in_hold_phase = false #track if in the holding phase
 """
 func _ready():
 	randomize()
-	_hold_height = randi() % MAX_HOLD_ZONE_HEIGHT + MIN_HOLD_ZONE_HEIGHT
+	if _hold_height == 0:
+		_hold_height = randi() % MAX_HOLD_ZONE_HEIGHT + MIN_HOLD_ZONE_HEIGHT
 	finish_object(_hold_height)
 	add_to_group("note")
 
@@ -53,6 +54,17 @@ func _ready():
 """
 func get_type() -> String:
 	return "hold_note"
+
+"""
+/*
+* @pre None
+* @post sets the height of the node (for if you don't want it to be random)
+* @param height_in -> int (height to set of hold note)
+* @return None
+*/
+"""
+func set_height(height_in: int):
+	_hold_height = height_in
 
 """
 /*
@@ -103,7 +115,7 @@ func _physics_process(delta):
 /*
 * @pre Called before ready function even fires
 * @post sets position, speed, and key that is being held down
-* @param lane -> int (lane to spawn in), new_speed -> int (y axis speed)
+* @param lane -> int (lane to spawn in), new_speed -> int (y axis speed),
 * @return None
 */
 """

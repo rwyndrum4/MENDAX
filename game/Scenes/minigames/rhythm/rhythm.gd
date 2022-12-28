@@ -30,6 +30,9 @@ onready var misses_count = $Combo/misses_count
 
 ## Global Variables ##
 
+# set to 0 if you want notes to be spawned randomly, 1 if not
+export var Implementation = 0
+
 # Score variables
 var _score_dict: Dictionary = {} #hold the dictionary of all the player's scores
 var _current_combo = 0 #current combo that the player holds
@@ -57,6 +60,11 @@ const MEDIUM = 750
 const FAST = 1000
 const GODLIKE = 1500
 
+enum _note_types {
+	NOTE = 1,
+	HOLD
+}
+
 # Beat variables
 ################################################################################
 # The way it works is that for every four beats there is a measure. After this
@@ -67,6 +75,9 @@ var _measure_one_beat = 1 #First beat
 var _measure_two_beat = 0 #Second beat
 var _measure_three_beat = 0 #Third beat
 var _measure_four_beat = 1 #Fourth beat
+
+# Script object where song beatmap is held
+var song = load("res://Scenes/minigames/rhythm/that_band.gd").new()
 
 """
 /*
@@ -184,11 +195,14 @@ func increment_counters(type: int):
 */
 """
 func _on_Conductor_measure(measure_position):
-	match measure_position:
-		1: _spawn_notes(_measure_one_beat)
-		2: _spawn_notes(_measure_two_beat)
-		3: _spawn_notes(_measure_three_beat)
-		4: _spawn_notes(_measure_four_beat)
+	if Implementation == 0:
+		match measure_position:
+			1: _spawn_notes_random(_measure_one_beat)
+			2: _spawn_notes_random(_measure_two_beat)
+			3: _spawn_notes_random(_measure_three_beat)
+			4: _spawn_notes_random(_measure_four_beat)
+	else:
+		pass
 
 """
 /*
@@ -200,66 +214,69 @@ func _on_Conductor_measure(measure_position):
 """
 func _on_Conductor_beat(beat_position):
 	_song_position_in_beats = beat_position
-	if _song_position_in_beats > 0:
-		_measure_one_beat = 1 
-		_measure_two_beat = 1 
-		_measure_three_beat = 1
-		_measure_four_beat = 1
-	if _song_position_in_beats > 36:
-		_measure_one_beat = 1 
-		_measure_two_beat = 1 
-		_measure_three_beat = 1 
-		_measure_four_beat = 1 
-	if _song_position_in_beats > 98:
-		_measure_one_beat = 2
-		_measure_two_beat = 0 
-		_measure_three_beat = 1 
-		_measure_four_beat = 0 
-	if _song_position_in_beats > 132:
-		_measure_one_beat = 0
-		_measure_two_beat = 2
-		_measure_three_beat = 0
-		_measure_four_beat = 2
-	if _song_position_in_beats > 162:
-		_measure_one_beat = 2 
-		_measure_two_beat = 2 
-		_measure_three_beat = 1 
-		_measure_four_beat = 1 
-	if _song_position_in_beats > 194:
-		_measure_one_beat = 2
-		_measure_two_beat = 2 
-		_measure_three_beat = 1 
-		_measure_four_beat = 2 
-	if _song_position_in_beats > 228:
-		_measure_one_beat = 0 
-		_measure_two_beat = 2 
-		_measure_three_beat = 1 
-		_measure_four_beat = 2 
-	if _song_position_in_beats > 258:
-		_measure_one_beat = 1 
-		_measure_two_beat = 2 
-		_measure_three_beat = 1 
-		_measure_four_beat = 2
-	if _song_position_in_beats > 288:
-		_measure_one_beat = 0 
-		_measure_two_beat = 2 
-		_measure_three_beat = 0
-		_measure_four_beat = 2
-	if _song_position_in_beats > 322:
-		_measure_one_beat = 3
-		_measure_two_beat = 2 
-		_measure_three_beat = 2 
-		_measure_four_beat = 1 
-	if _song_position_in_beats > 388:
-		_measure_one_beat = 1 
-		_measure_two_beat = 0 
-		_measure_three_beat = 0 
-		_measure_four_beat = 0 
-	if _song_position_in_beats > 396:
-		_measure_one_beat = 0 
-		_measure_two_beat = 0 
-		_measure_three_beat = 0 
-		_measure_four_beat = 0 
+	if Implementation == 0:
+		if _song_position_in_beats > 0:
+			_measure_one_beat = 1
+			_measure_two_beat = 0 
+			_measure_three_beat = 0
+			_measure_four_beat = 1
+		if _song_position_in_beats > 36:
+			_measure_one_beat = 1 
+			_measure_two_beat = 1 
+			_measure_three_beat = 1 
+			_measure_four_beat = 1 
+		if _song_position_in_beats > 98:
+			_measure_one_beat = 2
+			_measure_two_beat = 0 
+			_measure_three_beat = 1 
+			_measure_four_beat = 0 
+		if _song_position_in_beats > 132:
+			_measure_one_beat = 0
+			_measure_two_beat = 2
+			_measure_three_beat = 0
+			_measure_four_beat = 2
+		if _song_position_in_beats > 162:
+			_measure_one_beat = 2 
+			_measure_two_beat = 2 
+			_measure_three_beat = 1 
+			_measure_four_beat = 1 
+		if _song_position_in_beats > 194:
+			_measure_one_beat = 2
+			_measure_two_beat = 2 
+			_measure_three_beat = 1 
+			_measure_four_beat = 2 
+		if _song_position_in_beats > 228:
+			_measure_one_beat = 0 
+			_measure_two_beat = 2 
+			_measure_three_beat = 1 
+			_measure_four_beat = 2 
+		if _song_position_in_beats > 258:
+			_measure_one_beat = 1 
+			_measure_two_beat = 2 
+			_measure_three_beat = 1 
+			_measure_four_beat = 2
+		if _song_position_in_beats > 288:
+			_measure_one_beat = 0 
+			_measure_two_beat = 2 
+			_measure_three_beat = 0
+			_measure_four_beat = 2
+		if _song_position_in_beats > 322:
+			_measure_one_beat = 3
+			_measure_two_beat = 2 
+			_measure_three_beat = 2 
+			_measure_four_beat = 1 
+		if _song_position_in_beats > 388:
+			_measure_one_beat = 1 
+			_measure_two_beat = 0 
+			_measure_three_beat = 0 
+			_measure_four_beat = 0 
+		if _song_position_in_beats > 396:
+			_measure_one_beat = 0 
+			_measure_two_beat = 0 
+			_measure_three_beat = 0 
+			_measure_four_beat = 0 
+	else:
+		pass
 
 """
 /*
@@ -269,7 +286,7 @@ func _on_Conductor_beat(beat_position):
 * @return None
 */
 """
-func _spawn_notes(to_spawn: int):
+func _spawn_notes_random(to_spawn: int):
 	var local_note = gen_rand_note()
 	if to_spawn > 0:
 		lane = randi() % MAX_LANES
@@ -284,6 +301,28 @@ func _spawn_notes(to_spawn: int):
 			note_instance = local_note.instance()
 			note_instance.initialize(lane, FAST)
 			add_child(note_instance)
+
+"""
+/*
+* @pre Called for each beat that is called with a note
+* @post Helps spawn in the notes to the game, with you specifying which lane
+* @param lane_num -> int (lane to spawn note in),
+* note_type -> int (type of note to be spawned),
+* height -> int (height of hold_note, 0 if not specified)
+* @return None
+*/
+"""
+func _spawn_note_fixed_note(lane_num: int, note_type: int, height: int = 0):
+	var local_note
+	match note_type:
+		_note_types.NOTE: local_note = note
+		_note_types.HOLD: local_note = hold_note
+		_: local_note = note
+	note_instance = local_note.instance()
+	note_instance.initialize(lane_num, FAST)
+	if note_type == _note_types.HOLD:
+		note_instance.set_height(height)
+	add_child(note_instance)
 
 """
 /*
