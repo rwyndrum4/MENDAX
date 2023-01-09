@@ -47,7 +47,11 @@ enum scenes {
 	GAMEOVER
 }
 
+# Hold dictionary mapping player num to name
+# Ex. {"1": "Bob", "2": Mary, ...}
+var player_names: Dictionary = {}
 # Hold dictionary of player positions
+# Ex. {"1": Vector2(44,70), "2": Vector2(0,5) ...}
 var player_positions:Dictionary = {}
 # Hold dictionary of player input vectors
 var player_input_vectors:Dictionary = {}
@@ -82,6 +86,17 @@ func _ready():
 func add_match(lobby_name:String,match_id:String,private_chat_id:String):
 	#adds to dictionary
 	current_matches[lobby_name] = [match_id, private_chat_id]
+
+"""
+/*
+* @pre None
+* @post returns player name dependent on what number they are
+* @param player_num -> int (number player was assigned)
+* @return None
+*/
+"""
+func get_player_name(player_num: int) -> String:
+	return player_names[str(player_num)]
 
 """
 /*

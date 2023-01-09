@@ -17,6 +17,7 @@ enum OpCodes {
 	UPDATE_ARENA_SWORD,
 	UPDATE_ARENA_PLAYER_HEALTH,
 	UPDATE_ARENA_ENEMY_HIT,
+	UPDATE_RHYTHM_SCORE,
 	SPAWNED
 }
 
@@ -33,6 +34,7 @@ signal arena_player_swung_sword(id, direction) #signal to tell arena minigame so
 signal arena_player_lost_health(id, health) #signal to tell if player has lost health
 signal arena_enemy_hit(enemmy_hit, damage_taken) #signal to tell if an enemy has been hit
 signal minigame_player_spawned(id) #signal to tell if a player has arrived to a scene
+signal minigame_rhythm_score(id, score)
 
 #Other signals
 signal chat_message_received(msg,type,user_sent,from_user) #signal to tell game a chat message has come in
@@ -421,6 +423,19 @@ func send_arena_enemy_hit(damage: int, enemy_hit: int):
 
 """
 /*
+* @pre called when someone needs to send a score update for rhythm game
+* @post tells server which player is getting updated
+* @param new_score -> int (new score for the player)
+* @return None
+*/
+"""
+func send_rhythm_score(new_score:int):
+	if _socket:
+		var payload := {id = _player_num, score = new_score}
+		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_RHYTHM_SCORE, JSON.print(payload))
+
+"""
+/*
 * @pre called when player spawns in an area
 * @post tells other players they are there, used for syncing players together
 * @param None
@@ -553,6 +568,13 @@ func _on_NakamaSocket_received_match_state(match_state: NakamaRTAPI.MatchData) -
 			var dmg_taken: int = int(decoded.dmg)
 			
 			emit_signal("arena_enemy_hit", enemy, dmg_taken)
+		OpCodes.UPDATE_RHYTHM_SCORE:
+			var decoded: Dictionary = JSON.parse(raw).result
+			
+			var id: int = int(decoded.id)
+			var score: int = int(decoded.score)
+			
+			emit_signal("minigame_rhythm_score", id, score)
 		OpCodes.SPAWNED:
 			var decoded: Dictionary = JSON.parse(raw).result
 			

@@ -244,6 +244,7 @@ func spawn_character(player_name:String):
 		'text_obj': text_name
 	})
 	Global.player_positions[str(num_players+1)] = Vector2(char_pos.x*5,char_pos.y*5)
+	Global.player_names[str(num_players+1)] = player_name
 	num_players += 1
 	if player_name == Save.game_data.username:
 		ServerConnection._player_num = num_players

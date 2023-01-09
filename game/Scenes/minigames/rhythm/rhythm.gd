@@ -27,11 +27,11 @@ onready var perfect_count = $Combo/perfect_count
 onready var good_count = $Combo/good_count
 onready var okay_count = $Combo/okay_count
 onready var misses_count = $Combo/misses_count
+onready var onlineHandler = $onlineHandler
 
 ## Global Variables ##
 
-# set to 0 if you want notes to be spawned randomly, 1 if not
-export var Implementation = 0
+const DEBUG = true
 
 # Score variables
 var _score_dict: Dictionary = {} #hold the dictionary of all the player's scores
@@ -93,6 +93,8 @@ func _ready():
 	conductor.connect("beat", self, "_on_Conductor_beat")
 	conductor.play_with_beat_offset(8)
 	add_player_score(Save.game_data.username)
+	if not DEBUG:
+		onlineHandler.setup_players()
 	initialize_combo_scores()
 
 """
@@ -142,13 +144,39 @@ func add_player_score(p_name: String):
 """
 func change_score(p_name: String, new_points: int):
 	var added_score = new_points * _combo_multiplier
+	if not DEBUG:
+		onlineHandler.send_score_to_server(added_score)
 	if _score_dict.has(p_name):
 		#get the current score as a string
 		var label_txt = _score_dict.get(p_name).text
 		var current_score = label_txt.get_slice(" ",1)
 		var cleaned_data = label_txt.replace(current_score,"")
 		_score_dict.get(p_name).text = cleaned_data + str(int(current_score) + added_score)
+	check_placement() #check if scores need to be reordered
 
+#Custom sort function for check_placement
+class myCustomSorter:
+	static func sort_asc(a,b):
+		if a[1] > b[1]:
+			return true
+		return false
+"""
+/*
+* @pre None
+* @post order the players based on who has the best score
+* @param None
+* @return None
+*/
+"""
+func check_placement():
+	var ordered_places: Array = []
+	for p_name in _score_dict.keys():
+		ordered_places.append([p_name, int(_score_dict[p_name].text)])
+	ordered_places.sort_custom(myCustomSorter, "sort_asc")
+	var inc = 1
+	for obj in ordered_places:
+		$Scores.move_child(_score_dict[obj[0]], inc)
+		inc += 1
 """
 /*
 * @pre None
@@ -195,14 +223,11 @@ func increment_counters(type: int):
 */
 """
 func _on_Conductor_measure(measure_position):
-	if Implementation == 0:
-		match measure_position:
-			1: _spawn_notes_random(_measure_one_beat)
-			2: _spawn_notes_random(_measure_two_beat)
-			3: _spawn_notes_random(_measure_three_beat)
-			4: _spawn_notes_random(_measure_four_beat)
-	else:
-		pass
+	match measure_position:
+		1: _spawn_notes_random(_measure_one_beat)
+		2: _spawn_notes_random(_measure_two_beat)
+		3: _spawn_notes_random(_measure_three_beat)
+		4: _spawn_notes_random(_measure_four_beat)
 
 """
 /*
@@ -214,69 +239,66 @@ func _on_Conductor_measure(measure_position):
 """
 func _on_Conductor_beat(beat_position):
 	_song_position_in_beats = beat_position
-	if Implementation == 0:
-		if _song_position_in_beats > 0:
-			_measure_one_beat = 1
-			_measure_two_beat = 0 
-			_measure_three_beat = 0
-			_measure_four_beat = 1
-		if _song_position_in_beats > 36:
-			_measure_one_beat = 1 
-			_measure_two_beat = 1 
-			_measure_three_beat = 1 
-			_measure_four_beat = 1 
-		if _song_position_in_beats > 98:
-			_measure_one_beat = 2
-			_measure_two_beat = 0 
-			_measure_three_beat = 1 
-			_measure_four_beat = 0 
-		if _song_position_in_beats > 132:
-			_measure_one_beat = 0
-			_measure_two_beat = 2
-			_measure_three_beat = 0
-			_measure_four_beat = 2
-		if _song_position_in_beats > 162:
-			_measure_one_beat = 2 
-			_measure_two_beat = 2 
-			_measure_three_beat = 1 
-			_measure_four_beat = 1 
-		if _song_position_in_beats > 194:
-			_measure_one_beat = 2
-			_measure_two_beat = 2 
-			_measure_three_beat = 1 
-			_measure_four_beat = 2 
-		if _song_position_in_beats > 228:
-			_measure_one_beat = 0 
-			_measure_two_beat = 2 
-			_measure_three_beat = 1 
-			_measure_four_beat = 2 
-		if _song_position_in_beats > 258:
-			_measure_one_beat = 1 
-			_measure_two_beat = 2 
-			_measure_three_beat = 1 
-			_measure_four_beat = 2
-		if _song_position_in_beats > 288:
-			_measure_one_beat = 0 
-			_measure_two_beat = 2 
-			_measure_three_beat = 0
-			_measure_four_beat = 2
-		if _song_position_in_beats > 322:
-			_measure_one_beat = 3
-			_measure_two_beat = 2 
-			_measure_three_beat = 2 
-			_measure_four_beat = 1 
-		if _song_position_in_beats > 388:
-			_measure_one_beat = 1 
-			_measure_two_beat = 0 
-			_measure_three_beat = 0 
-			_measure_four_beat = 0 
-		if _song_position_in_beats > 396:
-			_measure_one_beat = 0 
-			_measure_two_beat = 0 
-			_measure_three_beat = 0 
-			_measure_four_beat = 0 
-	else:
-		pass
+	if _song_position_in_beats > 0:
+		_measure_one_beat = 1
+		_measure_two_beat = 0 
+		_measure_three_beat = 0
+		_measure_four_beat = 1
+	if _song_position_in_beats > 36:
+		_measure_one_beat = 1 
+		_measure_two_beat = 1 
+		_measure_three_beat = 1 
+		_measure_four_beat = 1 
+	if _song_position_in_beats > 98:
+		_measure_one_beat = 2
+		_measure_two_beat = 0 
+		_measure_three_beat = 1 
+		_measure_four_beat = 0 
+	if _song_position_in_beats > 132:
+		_measure_one_beat = 0
+		_measure_two_beat = 2
+		_measure_three_beat = 0
+		_measure_four_beat = 2
+	if _song_position_in_beats > 162:
+		_measure_one_beat = 2 
+		_measure_two_beat = 2 
+		_measure_three_beat = 1 
+		_measure_four_beat = 1 
+	if _song_position_in_beats > 194:
+		_measure_one_beat = 2
+		_measure_two_beat = 2 
+		_measure_three_beat = 1 
+		_measure_four_beat = 2 
+	if _song_position_in_beats > 228:
+		_measure_one_beat = 0 
+		_measure_two_beat = 2 
+		_measure_three_beat = 1 
+		_measure_four_beat = 2 
+	if _song_position_in_beats > 258:
+		_measure_one_beat = 1 
+		_measure_two_beat = 2 
+		_measure_three_beat = 1 
+		_measure_four_beat = 2
+	if _song_position_in_beats > 288:
+		_measure_one_beat = 0 
+		_measure_two_beat = 2 
+		_measure_three_beat = 0
+		_measure_four_beat = 2
+	if _song_position_in_beats > 322:
+		_measure_one_beat = 3
+		_measure_two_beat = 2 
+		_measure_three_beat = 2 
+		_measure_four_beat = 1 
+	if _song_position_in_beats > 388:
+		_measure_one_beat = 1 
+		_measure_two_beat = 0 
+		_measure_three_beat = 0 
+		_measure_four_beat = 0 
+	if _song_position_in_beats > 396:
+		_measure_one_beat = 0 
+		_measure_two_beat = 0 
+		_measure_three_beat = 0 
+		_measure_four_beat = 0 
 
 """
 /*
