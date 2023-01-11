@@ -52,6 +52,8 @@ var _socket : NakamaSocket #server socket connection
 var _general_chat_id: String = "" #id for communicating in general room
 var _current_whisper_id = "" #id for person you want to whisper
 var _group_chat_id: String = "" #id of the match's private group chat
+var _current_chat_id = "" #the current id that a message should be sent to
+var _is_global_chat: bool = true
 var _group_id: String = "" #id of match group (NOT THE CHAT ID, ITS DIFFERENT)
 var _world_id: String = "" #id of the world you are currently in
 var _device_id: String = "" #id of the user's computer generated id
@@ -75,17 +77,13 @@ func set_server_status(status: bool):
 """
 /*
 * @pre None
-* @post switches the general and group chat ids
-* 	idea being that _general_chat_id is used, but switching them will
-* 	allow the chat to send to a designated group id
+* @post switches from using global chat to group chat and vice versa
 * @param None
 * @return None
 */
 """
 func switch_chat_methods():
-	var temp = _group_chat_id
-	_group_chat_id = _general_chat_id
-	_general_chat_id = temp
+	_is_global_chat = not _is_global_chat
 
 """
 /*
@@ -281,6 +279,19 @@ func leave_match_group():
 	if leave.is_exception():
 		print("An error occurred: %s" % leave)
 
+"""
+/*
+* @pre None
+* @post sends a message to server based on if in global or match chat
+* @param text -> String (message to send to other players)
+* @return None
+*/
+"""
+func send_chat_message(text: String):
+	if _is_global_chat:
+		send_text_async_general(text)
+	else:
+		send_text_async_group(text)
 
 """
 /*
@@ -296,6 +307,27 @@ func send_text_async_general(text: String) -> int:
 	
 	var msg_result = yield(
 		_socket.write_chat_message_async(_general_chat_id, 
+		{"msg": text, 
+		"user_sent": "n/a",
+		"from_user": Save.game_data.username,
+		"type": "general"
+		}), "completed")
+	return ERR_CONNECTION_ERROR if msg_result.is_exception() else OK
+
+"""
+/*
+* @pre called when sending message to server
+* @post sends chat message to group packaged with the username
+* @param text -> String
+* @return None
+*/
+"""
+func send_text_async_group(text: String) -> int:
+	if not _socket:
+		return ERR_UNAVAILABLE
+	
+	var msg_result = yield(
+		_socket.write_chat_message_async(_group_chat_id, 
 		{"msg": text, 
 		"user_sent": "n/a",
 		"from_user": Save.game_data.username,
