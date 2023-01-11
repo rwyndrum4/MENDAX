@@ -304,6 +304,7 @@ func game_already_created():
 	num_players = 0
 	yield(ServerConnection.leave_match(ServerConnection._match_id), "completed")
 	yield(ServerConnection.leave_match_group(), "completed")
+	yield(ServerConnection.leave_match_group_chat(), "completed")
 	ServerConnection.switch_chat_methods() #switch back to using global chat
 	get_parent().chat_box.chat_event_message("Switched from match chat to global chat", "blue")
 	for p in player_objects:

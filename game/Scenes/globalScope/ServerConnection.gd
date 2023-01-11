@@ -264,7 +264,7 @@ func create_match_group(group_name: String):
 func join_match_group():
 	var join: NakamaAsyncResult = yield(_client.join_group_async(_session, _group_id), "completed")
 	if join.is_exception():
-		print("An error occurred: %s" % join)
+		printerr("An error occurred: %s" % join)
 
 """
 /*
@@ -277,7 +277,24 @@ func join_match_group():
 func leave_match_group():
 	var leave : NakamaAsyncResult = yield(_client.leave_group_async(_session, _group_id), "completed")
 	if leave.is_exception():
-		print("An error occurred: %s" % leave)
+		printerr("An error occurred: %s" % leave)
+
+"""
+/*
+* @pre None
+* @post leaves the match group chat
+* @param None
+* @return None
+*/
+"""
+func leave_match_group_chat():
+	var result: NakamaAsyncResult = yield(_socket.leave_chat_async(_group_chat_id), "completed")
+	
+	if result.is_exception():
+		printerr("An error occurred: %s" % result)
+		return
+
+	print("Left group chat")
 
 """
 /*
