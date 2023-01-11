@@ -40,7 +40,7 @@ signal minigame_rhythm_score(id, score)
 signal chat_message_received(msg,type,user_sent,from_user) #signal to tell game a chat message has come in
 
 const KEY := "nakama_mendax" #key that is stored in the server
-var IP_ADDRESS: String = "3.141.16.56" #ip address of server
+var IP_ADDRESS: String = "18.117.251.238" #ip address of server
 
 var _session: NakamaSession #user session
 
@@ -49,13 +49,14 @@ var _session: NakamaSession #user session
 var _client := Nakama.create_client(KEY, IP_ADDRESS, 7350, "http") #server client
 var _socket : NakamaSocket #server socket connection
 
-var _general_chat_id = "" #id for communicating in general room
+var _general_chat_id: String = "" #id for communicating in general room
 var _current_whisper_id = "" #id for person you want to whisper
+var _group_chat_id: String = "" #id of the match's private group chat
+var _group_id: String = "" #id of match group (NOT THE CHAT ID, ITS DIFFERENT)
 var _world_id: String = "" #id of the world you are currently in
 var _device_id: String = "" #id of the user's computer generated id
 var _match_id: String = "" #String to hold match id
 var _player_num: int = 0 #Number of the player
-var _group_id: String = "" #id of the match's private group chat
 var chatroom_users: Dictionary = {} #chatroom users
 var connected_opponents: Dictionary = {} #opponents currently in match (including you)
 var game_match = null #holds the current game match information once created
@@ -71,8 +72,20 @@ var game_match = null #holds the current game match information once created
 func set_server_status(status: bool):
 	server_status = status
 
-func set_general_chat_id(new_id: String):
-	_general_chat_id = new_id
+"""
+/*
+* @pre None
+* @post switches the general and group chat ids
+* 	idea being that _general_chat_id is used, but switching them will
+* 	allow the chat to send to a designated group id
+* @param None
+* @return None
+*/
+"""
+func switch_chat_methods():
+	var temp = _group_chat_id
+	_group_chat_id = _general_chat_id
+	_general_chat_id = temp
 
 """
 /*
@@ -208,6 +221,25 @@ func join_chat_async_whisper(input:String, has_id_already:bool) -> int:
 		return ERR_CONNECTION_ERROR
 	else:
 		return OK
+
+"""
+/*
+* @pre called when joining a group chat
+* @post sends group message
+* @param None
+* @return None
+*/
+"""
+func join_chat_async_group() -> int:
+	var loc_group_id = _group_id
+	var persistence = true
+	var hidden = false
+	var type = NakamaSocket.ChannelType.Group
+	var channel : NakamaRTAPI.Channel = yield(_socket.join_chat_async(loc_group_id, type, persistence, hidden), "completed")
+	_group_chat_id = channel.id 
+	print("Connected to group channel: '%s'" % [channel.id])
+	return OK
+
 
 """
 /*
