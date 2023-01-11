@@ -215,7 +215,7 @@ func _on_chatbox_message_sent(msg,is_whisper,username_to_send_to):
 		yield(ServerConnection.send_text_async_whisper(msg,username_to_send_to), "completed")
 	else:
 		#send message to general
-		yield(ServerConnection.send_chat_message(msg), "completed")
+		ServerConnection.send_chat_message(msg)
 
 """
 /*
