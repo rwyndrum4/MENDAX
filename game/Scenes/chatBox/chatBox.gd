@@ -117,15 +117,9 @@ func _input(event):
 """
 func add_message(text:String,type:String,user_sent:String,from_user:String):
 	if "MATCH_RECEIVED " in text:
-		#clean the string of match received
-		var clean_data = text.replace("MATCH_RECEIVED ","")
-		#get a dictionary from the string
-		var match_dict:Dictionary = parse_json(clean_data)
-		#add matches to current dictionary if not already in there
-		for key in match_dict.keys():
-			if not Global.match_exists(key):
-				Global.add_match(key, match_dict[key][0],match_dict[key][1])
+		handle_match_data(text)
 		return
+	
 	var user = from_user
 	var color:String = get_chat_color(type)
 	if from_user == Save.game_data.username and type == "whisper":
@@ -135,6 +129,16 @@ func add_message(text:String,type:String,user_sent:String,from_user:String):
 	chatLog.bbcode_text += text
 	chatLog.bbcode_text += "[/color]"
 	chatLog.bbcode_text += '\n'
+
+func handle_match_data(text):
+	#clean the string of match received
+	var clean_data = text.replace("MATCH_RECEIVED ","")
+	#get a dictionary from the string
+	var match_dict:Dictionary = parse_json(clean_data)
+	#add matches to current dictionary if not already in there
+	for key in match_dict.keys():
+		if not Global.match_exists(key):
+			Global.add_match(key, match_dict[key][0],match_dict[key][1])
 
 """
 /*

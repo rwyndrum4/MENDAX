@@ -118,7 +118,7 @@ func get_match(lobby_name:String) -> String:
 * @return String
 */
 """
-func get_match_group_chat(lobby_name: String) -> String:
+func get_match_group_id(lobby_name: String) -> String:
 	return current_matches[lobby_name][1]
 
 """
