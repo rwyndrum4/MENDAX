@@ -287,11 +287,12 @@ func leave_match_group():
 * @return None
 */
 """
-func send_chat_message(text: String):
+func send_chat_message(text: String) -> int:
 	if _is_global_chat:
 		send_text_async_general(text)
 	else:
 		send_text_async_group(text)
+	return OK
 
 """
 /*
