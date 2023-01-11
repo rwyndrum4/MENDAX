@@ -354,7 +354,8 @@ func _on_enterLobbyCode_text_entered(new_text):
 				var long_code = Global.get_match(code) #code of match in server
 				var users_in_menu = yield(ServerConnection.join_match(long_code), "completed")
 				ServerConnection._group_id = Global.get_match_group_id(code)
-				ServerConnection.join_chat_async_group() #join general chat
+				yield(ServerConnection.join_match_group(), "completed") #join group
+				yield(ServerConnection.join_chat_async_group(), "completed") #join general group chat
 				ServerConnection.switch_chat_methods() #switch chat id to new general id
 				get_parent().chat_box.chat_event_message("Switched from global chat to match chat", "pink")
 				#Spawn users that are currently in game and you
