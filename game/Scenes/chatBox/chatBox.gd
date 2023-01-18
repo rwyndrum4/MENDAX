@@ -21,6 +21,7 @@ var in_chatbox = false
 #Modulate values
 var MODULATE_MIN = 140
 var MODULATE_MAX = 255
+var CHAT_LOG_MODULATE_MAX = 500
 var CHARACTER_LIMIT = 256
 #Colors
 var channel_colors:Dictionary = {
@@ -169,7 +170,7 @@ func chat_event_message(event_message: String, color:String):
 	event_msg += event_message
 	chatLog.bbcode_text += event_msg
 	chatLog.bbcode_text += "\n"
-	modulate.a8 = MODULATE_MAX
+	chatLog.modulate.a8 = CHAT_LOG_MODULATE_MAX
 	var mod_timer: Timer = Timer.new()
 	add_child(mod_timer)
 	mod_timer.wait_time = 3
@@ -180,7 +181,7 @@ func chat_event_message(event_message: String, color:String):
 
 func _chat_timer_expired(timer_in):
 	timer_in.queue_free()
-	modulate.a8 = MODULATE_MIN
+	chatLog.modulate.a8 = MODULATE_MIN
 
 """
 /*

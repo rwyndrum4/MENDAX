@@ -40,7 +40,7 @@ signal minigame_rhythm_score(id, score)
 signal chat_message_received(msg,type,user_sent,from_user) #signal to tell game a chat message has come in
 
 const KEY := "nakama_mendax" #key that is stored in the server
-var IP_ADDRESS: String = "18.117.251.238" #ip address of server
+var IP_ADDRESS: String = "3.12.241.232" #ip address of server
 
 var _session: NakamaSession #user session
 
@@ -57,6 +57,7 @@ var _is_global_chat: bool = true
 var _group_id: String = "" #id of match group (NOT THE CHAT ID, ITS DIFFERENT)
 var _world_id: String = "" #id of the world you are currently in
 var _device_id: String = "" #id of the user's computer generated id
+var _lobby_id: String = "" #id four digits that is randomly generated in main menu
 var _match_id: String = "" #String to hold match id
 var _player_num: int = 0 #Number of the player
 var chatroom_users: Dictionary = {} #chatroom users
@@ -374,6 +375,7 @@ func send_text_async_whisper(text: String,user_sent_to:String) -> int:
 */
 """
 func create_match(lobby_name:String) -> Array:
+	_lobby_id = lobby_name
 	game_match = yield(_socket.create_match_async(lobby_name), "completed")
 	Global.add_match(lobby_name,game_match.match_id, _group_id)
 	_match_id = game_match.match_id

@@ -124,6 +124,17 @@ func get_match_group_id(lobby_name: String) -> String:
 """
 /*
 * @pre None
+* @post removes match from match pool
+* @param lobby_name -> String
+* @return None
+*/
+"""
+func remove_match(lobby_name: String):
+	current_matches.erase(lobby_name)
+
+"""
+/*
+* @pre None
 * @post returns whether the current match exists in the match list or not
 * @param player_code -> String
 * @return bool
