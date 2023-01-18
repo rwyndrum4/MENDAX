@@ -332,16 +332,16 @@ margin_bottom = 40.0
 margin_right = 83.0
 margin_bottom = 44.0
 
-[node name="quitButton" type="Button" parent="SettingsTabs/Exit/exitSettings/GridContainer"]
-margin_right = 83.0
-margin_bottom = 20.0
-text = "Quit Game"
-
 [node name="mainMenuButton" type="Button" parent="SettingsTabs/Exit/exitSettings/GridContainer"]
 margin_top = 24.0
 margin_right = 83.0
 margin_bottom = 44.0
 text = "Main Menu"
+
+[node name="quitButton" type="Button" parent="SettingsTabs/Exit/exitSettings/GridContainer"]
+margin_right = 83.0
+margin_bottom = 20.0
+text = "Quit Game"
 
 [connection signal="item_selected" from="SettingsTabs/Video/MarginContainer/videoSettings/DisplayOptionsButton" to="." method="_on_DisplayOptionsButton_item_selected"]
 [connection signal="toggled" from="SettingsTabs/Video/MarginContainer/videoSettings/VsyncButton" to="." method="_on_VsyncButton_toggled"]
@@ -356,5 +356,5 @@ text = "Main Menu"
 [connection signal="focus_entered" from="SettingsTabs/Gameplay/GameplaySettings/audioSettings/HBoxContainer/usernameInput" to="." method="_on_usernameInput_focus_entered"]
 [connection signal="focus_exited" from="SettingsTabs/Gameplay/GameplaySettings/audioSettings/HBoxContainer/usernameInput" to="." method="_on_usernameInput_focus_exited"]
 [connection signal="text_entered" from="SettingsTabs/Gameplay/GameplaySettings/audioSettings/HBoxContainer/usernameInput" to="." method="_on_usernameInput_text_entered"]
-[connection signal="pressed" from="SettingsTabs/Exit/exitSettings/GridContainer/quitButton" to="." method="_on_quitButton_pressed"]
 [connection signal="pressed" from="SettingsTabs/Exit/exitSettings/GridContainer/mainMenuButton" to="." method="_on_mainMenuButton_pressed"]
+[connection signal="pressed" from="SettingsTabs/Exit/exitSettings/GridContainer/quitButton" to="." method="_on_quitButton_pressed"]

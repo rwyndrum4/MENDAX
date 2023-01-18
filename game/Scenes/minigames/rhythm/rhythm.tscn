@@ -43,9 +43,10 @@ margin_bottom = 720.0
 color = Color( 0.847059, 0.807843, 0.803922, 0.411765 )
 
 [node name="Scores" type="VBoxContainer" parent="."]
-margin_left = 16.0
-margin_right = 130.0
-margin_bottom = 67.0
+margin_left = 8.0
+margin_top = 320.0
+margin_right = 122.0
+margin_bottom = 387.0
 
 [node name="ScoresLabel" type="Label" parent="Scores"]
 margin_right = 114.0

@@ -16,6 +16,7 @@ onready var chat_box = $GUI/chatbox
 onready var settings_menu = $GUI/SettingsMenu
 onready var world_env = $WorldEnvironment
 onready var fps_label = $GUI/fpsLabel
+onready var menu_button = $GUI/SettingsMenu/SettingsTabs/Exit/exitSettings/GridContainer/mainMenuButton
 
 #Scene Paths
 var main_menu = "res://Scenes/mainMenu/mainMenu.tscn"
@@ -24,6 +25,7 @@ var start_area = "res://Scenes/startArea/startArea.tscn"
 var cave = "res://Scenes/startArea/EntrySpace.tscn"
 var riddler_minigame = "res://Scenes/minigames/riddler/riddleGame.tscn"
 var arena_minigame = "res://Scenes/minigames/arena/arenaGame.tscn"
+var rhythm_minigame = "res://Scenes/minigames/rhythm/rhythm.tscn"
 var gameover = "res://Scenes/mainMenu/gameOver.tscn"
 
 #Current scene running
@@ -84,6 +86,7 @@ func _process(_delta): #if you want to use _delta, remove _
 			settings_menu.hide()
 			in_popup = false
 		elif can_open_settings:
+			menu_button.show()
 			settings_menu.popup_centered_ratio()
 			in_popup = true
 	set_popup_locks()
@@ -100,6 +103,7 @@ func _change_scene_to(state):
 	if state == Global.scenes.MAIN_MENU:
 		current_scene = load(main_menu).instance()
 	elif state == Global.scenes.OPTIONS_FROM_MAIN:
+		menu_button.hide()
 		settings_menu.popup_centered_ratio()
 		Global.state = Global.scenes.MAIN_MENU
 		return
@@ -113,6 +117,8 @@ func _change_scene_to(state):
 		current_scene = load(riddler_minigame).instance()
 	elif state == Global.scenes.ARENA_MINIGAME:
 		current_scene = load(arena_minigame).instance()
+	elif state == Global.scenes.RHYTHM_MINIGAME:
+		current_scene = load(rhythm_minigame).instance()
 	elif state == Global.scenes.GAMEOVER:
 		current_scene = load(gameover).instance()
 	#add scene to tree and revise local state
