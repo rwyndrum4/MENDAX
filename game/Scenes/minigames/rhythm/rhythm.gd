@@ -31,7 +31,7 @@ onready var onlineHandler = $onlineHandler
 
 ## Global Variables ##
 
-const DEBUG = true
+const DEBUG = false
 
 # Score variables
 var _score_dict: Dictionary = {} #hold the dictionary of all the player's scores
@@ -76,9 +76,6 @@ var _measure_two_beat = 0 #Second beat
 var _measure_three_beat = 0 #Third beat
 var _measure_four_beat = 1 #Fourth beat
 
-# Script object where song beatmap is held
-var song = load("res://Scenes/minigames/rhythm/that_band.gd").new()
-
 """
 /*
 * @pre Called when the rhythm game starts
@@ -92,9 +89,10 @@ func _ready():
 	conductor.connect("measure", self, "_on_Conductor_measure")
 	conductor.connect("beat", self, "_on_Conductor_beat")
 	conductor.play_with_beat_offset(8)
-	add_player_score(Save.game_data.username)
+	var username = Save.game_data.username
+	add_player_score(username)
 	if not DEBUG:
-		onlineHandler.setup_players()
+		onlineHandler.setup_players(username)
 	initialize_combo_scores()
 
 """
@@ -250,55 +248,58 @@ func _on_Conductor_beat(beat_position):
 		_measure_three_beat = 1 
 		_measure_four_beat = 1 
 	if _song_position_in_beats > 98:
-		_measure_one_beat = 2
+		_measure_one_beat = 1
 		_measure_two_beat = 0 
 		_measure_three_beat = 1 
 		_measure_four_beat = 0 
 	if _song_position_in_beats > 132:
 		_measure_one_beat = 0
-		_measure_two_beat = 2
+		_measure_two_beat = 1
 		_measure_three_beat = 0
-		_measure_four_beat = 2
+		_measure_four_beat = 1
 	if _song_position_in_beats > 162:
-		_measure_one_beat = 2 
-		_measure_two_beat = 2 
+		_measure_one_beat = 1 
+		_measure_two_beat = 1 
 		_measure_three_beat = 1 
 		_measure_four_beat = 1 
 	if _song_position_in_beats > 194:
-		_measure_one_beat = 2
-		_measure_two_beat = 2 
+		_measure_one_beat = 1
+		_measure_two_beat = 1 
 		_measure_three_beat = 1 
-		_measure_four_beat = 2 
+		_measure_four_beat = 1 
 	if _song_position_in_beats > 228:
 		_measure_one_beat = 0 
-		_measure_two_beat = 2 
+		_measure_two_beat = 1 
 		_measure_three_beat = 1 
-		_measure_four_beat = 2 
+		_measure_four_beat = 1 
 	if _song_position_in_beats > 258:
 		_measure_one_beat = 1 
-		_measure_two_beat = 2 
+		_measure_two_beat = 1 
 		_measure_three_beat = 1 
-		_measure_four_beat = 2
+		_measure_four_beat = 1
 	if _song_position_in_beats > 288:
 		_measure_one_beat = 0 
-		_measure_two_beat = 2 
+		_measure_two_beat = 1 
 		_measure_three_beat = 0
-		_measure_four_beat = 2
+		_measure_four_beat = 1
 	if _song_position_in_beats > 322:
-		_measure_one_beat = 3
-		_measure_two_beat = 2 
+		_measure_one_beat = 1
+		_measure_two_beat = 1 
 		_measure_three_beat = 2 
 		_measure_four_beat = 1 
 	if _song_position_in_beats > 388:
 		_measure_one_beat = 1 
 		_measure_two_beat = 0 
-		_measure_three_beat = 0 
+		_measure_three_beat = 1 
 		_measure_four_beat = 0 
 	if _song_position_in_beats > 396:
 		_measure_one_beat = 0 
 		_measure_two_beat = 0 
 		_measure_three_beat = 0 
 		_measure_four_beat = 0 
+	if _song_position_in_beats > 404:
+		#end of the song
+		Global.state = Global.scenes.CAVE
 
 """
 /*

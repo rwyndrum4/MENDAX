@@ -17,7 +17,8 @@ func _handle_new_score(player_id:int, new_score:int):
 func send_score_to_server(new_score:int):
 	ServerConnection.send_rhythm_score(new_score)
 
-func setup_players():
+func setup_players(your_name:String):
 	var names: Array = Global.player_names.values()
+	names.erase(your_name)
 	for p_name in names:
 		get_parent().add_player_score(p_name)
