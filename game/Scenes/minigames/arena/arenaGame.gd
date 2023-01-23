@@ -55,8 +55,6 @@ func _ready():
 	# warning-ignore:return_value_discarded
 	Global.connect("all_players_arrived", self, "_can_start_game")
 	# warning-ignore:return_value_discarded
-	Global.connect("game_timer_start", self, "_can_start_timer")
-	# warning-ignore:return_value_discarded
 	ServerConnection.connect("minigame_can_start", self, "_can_start_game_other")
 	playerHealth.visible = true
 	playerHealth.value = 100
@@ -101,6 +99,7 @@ func _ready():
 		change_target_timer.connect("timeout",self, "_target_timer_expired")
 	#else if single player experience
 	else:
+		myTimer.start(60)
 		start_arena_game()
 
 """
@@ -142,19 +141,9 @@ func _can_start_game():
 """
 func _can_start_game_other():
 	if not game_started:
-		start_arena_game()
 		game_started = true
-
-"""
-/*
-* @pre Called when all players have spawned into the game
-* @post Starts the timer so everyone is synced
-* @param None
-* @return None
-*/
-"""
-func _can_start_timer():
-	myTimer.start(60)
+		myTimer.start(60)
+		start_arena_game()
 
 """
 /*

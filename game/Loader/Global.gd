@@ -21,7 +21,6 @@ var players_in_minigame: int = 0
 
 # Singals
 signal all_players_arrived()
-signal game_timer_start()
 
 """
 -----------------------------SCENE LOADER INSTRUCTION-------------------------------------
@@ -188,8 +187,6 @@ func _minigame_player_spawn(_id: int):
 	if players_in_minigame == get_num_players() - 1:
 		if ServerConnection._player_num == 1:
 			emit_signal("all_players_arrived")
-		else:
-			emit_signal("game_timer_start")
 
 """
 /*
