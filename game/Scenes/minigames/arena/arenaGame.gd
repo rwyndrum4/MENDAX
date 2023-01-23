@@ -243,14 +243,14 @@ func _target_timer_expired():
 	var p_tgt = 0
 	var found = false
 	for p in alive_players.keys():
-		if alive_players[p]:
-			found = true
-			alive_players[p] = false
 		if found:
 			alive_players[p] = true
 			p_tgt = p
 			break
-	if not found:
+		if alive_players[p]:
+			found = true
+			alive_players[p] = false
+	if p_tgt == 0:
 		p_tgt = alive_players.keys()[0]
 		alive_players[p_tgt] = true
 	if is_instance_valid(SkeletonEnemy):
