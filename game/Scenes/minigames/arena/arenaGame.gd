@@ -48,13 +48,14 @@ var _player_dead = false #variable to track if player 1 has died
 */
 """
 func _ready():
-	myTimer.start(60)
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("openChatbox", self, "chatbox_use")
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("enemyDefeated",self,"_enemy_defeated")
 	# warning-ignore:return_value_discarded
 	Global.connect("all_players_arrived", self, "_can_start_game")
+	# warning-ignore:return_value_discarded
+	Global.connect("game_timer_start", self, "_can_start_timer")
 	# warning-ignore:return_value_discarded
 	ServerConnection.connect("minigame_can_start", self, "_can_start_game_other")
 	playerHealth.visible = true
@@ -128,6 +129,7 @@ func _start_timer_expired(timer):
 func _can_start_game():
 	game_started = true
 	ServerConnection.send_minigame_can_start()
+	myTimer.start(60)
 	start_arena_game()
 
 """
@@ -142,6 +144,17 @@ func _can_start_game_other():
 	if not game_started:
 		start_arena_game()
 		game_started = true
+
+"""
+/*
+* @pre Called when all players have spawned into the game
+* @post Starts the timer so everyone is synced
+* @param None
+* @return None
+*/
+"""
+func _can_start_timer():
+	myTimer.start(60)
 
 """
 /*
@@ -228,7 +241,6 @@ func _on_Timer_timeout():
 		BodEnemy.level_up()
 		BodEnemy.set_physics_process(false)
 	textBox.queue_text("OUT OF TIME. NOW PERISH.")
-	myTimer.queue_free()
 
 """
 /*
@@ -248,7 +260,7 @@ func _target_timer_expired():
 		if found:
 			alive_players[p] = true
 			p_tgt = p
-			found = false
+			break
 	if not found:
 		p_tgt = alive_players.keys()[0]
 		alive_players[p_tgt] = true
