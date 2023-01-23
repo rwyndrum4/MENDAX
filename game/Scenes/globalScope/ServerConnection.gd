@@ -558,7 +558,7 @@ func _on_NakamaSocket_received_match_state(match_state: NakamaRTAPI.MatchData) -
 			var dmg_taken: int = int(decoded.dmg)
 			
 			emit_signal("arena_enemy_hit", enemy, dmg_taken)
-		OpCodes.UPDATE_CAN_START_ARENA:
+		OpCodes.UPDATE_CAN_START_GAME:
 			emit_signal("minigame_can_start")
 		OpCodes.SPAWNED:
 			var decoded: Dictionary = JSON.parse(raw).result

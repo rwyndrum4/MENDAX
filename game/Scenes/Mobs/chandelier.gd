@@ -30,6 +30,8 @@ func _ready():
 	anim.set_loop(true)
 	chandelierAnim.play("idle")
 	healthbar.value = 200;
+	# warning-ignore:return_value_discarded
+	GlobalSignals.connect("textbox_empty",self,"turn_on_physics")
 
 
 func _physics_process(delta):
@@ -46,7 +48,8 @@ func _physics_process(delta):
 		fire();
 		chandelierAnim.play("idle")
 		
-		
+func turn_on_physics():
+	set_physics_process(true)
 
 var bullete =preload("res://Scenes/bullet/bulletenemy.tscn")
 func fire():

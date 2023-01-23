@@ -64,6 +64,7 @@ func _ready():
 	#If there is a server connection, spawn all players
 	SkeletonEnemy.set_physics_process(false)
 	BodEnemy.set_physics_process(false)
+	ChandelierEnemy.set_physics_process(false)
 	if ServerConnection.match_exists() and ServerConnection.get_server_status():
 		ServerConnection.send_spawn_notif()
 		spawn_players()
@@ -251,7 +252,8 @@ func _target_timer_expired():
 	if not found:
 		p_tgt = alive_players.keys()[0]
 		alive_players[p_tgt] = true
-	SkeletonEnemy.update_target(p_tgt)
+	if is_instance_valid(SkeletonEnemy):
+		SkeletonEnemy.update_target(p_tgt)
 
 """
 /*
