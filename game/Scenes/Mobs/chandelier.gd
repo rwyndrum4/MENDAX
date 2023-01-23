@@ -71,22 +71,25 @@ func fire():
 */
 """
 func take_damage(amount: int) -> void:
-	
+	ServerConnection.send_arena_enemy_hit(amount,2)
 	healthbar.value = healthbar.value - amount
 	chandelierAnim.play("hit")
-	print(healthbar.value)
 	if healthbar.value == 0:
 		chandelierAnim.play("death")
-		isDead = 1
-		#have to defer disabling the skeleton, got an error otherwise
-		#put the line of code in function below since call_deferred only takes functions as input
 		call_deferred("defer_disabling_chandelier")
+		isDead = 1
+	
+#Same as above function except it doesn't send data to server
+func take_damage_server(amount: int):
+	healthbar.value = healthbar.value - amount
+	chandelierAnim.play("hit")
+	if healthbar.value == 0:
+		chandelierAnim.play("death")
+		call_deferred("defer_disabling_BoD")
 		isDead = 1
 
 func defer_disabling_chandelier():
-	chandelierBox.disabled = true		
-	
-
+	chandelierBox.disabled = true
 
 """
 /*

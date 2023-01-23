@@ -11,8 +11,6 @@
 			   11/28/2022 - Added death signal
 			
 """
-
-
 extends KinematicBody2D
 onready var skeletonAnim = $skeletonAnimationPlayer
 onready var healthbar = $ProgressBar
@@ -23,6 +21,7 @@ onready var player_detector_box = $detector/box
 
 var isIn = false
 var isDead = 0
+var _player_target: int = 1
 
 # Global velocity
 var velocity = Vector2.ZERO
@@ -55,12 +54,15 @@ func _ready():
 """		
 func _physics_process(delta):
 	var player_pos = null
-	#Check if player 1 is there
-	if not get_parent()._player_dead:
-		player_pos = get_parent().get_node("Player").position
+	#Get player position 
+	if ServerConnection.match_exists() and ServerConnection.get_server_status():
+		player_pos = Global.get_player_pos(_player_target)
 	else:
-		velocity = move_and_slide(velocity.move_toward(BASE_SPEED*Vector2.ZERO, BASE_ACCELERATION*delta))
-		return
+		if not get_parent()._player_dead:
+			player_pos = get_parent().get_node("Player").position
+		else:
+			velocity = move_and_slide(velocity.move_toward(BASE_SPEED*Vector2.ZERO, BASE_ACCELERATION*delta))
+			return
 	velocity = move_and_slide(velocity.move_toward(BASE_SPEED*(player_pos - position), BASE_ACCELERATION*delta))
 	#Handle making skeleton turn around
 	if player_pos.x < position.x:
@@ -71,6 +73,17 @@ func _physics_process(delta):
 		pos2d.scale.x = 1
 		player_detector_box.position = Vector2(50,0)
 		skeleAtkBox.position = Vector2(60,0)
+		
+"""
+/*
+* @pre Called before player 1 sends who to target data
+* @post changes which enemy skeleton will move to
+* @param p_target -> int (id of player to target)
+* @return None
+*/
+"""
+func update_target(player: int):
+	_player_target = player
 
 func turn_on_physics():
 	set_physics_process(true)

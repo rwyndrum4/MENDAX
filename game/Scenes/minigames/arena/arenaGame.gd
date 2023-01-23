@@ -10,7 +10,9 @@
 extends Control
 
 # Member Variables
+var game_started = false
 var enemies_remaining = 3
+onready var myGUI = $GUI
 onready var myTimer: Timer = $GUI/Timer
 onready var timerText: Label = $GUI/Timer/timerText
 onready var textBox = $textBox
@@ -20,6 +22,7 @@ onready var sword = $Player/Sword
 onready var playerHealth = $Player/ProgressBar
 onready var SkeletonEnemy = $Skeleton
 onready var BodEnemy = $BoD
+onready var ChandelierEnemy = $chandelier
 #Scene for players that online oppenents use
 var online_players = "res://Scenes/player/arena_player/arena_player.tscn"
 
@@ -31,6 +34,7 @@ enum EnemyTypes {
 }
 #Array to hold objects of other players (not your own player)
 var server_players: Array = []
+var alive_players: Dictionary = {}
 var in_menu = false
 var EXTRA_TIME: float = 20.0
 var _player_dead = false #variable to track if player 1 has died
@@ -47,11 +51,19 @@ func _ready():
 	myTimer.start(60)
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("openChatbox", self, "chatbox_use")
+	# warning-ignore:return_value_discarded
+	GlobalSignals.connect("enemyDefeated",self,"_enemy_defeated")
+	# warning-ignore:return_value_discarded
+	Global.connect("all_players_arrived", self, "_can_start_game")
+	# warning-ignore:return_value_discarded
+	ServerConnection.connect("minigame_can_start", self, "_can_start_game_other")
 	playerHealth.visible = true
 	playerHealth.value = 100
 	sword.direction = "right"
 	swordPivot.position = main_player.position + Vector2(60,20)
 	#If there is a server connection, spawn all players
+	SkeletonEnemy.set_physics_process(false)
+	BodEnemy.set_physics_process(false)
 	if ServerConnection.match_exists() and ServerConnection.get_server_status():
 		spawn_players()
 		# warning-ignore:return_value_discarded
@@ -60,14 +72,90 @@ func _ready():
 		ServerConnection.connect("arena_player_lost_health",self,"other_player_hit")
 		# warning-ignore:return_value_discarded
 		ServerConnection.connect("arena_player_swung_sword",self,"other_player_swung_sword")
-	# Add signal-catching function to check for win condition after each enemy is defetaed
-	GlobalSignals.connect("enemyDefeated",self,"_enemy_defeated")
-	$Skeleton.set_physics_process(false)
-	$BoD.set_physics_process(false)
+		if ServerConnection._player_num == 1:
+			#in case p1 is last player to get to minigame
+			if Global.get_minigame_players() == Global.get_num_players() - 1:
+				ServerConnection.send_minigame_can_start()
+				game_started = true
+				start_arena_game()
+			#Sends the riddle to other players once all are present
+		else:
+			#If player doesn't receive riddle from server in 5 seconds, they get their own riddle
+			#If they got the riddle successfully nothing else will happen
+			var wait_for_start: Timer = Timer.new()
+			add_child(wait_for_start)
+			wait_for_start.wait_time = 5
+			wait_for_start.one_shot = true
+			wait_for_start.start()
+			# warning-ignore:return_value_discarded
+			wait_for_start.connect("timeout",self, "_start_timer_expired", [wait_for_start])
+		var change_target_timer: Timer = Timer.new()
+		add_child(change_target_timer)
+		change_target_timer.wait_time = 8
+		change_target_timer.one_shot = false
+		change_target_timer.start()
+		# warning-ignore:return_value_discarded
+		change_target_timer.connect("timeout",self, "_target_timer_expired")
+	#else if single player experience
+	else:
+		start_arena_game()
+
+"""
+/*
+* @pre Called once start time expires (happens once)
+* @post deletes timer and starts game if necessary
+* @param timer -> Timer
+* @return None
+*/
+"""
+func _start_timer_expired(timer):
+	timer.queue_free()
+	if not game_started:
+		game_started = true
+		start_arena_game()
+
+"""
+/*
+* @pre Called once all players have spawned into the minigame
+* 	only run by PLAYER 1
+* @post sends signal to other players to start, and start game
+* @param None
+* @return None
+*/
+"""
+func _can_start_game():
+	game_started = true
+	ServerConnection.send_minigame_can_start()
+	start_arena_game()
+
+"""
+/*
+* @pre Called when non-player 1 player receives signal to start game
+* @post starts the game if timer hasn't already done it for it
+* @param None
+* @return None
+*/
+"""
+func _can_start_game_other():
+	if not game_started:
+		start_arena_game()
+		game_started = true
+
+"""
+/*
+* @pre Signal to start has been received
+* @post starts the game, queues instruction text
+* @param None
+* @return None
+*/
+"""
+func start_arena_game():
+	$GUI/wait_on_players.queue_free()
 	textBox.queue_text("You have a minute to defeat all enemies.")
 	textBox.queue_text("Each enemy will become stronger once this time has passed.")
 	textBox.queue_text("If any one of you dies, I will reset the timer.")
 	textBox.queue_text("Let the strongest among you prevail.")
+	#game will start once all text in textBox is out of the queue
 
 """
 /*
@@ -142,6 +230,30 @@ func _on_Timer_timeout():
 
 """
 /*
+* @pre Called when the target timer hits 0
+* @post changes which target skeleton targets
+* @param None
+* @return None
+*/
+"""
+func _target_timer_expired():
+	var p_tgt = 0
+	var found = false
+	for p in alive_players.keys():
+		if alive_players[p]:
+			found = true
+			alive_players[p] = false
+		if found:
+			alive_players[p] = true
+			p_tgt = p
+			found = false
+	if not found:
+		p_tgt = alive_players.keys()[0]
+		alive_players[p_tgt] = true
+	SkeletonEnemy.update_target(p_tgt)
+
+"""
+/*
 * @pre all enemies have died
 * @post sends players back to the cave
 * @param None
@@ -196,6 +308,10 @@ func spawn_players():
 				'player_obj': new_player,
 				'sword_dir': "right"
 			})
+		if num == 1:
+			alive_players[num] = true
+		else:
+			alive_players[num] = false
 		#Set initial input vectors to zero
 		Global.player_input_vectors[str(num)] = Vector2.ZERO
 
@@ -246,7 +362,7 @@ func someone_hit_enemy(enemy_id: int, dmg_taken: int):
 	elif enemy_id == EnemyTypes.BOD:
 		BodEnemy.take_damage_server(dmg_taken)
 	elif enemy_id == EnemyTypes.CHANDELIER:
-		pass #implement when chandelier is ready
+		ChandelierEnemy.take_damage_server(dmg_taken)
 
 """
 /*
@@ -271,7 +387,9 @@ func other_player_swung_sword(player_id: int, direction: String):
 * @return None
 */
 """
-func _extend_timer():
+func _extend_timer(p_id: int):
+	# warning-ignore:return_value_discarded
+	alive_players.erase(p_id)
 	var new_time: float = myTimer.time_left + EXTRA_TIME
 	myTimer.start(new_time)
 			

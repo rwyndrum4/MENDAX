@@ -55,7 +55,7 @@ func _ready():
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("answer_received",self,"_check_answer")
 	# warning-ignore:return_value_discarded
-	ServerConnection.connect( "riddle_received", self, "set_riddle_from_server")
+	ServerConnection.connect("riddle_received", self, "set_riddle_from_server")
 	# warning-ignore:return_value_discarded
 	Global.connect("all_players_arrived", self, "_can_send_riddle")
 	# warning-ignore:return_value_discarded

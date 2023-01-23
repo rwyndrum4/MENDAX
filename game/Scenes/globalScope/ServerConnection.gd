@@ -12,12 +12,14 @@ extends Node
 #Opcodes used to send to server about what is happening in game
 enum OpCodes {
 	UPDATE_POSITION = 1,
-	UPDATE_INPUT,
-	UPDATE_RIDDLER_RIDDLE,
-	UPDATE_ARENA_SWORD,
-	UPDATE_ARENA_PLAYER_HEALTH,
-	UPDATE_ARENA_ENEMY_HIT,
-	SPAWNED
+	UPDATE_INPUT = 2,
+	UPDATE_RIDDLER_RIDDLE = 3,
+	UPDATE_ARENA_SWORD = 4,
+	UPDATE_ARENA_PLAYER_HEALTH = 5,
+	UPDATE_ARENA_ENEMY_HIT = 6,
+	UPDATE_ARENA_ENEMY_MOVE = 7,
+	UPDATE_CAN_START_GAME = 8,
+	SPAWNED = 9
 }
 
 #Variable that checks if connected to server
@@ -32,13 +34,14 @@ signal riddle_received(riddle) #signal to tell game it has received a riddle fro
 signal arena_player_swung_sword(id, direction) #signal to tell arena minigame someone swung sword
 signal arena_player_lost_health(id, health) #signal to tell if player has lost health
 signal arena_enemy_hit(enemmy_hit, damage_taken) #signal to tell if an enemy has been hit
+signal minigame_can_start() #signal that the minigame can be started
 signal minigame_player_spawned(id) #signal to tell if a player has arrived to a scene
 
 #Other signals
 signal chat_message_received(msg,type,user_sent,from_user) #signal to tell game a chat message has come in
 
 const KEY := "nakama_mendax" #key that is stored in the server
-var IP_ADDRESS: String = "18.218.153.28" #ip address of server
+var IP_ADDRESS: String = "3.23.17.173" #ip address of server
 
 var _session: NakamaSession #user session
 
@@ -416,6 +419,11 @@ func send_arena_enemy_hit(damage: int, enemy_hit: int):
 		var payload := {enemy = enemy_hit, dmg = damage}
 		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_ARENA_ENEMY_HIT, JSON.print(payload))
 
+func send_minigame_can_start():
+	if _socket:
+		var payload := {}
+		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_CAN_START_GAME, JSON.print(payload))
+
 """
 /*
 * @pre called when player spawns in an area
@@ -550,6 +558,8 @@ func _on_NakamaSocket_received_match_state(match_state: NakamaRTAPI.MatchData) -
 			var dmg_taken: int = int(decoded.dmg)
 			
 			emit_signal("arena_enemy_hit", enemy, dmg_taken)
+		OpCodes.UPDATE_CAN_START_ARENA:
+			emit_signal("minigame_can_start")
 		OpCodes.SPAWNED:
 			var decoded: Dictionary = JSON.parse(raw).result
 			
