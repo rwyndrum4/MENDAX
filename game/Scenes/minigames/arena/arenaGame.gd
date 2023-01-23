@@ -65,6 +65,7 @@ func _ready():
 	SkeletonEnemy.set_physics_process(false)
 	BodEnemy.set_physics_process(false)
 	if ServerConnection.match_exists() and ServerConnection.get_server_status():
+		ServerConnection.send_spawn_notif()
 		spawn_players()
 		# warning-ignore:return_value_discarded
 		ServerConnection.connect("arena_enemy_hit",self,"someone_hit_enemy")
@@ -358,11 +359,14 @@ func other_player_hit(player_id: int, player_health: int):
 """
 func someone_hit_enemy(enemy_id: int, dmg_taken: int):
 	if enemy_id == EnemyTypes.SKELETON:
-		SkeletonEnemy.take_damage_server(dmg_taken)
+		if is_instance_valid(SkeletonEnemy):
+			SkeletonEnemy.take_damage_server(dmg_taken)
 	elif enemy_id == EnemyTypes.BOD:
-		BodEnemy.take_damage_server(dmg_taken)
+		if is_instance_valid(BodEnemy):
+			BodEnemy.take_damage_server(dmg_taken)
 	elif enemy_id == EnemyTypes.CHANDELIER:
-		ChandelierEnemy.take_damage_server(dmg_taken)
+		if is_instance_valid(ChandelierEnemy):
+			ChandelierEnemy.take_damage_server(dmg_taken)
 
 """
 /*

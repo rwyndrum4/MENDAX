@@ -57,7 +57,7 @@ current = true
 [node name="Sword" parent="Player" instance=ExtResource( 8 )]
 
 [node name="Skeleton" parent="." instance=ExtResource( 5 )]
-position = Vector2( 475, 432 )
+position = Vector2( 929, 838 )
 scale = Vector2( 3, 3 )
 collision_layer = 262148
 collision_mask = 262144
