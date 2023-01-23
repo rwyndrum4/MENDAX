@@ -85,6 +85,15 @@ func _physics_process(delta):
 func update_target(player: int):
 	_player_target = player
 
+
+"""
+/*
+* @pre Text Box queue is empty
+* @post turns back on the physics process, aka can now move
+* @param None
+* @return None
+*/
+"""	
 func turn_on_physics():
 	set_physics_process(true)
 
@@ -107,6 +116,7 @@ func take_damage(amount: int) -> void:
 		call_deferred("defer_disabling_skeleton")
 		isDead = 1
 
+#Same function as above but doesn't send data to the server
 func take_damage_server(amount: int):
 	healthbar.value = healthbar.value - amount
 	skeletonAnim.play("hit")
@@ -117,6 +127,7 @@ func take_damage_server(amount: int):
 		call_deferred("defer_disabling_skeleton")
 		isDead = 1
 
+#function for disabling skeleton, needs to be deferred for reasons above
 func defer_disabling_skeleton():
 	skeleBox.disabled = true
 
