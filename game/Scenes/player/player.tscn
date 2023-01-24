@@ -1,4 +1,4 @@
-[gd_scene load_steps=132 format=2]
+[gd_scene load_steps=133 format=2]
 
 [ext_resource path="res://Assets/ben-character/blue/rolling/5.png" type="Texture" id=1]
 [ext_resource path="res://Scenes/player/playerScript.gd" type="Script" id=2]
@@ -126,6 +126,7 @@
 [ext_resource path="res://Assets/ben-character/red/rolling/6.png" type="Texture" id=124]
 [ext_resource path="res://Assets/ben-character/red/rolling/1.png" type="Texture" id=125]
 [ext_resource path="res://Scenes/player/Sword/MyHurtBox.gd" type="Script" id=126]
+[ext_resource path="res://Assets/TorchLight.png" type="Texture" id=127]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 9, 9 )
@@ -247,8 +248,7 @@ anti_aliasing_size = 0.235
 radius = 39.0128
 
 [sub_resource type="OccluderPolygon2D" id=5]
-closed = false
-polygon = PoolVector2Array( 0, -39, -13, -36, -24, -28, -31, -20, -37, -11, -39, 0, -37, 12, -32, 21, -26, 28, -15, 34, -7, 36, 0, 36 )
+polygon = PoolVector2Array( 0, -43, -17, -39, -29, -30, -39, -19, -42, 0, -40, 18, -31, 30, -18, 37, 0, 40, 17, 36, 31, 28, 39, 18, 42, 0, 39, -16, 29, -29, 18, -38 )
 
 [node name="Player" type="KinematicBody2D"]
 collision_layer = 3
@@ -286,3 +286,9 @@ shape = SubResource( 4 )
 
 [node name="LightOccluder2D" type="LightOccluder2D" parent="."]
 occluder = SubResource( 5 )
+
+[node name="Torch1" type="Light2D" parent="."]
+visible = false
+position = Vector2( -73, -39 )
+texture = ExtResource( 127 )
+color = Color( 0.862745, 0.027451, 0.262745, 1 )

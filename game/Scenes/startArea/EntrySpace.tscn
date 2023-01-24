@@ -100,13 +100,13 @@ scale = Vector2( 4.84362, -4055.78 )
 texture = SubResource( 13 )
 
 [node name="Light2D" type="Light2D" parent="."]
-position = Vector2( 1060, 1600 )
+position = Vector2( 1179, 1595 )
 rotation = -4.70422
 scale = Vector2( 0.157201, 0.59011 )
 texture = SubResource( 3 )
-offset = Vector2( 0, 1600 )
+offset = Vector2( 0, 1800 )
 shadow_enabled = true
-shadow_color = Color( 0.686275, 0.0901961, 0.0901961, 0 )
+shadow_gradient_length = 10.0
 
 [node name="Darkness" type="Light2D" parent="."]
 position = Vector2( 192, 1800 )
