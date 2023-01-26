@@ -97,7 +97,7 @@ func _ready():
 		change_target_timer.start()
 		# warning-ignore:return_value_discarded
 		change_target_timer.connect("timeout",self, "_target_timer_expired")
-	#else if single player experience
+	#else if single player game
 	else:
 		myTimer.start(60)
 		start_arena_game()
@@ -257,6 +257,7 @@ func _target_timer_expired():
 		p_tgt = alive_players.keys()[0]
 		alive_players[p_tgt] = true
 	if is_instance_valid(SkeletonEnemy):
+		SkeletonEnemy.slow_speed()
 		SkeletonEnemy.update_target(p_tgt)
 
 """

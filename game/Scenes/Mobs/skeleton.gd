@@ -93,9 +93,34 @@ func update_target(player: int):
 * @param None
 * @return None
 */
-"""	
+"""
 func turn_on_physics():
 	set_physics_process(true)
+
+"""
+/*
+* @pre Called when switching target players
+* @post turns down speed and sets timer to fix it back
+* @param None
+* @return None
+*/
+"""
+func slow_speed():
+	BASE_SPEED = 0.2
+	var reset_accel_timer: Timer = Timer.new()
+	add_child(reset_accel_timer)
+	reset_accel_timer.wait_time = 2
+	reset_accel_timer.one_shot = true
+	reset_accel_timer.start()
+	# warning-ignore:return_value_discarded
+	reset_accel_timer.connect("timeout",self, "_accel_timer_expired", [reset_accel_timer])
+
+func _accel_timer_expired(timer:Timer):
+	timer.queue_free()
+	if $MyHitBox.damage == 30:
+		BASE_SPEED = 1.6
+	else:
+		BASE_SPEED = 0.7
 
 """
 /*
