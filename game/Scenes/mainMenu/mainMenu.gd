@@ -135,6 +135,17 @@ func _on_Tests_pressed():
 
 """
 /*
+* @pre Credits Button is pressed
+* @post Load a window with credits
+* @param None
+* @return None
+*/
+"""
+func _on_Credits_pressed():
+	$credits.popup_centered()
+
+"""
+/*
 * @pre Quit Button is pressed
 * @post Application is closed
 * @param None

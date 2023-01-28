@@ -1,6 +1,7 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://Scenes/mainMenu/mainMenu.gd" type="Script" id=1]
+[ext_resource path="res://Scenes/mainMenu/creditsWindow.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Assets/mainMenuAssets/BAUHS93.TTF" type="DynamicFontData" id=3]
 [ext_resource path="res://Assets/mainMenuBG.png" type="Texture" id=4]
 [ext_resource path="res://Assets/fire5.png" type="Texture" id=6]
@@ -84,10 +85,10 @@ stretch_mode = 1
 [node name="menuButtons" type="VBoxContainer" parent="."]
 anchor_top = 1.0
 anchor_bottom = 1.0
-margin_left = 25.0
-margin_top = -264.0
-margin_right = 143.0
-margin_bottom = -142.0
+margin_left = 16.0
+margin_top = -314.0
+margin_right = 134.0
+margin_bottom = -174.0
 rect_scale = Vector2( 1.77124, 1.77124 )
 
 [node name="Start" type="Button" parent="menuButtons"]
@@ -116,10 +117,16 @@ margin_right = 118.0
 margin_bottom = 92.0
 text = "Tests"
 
-[node name="Quit" type="Button" parent="menuButtons"]
+[node name="Credits" type="Button" parent="menuButtons"]
 margin_top = 96.0
 margin_right = 118.0
 margin_bottom = 116.0
+text = "Credits"
+
+[node name="Quit" type="Button" parent="menuButtons"]
+margin_top = 120.0
+margin_right = 118.0
+margin_bottom = 140.0
 focus_neighbour_bottom = NodePath("../Start")
 text = "Quit"
 
@@ -184,10 +191,13 @@ position = Vector2( 899, 404 )
 scale = Vector2( 0.40332, 0.37793 )
 texture = ExtResource( 6 )
 
+[node name="credits" parent="." instance=ExtResource( 2 )]
+
 [connection signal="pressed" from="menuButtons/Start" to="." method="_on_Start_pressed"]
 [connection signal="pressed" from="menuButtons/Options" to="." method="_on_Options_pressed"]
 [connection signal="pressed" from="menuButtons/Market" to="." method="_on_Market_pressed"]
 [connection signal="pressed" from="menuButtons/Tests" to="." method="_on_Tests_pressed"]
+[connection signal="pressed" from="menuButtons/Credits" to="." method="_on_Credits_pressed"]
 [connection signal="pressed" from="menuButtons/Quit" to="." method="_on_Quit_pressed"]
 [connection signal="pressed" from="createGameButton" to="." method="_on_createGameButton_pressed"]
 [connection signal="pressed" from="joinLobby/joinGame" to="." method="_on_joinGame_pressed"]
