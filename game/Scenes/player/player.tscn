@@ -326,15 +326,15 @@ shape = SubResource( 4 )
 [node name="LightOccluder2D" type="LightOccluder2D" parent="."]
 occluder = SubResource( 5 )
 
-[node name="light" type="AnimatedSprite" parent="."]
-position = Vector2( -57, -37 )
-scale = Vector2( 3.75, 3.45918 )
-frames = SubResource( 12 )
-frame = 1
-playing = true
-
 [node name="Torch1" type="Light2D" parent="."]
 position = Vector2( -60, -37 )
 scale = Vector2( 0.166168, 0.159722 )
 texture = ExtResource( 127 )
 color = Color( 0.839216, 0.454902, 0.0980392, 1 )
+
+[node name="light" type="AnimatedSprite" parent="Torch1"]
+position = Vector2( 18.054, 0 )
+scale = Vector2( 22.5675, 21.6575 )
+frames = SubResource( 12 )
+frame = 3
+playing = true
