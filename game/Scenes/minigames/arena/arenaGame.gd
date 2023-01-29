@@ -233,6 +233,7 @@ func _on_Timer_timeout():
 		ChandelierEnemy.level_up()
 		ChandelierEnemy.set_physics_process(false)
 	textBox.queue_text("OUT OF TIME. NOW PERISH.")
+	myTimer.queue_free()
 
 """
 /*

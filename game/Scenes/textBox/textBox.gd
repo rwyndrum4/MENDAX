@@ -8,6 +8,7 @@
 	Based on this code from the above github
 * Date Revisions:
 	10/9/2022 - Added properties to show when text is added and changed onready var paths
+	1/28/2023 - Added sfx for text box "typing"
 """
 extends CanvasLayer
 
@@ -19,6 +20,7 @@ onready var start_symbol = $Container/MarginContainer/HBoxContainer/Start
 onready var end_symbol = $Container/MarginContainer/HBoxContainer/End
 onready var text_box = $Container/MarginContainer/HBoxContainer/Text
 onready var text_displayer = $Tween
+onready var dialogue = $dialogue
 
 enum State {
 	READY,
@@ -56,19 +58,45 @@ func _process(_delta): #change to delta if used
 			if !text_queue.empty():
 				display_text()
 				GlobalSignals.emit_signal("textbox_shift",true)
+				# Play dialogue sounds if in scenes that require them
+				if Global.state == Global.scenes.RIDDLER_MINIGAME:
+					$RiddlerDialogue.play()
+				elif Global.state == Global.scenes.ARENA_MINIGAME:
+					$ArenaDialogue.play()
+			else:
+				# Stop any playing dialogue
+				if Global.state == Global.scenes.RIDDLER_MINIGAME:
+					$RiddlerDialogue.stop()
+				elif Global.state == Global.scenes.ARENA_MINIGAME:
+					$ArenaDialogue.stop()
 		State.READING:
 			#if text is currently in process of being displayed and enter is
 			#pressed, display all text and move to finished state
 			if Input.is_action_just_pressed("ui_accept"):
+				dialogue.stop()
+				# Stop any playing dialogue
+				if Global.state == Global.scenes.RIDDLER_MINIGAME:
+					$RiddlerDialogue.stop()
+				elif Global.state == Global.scenes.ARENA_MINIGAME:
+					$ArenaDialogue.stop()
+				$accept.play()
 				text_box.percent_visible = 1.0
 				text_displayer.remove_all()
 				end_symbol.text = "v"
 				change_state(State.FINISHED)
+				
 		State.FINISHED:
 			#if in finished state and enter is pressed, move to ready state
 			#and hide textbox
 			if Input.is_action_just_pressed("ui_accept"):
 				change_state(State.READY)
+				# Stop any playing dialogue
+				if Global.state == Global.scenes.RIDDLER_MINIGAME:
+					$RiddlerDialogue.stop()
+				elif Global.state == Global.scenes.ARENA_MINIGAME:
+					$ArenaDialogue.stop()
+				dialogue.stop()
+				$accept.play()
 				hide_textbox()
 				GlobalSignals.emit_signal("textbox_shift",false)
 				if text_queue.empty():
@@ -159,7 +187,9 @@ func display_text():
 	change_state(State.READING)
 	#Next two lines is what makes text slowly show up in textbox
 	text_displayer.interpolate_property(text_box, "percent_visible", 0.0, 1.0, len(next_text) * CHAR_READ_RATE, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	dialogue.play()
 	text_displayer.start()
+	
 
 """
 /*
@@ -201,4 +231,10 @@ func queue_file(file_name: String):
 """
 func _on_Tween_tween_completed(_object, _key): #remove underscores if want to use variables
 	end_symbol.text = ">"
+	# Stop any playing dialogue
+	if Global.state == Global.scenes.RIDDLER_MINIGAME:
+		$RiddlerDialogue.stop()
+	elif Global.state == Global.scenes.ARENA_MINIGAME:
+		$ArenaDialogue.stop()
+	dialogue.stop()
 	change_state(State.FINISHED)

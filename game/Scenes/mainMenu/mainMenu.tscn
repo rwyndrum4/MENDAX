@@ -1,12 +1,14 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://Scenes/mainMenu/mainMenu.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/mainMenu/creditsWindow.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Assets/mainMenuAssets/BAUHS93.TTF" type="DynamicFontData" id=3]
 [ext_resource path="res://Assets/mainMenuBG.png" type="Texture" id=4]
+[ext_resource path="res://Assets/SFX/myTongue.wav" type="AudioStream" id=5]
 [ext_resource path="res://Assets/fire5.png" type="Texture" id=6]
 [ext_resource path="res://Assets/ARIALBD.TTF" type="DynamicFontData" id=8]
 [ext_resource path="res://Assets/Teko-Light.ttf" type="DynamicFontData" id=10]
+[ext_resource path="res://Assets/SFX/click.wav" type="AudioStream" id=11]
 
 [sub_resource type="DynamicFont" id=8]
 size = 32
@@ -91,46 +93,46 @@ margin_right = 134.0
 margin_bottom = -174.0
 rect_scale = Vector2( 1.77124, 1.77124 )
 
-[node name="Start" type="Button" parent="menuButtons"]
+[node name="Start" type="Button" parent="menuButtons" groups=["my_buttons"]]
 margin_right = 118.0
 margin_bottom = 20.0
 rect_pivot_offset = Vector2( -644, -266 )
 focus_neighbour_top = NodePath("../Quit")
 text = "Start"
 
-[node name="Options" type="Button" parent="menuButtons"]
+[node name="Options" type="Button" parent="menuButtons" groups=["my_buttons"]]
 margin_top = 24.0
 margin_right = 118.0
 margin_bottom = 44.0
 text = "Options"
 
-[node name="Market" type="Button" parent="menuButtons"]
+[node name="Market" type="Button" parent="menuButtons" groups=["my_buttons"]]
 margin_top = 48.0
 margin_right = 118.0
 margin_bottom = 68.0
 rect_pivot_offset = Vector2( -644, -266 )
 text = "Market"
 
-[node name="Tests" type="Button" parent="menuButtons"]
+[node name="Tests" type="Button" parent="menuButtons" groups=["my_buttons"]]
 margin_top = 72.0
 margin_right = 118.0
 margin_bottom = 92.0
 text = "Tests"
 
-[node name="Credits" type="Button" parent="menuButtons"]
+[node name="Credits" type="Button" parent="menuButtons" groups=["my_buttons"]]
 margin_top = 96.0
 margin_right = 118.0
 margin_bottom = 116.0
 text = "Credits"
 
-[node name="Quit" type="Button" parent="menuButtons"]
+[node name="Quit" type="Button" parent="menuButtons" groups=["my_buttons"]]
 margin_top = 120.0
 margin_right = 118.0
 margin_bottom = 140.0
 focus_neighbour_bottom = NodePath("../Start")
 text = "Quit"
 
-[node name="createGameButton" type="Button" parent="."]
+[node name="createGameButton" type="Button" parent="." groups=["my_buttons"]]
 margin_left = 1095.0
 margin_top = 11.0
 margin_right = 1269.0
@@ -144,7 +146,7 @@ margin_top = 77.0
 margin_right = 1269.0
 margin_bottom = 130.0
 
-[node name="joinGame" type="Button" parent="joinLobby"]
+[node name="joinGame" type="Button" parent="joinLobby" groups=["my_buttons"]]
 margin_right = 174.0
 margin_bottom = 53.0
 custom_fonts/font = SubResource( 9 )
@@ -165,7 +167,7 @@ margin_right = -864.0
 margin_bottom = 779.0
 rect_scale = Vector2( 0.889601, 0.796081 )
 
-[node name="lobbyCode" type="Button" parent="showLobbyCode"]
+[node name="lobbyCode" type="Button" parent="showLobbyCode" groups=["my_buttons"]]
 margin_right = 213.0
 margin_bottom = 50.0
 rect_pivot_offset = Vector2( -644, -266 )
@@ -192,6 +194,14 @@ scale = Vector2( 0.40332, 0.37793 )
 texture = ExtResource( 6 )
 
 [node name="credits" parent="." instance=ExtResource( 2 )]
+[node name="click" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 11 )
+volume_db = 24.0
+bus = "SFX"
+
+[node name="button_down" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 5 )
+volume_db = 4.522
 
 [connection signal="pressed" from="menuButtons/Start" to="." method="_on_Start_pressed"]
 [connection signal="pressed" from="menuButtons/Options" to="." method="_on_Options_pressed"]

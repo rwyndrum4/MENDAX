@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/cave_out.mp3-bdcbc0d3197fad2562ce63e50cfc1c93.mp3str"
+
+[deps]
+
+source_file="res://Assets/SFX/cave_out.mp3"
+dest_files=[ "res://.import/cave_out.mp3-bdcbc0d3197fad2562ce63e50cfc1c93.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

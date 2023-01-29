@@ -99,12 +99,15 @@ func fire(extra_angle = Vector2(0,0)):
 """
 func take_damage(amount: int) -> void:
 	ServerConnection.send_arena_enemy_hit(amount,2)
+	$AudioStreamPlayer2D.play()
 	healthbar.value = healthbar.value - amount
 	chandelierAnim.play("hit")
 	if healthbar.value == 0:
-		chandelierAnim.play("death")
-		call_deferred("defer_disabling_chandelier")
 		_isDead = 1
+		chandelierAnim.play("death")
+		#have to defer disabling the skeleton, got an error otherwise
+		#put the line of code in function below since call_deferred only takes functions as input
+		call_deferred("defer_disabling_chandelier")
 	
 #Same as above function except it doesn't send data to server
 func take_damage_server(amount: int):
@@ -135,7 +138,10 @@ func _on_AnimationPlayer_animation_finished(_anim_name):
 		#	chandelierAnim.play("attack1")
 		pass
 	else:
+		$death.play()
+		yield($death, "finished")
 		GlobalSignals.emit_signal("enemyDefeated", 0) #replace 0 with indication of enemy ID later
+		
 		queue_free()
 
 """
