@@ -1,7 +1,9 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Scenes/textBox/textBox.gd" type="Script" id=1]
 [ext_resource path="res://Assets/Silver.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://Assets/MendaxVA/JesterB_2.mp3" type="AudioStream" id=3]
+[ext_resource path="res://Assets/MendaxVA/ArenaB_1.mp3" type="AudioStream" id=4]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0, 0, 0, 1 )
@@ -84,5 +86,11 @@ custom_fonts/font = SubResource( 2 )
 text = ">"
 
 [node name="Tween" type="Tween" parent="."]
+
+[node name="RiddlerDialogue" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 3 )
+
+[node name="ArenaDialogue" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 4 )
 
 [connection signal="tween_completed" from="Tween" to="." method="_on_Tween_tween_completed"]

@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/ArenaC_2.mp3-30722113ddca11b8814c45024eea2753.mp3str"
+
+[deps]
+
+source_file="res://Assets/MendaxVA/ArenaC_2.mp3"
+dest_files=[ "res://.import/ArenaC_2.mp3-30722113ddca11b8814c45024eea2753.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0
