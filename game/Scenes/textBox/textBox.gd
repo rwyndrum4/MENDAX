@@ -58,6 +58,17 @@ func _process(_delta): #change to delta if used
 			if !text_queue.empty():
 				display_text()
 				GlobalSignals.emit_signal("textbox_shift",true)
+				# Play dialogue sounds if in scenes that require them
+				if Global.state == Global.scenes.RIDDLER_MINIGAME:
+					$RiddlerDialogue.play()
+				elif Global.state == Global.scenes.ARENA_MINIGAME:
+					$ArenaDialogue.play()
+			else:
+				# Stop any playing dialogue
+				if Global.state == Global.scenes.RIDDLER_MINIGAME:
+					$RiddlerDialogue.stop()
+				elif Global.state == Global.scenes.ARENA_MINIGAME:
+					$ArenaDialogue.stop()
 		State.READING:
 			#if text is currently in process of being displayed and enter is
 			#pressed, display all text and move to finished state
