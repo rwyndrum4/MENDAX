@@ -71,7 +71,7 @@ func fire():
 */
 """
 func take_damage(amount: int) -> void:
-	
+	$AudioStreamPlayer2D.play()
 	healthbar.value = healthbar.value - amount
 	chandelierAnim.play("hit")
 	print(healthbar.value)
@@ -105,7 +105,10 @@ func _on_AnimationPlayer_animation_finished(_anim_name):
 		#	chandelierAnim.play("attack1")
 		pass
 	else:
+		$death.play()
+		yield($death, "finished")
 		GlobalSignals.emit_signal("enemyDefeated", 0) #replace 0 with indication of enemy ID later
+		
 		queue_free()
 
 """

@@ -69,6 +69,7 @@ func turn_on_physics():
 */
 """
 func take_damage(amount: int) -> void:
+	$AudioStreamPlayer2D.play()
 	ServerConnection.send_arena_enemy_hit(amount,3) #3 is the type of enemy, reference EnemyTypes in arenaGame.gd
 	healthbar.value = healthbar.value - amount
 	BodAnim.play("hit")
@@ -105,7 +106,10 @@ func _on_AnimationPlayer_animation_finished(_anim_name):
 		else:
 			BodAnim.play("attack1")
 	else:
+		$death.play()
+		yield($death, "finished")
 		GlobalSignals.emit_signal("enemyDefeated", 0) #replace 0 with indication of enemy ID later
+		
 		queue_free()
 
 """

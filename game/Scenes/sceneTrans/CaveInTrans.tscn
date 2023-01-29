@@ -2,7 +2,7 @@
 
 [ext_resource path="res://Scenes/sceneTrans/CaveInTrans.gd" type="Script" id=1]
 [ext_resource path="res://Assets/cavepixel.png" type="Texture" id=2]
-[ext_resource path="res://Assets/SFX/wing.wav" type="AudioStream" id=3]
+[ext_resource path="res://Assets/SFX/cave_out.mp3" type="AudioStream" id=3]
 
 [sub_resource type="Animation" id=1]
 resource_name = "DISSOLVE"
@@ -86,4 +86,5 @@ anims/RESET = SubResource( 2 )
 
 [node name="Exit" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 3 )
+volume_db = -9.792
 bus = "SFX"

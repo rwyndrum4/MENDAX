@@ -279,3 +279,6 @@ script = ExtResource( 126 )
 [node name="hitbox" type="CollisionShape2D" parent="MyHurtBox"]
 position = Vector2( -1, 0 )
 shape = SubResource( 4 )
+
+[node name="Listener2D" type="Listener2D" parent="."]
+current = true
