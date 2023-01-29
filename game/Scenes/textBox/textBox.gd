@@ -74,6 +74,11 @@ func _process(_delta): #change to delta if used
 			#pressed, display all text and move to finished state
 			if Input.is_action_just_pressed("ui_accept"):
 				dialogue.stop()
+				# Stop any playing dialogue
+				if Global.state == Global.scenes.RIDDLER_MINIGAME:
+					$RiddlerDialogue.stop()
+				elif Global.state == Global.scenes.ARENA_MINIGAME:
+					$ArenaDialogue.stop()
 				$accept.play()
 				text_box.percent_visible = 1.0
 				text_displayer.remove_all()
@@ -85,6 +90,11 @@ func _process(_delta): #change to delta if used
 			#and hide textbox
 			if Input.is_action_just_pressed("ui_accept"):
 				change_state(State.READY)
+				# Stop any playing dialogue
+				if Global.state == Global.scenes.RIDDLER_MINIGAME:
+					$RiddlerDialogue.stop()
+				elif Global.state == Global.scenes.ARENA_MINIGAME:
+					$ArenaDialogue.stop()
 				dialogue.stop()
 				$accept.play()
 				hide_textbox()
@@ -221,5 +231,10 @@ func queue_file(file_name: String):
 """
 func _on_Tween_tween_completed(_object, _key): #remove underscores if want to use variables
 	end_symbol.text = ">"
+	# Stop any playing dialogue
+	if Global.state == Global.scenes.RIDDLER_MINIGAME:
+		$RiddlerDialogue.stop()
+	elif Global.state == Global.scenes.ARENA_MINIGAME:
+		$ArenaDialogue.stop()
 	dialogue.stop()
 	change_state(State.FINISHED)

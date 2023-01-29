@@ -76,8 +76,9 @@ func take_damage(amount: int) -> void:
 	chandelierAnim.play("hit")
 	print(healthbar.value)
 	if healthbar.value == 0:
-		chandelierAnim.play("death")
 		isDead = 1
+		chandelierAnim.play("death")
+		
 		#have to defer disabling the skeleton, got an error otherwise
 		#put the line of code in function below since call_deferred only takes functions as input
 		call_deferred("defer_disabling_chandelier")

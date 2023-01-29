@@ -74,9 +74,10 @@ func take_damage(amount: int) -> void:
 	healthbar.value = healthbar.value - amount
 	BodAnim.play("hit")
 	if healthbar.value == 0:
+		isDead = 1
 		BodAnim.play("death")
 		call_deferred("defer_disabling_BoD")
-		isDead = 1
+		
 		
 func defer_disabling_BoD():
 	BodBox.disabled = true
