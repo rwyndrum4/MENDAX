@@ -32,48 +32,58 @@ custom_fonts/bold_font = SubResource( 1 )
 custom_fonts/normal_font = SubResource( 2 )
 bbcode_enabled = true
 bbcode_text = "[i][color=#eb4034]Music:[/color][/i]
+Fireplace:
+tosha73
+https://pixabay.com/sound-effects/bonfire-hq-6991/
+------------------------------------------------
 [i][color=#eb4034]Fonts:[/color][/i]
 Silver font
 https://poppyworks.itch.io/silver
 Author: Poppy Works, Wolfgang Wozniak
 Major Contributors: Itou Hiro (PixelMPlus), leedheo (DOSGothic)
 Minor Contributors: minipete
----------------------------------------------
+------------------------------------------------
 [i][color=#eb4034]SFX:[/color][/i]
 Sword Swings:
 qubodup
 https://freesound.org/people/qubodup/sounds/59992/
 colorsCrimsonTears
 https://freesound.org/people/colorsCrimsonTears/sounds/580307/
----------------------------------------------
+------------------------------------------------
 Enemy Die:
 plasterbrain
 https://freesound.org/people/plasterbrain/sounds/394466/
----------------------------------------------
+------------------------------------------------
 8 bit Slam:
 Jofae
 https://freesound.org/people/Jofae/sounds/361636/
+------------------------------------------------
 "
 text = "Music:
+Fireplace:
+tosha73
+https://pixabay.com/sound-effects/bonfire-hq-6991/
+------------------------------------------------
 Fonts:
 Silver font
 https://poppyworks.itch.io/silver
 Author: Poppy Works, Wolfgang Wozniak
 Major Contributors: Itou Hiro (PixelMPlus), leedheo (DOSGothic)
 Minor Contributors: minipete
----------------------------------------------
+------------------------------------------------
 SFX:
 Sword Swings:
 qubodup
 https://freesound.org/people/qubodup/sounds/59992/
 colorsCrimsonTears
 https://freesound.org/people/colorsCrimsonTears/sounds/580307/
----------------------------------------------
+------------------------------------------------
 Enemy Die:
 plasterbrain
 https://freesound.org/people/plasterbrain/sounds/394466/
----------------------------------------------
+------------------------------------------------
 8 bit Slam:
 Jofae
 https://freesound.org/people/Jofae/sounds/361636/
+------------------------------------------------
 "
