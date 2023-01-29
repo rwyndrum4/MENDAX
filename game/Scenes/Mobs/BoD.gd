@@ -12,8 +12,8 @@ onready var BodAtkBox = $MyHitBox/CollisionShape2D
 onready var pos2d = $Position2D
 onready var player_detector_box = $detector/box
 
-var isIn = false
-var isDead = 0
+var isIn: bool = false
+var isDead: int = 0
 
 """
 /*
@@ -57,6 +57,14 @@ func _physics_process(_delta):
 		player_detector_box.position = Vector2(70,-5)
 		BodAtkBox.position = Vector2(5,-3)
 
+"""
+/*
+* @pre Text Box queue is empty
+* @post turns back on the physics process, aka can now move
+* @param None
+* @return None
+*/
+"""		
 func turn_on_physics():
 	set_physics_process(true)
 
@@ -77,10 +85,6 @@ func take_damage(amount: int) -> void:
 		isDead = 1
 		BodAnim.play("death")
 		call_deferred("defer_disabling_BoD")
-		
-		
-func defer_disabling_BoD():
-	BodBox.disabled = true
 
 #Same as above function except it doesn't send data to server
 func take_damage_server(amount: int):
@@ -90,6 +94,10 @@ func take_damage_server(amount: int):
 		BodAnim.play("death")
 		call_deferred("defer_disabling_BoD")
 		isDead = 1
+
+#function for disabling skeleton, needs to be deferred for reasons above
+func defer_disabling_BoD():
+	BodBox.disabled = true
 
 """
 /*
@@ -147,4 +155,30 @@ func _on_detector_body_exited(_body):
 */
 """
 func level_up():
-	pass
+	healthbar.value = healthbar.value + 40
+	#New timer that makes it so that BoD teleports ever 4 sec
+	var teleport_timer: Timer = Timer.new()
+	add_child(teleport_timer)
+	teleport_timer.wait_time = 4
+	teleport_timer.one_shot = false
+	teleport_timer.start()
+	# warning-ignore:return_value_discarded
+	teleport_timer.connect("timeout",self, "_tp_timer_expired")
+
+"""
+/*
+* @pre timer defined above has expired
+* @post makes BoD telport to player
+* @param None
+* @return None
+*/
+"""
+func _tp_timer_expired():
+	BodAnim.stop() #stop previous animation if it had one
+	if not get_parent()._player_dead:
+		var x = randi() % 75
+		var y = randi() % 75
+		if randf() > 0.5:
+			x *= -1
+			y *= -1
+		position = get_parent().get_node("Player").position + Vector2(x,y)

@@ -11,12 +11,14 @@ onready var healthbar = $ProgressBar
 onready var chandelierBox = $MyHurtBox/hitbox
 onready var chandelierAtkBox = $MyHitBox/CollisionShape2D
 
-var isIn = false
-var isDead = 0
+var _isIn = false
+var _isDead = 0
+var _leveled_up: bool = false
 
 #motion vector for enemy
-var motion=Vector2()
-var timer=0;
+var _motion=Vector2()
+var _timer=0;
+var _fire_wait_time: int = 4
 """
 /*
 * @pre Called once when mob is initialized
@@ -30,37 +32,62 @@ func _ready():
 	anim.set_loop(true)
 	chandelierAnim.play("idle")
 	healthbar.value = 200;
-
-
-func _physics_process(delta):
-	##position +=(Player.position-position)/50 #enemy moves toward player
+	# warning-ignore:return_value_discarded
+	GlobalSignals.connect("textbox_empty",self,"turn_on_physics")
 	position=Vector2(500,500)
-	
-	#move_and_collide(motion)
-	timer+=delta
-	#print(timer)
-	if timer>4:
-		timer=0;
+
+"""
+/*
+* @pre Called every frame
+* @post x an y velocity of the Skeleton is updated to move towards the player (if the player is within it's Search range)
+* @param delta : elapsed time (in seconds) since previous frame. Should be constant across sequential calls
+* @return None
+*/
+"""
+func _physics_process(delta):
+	_timer+=delta
+	if _timer > _fire_wait_time:
+		_timer=0;
 		chandelierAnim.play("attack1")
 		yield(chandelierAnim, "animation_finished")
 		fire();
+		if _leveled_up:
+			fire(Vector2(-200, -200))
+			fire(Vector2(-100, -100))
+			fire(Vector2(100, 100))
+			fire(Vector2(200, 200))
 		chandelierAnim.play("idle")
-		
-		
 
-var bullete =preload("res://Scenes/bullet/bulletenemy.tscn")
-func fire():
+"""
+/*
+* @pre Text Box queue is empty
+* @post turns back on the physics process, aka can now move
+* @param None
+* @return None
+*/
+"""	
+func turn_on_physics():
+	set_physics_process(true)
+
+"""
+/*
+* @pre Chandelier is ready to fire
+* @post Fires bullet towoards player
+* @param extra_angle -> Vector2 (extra angles to fire at)
+* @return None
+*/
+"""	
+func fire(extra_angle = Vector2(0,0)):
 	if get_parent()._player_dead:
 		return
 	var Player=get_parent().get_node("Player")
+	var bullete =preload("res://Scenes/bullet/bulletenemy.tscn")
 	var bulenemy = bullete.instance()
-	
-	#get_tree().get_root().add_child(bulenemy)
 	get_parent().add_child(bulenemy)
-	if get_parent()._player_dead == false:
-		bulenemy.global_position = global_position + Vector2(0, -90)
-		bulenemy.velocity=bulenemy.global_position.direction_to(Player.global_position)
-	print(bulenemy.velocity)
+	bulenemy.global_position = global_position + Vector2(0, -90)
+	bulenemy.velocity = bulenemy.global_position.direction_to(
+		Player.global_position + extra_angle
+	)
 
 """
 /*
@@ -71,23 +98,28 @@ func fire():
 */
 """
 func take_damage(amount: int) -> void:
+	ServerConnection.send_arena_enemy_hit(amount,2)
 	$AudioStreamPlayer2D.play()
 	healthbar.value = healthbar.value - amount
 	chandelierAnim.play("hit")
-	print(healthbar.value)
 	if healthbar.value == 0:
-		isDead = 1
+		_isDead = 1
 		chandelierAnim.play("death")
-		
 		#have to defer disabling the skeleton, got an error otherwise
 		#put the line of code in function below since call_deferred only takes functions as input
 		call_deferred("defer_disabling_chandelier")
-		isDead = 1
+	
+#Same as above function except it doesn't send data to server
+func take_damage_server(amount: int):
+	healthbar.value = healthbar.value - amount
+	chandelierAnim.play("hit")
+	if healthbar.value == 0:
+		chandelierAnim.play("death")
+		call_deferred("defer_disabling_BoD")
+		_isDead = 1
 
 func defer_disabling_chandelier():
-	chandelierBox.disabled = true		
-	
-
+	chandelierBox.disabled = true
 
 """
 /*
@@ -99,7 +131,7 @@ func defer_disabling_chandelier():
 """
 func _on_AnimationPlayer_animation_finished(_anim_name):
 		
-	if !isDead:
+	if !_isDead:
 		#if !isIn:			
 		#	chandelierAnim.play("idle")
 		#else:
@@ -121,7 +153,7 @@ func _on_AnimationPlayer_animation_finished(_anim_name):
 */
 """
 func _on_detector_body_entered(_body):
-	isIn = true
+	_isIn = true
 	#chandelierAnim.play("attack1")
 	
 
@@ -135,4 +167,30 @@ func _on_detector_body_entered(_body):
 */
 """
 func _on_detector_body_exited(_body):
-	isIn = false
+	_isIn = false
+
+func level_up():
+	_leveled_up = true
+	_fire_wait_time = 1
+	healthbar.value = healthbar.value + 40
+	#New timer that makes it so that BoD teleports ever 4 sec
+	var teleport_timer: Timer = Timer.new()
+	add_child(teleport_timer)
+	teleport_timer.wait_time = 10
+	teleport_timer.one_shot = false
+	teleport_timer.start()
+	# warning-ignore:return_value_discarded
+	teleport_timer.connect("timeout",self, "_tp_timer_expired")
+
+"""
+/*
+* @pre timer defined above has expired
+* @post makes BoD telport to player
+* @param None
+* @return None
+*/
+"""
+func _tp_timer_expired():
+	var x = randi() % 3500 + 500
+	var y = randi() % 3250 + 500
+	position = Vector2(x,y)

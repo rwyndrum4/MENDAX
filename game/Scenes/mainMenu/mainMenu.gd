@@ -87,7 +87,16 @@ func _on_Start_pressed():
 	for player in player_objects:
 		delete_player_obj(player['player_obj'],player['text_obj'])
 	if ServerConnection.match_exists() and ServerConnection.get_server_status():
-		get_parent().chat_box.chat_event_message("Switched from global chat to match chat")
+		if num_players == 1:
+			get_parent().chat_box.chat_event_message(
+				"Disconnecting from match, single player mode started"
+			)
+			yield(ServerConnection.leave_match(ServerConnection._match_id), "completed")
+			yield(ServerConnection.leave_match_group(), "completed")
+		else:
+			get_parent().chat_box.chat_event_message(
+				"Switched from global chat to match chat"
+			)
 	#change scene to start area
 	SceneTrans.change_scene(Global.scenes.START_AREA)
 
@@ -128,6 +137,17 @@ func _on_Market_pressed():
 """
 func _on_Tests_pressed():
 	Global.state = Global.scenes.CAVE
+
+"""
+/*
+* @pre Credits Button is pressed
+* @post Load a window with credits
+* @param None
+* @return None
+*/
+"""
+func _on_Credits_pressed():
+	$credits.popup_centered()
 
 """
 /*
