@@ -323,6 +323,9 @@ script = ExtResource( 126 )
 position = Vector2( -1, 0 )
 shape = SubResource( 4 )
 
+[node name="Listener2D" type="Listener2D" parent="."]
+current = true
+
 [node name="LightOccluder2D" type="LightOccluder2D" parent="."]
 occluder = SubResource( 5 )
 
@@ -336,5 +339,5 @@ color = Color( 0.839216, 0.454902, 0.0980392, 1 )
 position = Vector2( 18.054, 0 )
 scale = Vector2( 22.5675, 21.6575 )
 frames = SubResource( 12 )
-frame = 3
+frame = 4
 playing = true

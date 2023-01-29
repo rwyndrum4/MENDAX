@@ -10,6 +10,7 @@
 	10/1/2022 - Fixed options menu movment
 	11/4/2022 - Adding server functionality 
 	11/13/2022 - add test functionality
+	1/29/2023 - added sfx for buttons
 """
 extends Control
 
@@ -53,6 +54,10 @@ func _ready():
 	ServerConnection.connect("character_spawned",self,"spawn_character")
 	# warning-ignore:return_value_discarded
 	ServerConnection.connect("character_despawned",self,"despawn_character")
+	for button in get_tree().get_nodes_in_group("my_buttons"):
+		button.connect("mouse_entered", self, "_mouse_button_entered")
+		button.connect("focus_entered", self, "_mouse_button_entered")
+		button.connect("button_down", self, "_button_down")
 
 """
 /*
@@ -479,3 +484,21 @@ func _delete_get_user_input_obj():
 	else:
 		GlobalSettings.update_username(given_username)
 		startButton.grab_focus()
+
+"""
+/*
+* @pre None
+* @post None
+* @param None
+* @return None
+*/
+"""
+#plays sound
+func _mouse_button_entered():
+	$click.play()
+
+func _button_down():
+	$button_down.play()
+
+func _on_lobbyCode_mouse_entered():
+	pass # Replace with function body.

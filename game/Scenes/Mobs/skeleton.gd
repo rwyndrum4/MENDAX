@@ -84,15 +84,17 @@ func turn_on_physics():
 */
 """
 func take_damage(amount: int) -> void:
+	$AudioStreamPlayer2D.play()
 	ServerConnection.send_arena_enemy_hit(amount,1) #1 is the type of enemy, reference EnemyTypes in arenaGame.gd
 	healthbar.value = healthbar.value - amount
 	skeletonAnim.play("hit")
 	if healthbar.value == 0:
+		isDead = 1
 		skeletonAnim.play("death")
 		#have to defer disabling the skeleton, got an error otherwise
 		#put the line of code in function below since call_deferred only takes functions as input
 		call_deferred("defer_disabling_skeleton")
-		isDead = 1
+		
 
 func take_damage_server(amount: int):
 	healthbar.value = healthbar.value - amount
@@ -145,7 +147,12 @@ func _on_skeletonAnimationPlayer_animation_finished(_anim_name):
 		else:
 			skeletonAnim.play("attack1")
 	else:
+		set_physics_process(false)
+		$death.play()
+		yield($death, "finished")
+		
 		GlobalSignals.emit_signal("enemyDefeated", 0) #replace 0 with indication of enemy ID later
+		
 		queue_free()
 
 """
