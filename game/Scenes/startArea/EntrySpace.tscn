@@ -4,6 +4,7 @@
 [ext_resource path="res://Scenes/player/player.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Scenes/startArea/fog.gdshader" type="Shader" id=3]
 [ext_resource path="res://Scenes/startArea/EntrySpace.gd" type="Script" id=4]
+[ext_resource path="res://Assets/DarknessLighter.png" type="Texture" id=5]
 [ext_resource path="res://Assets/Teko-Light.ttf" type="DynamicFontData" id=6]
 [ext_resource path="res://Scenes/textBox/textBox.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Assets/background.png" type="Texture" id=8]
@@ -44,9 +45,6 @@ gradient = SubResource( 12 )
 [sub_resource type="StreamTexture" id=3]
 flags = 4
 load_path = "res://.import/light.png-9e6eff90e703f084db87a88d6ba8f890.stex"
-
-[sub_resource type="OccluderPolygon2D" id=6]
-polygon = PoolVector2Array( -48.9833, -45.9201, -50.0482, 47.9166, -50.0482, 47.9166, 50.0482, 46.9184, 50.0482, 46.9184, 48.9833, -48.9149, 47.9185, -50.9114 )
 
 [sub_resource type="DynamicFont" id=2]
 size = 40
@@ -102,13 +100,20 @@ scale = Vector2( 4.84362, -4055.78 )
 texture = SubResource( 13 )
 
 [node name="Light2D" type="Light2D" parent="."]
-position = Vector2( 1060, 1600 )
+position = Vector2( 1179, 1595 )
 rotation = -4.70422
 scale = Vector2( 0.157201, 0.59011 )
 texture = SubResource( 3 )
-offset = Vector2( 0, 1600 )
+offset = Vector2( 0, 1800 )
 shadow_enabled = true
-shadow_color = Color( 0.686275, 0.0901961, 0.0901961, 0 )
+shadow_gradient_length = 10.0
+
+[node name="Darkness" type="Light2D" parent="."]
+position = Vector2( 192, 1800 )
+texture = ExtResource( 5 )
+color = Color( 0.870588, 0.870588, 0.870588, 1 )
+mode = 1
+range_item_cull_mask = 3
 
 [node name="Player" parent="." instance=ExtResource( 2 )]
 position = Vector2( 855, 1540 )
@@ -116,9 +121,6 @@ collision_layer = 1
 __meta__ = {
 "_edit_group_": true
 }
-
-[node name="LightOccluder2D" type="LightOccluder2D" parent="Player"]
-occluder = SubResource( 6 )
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 current = true

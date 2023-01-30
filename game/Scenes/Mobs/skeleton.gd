@@ -11,8 +11,6 @@
 			   11/28/2022 - Added death signal
 			
 """
-
-
 extends KinematicBody2D
 onready var skeletonAnim = $skeletonAnimationPlayer
 onready var healthbar = $ProgressBar
@@ -23,6 +21,7 @@ onready var player_detector_box = $detector/box
 
 var isIn = false
 var isDead = 0
+var _player_target: int = 1
 
 # Global velocity
 var velocity = Vector2.ZERO
@@ -55,12 +54,15 @@ func _ready():
 """		
 func _physics_process(delta):
 	var player_pos = null
-	#Check if player 1 is there
-	if not get_parent()._player_dead:
-		player_pos = get_parent().get_node("Player").position
+	#Get player position 
+	if ServerConnection.match_exists() and ServerConnection.get_server_status():
+		player_pos = Global.get_player_pos(_player_target)
 	else:
-		velocity = move_and_slide(velocity.move_toward(BASE_SPEED*Vector2.ZERO, BASE_ACCELERATION*delta))
-		return
+		if not get_parent()._player_dead:
+			player_pos = get_parent().get_node("Player").position
+		else:
+			velocity = move_and_slide(velocity.move_toward(BASE_SPEED*Vector2.ZERO, BASE_ACCELERATION*delta))
+			return
 	velocity = move_and_slide(velocity.move_toward(BASE_SPEED*(player_pos - position), BASE_ACCELERATION*delta))
 	#Handle making skeleton turn around
 	if player_pos.x < position.x:
@@ -71,9 +73,54 @@ func _physics_process(delta):
 		pos2d.scale.x = 1
 		player_detector_box.position = Vector2(50,0)
 		skeleAtkBox.position = Vector2(60,0)
+		
+"""
+/*
+* @pre Called before player 1 sends who to target data
+* @post changes which enemy skeleton will move to
+* @param p_target -> int (id of player to target)
+* @return None
+*/
+"""
+func update_target(player: int):
+	_player_target = player
 
+
+"""
+/*
+* @pre Text Box queue is empty
+* @post turns back on the physics process, aka can now move
+* @param None
+* @return None
+*/
+"""
 func turn_on_physics():
 	set_physics_process(true)
+
+"""
+/*
+* @pre Called when switching target players
+* @post turns down speed and sets timer to fix it back
+* @param None
+* @return None
+*/
+"""
+func slow_speed():
+	BASE_SPEED = 0.2
+	var reset_accel_timer: Timer = Timer.new()
+	add_child(reset_accel_timer)
+	reset_accel_timer.wait_time = 2
+	reset_accel_timer.one_shot = true
+	reset_accel_timer.start()
+	# warning-ignore:return_value_discarded
+	reset_accel_timer.connect("timeout",self, "_accel_timer_expired", [reset_accel_timer])
+
+func _accel_timer_expired(timer:Timer):
+	timer.queue_free()
+	if $MyHitBox.damage == 30:
+		BASE_SPEED = 1.6
+	else:
+		BASE_SPEED = 0.7
 
 """
 /*
@@ -84,16 +131,19 @@ func turn_on_physics():
 */
 """
 func take_damage(amount: int) -> void:
+	$AudioStreamPlayer2D.play()
 	ServerConnection.send_arena_enemy_hit(amount,1) #1 is the type of enemy, reference EnemyTypes in arenaGame.gd
 	healthbar.value = healthbar.value - amount
 	skeletonAnim.play("hit")
 	if healthbar.value == 0:
+		isDead = 1
 		skeletonAnim.play("death")
 		#have to defer disabling the skeleton, got an error otherwise
 		#put the line of code in function below since call_deferred only takes functions as input
 		call_deferred("defer_disabling_skeleton")
-		isDead = 1
+		
 
+#Same function as above but doesn't send data to the server
 func take_damage_server(amount: int):
 	healthbar.value = healthbar.value - amount
 	skeletonAnim.play("hit")
@@ -104,6 +154,7 @@ func take_damage_server(amount: int):
 		call_deferred("defer_disabling_skeleton")
 		isDead = 1
 
+#function for disabling skeleton, needs to be deferred for reasons above
 func defer_disabling_skeleton():
 	skeleBox.disabled = true
 
@@ -145,7 +196,12 @@ func _on_skeletonAnimationPlayer_animation_finished(_anim_name):
 		else:
 			skeletonAnim.play("attack1")
 	else:
+		set_physics_process(false)
+		$death.play()
+		yield($death, "finished")
+		
 		GlobalSignals.emit_signal("enemyDefeated", 0) #replace 0 with indication of enemy ID later
+		
 		queue_free()
 
 """

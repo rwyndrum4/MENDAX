@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://Scenes/minigames/arena/arenaGame.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/minigames/arena/arenaMap.tscn" type="PackedScene" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://Scenes/textBox/textBox.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Scenes/Mobs/skeleton.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Scenes/player/player.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Assets/Silver.ttf" type="DynamicFontData" id=7]
 [ext_resource path="res://Scenes/player/Sword/Sword.tscn" type="PackedScene" id=8]
 [ext_resource path="res://Scenes/minigames/arena/littleGuy.png" type="Texture" id=9]
 [ext_resource path="res://Scenes/minigames/arena/littleGuy.gd" type="Script" id=10]
@@ -21,6 +22,10 @@ extents = Vector2( 3.66668, 17.6191 )
 [sub_resource type="DynamicFont" id=4]
 size = 40
 font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=7]
+size = 75
+font_data = ExtResource( 7 )
 
 [sub_resource type="SpriteFrames" id=6]
 animations = [ {
@@ -52,7 +57,7 @@ current = true
 [node name="Sword" parent="Player" instance=ExtResource( 8 )]
 
 [node name="Skeleton" parent="." instance=ExtResource( 5 )]
-position = Vector2( 475, 432 )
+position = Vector2( 929, 838 )
 scale = Vector2( 3, 3 )
 collision_layer = 262148
 collision_mask = 262144
@@ -79,6 +84,14 @@ custom_colors/font_color = Color( 0, 1, 0.203922, 1 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 4 )
 
+[node name="wait_on_players" type="Label" parent="GUI"]
+margin_left = 350.0
+margin_top = 450.0
+margin_right = 950.0
+margin_bottom = 534.0
+custom_fonts/font = SubResource( 7 )
+text = "Waiting on other players..."
+
 [node name="textBox" parent="." instance=ExtResource( 4 )]
 visible = false
 
@@ -104,6 +117,4 @@ scale = Vector2( 3, 3 )
 [node name="chandelier" parent="." instance=ExtResource( 12 )]
 scale = Vector2( 3, 3 )
 
-[connection signal="body_entered" from="Skeleton/mySearchBox" to="Skeleton" method="_on_mySearchBox_body_entered"]
-[connection signal="body_exited" from="Skeleton/myLostBox" to="Skeleton" method="_on_myLostBox_body_exited"]
 [connection signal="timeout" from="GUI/Timer" to="." method="_on_Timer_timeout"]
