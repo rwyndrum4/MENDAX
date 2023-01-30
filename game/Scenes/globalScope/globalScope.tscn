@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Scenes/chatBox/chatBox.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Scenes/SettingsMenu/settingsMenu.tscn" type="PackedScene" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://Scenes/worldEnvironment/worldEnv.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Assets/ARIALBD.TTF" type="DynamicFontData" id=7]
 [ext_resource path="res://Scenes/fpsDisplay/fpsLabel.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Inventory/Hotbar.tscn" type="PackedScene" id=9]
 
 [sub_resource type="DynamicFont" id=1]
 font_data = ExtResource( 7 )
@@ -34,5 +35,7 @@ visible = false
 margin_right = 59.0
 margin_bottom = 24.0
 custom_fonts/font = SubResource( 1 )
+
+[node name="Hotbar" parent="GUI" instance=ExtResource( 9 )]
 
 [connection signal="message_sent" from="GUI/chatbox" to="." method="_on_chatbox_message_sent"]
