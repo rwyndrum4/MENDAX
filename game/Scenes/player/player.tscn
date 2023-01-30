@@ -1,4 +1,4 @@
-[gd_scene load_steps=141 format=2]
+[gd_scene load_steps=142 format=2]
 
 [ext_resource path="res://Assets/ben-character/blue/rolling/5.png" type="Texture" id=1]
 [ext_resource path="res://Scenes/player/playerScript.gd" type="Script" id=2]
@@ -126,8 +126,9 @@
 [ext_resource path="res://Assets/ben-character/red/rolling/6.png" type="Texture" id=124]
 [ext_resource path="res://Assets/ben-character/red/rolling/1.png" type="Texture" id=125]
 [ext_resource path="res://Scenes/player/Sword/MyHurtBox.gd" type="Script" id=126]
-[ext_resource path="res://Assets/circle.png" type="Texture" id=127]
+[ext_resource path="res://Assets/TorchLight3.png" type="Texture" id=127]
 [ext_resource path="res://Assets/torch_spritesheet.png" type="Texture" id=128]
+[ext_resource path="res://Scenes/player/Torch1.gd" type="Script" id=129]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 9, 9 )
@@ -333,11 +334,13 @@ occluder = SubResource( 5 )
 position = Vector2( -60, -37 )
 scale = Vector2( 0.166168, 0.159722 )
 texture = ExtResource( 127 )
+texture_scale = 20.0
 color = Color( 0.839216, 0.454902, 0.0980392, 1 )
+script = ExtResource( 129 )
 
 [node name="light" type="AnimatedSprite" parent="Torch1"]
 position = Vector2( 18.054, 0 )
 scale = Vector2( 22.5675, 21.6575 )
 frames = SubResource( 12 )
-frame = 4
+frame = 3
 playing = true
