@@ -12,6 +12,7 @@
 	11/13/2022 - add test functionality
 	12/19/2022 - fixed bugs dealing with players spawning
 	1/10/2022 - Adding ability to swap to match chat
+	1/29/2023 - added sfx for buttons
 """
 extends Control
 
@@ -58,6 +59,10 @@ func _ready():
 	ServerConnection.connect("character_spawned",self,"spawn_character")
 	# warning-ignore:return_value_discarded
 	ServerConnection.connect("character_despawned",self,"despawn_character")
+	for button in get_tree().get_nodes_in_group("my_buttons"):
+		button.connect("mouse_entered", self, "_mouse_button_entered")
+		button.connect("focus_entered", self, "_mouse_button_entered")
+		button.connect("button_down", self, "_button_down")
 
 """
 /*
@@ -86,6 +91,17 @@ func _on_Start_pressed():
 	#delete player objects
 	for player in player_objects:
 		delete_player_obj(player['player_obj'],player['text_obj'])
+	if ServerConnection.match_exists() and ServerConnection.get_server_status():
+		if num_players == 1:
+			get_parent().chat_box.chat_event_message(
+				"Disconnecting from match, single player mode started"
+			)
+			yield(ServerConnection.leave_match(ServerConnection._match_id), "completed")
+			yield(ServerConnection.leave_match_group(), "completed")
+		else:
+			get_parent().chat_box.chat_event_message(
+				"Switched from global chat to match chat"
+			)
 	#change scene to start area
 	SceneTrans.change_scene(Global.scenes.START_AREA)
 
@@ -128,6 +144,17 @@ func _on_Market_pressed():
 func _on_Tests_pressed():
 	#Change scene to cave
 	Global.state = Global.scenes.CAVE
+
+"""
+/*
+* @pre Credits Button is pressed
+* @post Load a window with credits
+* @param None
+* @return None
+*/
+"""
+func _on_Credits_pressed():
+	$credits.popup_centered()
 
 """
 /*
@@ -508,3 +535,21 @@ func _delete_get_user_input_obj():
 	else:
 		GlobalSettings.update_username(given_username)
 		startButton.grab_focus()
+
+"""
+/*
+* @pre None
+* @post None
+* @param None
+* @return None
+*/
+"""
+#plays sound
+func _mouse_button_entered():
+	$click.play()
+
+func _button_down():
+	$button_down.play()
+
+func _on_lobbyCode_mouse_entered():
+	pass # Replace with function body.

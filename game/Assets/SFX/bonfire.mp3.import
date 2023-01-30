@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/bonfire.mp3-0d5ab57cad97d69dd8c66e9cf4e04cfc.mp3str"
+
+[deps]
+
+source_file="res://Assets/SFX/bonfire.mp3"
+dest_files=[ "res://.import/bonfire.mp3-0d5ab57cad97d69dd8c66e9cf4e04cfc.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

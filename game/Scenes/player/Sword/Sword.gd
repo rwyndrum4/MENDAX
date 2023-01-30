@@ -2,7 +2,8 @@
 * Programmer Name - Jason Truong
 * Description - Code for player's sword
 * Date Created - 11/20/2022
-			
+*Date Revisions: 1/29/2023 - Added sword swing
+
 """
 extends Node
 var direction
@@ -19,11 +20,16 @@ func _process(_delta):
 	if Input.is_action_just_pressed("mouse_click_left", false) or Input.is_action_just_pressed("jump", false):
 		if direction == "right":
 			ServerConnection.send_arena_sword("right")
+			
+			if $pivot/Sprite/swing.playing == false:
+				$pivot/Sprite/swing.play()
 			$AnimationPlayer.play("slash")
 			yield($AnimationPlayer, 'animation_finished')
 			$AnimationPlayer.play("slash_rev")
 			yield($AnimationPlayer, 'animation_finished')
 		else:
+			if $pivot/Sprite/swing.playing == false:
+				$pivot/Sprite/swing.play()
 			ServerConnection.send_arena_sword("left")
 			$AnimationPlayer.play("slashLeft")
 			yield($AnimationPlayer, 'animation_finished')

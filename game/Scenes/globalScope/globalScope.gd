@@ -17,6 +17,7 @@ onready var settings_menu = $GUI/SettingsMenu
 onready var world_env = $WorldEnvironment
 onready var fps_label = $GUI/fpsLabel
 onready var menu_button = $GUI/SettingsMenu/SettingsTabs/Exit/exitSettings/GridContainer/mainMenuButton
+onready var hotbar = $GUI/Hotbar
 
 #Scene Paths
 var main_menu = "res://Scenes/mainMenu/mainMenu.tscn"
@@ -236,6 +237,9 @@ func initialize_settings():
 	settings_menu._on_MasterVolSlider_value_changed(Save.game_data.master_vol)
 	settings_menu._on_MusicVolSlider_value_changed(Save.game_data.music_vol)
 	settings_menu._on_SfxVolSlider_value_changed(Save.game_data.sfx_vol)
+
+func toggle_hotbar(en: bool):
+	hotbar.visible = en
 
 func initialize_world_env():
 	#Call functions to use user saved brightness and bloom values

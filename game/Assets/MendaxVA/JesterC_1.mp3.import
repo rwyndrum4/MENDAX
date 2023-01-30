@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/JesterC_1.mp3-7bbd7f82daa8fe2f92a9ceb2c66536b8.mp3str"
+
+[deps]
+
+source_file="res://Assets/MendaxVA/JesterC_1.mp3"
+dest_files=[ "res://.import/JesterC_1.mp3-7bbd7f82daa8fe2f92a9ceb2c66536b8.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

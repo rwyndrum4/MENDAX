@@ -28,7 +28,7 @@ const FRICTION = 500
 var velocity = Vector2.ZERO
 
 # Signals
-signal player_died() #fires when player health goes >= 0
+signal player_died(p_id) #fires when player health goes >= 0
 
 """
 /*
@@ -113,7 +113,7 @@ func control_animations(vel):
 func take_damage(new_health) -> void:
 	healthbar.value = new_health
 	if healthbar.value <= 0:
-		emit_signal("player_died")
+		emit_signal("player_died", player_id)
 		queue_free()
 
 """
