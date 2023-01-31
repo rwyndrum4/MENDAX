@@ -14,6 +14,7 @@ extends Node
 #Member Variables
 onready var chat_box = $GUI/chatbox
 onready var settings_menu = $GUI/SettingsMenu
+onready var credits = $GUI/credits
 onready var world_env = $WorldEnvironment
 onready var fps_label = $GUI/fpsLabel
 onready var menu_button = $GUI/SettingsMenu/SettingsTabs/Exit/exitSettings/GridContainer/mainMenuButton
@@ -91,6 +92,7 @@ func _process(_delta): #if you want to use _delta, remove _
 			settings_menu.popup_centered_ratio()
 			in_popup = true
 	set_popup_locks()
+
 """
 /*
 * @pre called when global wants to change scenes
@@ -110,6 +112,10 @@ func _change_scene_to(state):
 		return
 	elif state == Global.scenes.MARKET:
 		current_scene = load(market).instance()
+	elif state == Global.scenes.CREDITS:
+		credits.popup_centered()
+		Global.state = Global.scenes.MAIN_MENU
+		return
 	elif state == Global.scenes.START_AREA:
 		current_scene = load(start_area).instance()
 	elif state == Global.scenes.CAVE:
@@ -262,6 +268,8 @@ func initialize_fps_label():
 func not_popup(state) -> bool:
 	match state:
 		Global.scenes.OPTIONS_FROM_MAIN:
+			return false
+		Global.scenes.CREDITS:
 			return false
 		_:
 			return true

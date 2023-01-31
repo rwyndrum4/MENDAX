@@ -154,7 +154,8 @@ func _on_Tests_pressed():
 */
 """
 func _on_Credits_pressed():
-	$credits.popup_centered()
+	#Tell globalScope to open credits popup
+	Global.state = Global.scenes.CREDITS
 
 """
 /*

@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://Scenes/minigames/rhythm/rhythm.gd" type="Script" id=1]
 [ext_resource path="res://Assets/Silver.ttf" type="DynamicFontData" id=2]
@@ -32,8 +32,14 @@ font_data = ExtResource( 2 )
 size = 32
 font_data = ExtResource( 2 )
 
+[sub_resource type="DynamicFont" id=7]
+size = 75
+font_data = ExtResource( 2 )
+
 [node name="RhythmGame" type="Node2D"]
 script = ExtResource( 1 )
+
+[node name="Conductor" parent="." instance=ExtResource( 3 )]
 
 [node name="onlineHandler" parent="." instance=ExtResource( 5 )]
 
@@ -93,8 +99,6 @@ margin_bottom = 220.0
 custom_colors/font_color = Color( 0.878431, 0.203922, 0.258824, 1 )
 custom_fonts/font = SubResource( 6 )
 
-[node name="Conductor" parent="." instance=ExtResource( 3 )]
-
 [node name="blue" parent="." instance=ExtResource( 4 )]
 position = Vector2( 420, 600 )
 _color_animation = "blue_rhythm"
@@ -133,3 +137,11 @@ default_color = Color( 0.968627, 0.4, 1, 1 )
 position = Vector2( -48, 0 )
 points = PoolVector2Array( 824, -8, 952, 752 )
 default_color = Color( 0.968627, 0.4, 1, 1 )
+
+[node name="wait_on_players" type="Label" parent="Frame"]
+margin_left = 334.0
+margin_top = 179.0
+margin_right = 934.0
+margin_bottom = 263.0
+custom_fonts/font = SubResource( 7 )
+text = "Waiting on other players..."

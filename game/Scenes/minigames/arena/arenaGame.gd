@@ -277,6 +277,7 @@ func _end_game():
 		var obj = o_player.get('player_obj')
 		if obj != null:
 			obj.queue_free()
+	Global.reset_minigame_players()
 	Global.state = Global.scenes.CAVE
 
 func chatbox_use(value):
@@ -426,7 +427,5 @@ func _enemy_defeated(_enemyID:int):
 		t.start()
 		yield(t, "timeout")
 		t.queue_free()
-		
-		# Transition back to 
-		playerHealth.visible = false
-		Global.state = Global.scenes.CAVE
+		#Go back to cave
+		_end_game()

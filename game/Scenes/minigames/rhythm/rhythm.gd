@@ -8,13 +8,9 @@
 
 ## TODO ##
 ################################################
+# Find song
 # Map notes to song
-# Handle notes being spawned on top of eachother
-# Online functionality
-# Sabatoge mechanic
-# Beginning and end screen
-# Handle multiple players joining
-# Multiple Difficulties?
+# Sabatoge mechanic (maybe)
 ################################################
 
 extends Node2D
@@ -31,7 +27,7 @@ onready var onlineHandler = $onlineHandler
 
 ## Global Variables ##
 
-const DEBUG = false
+var game_started: bool = false
 
 # Score variables
 var _score_dict: Dictionary = {} #hold the dictionary of all the player's scores
@@ -86,14 +82,112 @@ var _measure_four_beat = 1 #Fourth beat
 """
 func _ready():
 	randomize()
+	# warning-ignore:return_value_discarded
+	Global.connect("all_players_arrived", self, "_can_start_game")
+	# warning-ignore:return_value_discarded
+	ServerConnection.connect("minigame_can_start", self, "_can_start_game_other")
+	# warning-ignore:return_value_discarded
 	conductor.connect("measure", self, "_on_Conductor_measure")
+	# warning-ignore:return_value_discarded
 	conductor.connect("beat", self, "_on_Conductor_beat")
-	conductor.play_with_beat_offset(8)
 	var username = Save.game_data.username
 	add_player_score(username)
-	if not DEBUG:
-		onlineHandler.setup_players(username)
 	initialize_combo_scores()
+	if ServerConnection.match_exists() and ServerConnection.get_server_status():
+		onlineHandler.setup_players(username)
+		ServerConnection.send_spawn_notif()
+		if ServerConnection._player_num == 1:
+			#in case p1 is last player to get to minigame
+			if Global.get_minigame_players() == Global.get_num_players() - 1:
+				ServerConnection.send_minigame_can_start()
+				game_started = true
+				start_rhythm_game()
+		else:
+			var wait_for_start: Timer = Timer.new()
+			add_child(wait_for_start)
+			wait_for_start.wait_time = 5
+			wait_for_start.one_shot = true
+			wait_for_start.start()
+			# warning-ignore:return_value_discarded
+			wait_for_start.connect("timeout",self, "_start_timer_expired", [wait_for_start])
+	#else if single player game
+	else:
+		start_rhythm_game()
+
+"""
+/*
+* @pre Called once start time expires (happens once)
+* @post deletes timer and starts game if necessary
+* @param timer -> Timer
+* @return None
+*/
+"""
+func _start_timer_expired(timer):
+	timer.queue_free()
+	if not game_started:
+		game_started = true
+		start_rhythm_game()
+
+"""
+/*
+* @pre Called once all players have spawned into the minigame
+* 	only run by PLAYER 1
+* @post sends signal to other players to start, and start game
+* @param None
+* @return None
+*/
+"""
+func _can_start_game():
+	game_started = true
+	ServerConnection.send_minigame_can_start()
+	start_rhythm_game()
+
+"""
+/*
+* @pre Called when non-player 1 player receives signal to start game
+* @post starts the game if timer hasn't already done it for it
+* @param None
+* @return None
+*/
+"""
+func _can_start_game_other():
+	if not game_started:
+		game_started = true
+		start_rhythm_game()
+
+"""
+/*
+* @pre Called once the rhythm game can be started
+* @post Starts playing the song
+* @param None
+* @return None
+*/
+"""
+func start_rhythm_game():
+	$Frame/wait_on_players.queue_free()
+	var instructions:Popup = load("res://Scenes/minigames/rhythm/instructions.tscn").instance()
+	$Frame.add_child(instructions)
+	instructions.popup_centered()
+	instructions.connect("done_explaining",self, "_delete_instr_and_start_song", [instructions])
+
+"""
+/*
+* @pre None
+* @post Deletes instructions and starts the game after 2 sec pause
+* @param instr_scn -> Popup (popup scene to be deleted)
+* @return None
+*/
+"""
+func _delete_instr_and_start_song(instr_scn):
+	instr_scn.queue_free()
+	var wait_timer = Timer.new()
+	add_child(wait_timer)
+	wait_timer.wait_time = 2
+	wait_timer.one_shot = true
+	wait_timer.start()
+	yield(wait_timer, "timeout")
+	wait_timer.queue_free()
+	conductor.play_with_beat_offset(8)
 
 """
 /*
@@ -142,7 +236,7 @@ func add_player_score(p_name: String):
 """
 func change_score(p_name: String, new_points: int):
 	var added_score = new_points * _combo_multiplier
-	if not DEBUG:
+	if ServerConnection.match_exists() and ServerConnection.get_server_status():
 		onlineHandler.send_score_to_server(added_score)
 	if _score_dict.has(p_name):
 		#get the current score as a string
@@ -299,7 +393,34 @@ func _on_Conductor_beat(beat_position):
 		_measure_four_beat = 0 
 	if _song_position_in_beats > 404:
 		#end of the song
-		Global.state = Global.scenes.CAVE
+		end_rhythm_game()
+
+"""
+/*
+* @pre Called when the song has ended
+* @post Show final winner screen, then leave minigame
+* @param None
+* @return None
+*/
+"""
+func end_rhythm_game():
+	var result_dict = {}
+	for res in _score_dict.keys():
+		var label_txt = _score_dict[res]
+		var current_score = int(label_txt.text.get_slice(" ",1))
+		result_dict[res] = current_score
+	var end_screen:Popup = load("res://Scenes/minigames/rhythm/endScreen.tscn").instance()
+	$Frame.add_child(end_screen)
+	end_screen.add_results(result_dict)
+	end_screen.popup_centered()
+	var wait_timer = Timer.new()
+	add_child(wait_timer)
+	wait_timer.wait_time = 6
+	wait_timer.one_shot = true
+	wait_timer.start()
+	yield(wait_timer, "timeout")
+	wait_timer.queue_free()
+	Global.state = Global.scenes.CAVE
 
 """
 /*

@@ -77,6 +77,7 @@ func set_height(height_in: int):
 func brighten_hold_zone():
 	if _in_hold_phase:
 		hold_zone.modulate.a8 = 180
+		$first_sprite.modulate.a8 = 200
 		second_sprite.modulate.a8 = 200
 
 """

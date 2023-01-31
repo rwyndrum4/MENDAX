@@ -1,7 +1,6 @@
 [gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://Scenes/mainMenu/mainMenu.gd" type="Script" id=1]
-[ext_resource path="res://Scenes/mainMenu/creditsWindow.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Assets/mainMenuAssets/BAUHS93.TTF" type="DynamicFontData" id=3]
 [ext_resource path="res://Assets/mainMenuBG.png" type="Texture" id=4]
 [ext_resource path="res://Assets/SFX/myTongue.wav" type="AudioStream" id=5]
@@ -193,7 +192,6 @@ position = Vector2( 899, 404 )
 scale = Vector2( 0.40332, 0.37793 )
 texture = ExtResource( 6 )
 
-[node name="credits" parent="." instance=ExtResource( 2 )]
 [node name="click" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 11 )
 volume_db = 24.0
