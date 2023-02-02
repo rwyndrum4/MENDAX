@@ -72,6 +72,9 @@ var _measure_two_beat = 0 #Second beat
 var _measure_three_beat = 0 #Third beat
 var _measure_four_beat = 1 #Fourth beat
 
+const beatmap_file = preload("res://Scenes/minigames/rhythm/beatmap.gd")
+onready var _map = beatmap_file.new()
+
 """
 /*
 * @pre Called when the rhythm game starts
@@ -82,6 +85,8 @@ var _measure_four_beat = 1 #Fourth beat
 """
 func _ready():
 	randomize()
+	# warning-ignore:return_value_discarded
+	conductor.connect("finished",self,"end_rhythm_game")
 	# warning-ignore:return_value_discarded
 	Global.connect("all_players_arrived", self, "_can_start_game")
 	# warning-ignore:return_value_discarded
@@ -187,7 +192,7 @@ func _delete_instr_and_start_song(instr_scn):
 	wait_timer.start()
 	yield(wait_timer, "timeout")
 	wait_timer.queue_free()
-	conductor.play_with_beat_offset(8)
+	conductor.play_with_beat_offset(0)
 
 """
 /*
@@ -316,10 +321,14 @@ func increment_counters(type: int):
 """
 func _on_Conductor_measure(measure_position):
 	match measure_position:
-		1: _spawn_notes_random(_measure_one_beat)
-		2: _spawn_notes_random(_measure_two_beat)
-		3: _spawn_notes_random(_measure_three_beat)
-		4: _spawn_notes_random(_measure_four_beat)
+		1: if _measure_one_beat > 0:
+			_spawn_note_fixed_note(_song_position_in_beats)
+		2: if _measure_two_beat > 0:
+			_spawn_note_fixed_note(_song_position_in_beats)
+		3: if _measure_three_beat > 0:
+			_spawn_note_fixed_note(_song_position_in_beats)
+		4: if _measure_four_beat > 0:
+			_spawn_note_fixed_note(_song_position_in_beats)
 
 """
 /*
@@ -391,9 +400,6 @@ func _on_Conductor_beat(beat_position):
 		_measure_two_beat = 0 
 		_measure_three_beat = 0 
 		_measure_four_beat = 0 
-	if _song_position_in_beats > 404:
-		#end of the song
-		end_rhythm_game()
 
 """
 /*
@@ -404,6 +410,13 @@ func _on_Conductor_beat(beat_position):
 */
 """
 func end_rhythm_game():
+	var wait_timer_show_leaderboard = Timer.new()
+	add_child(wait_timer_show_leaderboard)
+	wait_timer_show_leaderboard.wait_time = 2
+	wait_timer_show_leaderboard.one_shot = true
+	wait_timer_show_leaderboard.start()
+	yield(wait_timer_show_leaderboard, "timeout")
+	wait_timer_show_leaderboard.queue_free()
 	var result_dict = {}
 	for res in _score_dict.keys():
 		var label_txt = _score_dict[res]
@@ -413,13 +426,13 @@ func end_rhythm_game():
 	$Frame.add_child(end_screen)
 	end_screen.add_results(result_dict)
 	end_screen.popup_centered()
-	var wait_timer = Timer.new()
-	add_child(wait_timer)
-	wait_timer.wait_time = 6
-	wait_timer.one_shot = true
-	wait_timer.start()
-	yield(wait_timer, "timeout")
-	wait_timer.queue_free()
+	var wait_timer_look_leaderboard = Timer.new()
+	add_child(wait_timer_look_leaderboard)
+	wait_timer_look_leaderboard.wait_time = 6
+	wait_timer_look_leaderboard.one_shot = true
+	wait_timer_look_leaderboard.start()
+	yield(wait_timer_look_leaderboard, "timeout")
+	wait_timer_look_leaderboard.queue_free()
 	Global.state = Global.scenes.CAVE
 
 """
@@ -456,17 +469,29 @@ func _spawn_notes_random(to_spawn: int):
 * @return None
 */
 """
-func _spawn_note_fixed_note(lane_num: int, note_type: int, height: int = 0):
-	var local_note
-	match note_type:
-		_note_types.NOTE: local_note = note
-		_note_types.HOLD: local_note = hold_note
-		_: local_note = note
-	note_instance = local_note.instance()
-	note_instance.initialize(lane_num, FAST)
-	if note_type == _note_types.HOLD:
-		note_instance.set_height(height)
-	add_child(note_instance)
+func _spawn_note_fixed_note(beat_pos:int):
+	var data:Array = []
+	if len(_map.beatmap) - 1 < beat_pos:
+		data = [0,[],[],[]]
+	else:
+		data = _map.beatmap[beat_pos]
+	var num_notes = data[0]
+	if num_notes == 0:
+		return
+	var lanes = data[1]
+	var types_of_notes = data[2]
+	var heights = data[3]
+	for i in range(num_notes):
+		var local_note
+		var note_type = types_of_notes[i]
+		match note_type:
+			_note_types.NOTE: local_note = note
+			_note_types.HOLD: local_note = hold_note
+		note_instance = local_note.instance()
+		note_instance.initialize(lanes[i], FAST)
+		if note_type == _note_types.HOLD:
+			note_instance.set_height(heights[i])
+		add_child(note_instance)
 
 """
 /*

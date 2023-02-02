@@ -1,10 +1,14 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Assets/Teko-Light.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://Scenes/minigames/rhythm/instructions.gd" type="Script" id=2]
 [ext_resource path="res://Assets/rhythm/note.png" type="Texture" id=3]
 [ext_resource path="res://Assets/Silver.ttf" type="DynamicFontData" id=4]
 [ext_resource path="res://Assets/rhythm/hit_bar_ex.png" type="Texture" id=5]
+
+[sub_resource type="DynamicFont" id=5]
+size = 160
+font_data = ExtResource( 1 )
 
 [sub_resource type="DynamicFont" id=1]
 size = 80
@@ -35,6 +39,7 @@ color = Color( 0.929412, 0.552941, 0.552941, 1 )
 [node name="text_instr" type="RichTextLabel" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+custom_fonts/bold_italics_font = SubResource( 5 )
 custom_fonts/bold_font = SubResource( 1 )
 custom_fonts/normal_font = SubResource( 2 )
 bbcode_enabled = true
@@ -108,6 +113,7 @@ texture = ExtResource( 3 )
 
 [node name="hit_bar_ex" type="Node2D" parent="."]
 visible = false
+position = Vector2( 0, -64 )
 
 [node name="hit_bar" type="Sprite" parent="hit_bar_ex"]
 position = Vector2( 448, 504 )

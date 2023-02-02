@@ -2,7 +2,7 @@
 
 extends AudioStreamPlayer
 
-export var bpm := 160
+export var bpm := 93
 export var measures := 4
 
 # Tracking the beat and song position
@@ -33,7 +33,6 @@ func _physics_process(_delta):
 		song_position_in_beats = int(floor(song_position / sec_per_beat)) + beats_before_start
 		_report_beat()
 
-
 func _report_beat():
 	if last_reported_beat < song_position_in_beats:
 		if measure > measures:
@@ -43,6 +42,8 @@ func _report_beat():
 		last_reported_beat = song_position_in_beats
 		measure += 1
 
+func set_bpm(new_bpm:int):
+	bpm = new_bpm
 
 func play_with_beat_offset(num):
 	beats_before_start = num
