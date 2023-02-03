@@ -58,7 +58,7 @@ const GODLIKE = 1500
 
 enum _note_types {
 	NOTE = 1,
-	HOLD
+	HOLD = 2
 }
 
 # Beat variables
@@ -169,11 +169,15 @@ func _can_start_game_other():
 */
 """
 func start_rhythm_game():
+	var DEBUG = true
 	$Frame/wait_on_players.queue_free()
 	var instructions:Popup = load("res://Scenes/minigames/rhythm/instructions.tscn").instance()
-	$Frame.add_child(instructions)
-	instructions.popup_centered()
-	instructions.connect("done_explaining",self, "_delete_instr_and_start_song", [instructions])
+	if not DEBUG:
+		$Frame.add_child(instructions)
+		instructions.popup_centered()
+		instructions.connect("done_explaining",self, "_delete_instr_and_start_song", [instructions])
+	else:
+		conductor.play_from_beat(180,0)
 
 """
 /*
@@ -340,66 +344,11 @@ func _on_Conductor_measure(measure_position):
 """
 func _on_Conductor_beat(beat_position):
 	_song_position_in_beats = beat_position
-	if _song_position_in_beats > 0:
-		_measure_one_beat = 1
-		_measure_two_beat = 0 
-		_measure_three_beat = 0
-		_measure_four_beat = 1
-	if _song_position_in_beats > 36:
-		_measure_one_beat = 1 
-		_measure_two_beat = 1 
-		_measure_three_beat = 1 
-		_measure_four_beat = 1 
-	if _song_position_in_beats > 98:
-		_measure_one_beat = 1
-		_measure_two_beat = 0 
-		_measure_three_beat = 1 
-		_measure_four_beat = 0 
-	if _song_position_in_beats > 132:
-		_measure_one_beat = 0
-		_measure_two_beat = 1
-		_measure_three_beat = 0
-		_measure_four_beat = 1
-	if _song_position_in_beats > 162:
-		_measure_one_beat = 1 
-		_measure_two_beat = 1 
-		_measure_three_beat = 1 
-		_measure_four_beat = 1 
-	if _song_position_in_beats > 194:
-		_measure_one_beat = 1
-		_measure_two_beat = 1 
-		_measure_three_beat = 1 
-		_measure_four_beat = 1 
-	if _song_position_in_beats > 228:
-		_measure_one_beat = 0 
-		_measure_two_beat = 1 
-		_measure_three_beat = 1 
-		_measure_four_beat = 1 
-	if _song_position_in_beats > 258:
-		_measure_one_beat = 1 
-		_measure_two_beat = 1 
-		_measure_three_beat = 1 
-		_measure_four_beat = 1
-	if _song_position_in_beats > 288:
-		_measure_one_beat = 0 
-		_measure_two_beat = 1 
-		_measure_three_beat = 0
-		_measure_four_beat = 1
-	if _song_position_in_beats > 322:
-		_measure_one_beat = 1
-		_measure_two_beat = 1 
-		_measure_three_beat = 2 
-		_measure_four_beat = 1 
-	if _song_position_in_beats > 388:
-		_measure_one_beat = 1 
-		_measure_two_beat = 0 
-		_measure_three_beat = 1 
-		_measure_four_beat = 0 
-	if _song_position_in_beats > 396:
-		_measure_one_beat = 0 
-		_measure_two_beat = 0 
-		_measure_three_beat = 0 
-		_measure_four_beat = 0 
+	print(_song_position_in_beats)
+	_measure_one_beat = 1
+	_measure_two_beat = 1 
+	_measure_three_beat = 1
+	_measure_four_beat = 1
 
 """
 /*
@@ -471,8 +420,8 @@ func _spawn_notes_random(to_spawn: int):
 """
 func _spawn_note_fixed_note(beat_pos:int):
 	var data:Array = []
-	if len(_map.beatmap) - 1 < beat_pos:
-		data = [0,[],[],[]]
+	if len(_map.beatmap) + 1 < beat_pos:
+		data = [1,[1],[1],[0]]
 	else:
 		data = _map.beatmap[beat_pos]
 	var num_notes = data[0]
@@ -488,9 +437,9 @@ func _spawn_note_fixed_note(beat_pos:int):
 			_note_types.NOTE: local_note = note
 			_note_types.HOLD: local_note = hold_note
 		note_instance = local_note.instance()
-		note_instance.initialize(lanes[i], FAST)
 		if note_type == _note_types.HOLD:
 			note_instance.set_height(heights[i])
+		note_instance.initialize(lanes[i], FAST)
 		add_child(note_instance)
 
 """

@@ -27,6 +27,7 @@ var _hit = false #track whether the note was hit or not
 */
 """
 func _ready():
+	$hit_sound.volume_db = -6
 	add_to_group("note")
 
 """
@@ -94,6 +95,8 @@ func initialize(lane: int, new_speed: int):
 """
 func destroy(score: int):
 	_hit = true
+	if score > 0:
+		$hit_sound.play()
 	match score:
 		3:
 			text_label.text = "PERFECT"

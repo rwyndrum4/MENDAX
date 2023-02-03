@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/teeth_noPitch.mp3-7e770de83b7b2b042212de5b25bc78c9.mp3str"
+
+[deps]
+
+source_file="res://Assets/rhythm/teeth_noPitch.mp3"
+dest_files=[ "res://.import/teeth_noPitch.mp3-7e770de83b7b2b042212de5b25bc78c9.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

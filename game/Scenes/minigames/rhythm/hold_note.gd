@@ -38,9 +38,9 @@ var _in_hold_phase = false #track if in the holding phase
 */
 """
 func _ready():
+	assert(_hold_height != 0, "ERROR: Hold note height not set")
+	$hit_sound.volume_db = 8
 	randomize()
-	if _hold_height == 0:
-		_hold_height = randi() % MAX_HOLD_ZONE_HEIGHT + MIN_HOLD_ZONE_HEIGHT
 	finish_object(_hold_height)
 	add_to_group("note")
 
@@ -76,6 +76,7 @@ func set_height(height_in: int):
 """
 func brighten_hold_zone():
 	if _in_hold_phase:
+		$hit_sound.play()
 		hold_zone.modulate.a8 = 180
 		$first_sprite.modulate.a8 = 200
 		second_sprite.modulate.a8 = 200
@@ -89,6 +90,7 @@ func brighten_hold_zone():
 */
 """
 func reset_hold_zone():
+	$hit_sound.stop()
 	if _in_hold_phase:
 		hold_zone.modulate.a8 = 75
 		second_sprite.modulate.a8 = 75
@@ -188,14 +190,7 @@ func destroy(score: int):
 		hold_zone.queue_free()
 		$first_sprite.queue_free()
 		$second_sprite.queue_free()
-		#Destroy the note when hit based on a timer
-		var destroy_timer: Timer = Timer.new()
-		destroy_timer.one_shot = true
-		destroy_timer.wait_time = 3
-		add_child(destroy_timer)
-		destroy_timer.start()
-		# warning-ignore: return_value_discarded
-		destroy_timer.connect("timeout", self, "_delete_node", [destroy_timer])
+		_delete_node()
 	#Give a score for the hit
 	match score:
 		3:
@@ -216,14 +211,13 @@ func destroy(score: int):
 
 """
 /*
-* @pre Called when the timer goes off
-* @post deletes the timer and note object
+* @pre None
+* @post deletes note object
 * @param None
 * @return None
 */
 """
-func _delete_node(timer_var: Timer):
-	timer_var.queue_free()
+func _delete_node():
 	queue_free()
 
 """
