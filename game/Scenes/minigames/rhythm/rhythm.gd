@@ -177,7 +177,7 @@ func start_rhythm_game():
 		instructions.popup_centered()
 		instructions.connect("done_explaining",self, "_delete_instr_and_start_song", [instructions])
 	else:
-		conductor.play_from_beat(180,0)
+		conductor.play_from_beat(210,0)
 
 """
 /*

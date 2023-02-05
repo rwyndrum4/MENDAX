@@ -39,7 +39,8 @@ var _in_hold_phase = false #track if in the holding phase
 """
 func _ready():
 	assert(_hold_height != 0, "ERROR: Hold note height not set")
-	$hit_sound.volume_db = 8
+	$slide_sound.volume_db = 8
+	$final_hit_sound.volume_db = -6
 	randomize()
 	finish_object(_hold_height)
 	add_to_group("note")
@@ -76,7 +77,7 @@ func set_height(height_in: int):
 """
 func brighten_hold_zone():
 	if _in_hold_phase:
-		$hit_sound.play()
+		$slide_sound.play()
 		hold_zone.modulate.a8 = 180
 		$first_sprite.modulate.a8 = 200
 		second_sprite.modulate.a8 = 200
@@ -90,7 +91,7 @@ func brighten_hold_zone():
 */
 """
 func reset_hold_zone():
-	$hit_sound.stop()
+	$slide_sound.stop()
 	if _in_hold_phase:
 		hold_zone.modulate.a8 = 75
 		second_sprite.modulate.a8 = 75
@@ -109,7 +110,7 @@ func _physics_process(delta):
 		if position.y > 1400:
 			get_parent().increment_counters(0)
 			if not _second_hit:
-				destroy(0)
+				destroy(0,true)
 	else:
 		_current_label.position.y -= LABEL_SPEED * delta
 		_current_label.modulate.a8 -= MODULATE_VALUE
@@ -169,11 +170,13 @@ func finish_object(zone_height: int):
 * @pre Called when note wants to be destroyed (needs to be called twice )
 * @post performs various tasks depending on if it is the first or second time called
 * @param score -> int (score type, perfect good etc)
+*		 note_fully_missed -> bool (optional: only used when note is fully missed)
 * @return None
 */
 """
-func destroy(score: int):
+func destroy(score: int, note_fully_missed = false):
 	var text_label
+	var delete_node = false
 	#Change parameters based on if it is on the first or second note
 	if not _first_hit:
 		text_label = first_label_text
@@ -182,6 +185,8 @@ func destroy(score: int):
 		_in_hold_phase = true
 		$first_collider.queue_free()
 	else:
+		if score > 0:
+			$final_hit_sound.play()
 		text_label = second_label_text
 		_current_label = $second_label
 		_second_hit = true
@@ -190,7 +195,7 @@ func destroy(score: int):
 		hold_zone.queue_free()
 		$first_sprite.queue_free()
 		$second_sprite.queue_free()
-		_delete_node()
+		delete_node = true
 	#Give a score for the hit
 	match score:
 		3:
@@ -208,6 +213,9 @@ func destroy(score: int):
 		0:
 			text_label.text = "MISSED"
 			text_label.modulate = Color("#e03442")
+	#covers the case if player misses the note entirely
+	if note_fully_missed or delete_node:
+		_delete_node()
 
 """
 /*
@@ -218,6 +226,8 @@ func destroy(score: int):
 */
 """
 func _delete_node():
+	if _second_hit:
+		yield($final_hit_sound, "finished")
 	queue_free()
 
 """
