@@ -155,6 +155,8 @@ func _on_Timer_timeout():
 	elif Global.minigame == 1:
 		Global.minigame = 2
 		Global.state = Global.scenes.ARENA_MINIGAME
+	else: 
+		begin_final_boss()
 
 """
 /*
@@ -337,3 +339,21 @@ func set_init_player_pos():
 			3: Global._player_positions_updated(num,Vector2(800,1450))
 			4: Global._player_positions_updated(num,Vector2(880,1450))
 			_: printerr("THERE ARE MORE THAN 4 PLAYERS TRYING TO BE SPAWNED IN EntrySpace.gd")
+			
+func begin_final_boss():
+	myTimer.stop()
+	print("got here!")
+	var bezier = preload("res://Scenes/FinalBoss/Bezier.tscn")
+	var bez1 = bezier.instance()
+	var bez2 = bezier.instance()
+	var bez3 = bezier.instance()
+	var bez4 = bezier.instance()
+	bez1.set("position", Vector2(2750, 2000))
+	bez2.set("position", Vector2(1500, 0))
+	bez3.set("position", Vector2(-10000, 4000))
+	bez4.set("position", Vector2(-7750, 3250))
+	add_child_below_node($Darkness, bez1)
+	add_child_below_node($Darkness, bez2)
+	add_child_below_node($Darkness, bez3)
+	add_child_below_node($Darkness, bez4)
+	
