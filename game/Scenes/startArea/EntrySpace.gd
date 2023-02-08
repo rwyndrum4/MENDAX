@@ -351,11 +351,15 @@ func set_init_player_pos():
 func begin_final_boss():
 	myTimer.stop()
 	# Generate beziers
-	var bezier = preload("res://Scenes/FinalBoss/Bezier.tscn")
-	var bez1 = bezier.instance()
-	var bez2 = bezier.instance()
-	var bez3 = bezier.instance()
-	var bez4 = bezier.instance()
+	var bez1 = preload("res://Scenes/FinalBoss/Bezier.tscn").instance()
+	var bez2 = preload("res://Scenes/FinalBoss/Bezier.tscn").instance()
+	var bez3 = preload("res://Scenes/FinalBoss/Bezier.tscn").instance()
+	var bez4 = preload("res://Scenes/FinalBoss/Bezier.tscn").instance()
+	# Assign ids (for the purpose of differentiating signals)
+	bez1._id = 1
+	bez2._id = 2
+	bez3._id = 3
+	bez4._id = 4
 	# Place beziers
 	bez1.set("position", Vector2(2750, 2000))
 	bez2.set("position", Vector2(1500, 0))
