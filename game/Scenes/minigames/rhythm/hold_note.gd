@@ -107,7 +107,7 @@ func reset_hold_zone():
 func _physics_process(delta):
 	if not (_first_hit and _second_hit):
 		position += _speed * delta
-		if position.y > 1400:
+		if position.y > 3000:
 			get_parent().increment_counters(0)
 			if not _second_hit:
 				destroy(0,true)

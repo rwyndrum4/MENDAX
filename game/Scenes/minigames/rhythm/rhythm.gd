@@ -169,15 +169,11 @@ func _can_start_game_other():
 */
 """
 func start_rhythm_game():
-	var DEBUG = true
 	$Frame/wait_on_players.queue_free()
 	var instructions:Popup = load("res://Scenes/minigames/rhythm/instructions.tscn").instance()
-	if not DEBUG:
-		$Frame.add_child(instructions)
-		instructions.popup_centered()
-		instructions.connect("done_explaining",self, "_delete_instr_and_start_song", [instructions])
-	else:
-		conductor.play_from_beat(210,0)
+	$Frame.add_child(instructions)
+	instructions.popup_centered()
+	instructions.connect("done_explaining",self, "_delete_instr_and_start_song", [instructions])
 
 """
 /*
@@ -359,13 +355,6 @@ func _on_Conductor_beat(beat_position):
 */
 """
 func end_rhythm_game():
-	var wait_timer_show_leaderboard = Timer.new()
-	add_child(wait_timer_show_leaderboard)
-	wait_timer_show_leaderboard.wait_time = 2
-	wait_timer_show_leaderboard.one_shot = true
-	wait_timer_show_leaderboard.start()
-	yield(wait_timer_show_leaderboard, "timeout")
-	wait_timer_show_leaderboard.queue_free()
 	var result_dict = {}
 	for res in _score_dict.keys():
 		var label_txt = _score_dict[res]
@@ -421,7 +410,7 @@ func _spawn_notes_random(to_spawn: int):
 func _spawn_note_fixed_note(beat_pos:int):
 	var data:Array = []
 	if len(_map.beatmap) + 1 < beat_pos:
-		data = [1,[1],[1],[0]]
+		data = [0]
 	else:
 		data = _map.beatmap[beat_pos]
 	var num_notes = data[0]

@@ -1,7 +1,7 @@
 extends Popup
 
 func add_results(results:Dictionary):
-	var res_str: String = "[center][color=#202124]Game Over![/color][/center]\n"
+	var res_str: String = "[center][color=#202124]Results[/color][/center]\n"
 	var count: int = 0
 	for p_name in results.keys():
 		count += 1
