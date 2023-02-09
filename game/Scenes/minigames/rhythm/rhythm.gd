@@ -85,6 +85,7 @@ onready var _map = beatmap_file.new()
 """
 func _ready():
 	randomize()
+	get_parent().toggle_hotbar(false)
 	# warning-ignore:return_value_discarded
 	conductor.connect("finished",self,"end_rhythm_game")
 	# warning-ignore:return_value_discarded
@@ -371,6 +372,7 @@ func end_rhythm_game():
 	wait_timer_look_leaderboard.start()
 	yield(wait_timer_look_leaderboard, "timeout")
 	wait_timer_look_leaderboard.queue_free()
+	get_parent().toggle_hotbar(true)
 	Global.state = Global.scenes.CAVE
 
 """
