@@ -21,14 +21,14 @@ func _ready():
 
 func _process(delta):
 	_timer += delta
-	if _timer > 12:
+	if _timer > 16:
 		emit_signal("done_explaining")
-	elif _timer > 8:
+	elif _timer > 12:
 		$reg_note_fd.hide()
 		$hold_note.hide()
 		var extra: String = "[i][b][center]" + str(4 - (int(_timer) % 4)) + "[/center][/b][/i]"
 		$text_instr.bbcode_text = _s3 + extra
-	elif _timer > 4:
+	elif _timer > 6:
 		$hit_bar_ex.hide()
 		$text_instr.bbcode_text = _s2
 		$reg_note_fd.show()

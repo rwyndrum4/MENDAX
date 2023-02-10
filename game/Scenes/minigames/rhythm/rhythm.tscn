@@ -1,10 +1,11 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://Scenes/minigames/rhythm/rhythm.gd" type="Script" id=1]
 [ext_resource path="res://Assets/Silver.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://Scenes/minigames/rhythm/conductor.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Scenes/minigames/rhythm/hit_buttons.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Scenes/minigames/rhythm/onlineHandler.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Scenes/minigames/rhythm/FULL_COMBO.gd" type="Script" id=6]
 
 [sub_resource type="DynamicFont" id=1]
 size = 60
@@ -34,6 +35,12 @@ font_data = ExtResource( 2 )
 
 [sub_resource type="DynamicFont" id=7]
 size = 75
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=8]
+size = 120
+outline_size = 7
+outline_color = Color( 1, 0, 0.305882, 1 )
 font_data = ExtResource( 2 )
 
 [node name="RhythmGame" type="Node2D"]
@@ -145,3 +152,13 @@ margin_right = 934.0
 margin_bottom = 263.0
 custom_fonts/font = SubResource( 7 )
 text = "Waiting on other players..."
+
+[node name="FULL_COMBO" type="Label" parent="Frame"]
+visible = false
+margin_left = 496.0
+margin_top = 248.0
+margin_right = 764.0
+margin_bottom = 517.0
+custom_fonts/font = SubResource( 8 )
+align = 1
+script = ExtResource( 6 )

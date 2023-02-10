@@ -24,6 +24,7 @@ onready var good_count = $Combo/good_count
 onready var okay_count = $Combo/okay_count
 onready var misses_count = $Combo/misses_count
 onready var onlineHandler = $onlineHandler
+onready var full_combo = $Frame/FULL_COMBO
 
 ## Global Variables ##
 
@@ -55,6 +56,7 @@ const SLOW = 500
 const MEDIUM = 750
 const FAST = 1000
 const GODLIKE = 1500
+const CHAR_READ_RATE = 0.05
 
 enum _note_types {
 	NOTE = 1,
@@ -341,6 +343,8 @@ func _on_Conductor_measure(measure_position):
 """
 func _on_Conductor_beat(beat_position):
 	_song_position_in_beats = beat_position
+	if _song_position_in_beats == 410 and _combo_multiplier == 404:
+		full_combo.start_ani()
 	print(_song_position_in_beats)
 	_measure_one_beat = 1
 	_measure_two_beat = 1 
@@ -366,6 +370,7 @@ func end_rhythm_game():
 	end_screen.add_results(result_dict)
 	end_screen.popup_centered()
 	var wait_timer_look_leaderboard = Timer.new()
+	full_combo.hide()
 	add_child(wait_timer_look_leaderboard)
 	wait_timer_look_leaderboard.wait_time = 6
 	wait_timer_look_leaderboard.one_shot = true
