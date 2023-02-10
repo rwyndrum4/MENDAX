@@ -370,4 +370,10 @@ func begin_final_boss():
 	add_child_below_node($Darkness, bez2)
 	add_child_below_node($Darkness, bez3)
 	add_child_below_node($Darkness, bez4)
+	# Initialize, place, and spawn boss
+	var boss = preload("res://Scenes/FinalBoss/Boss.tscn").instance()
+	boss.set("position", Vector2(-4250, 2160))
+	add_child_below_node($Darkness, boss)
+	# Zoom out camera so player can view Mendax in all his glory
+	$Player.get_node("Camera2D").set("zoom", Vector2(2, 2))
 	
