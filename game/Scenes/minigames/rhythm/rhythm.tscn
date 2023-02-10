@@ -122,7 +122,7 @@ _color_animation = "orange_rhythm"
 position = Vector2( 810, 600 )
 _color_animation = "red_rhythm"
 
-[node name="Frame" type="CanvasLayer" parent="."]
+[node name="Frame" type="Node" parent="."]
 
 [node name="top_of_buttons" type="Line2D" parent="Frame"]
 points = PoolVector2Array( 360, 552, 872, 552 )
@@ -162,3 +162,5 @@ margin_bottom = 517.0
 custom_fonts/font = SubResource( 8 )
 align = 1
 script = ExtResource( 6 )
+
+[node name="Tween" type="Tween" parent="Frame/FULL_COMBO"]

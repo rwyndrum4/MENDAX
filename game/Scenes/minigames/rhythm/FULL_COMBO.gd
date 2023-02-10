@@ -1,17 +1,19 @@
 extends Label
 
-var my_text = "Full Combo!!!"
+var my_text = "Full\nCombo!!!"
 
-func start_ani():
+func start_ani(full_combo:bool):
+	if not full_combo:
+		my_text = "Song\nComplete!!"
 	show()
-	for l in my_text:
-		if l == " ":
-			l = "\n"
-		text += l
-		var t = Timer.new()
-		add_child(t)
-		t.wait_time = 0.15
-		t.one_shot = true
-		t.start()
-		yield(t, "timeout")
-		t.queue_free()
+	text = my_text
+	$Tween.interpolate_property(
+		self,
+		"percent_visible",
+		0.0,
+		1.0,
+		2.0,
+		Tween.TRANS_LINEAR,
+		Tween.EASE_IN_OUT
+	)
+	$Tween.start()

@@ -6,13 +6,6 @@
 * Date Revisions: 12/21/2022 - Adding support for other files
 """
 
-## TODO ##
-################################################
-# Find song
-# Map notes to song
-# Sabatoge mechanic (maybe)
-################################################
-
 extends Node2D
 
 # Member Variables
@@ -39,6 +32,7 @@ var _good_counter = 0 #variable to count how many goods player gets
 var _okay_counter = 0 #variable to count how many okays player gets
 var _missed_counter = 0 #variable to count how many notes missed
 var _combo_multiplier = 1 #variable to track how much to multiply points by
+var _never_missed = true
 
 # Song variables
 var _song_position_in_beats = 0 #Tracks where the song is in terms of beats
@@ -51,12 +45,8 @@ var hold_note = load("res://Scenes/minigames/rhythm/hold_note.tscn") #Hold Note 
 var note_instance #Global instance of node to be spawned into the game
 const MAX_LANES = 4
 
-# Note speeds
-const SLOW = 500
-const MEDIUM = 750
+# Note speed
 const FAST = 1000
-const GODLIKE = 1500
-const CHAR_READ_RATE = 0.05
 
 enum _note_types {
 	NOTE = 1,
@@ -69,10 +59,10 @@ enum _note_types {
 # measure, the measure will reset and another four beats will play, continuing 
 # on until the song ends
 ################################################################################
-var _measure_one_beat = 1 #First beat
-var _measure_two_beat = 0 #Second beat
-var _measure_three_beat = 0 #Third beat
-var _measure_four_beat = 1 #Fourth beat
+var _measure_one_beat = 1
+var	_measure_two_beat = 1 
+var	_measure_three_beat = 1
+var	_measure_four_beat = 1
 
 const beatmap_file = preload("res://Scenes/minigames/rhythm/beatmap.gd")
 onready var _map = beatmap_file.new()
@@ -289,6 +279,7 @@ func increment_counters(type: int):
 	#Increment combo if player hits, else reset combo
 	match type:
 		0: 
+			_never_missed = false
 			_current_combo = 0
 			_combo_multiplier = 1
 		_: 
@@ -343,13 +334,11 @@ func _on_Conductor_measure(measure_position):
 """
 func _on_Conductor_beat(beat_position):
 	_song_position_in_beats = beat_position
-	if _song_position_in_beats == 410 and _combo_multiplier == 404:
-		full_combo.start_ani()
 	print(_song_position_in_beats)
-	_measure_one_beat = 1
-	_measure_two_beat = 1 
-	_measure_three_beat = 1
-	_measure_four_beat = 1
+	if _song_position_in_beats == 410 and _never_missed:
+		full_combo.start_ani(true)
+	elif _song_position_in_beats == 410 and (not _never_missed):
+		full_combo.start_ani(false)
 
 """
 /*
@@ -379,30 +368,6 @@ func end_rhythm_game():
 	wait_timer_look_leaderboard.queue_free()
 	get_parent().toggle_hotbar(true)
 	Global.state = Global.scenes.CAVE
-
-"""
-/*
-* @pre Called for each beat that is called with a note
-* @post Helps spawn in the notes to the game
-* @param to_spawn -> int (number of notes to spawn)
-* @return None
-*/
-"""
-func _spawn_notes_random(to_spawn: int):
-	var local_note = gen_rand_note()
-	if to_spawn > 0:
-		lane = randi() % MAX_LANES
-		note_instance = local_note.instance()
-		note_instance.initialize(lane, FAST)
-		add_child(note_instance)
-	if to_spawn > 1:
-		for _i in range(0, to_spawn):
-			while rand == lane:
-				rand = randi() % MAX_LANES
-			lane = rand
-			note_instance = local_note.instance()
-			note_instance.initialize(lane, FAST)
-			add_child(note_instance)
 
 """
 /*
@@ -452,3 +417,27 @@ func gen_rand_note() -> Object:
 		return note
 	else:
 		return hold_note
+
+"""
+/*
+* @pre Called for each beat that is called with a note
+* @post Helps spawn in the notes to the game
+* @param to_spawn -> int (number of notes to spawn)
+* @return None
+*/
+"""
+func _spawn_notes_random(to_spawn: int):
+	var local_note = gen_rand_note()
+	if to_spawn > 0:
+		lane = randi() % MAX_LANES
+		note_instance = local_note.instance()
+		note_instance.initialize(lane, FAST)
+		add_child(note_instance)
+	if to_spawn > 1:
+		for _i in range(0, to_spawn):
+			while rand == lane:
+				rand = randi() % MAX_LANES
+			lane = rand
+			note_instance = local_note.instance()
+			note_instance.initialize(lane, FAST)
+			add_child(note_instance)
