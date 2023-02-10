@@ -14,8 +14,9 @@ texture = ExtResource( 1 )
 [node name="Light2D" type="Light2D" parent="."]
 position = Vector2( -6, -46 )
 texture = ExtResource( 2 )
-texture_scale = 6.0
+texture_scale = 20.0
 color = Color( 1, 0.996078, 0.717647, 1 )
+energy = 0.9
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( 0, -0.5 )
