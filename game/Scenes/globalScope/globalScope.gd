@@ -134,6 +134,7 @@ func _change_scene_to(state):
 		$BGM/arena.play()
 		current_scene = load(arena_minigame).instance()
 	elif state == Global.scenes.RHYTHM_MINIGAME:
+		stopall()
 		current_scene = load(rhythm_minigame).instance()
 	elif state == Global.scenes.GAMEOVER:
 		stopall()
