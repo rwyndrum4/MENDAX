@@ -6,28 +6,28 @@ onready var ListItem=$VBoxContainer/ItemList
 onready var RestartButton=$VBoxContainer/Button
 var data=[
 	{
-		"question": "If you freeze water, what do you get?",
-		"options": ["Ice", "Bomb", "Fire"],
+		"question": "Placeholder 1",
+		"options": ["1", "2", "3"],
 		"correctOptionIndex": 0
 	},	
 	{
-		"question": "What's the name of a place you go to see lots of animals?",
-		"options": ["Airport", "School", "Zoo"],
+		"question": "Placeholder 2",
+		"options": ["1", "2", "3"],
 		"correctOptionIndex": 2
 	},
 	{
-		"question": "What do caterpillars turn into?",
-		"options": ["Butterflies", "Fish", "Birds"],
+		"question": "Placeholder 3",
+		"options": ["1", "2", "3"],
 		"correctOptionIndex": 0
 	},	
 	{
-		"question": "On which holiday do you go trick-or-treating?",
-		"options": ["Christmas", "Halloween", "Easter"],
+		"question": "Placeholder 4",
+		"options": ["1", "2", "3"],
 		"correctOptionIndex": 1
 	},
 	{
-		"question": "Which is the fastest land animal?",
-		"options": ["Turtle", "Cheetah", "Snail"],
+		"question": "Placeholder 5",
+		"options": ["1", "2", "3"],
 		"correctOptionIndex": 1
 	}
 ]
