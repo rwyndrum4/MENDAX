@@ -16,7 +16,7 @@ extends Node
 */
 """
 func _ready():
-	$tavernbg.play() #constant looping bg music
+	pass#$tavernbg.play() #constant looping bg music
 """
 /*
 * @pre Button is pressed

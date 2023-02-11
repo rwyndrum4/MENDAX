@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/Wholesome.mp3-267deb0cfed95656251912aacf7ac0b1.mp3str"
+
+[deps]
+
+source_file="res://Assets/SFX/bgm/Wholesome.mp3"
+dest_files=[ "res://.import/Wholesome.mp3-267deb0cfed95656251912aacf7ac0b1.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0
