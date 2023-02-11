@@ -6,8 +6,8 @@ onready var ListItem=$VBoxContainer/ItemList
 onready var RestartButton=$VBoxContainer/Button
 var data=[
 	{
-		"question": "Placeholder 1",
-		"options": ["1", "2", "3"],
+		"question": "Who inflicted the most damage?",
+		"options": ["Ben", "Freeman", "Mohit"],
 		"correctOptionIndex": 0
 	},	
 	{
