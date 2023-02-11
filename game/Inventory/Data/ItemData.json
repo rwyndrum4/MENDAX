@@ -3,5 +3,11 @@
 	"ItemCategory": "Coin",
 	"StackSize": 100,
 	"Description": "Money! Spend at the store"
+	},
+	"Torch": {
+	"ItemCategory": "Torch",
+	"StackSize": 1,
+	"BurnTimeRemaining": 120,
+	"Description": "Fire!",
 	}
 }

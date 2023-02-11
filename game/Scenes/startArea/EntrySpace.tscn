@@ -109,8 +109,10 @@ shadow_enabled = true
 shadow_gradient_length = 10.0
 
 [node name="Darkness" type="Light2D" parent="."]
-position = Vector2( 192, 1800 )
+position = Vector2( -3120, 3208 )
+scale = Vector2( 2.74444, 1.47778 )
 texture = ExtResource( 5 )
+texture_scale = 3.0
 color = Color( 0.870588, 0.870588, 0.870588, 1 )
 mode = 1
 range_item_cull_mask = 3

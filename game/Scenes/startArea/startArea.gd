@@ -32,6 +32,7 @@ func _ready():
 		spawn_players()
 	#This is how you queue text to the textbox queue
 	textBox.queue_text("If you're ready to begin your challenge, press enter")
+	get_parent().toggle_hotbar(true)
 
 """
 /*

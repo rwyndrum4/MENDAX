@@ -14,6 +14,7 @@
 [ext_resource path="res://Assets/SFX/bgm/Professor Umlaut.mp3" type="AudioStream" id=12]
 [ext_resource path="res://Assets/SFX/bgm/Black Vortex.mp3" type="AudioStream" id=13]
 [ext_resource path="res://Assets/SFX/bgm/Lost Time.mp3" type="AudioStream" id=14]
+[ext_resource path="res://Inventory/Hotbar.tscn" type="PackedScene" id=15]
 
 [sub_resource type="DynamicFont" id=1]
 font_data = ExtResource( 7 )
@@ -72,5 +73,6 @@ bus = "Music"
 stream = ExtResource( 14 )
 volume_db = -15.0
 bus = "Music"
+[node name="Hotbar" parent="GUI" instance=ExtResource( 15 )]
 
 [connection signal="message_sent" from="GUI/chatbox" to="." method="_on_chatbox_message_sent"]
