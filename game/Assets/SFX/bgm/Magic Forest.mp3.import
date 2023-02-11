@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/Magic Forest.mp3-5f5e1d99a9ad6fe4ccc249e0b1000c13.mp3str"
+
+[deps]
+
+source_file="res://Assets/SFX/bgm/Magic Forest.mp3"
+dest_files=[ "res://.import/Magic Forest.mp3-5f5e1d99a9ad6fe4ccc249e0b1000c13.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

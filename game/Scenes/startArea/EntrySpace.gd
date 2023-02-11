@@ -159,6 +159,8 @@ func _on_Timer_timeout():
 	elif Global.minigame == 2:
 		Global.minigame = 3
 		Global.state = Global.scenes.RHYTHM_MINIGAME
+	else: 
+		begin_final_boss()
 
 """
 /*
@@ -341,3 +343,41 @@ func set_init_player_pos():
 			3: Global._player_positions_updated(num,Vector2(800,1450))
 			4: Global._player_positions_updated(num,Vector2(880,1450))
 			_: printerr("THERE ARE MORE THAN 4 PLAYERS TRYING TO BE SPAWNED IN EntrySpace.gd")
+
+"""
+/*
+* @pre Called by the timer after it reaches 0 when all minigames have been completed.
+* @post begins the final boss fight
+* @param None
+* @return Currently, timer stops and four bezier objects spawn
+*/
+"""			
+func begin_final_boss():
+	myTimer.stop()
+	# Generate beziers
+	var bez1 = preload("res://Scenes/FinalBoss/Bezier.tscn").instance()
+	var bez2 = preload("res://Scenes/FinalBoss/Bezier.tscn").instance()
+	var bez3 = preload("res://Scenes/FinalBoss/Bezier.tscn").instance()
+	var bez4 = preload("res://Scenes/FinalBoss/Bezier.tscn").instance()
+	# Assign ids (for the purpose of differentiating signals)
+	bez1._id = 1
+	bez2._id = 2
+	bez3._id = 3
+	bez4._id = 4
+	# Place beziers
+	bez1.set("position", Vector2(2750, 2000))
+	bez2.set("position", Vector2(1500, 0))
+	bez3.set("position", Vector2(-10000, 4000))
+	bez4.set("position", Vector2(-7750, 3250))
+	# Add beziers to scene
+	add_child_below_node($Darkness, bez1)
+	add_child_below_node($Darkness, bez2)
+	add_child_below_node($Darkness, bez3)
+	add_child_below_node($Darkness, bez4)
+	# Initialize, place, and spawn boss
+	var boss = preload("res://Scenes/FinalBoss/Boss.tscn").instance()
+	boss.set("position", Vector2(-4250, 2160))
+	add_child_below_node($worldMap, boss)
+	# Zoom out camera so player can view Mendax in all his glory
+	$Player.get_node("Camera2D").set("zoom", Vector2(2, 2))
+	

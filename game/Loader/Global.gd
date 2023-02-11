@@ -47,6 +47,7 @@ enum scenes {
 	ARENA_MINIGAME,
 	RHYTHM_MINIGAME,
 	GAMEOVER
+	QUIZ
 }
 
 # Hold dictionary mapping player num to name

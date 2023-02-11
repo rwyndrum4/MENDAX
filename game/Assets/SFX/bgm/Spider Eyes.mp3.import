@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/Spider Eyes.mp3-abc9b98df71dc23a8c5d307958e86b39.mp3str"
+
+[deps]
+
+source_file="res://Assets/SFX/bgm/Spider Eyes.mp3"
+dest_files=[ "res://.import/Spider Eyes.mp3-abc9b98df71dc23a8c5d307958e86b39.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0
