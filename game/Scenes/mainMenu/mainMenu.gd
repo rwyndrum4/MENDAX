@@ -136,8 +136,12 @@ func _on_Market_pressed():
 */
 """
 func _on_Tests_pressed():
-	Global.state = Global.scenes.CAVE
-
+	"""
+	/*
+	*Global.state = Global.scenes.CAVE
+*/
+"""
+	Global.state=Global.scenes.QUIZ
 """
 /*
 * @pre Credits Button is pressed
