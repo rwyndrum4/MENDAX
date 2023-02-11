@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/Black Vortex.mp3-a1a0e331f97f5d884e5baeff35201a99.mp3str"
+
+[deps]
+
+source_file="res://Assets/SFX/bgm/Black Vortex.mp3"
+dest_files=[ "res://.import/Black Vortex.mp3-a1a0e331f97f5d884e5baeff35201a99.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

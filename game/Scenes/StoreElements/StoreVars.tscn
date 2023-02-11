@@ -4,7 +4,7 @@
 [ext_resource path="res://Scenes/StoreElements/BalanceText.gd" type="Script" id=2]
 [ext_resource path="res://Assets/ARIALBD.TTF" type="DynamicFontData" id=3]
 [ext_resource path="res://Assets/SFX/cash-register-purchase-87313.mp3" type="AudioStream" id=4]
-[ext_resource path="res://Assets/SFX/tavern.mp3" type="AudioStream" id=5]
+[ext_resource path="res://Assets/SFX/bgm/Wholesome.mp3" type="AudioStream" id=5]
 
 [sub_resource type="DynamicFont" id=1]
 size = 48
@@ -78,7 +78,7 @@ bus = "SFX"
 
 [node name="tavernbg" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 5 )
-volume_db = -27.092
+volume_db = -16.526
 bus = "Music"
 
 [connection signal="pressed" from="Node2D/VBoxContainer/addMoney" to="." method="_on_addMoney_pressed"]

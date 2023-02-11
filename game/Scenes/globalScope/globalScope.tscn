@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://Scenes/chatBox/chatBox.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Scenes/SettingsMenu/settingsMenu.tscn" type="PackedScene" id=2]
@@ -8,6 +8,12 @@
 [ext_resource path="res://Scenes/worldEnvironment/worldEnv.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Assets/ARIALBD.TTF" type="DynamicFontData" id=7]
 [ext_resource path="res://Scenes/fpsDisplay/fpsLabel.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Assets/SFX/bgm/Magic Forest.mp3" type="AudioStream" id=9]
+[ext_resource path="res://Assets/SFX/bgm/Wholesome.mp3" type="AudioStream" id=10]
+[ext_resource path="res://Assets/SFX/bgm/Static Motion.mp3" type="AudioStream" id=11]
+[ext_resource path="res://Assets/SFX/bgm/Professor Umlaut.mp3" type="AudioStream" id=12]
+[ext_resource path="res://Assets/SFX/bgm/Black Vortex.mp3" type="AudioStream" id=13]
+[ext_resource path="res://Assets/SFX/bgm/Lost Time.mp3" type="AudioStream" id=14]
 
 [sub_resource type="DynamicFont" id=1]
 font_data = ExtResource( 7 )
@@ -34,5 +40,37 @@ visible = false
 margin_right = 59.0
 margin_bottom = 24.0
 custom_fonts/font = SubResource( 1 )
+
+[node name="BGM" type="AudioStreamPlayer" parent="."]
+
+[node name="mainmenu" type="AudioStreamPlayer" parent="BGM"]
+stream = ExtResource( 9 )
+volume_db = -15.0
+bus = "Music"
+
+[node name="market" type="AudioStreamPlayer" parent="BGM"]
+stream = ExtResource( 10 )
+volume_db = -15.0
+bus = "Music"
+
+[node name="cave" type="AudioStreamPlayer" parent="BGM"]
+stream = ExtResource( 11 )
+volume_db = -16.737
+bus = "Music"
+
+[node name="riddler" type="AudioStreamPlayer" parent="BGM"]
+stream = ExtResource( 12 )
+volume_db = -25.551
+bus = "Music"
+
+[node name="arena" type="AudioStreamPlayer" parent="BGM"]
+stream = ExtResource( 13 )
+volume_db = -26.304
+bus = "Music"
+
+[node name="gameover" type="AudioStreamPlayer" parent="BGM"]
+stream = ExtResource( 14 )
+volume_db = -15.0
+bus = "Music"
 
 [connection signal="message_sent" from="GUI/chatbox" to="." method="_on_chatbox_message_sent"]

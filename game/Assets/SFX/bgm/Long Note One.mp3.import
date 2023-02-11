@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/Long Note One.mp3-ee61660cb0ce9d001fb92e8adbfe3c6b.mp3str"
+
+[deps]
+
+source_file="res://Assets/SFX/bgm/Long Note One.mp3"
+dest_files=[ "res://.import/Long Note One.mp3-ee61660cb0ce9d001fb92e8adbfe3c6b.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

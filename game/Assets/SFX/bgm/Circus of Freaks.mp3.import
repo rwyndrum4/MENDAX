@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/Circus of Freaks.mp3-e7e17c46141ebaaeb2033b3fb6e8ef8d.mp3str"
+
+[deps]
+
+source_file="res://Assets/SFX/bgm/Circus of Freaks.mp3"
+dest_files=[ "res://.import/Circus of Freaks.mp3-e7e17c46141ebaaeb2033b3fb6e8ef8d.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

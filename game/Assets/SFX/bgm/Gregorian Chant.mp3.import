@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/Gregorian Chant.mp3-90b376c9ea0541d293d322aea57c9f9a.mp3str"
+
+[deps]
+
+source_file="res://Assets/SFX/bgm/Gregorian Chant.mp3"
+dest_files=[ "res://.import/Gregorian Chant.mp3-90b376c9ea0541d293d322aea57c9f9a.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

@@ -50,6 +50,7 @@ var typing_code: bool = false
 """
 func _ready():
 	initialize_menu()
+	#$bgm.play()
 	# warning-ignore:return_value_discarded
 	ServerConnection.connect("character_spawned",self,"spawn_character")
 	# warning-ignore:return_value_discarded

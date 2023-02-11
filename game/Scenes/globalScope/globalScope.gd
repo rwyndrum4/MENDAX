@@ -16,6 +16,7 @@ onready var chat_box = $GUI/chatbox
 onready var settings_menu = $GUI/SettingsMenu
 onready var world_env = $WorldEnvironment
 onready var fps_label = $GUI/fpsLabel
+onready var current_song = $BGM/mainmenu
 
 #Scene Paths
 var main_menu = "res://Scenes/mainMenu/mainMenu.tscn"
@@ -58,6 +59,7 @@ func _ready():
 	add_child(current_scene)
 	Global.state = Global.scenes.MAIN_MENU
 	local_state = Global.scenes.MAIN_MENU
+	$BGM/mainmenu.play()
 	#Connect to Server and join world
 	yield(server_checks(), "completed")
 
@@ -107,17 +109,32 @@ func _change_scene_to(state):
 	elif state == Global.scenes.START_AREA:
 		current_scene = load(start_area).instance()
 	elif state == Global.scenes.CAVE:
+		stopall()
+		$BGM/cave.play()
 		current_scene = load(cave).instance()
 	elif state == Global.scenes.RIDDLER_MINIGAME:
+		stopall()
+		$BGM/riddler.play()
 		current_scene = load(riddler_minigame).instance()
 	elif state == Global.scenes.ARENA_MINIGAME:
+		stopall()
+		$BGM/arena.play()
 		current_scene = load(arena_minigame).instance()
 	elif state == Global.scenes.GAMEOVER:
+		stopall()
+		$BGM/gameover.play()
+		current_song = "$BGM/gameover"
 		current_scene = load(gameover).instance()
 	#add scene to tree and revise local state
 	add_child(current_scene)
 	local_state = Global.state
 
+func stopall():
+	$BGM/mainmenu.stop()
+	$BGM/cave.stop()
+	$BGM/riddler.stop()
+	$BGM/arena.stop()
+	$BGM/gameover.stop()
 """
 /*
 * @pre called once in _ready function
