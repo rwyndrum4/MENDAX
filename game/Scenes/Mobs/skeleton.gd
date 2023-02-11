@@ -201,7 +201,6 @@ func _on_skeletonAnimationPlayer_animation_finished(_anim_name):
 		set_physics_process(false)
 		$death.play()
 		yield($death, "finished")
-		
 		GlobalSignals.emit_signal("enemyDefeated", 0) #replace 0 with indication of enemy ID later
 		
 		queue_free()

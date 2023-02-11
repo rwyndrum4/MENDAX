@@ -12,13 +12,14 @@ onready var chandelierBox = $MyHurtBox/hitbox
 onready var chandelierAtkBox = $MyHitBox/CollisionShape2D
 
 var _isIn = false
-var _isDead = true
+var _isDead = false
 var _leveled_up: bool = false
 
 #motion vector for enemy
 var _motion=Vector2()
 var _timer=0;
 var _fire_wait_time: int = 4
+
 """
 /*
 * @pre Called once when mob is initialized
