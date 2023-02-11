@@ -45,6 +45,7 @@ enum scenes {
 	RIDDLER_MINIGAME,
 	ARENA_MINIGAME,
 	GAMEOVER
+	QUIZ
 }
 
 # Hold dictionary of player positions

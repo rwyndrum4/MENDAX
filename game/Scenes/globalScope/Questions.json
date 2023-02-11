@@ -1,0 +1,27 @@
+[
+	{
+		"question": "If you freeze water, what do you get?",
+		"options": ["Ice", "Bomb", "Fire"],
+		"correctOptionIndex": 0
+	},	
+	{
+		"question": "What's the name of a place you go to see lots of animals?",
+		"options": ["Airport", "School", "Zoo"],
+		"correctOptionIndex": 2
+	},
+	{
+		"question": "What do caterpillars turn into?",
+		"options": ["Butterflies", "Fish", "Birds"],
+		"correctOptionIndex": 0
+	},	
+	{
+		"question": "On which holiday do you go trick-or-treating?",
+		"options": ["Christmas", "Halloween", "Easter"],
+		"correctOptionIndex": 1
+	},
+	{
+		"question": "Which is the fastest land animal?",
+		"options": ["Turtle", "Cheetah", "Snail"],
+		"correctOptionIndex": 1
+	}
+]
