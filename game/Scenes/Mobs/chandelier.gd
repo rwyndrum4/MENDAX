@@ -12,13 +12,14 @@ onready var chandelierBox = $MyHurtBox/hitbox
 onready var chandelierAtkBox = $MyHitBox/CollisionShape2D
 
 var _isIn = false
-var _isDead = 0
+var _isDead = false
 var _leveled_up: bool = false
 
 #motion vector for enemy
 var _motion=Vector2()
 var _timer=0;
 var _fire_wait_time: int = 4
+
 """
 /*
 * @pre Called once when mob is initialized
@@ -101,22 +102,24 @@ func take_damage(amount: int) -> void:
 	ServerConnection.send_arena_enemy_hit(amount,2)
 	$AudioStreamPlayer2D.play()
 	healthbar.value = healthbar.value - amount
-	chandelierAnim.play("hit")
 	if healthbar.value == 0:
-		_isDead = 1
+		_isDead = true
 		chandelierAnim.play("death")
 		#have to defer disabling the skeleton, got an error otherwise
 		#put the line of code in function below since call_deferred only takes functions as input
 		call_deferred("defer_disabling_chandelier")
+	else:
+		chandelierAnim.play("hit")
 	
 #Same as above function except it doesn't send data to server
 func take_damage_server(amount: int):
 	healthbar.value = healthbar.value - amount
-	chandelierAnim.play("hit")
 	if healthbar.value == 0:
+		_isDead = true
 		chandelierAnim.play("death")
 		call_deferred("defer_disabling_BoD")
-		_isDead = 1
+	else:
+		chandelierAnim.play("hit")
 
 func defer_disabling_chandelier():
 	chandelierBox.disabled = true
@@ -130,18 +133,10 @@ func defer_disabling_chandelier():
 */
 """
 func _on_AnimationPlayer_animation_finished(_anim_name):
-		
-	if !_isDead:
-		#if !isIn:			
-		#	chandelierAnim.play("idle")
-		#else:
-		#	chandelierAnim.play("attack1")
-		pass
-	else:
+	if _isDead:
 		$death.play()
 		yield($death, "finished")
 		GlobalSignals.emit_signal("enemyDefeated", 0) #replace 0 with indication of enemy ID later
-		
 		queue_free()
 
 """
@@ -154,8 +149,6 @@ func _on_AnimationPlayer_animation_finished(_anim_name):
 """
 func _on_detector_body_entered(_body):
 	_isIn = true
-	#chandelierAnim.play("attack1")
-	
 
 
 """

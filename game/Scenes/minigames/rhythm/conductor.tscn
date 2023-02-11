@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Scenes/minigames/rhythm/conductor.gd" type="Script" id=1]
+[ext_resource path="res://Assets/rhythm/The Cannery.mp3" type="AudioStream" id=2]
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer"]
+stream = ExtResource( 2 )
+bus = "Music"
+script = ExtResource( 1 )
+
+[node name="StartTimer" type="Timer" parent="."]
+
+[connection signal="timeout" from="StartTimer" to="." method="_on_StartTimer_timeout"]

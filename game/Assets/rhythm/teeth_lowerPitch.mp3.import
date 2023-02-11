@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/teeth_lowerPitch.mp3-12da03e4153ef7ca3688d6ebfd851cfb.mp3str"
+
+[deps]
+
+source_file="res://Assets/rhythm/teeth_lowerPitch.mp3"
+dest_files=[ "res://.import/teeth_lowerPitch.mp3-12da03e4153ef7ca3688d6ebfd851cfb.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

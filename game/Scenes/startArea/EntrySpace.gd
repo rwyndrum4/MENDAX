@@ -155,6 +155,10 @@ func _on_Timer_timeout():
 	elif Global.minigame == 1:
 		Global.minigame = 2
 		Global.state = Global.scenes.ARENA_MINIGAME
+	#change scene to rhythm minigame
+	elif Global.minigame == 2:
+		Global.minigame = 3
+		Global.state = Global.scenes.RHYTHM_MINIGAME
 	else: 
 		begin_final_boss()
 

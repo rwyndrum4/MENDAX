@@ -19,7 +19,8 @@ enum OpCodes {
 	UPDATE_ARENA_ENEMY_HIT = 6,
 	UPDATE_ARENA_ENEMY_MOVE = 7,
 	UPDATE_CAN_START_GAME = 8,
-	SPAWNED = 9
+	UPDATE_RHYTHM_SCORE = 9,
+	SPAWNED = 10
 }
 
 #Variable that checks if connected to server
@@ -36,6 +37,7 @@ signal arena_player_lost_health(id, health) #signal to tell if player has lost h
 signal arena_enemy_hit(enemmy_hit, damage_taken) #signal to tell if an enemy has been hit
 signal minigame_can_start() #signal that the minigame can be started
 signal minigame_player_spawned(id) #signal to tell if a player has arrived to a scene
+signal minigame_rhythm_score(id, score)
 
 #Other signals
 signal chat_message_received(msg,type,user_sent,from_user) #signal to tell game a chat message has come in
@@ -50,13 +52,17 @@ var _session: NakamaSession #user session
 var _client := Nakama.create_client(KEY, IP_ADDRESS, 7350, "http") #server client
 var _socket : NakamaSocket #server socket connection
 
-var _general_chat_id = "" #id for communicating in general room
+var _general_chat_id: String = "" #id for communicating in general room
 var _current_whisper_id = "" #id for person you want to whisper
+var _group_chat_id: String = "" #id of the match's private group chat
+var _current_chat_id = "" #the current id that a message should be sent to
+var _is_global_chat: bool = true
+var _group_id: String = "" #id of match group (NOT THE CHAT ID, ITS DIFFERENT)
 var _world_id: String = "" #id of the world you are currently in
 var _device_id: String = "" #id of the user's computer generated id
+var _lobby_id: String = "" #id four digits that is randomly generated in main menu
 var _match_id: String = "" #String to hold match id
 var _player_num: int = 0 #Number of the player
-var _group_id: String = "" #id of the match's private group chat
 var chatroom_users: Dictionary = {} #chatroom users
 var connected_opponents: Dictionary = {} #opponents currently in match (including you)
 var game_match = null #holds the current game match information once created
@@ -71,6 +77,17 @@ var game_match = null #holds the current game match information once created
 """
 func set_server_status(status: bool):
 	server_status = status
+
+"""
+/*
+* @pre None
+* @post switches from using global chat to group chat and vice versa
+* @param None
+* @return None
+*/
+"""
+func switch_chat_methods():
+	_is_global_chat = not _is_global_chat
 
 """
 /*
@@ -209,6 +226,25 @@ func join_chat_async_whisper(input:String, has_id_already:bool) -> int:
 
 """
 /*
+* @pre called when joining a group chat
+* @post sends group message
+* @param None
+* @return None
+*/
+"""
+func join_chat_async_group() -> int:
+	var loc_group_id = _group_id
+	var persistence = true
+	var hidden = false
+	var type = NakamaSocket.ChannelType.Group
+	var channel : NakamaRTAPI.Channel = yield(_socket.join_chat_async(loc_group_id, type, persistence, hidden), "completed")
+	_group_chat_id = channel.id 
+	print("Connected to group channel: '%s'" % [channel.id])
+	return OK
+
+
+"""
+/*
 * @pre None
 * @post creates group in the server
 * @param group_name -> String
@@ -232,7 +268,7 @@ func create_match_group(group_name: String):
 func join_match_group():
 	var join: NakamaAsyncResult = yield(_client.join_group_async(_session, _group_id), "completed")
 	if join.is_exception():
-		print("An error occurred: %s" % join)
+		printerr("An error occurred: %s" % join)
 
 """
 /*
@@ -245,8 +281,38 @@ func join_match_group():
 func leave_match_group():
 	var leave : NakamaAsyncResult = yield(_client.leave_group_async(_session, _group_id), "completed")
 	if leave.is_exception():
-		print("An error occurred: %s" % leave)
+		printerr("An error occurred: %s" % leave)
 
+"""
+/*
+* @pre None
+* @post leaves the match group chat
+* @param None
+* @return None
+*/
+"""
+func leave_match_group_chat():
+	var result: NakamaAsyncResult = yield(_socket.leave_chat_async(_group_chat_id), "completed")
+	
+	if result.is_exception():
+		printerr("An error occurred: %s" % result)
+		return
+
+	print("Left group chat")
+
+"""
+/*
+* @pre None
+* @post sends a message to server based on if in global or match chat
+* @param text -> String (message to send to other players)
+* @return None
+*/
+"""
+func send_chat_message(text: String):
+	if _is_global_chat:
+		yield(send_text_async_general(text), "completed")
+	else:
+		yield(send_text_async_group(text), "completed")
 
 """
 /*
@@ -266,6 +332,27 @@ func send_text_async_general(text: String) -> int:
 		"user_sent": "n/a",
 		"from_user": Save.game_data.username,
 		"type": "general"
+		}), "completed")
+	return ERR_CONNECTION_ERROR if msg_result.is_exception() else OK
+
+"""
+/*
+* @pre called when sending message to server
+* @post sends chat message to group packaged with the username
+* @param text -> String
+* @return None
+*/
+"""
+func send_text_async_group(text: String) -> int:
+	if not _socket:
+		return ERR_UNAVAILABLE
+	
+	var msg_result = yield(
+		_socket.write_chat_message_async(_group_chat_id, 
+		{"msg": text, 
+		"user_sent": "n/a",
+		"from_user": Save.game_data.username,
+		"type": "group"
 		}), "completed")
 	return ERR_CONNECTION_ERROR if msg_result.is_exception() else OK
 
@@ -291,8 +378,9 @@ func send_text_async_whisper(text: String,user_sent_to:String) -> int:
 */
 """
 func create_match(lobby_name:String) -> Array:
+	_lobby_id = lobby_name
 	game_match = yield(_socket.create_match_async(lobby_name), "completed")
-	Global.add_match(lobby_name,game_match.match_id)
+	Global.add_match(lobby_name,game_match.match_id, _group_id)
 	_match_id = game_match.match_id
 	send_text_async_general("MATCH_RECEIVED " + JSON.print(Global.current_matches))
 	return game_match.presences
@@ -423,6 +511,19 @@ func send_minigame_can_start():
 	if _socket:
 		var payload := {}
 		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_CAN_START_GAME, JSON.print(payload))
+
+"""
+/*
+* @pre called when someone needs to send a score update for rhythm game
+* @post tells server which player is getting updated
+* @param new_score -> int (new score for the player)
+* @return None
+*/
+"""
+func send_rhythm_score(new_score:int):
+	if _socket:
+		var payload := {id = _player_num, score = new_score}
+		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_RHYTHM_SCORE, JSON.print(payload))
 
 """
 /*
@@ -558,6 +659,13 @@ func _on_NakamaSocket_received_match_state(match_state: NakamaRTAPI.MatchData) -
 			var dmg_taken: int = int(decoded.dmg)
 			
 			emit_signal("arena_enemy_hit", enemy, dmg_taken)
+		OpCodes.UPDATE_RHYTHM_SCORE:
+			var decoded: Dictionary = JSON.parse(raw).result
+			
+			var id: int = int(decoded.id)
+			var score: int = int(decoded.score)
+			
+			emit_signal("minigame_rhythm_score", id, score)
 		OpCodes.UPDATE_CAN_START_GAME:
 			emit_signal("minigame_can_start")
 		OpCodes.SPAWNED:

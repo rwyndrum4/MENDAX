@@ -14,8 +14,10 @@ extends Node
 #Member Variables
 onready var chat_box = $GUI/chatbox
 onready var settings_menu = $GUI/SettingsMenu
+onready var credits = $GUI/credits
 onready var world_env = $WorldEnvironment
 onready var fps_label = $GUI/fpsLabel
+onready var menu_button = $GUI/SettingsMenu/SettingsTabs/Exit/exitSettings/GridContainer/mainMenuButton
 onready var current_song = $BGM/mainmenu
 onready var hotbar = $GUI/Hotbar
 
@@ -26,6 +28,7 @@ var start_area = "res://Scenes/startArea/startArea.tscn"
 var cave = "res://Scenes/startArea/EntrySpace.tscn"
 var riddler_minigame = "res://Scenes/minigames/riddler/riddleGame.tscn"
 var arena_minigame = "res://Scenes/minigames/arena/arenaGame.tscn"
+var rhythm_minigame = "res://Scenes/minigames/rhythm/rhythm.tscn"
 var gameover = "res://Scenes/mainMenu/gameOver.tscn"
 var quiz="res://Scenes/FinalBoss/Quiz.tscn"
 
@@ -37,6 +40,7 @@ var local_state = null
 var in_popup: bool = false
 #Bools to tell if in chatbox or not, work like a locking mechanism
 var in_chatbox: bool = false
+#Bools to tell if you can open the settings or not
 var can_open_settings: bool = false
 
 """
@@ -87,9 +91,11 @@ func _process(_delta): #if you want to use _delta, remove _
 			settings_menu.hide()
 			in_popup = false
 		elif can_open_settings:
+			menu_button.show()
 			settings_menu.popup_centered_ratio()
 			in_popup = true
 	set_popup_locks()
+
 """
 /*
 * @pre called when global wants to change scenes
@@ -103,11 +109,16 @@ func _change_scene_to(state):
 	if state == Global.scenes.MAIN_MENU:
 		current_scene = load(main_menu).instance()
 	elif state == Global.scenes.OPTIONS_FROM_MAIN:
+		menu_button.hide()
 		settings_menu.popup_centered_ratio()
 		Global.state = Global.scenes.MAIN_MENU
 		return
 	elif state == Global.scenes.MARKET:
 		current_scene = load(market).instance()
+	elif state == Global.scenes.CREDITS:
+		credits.popup_centered()
+		Global.state = Global.scenes.MAIN_MENU
+		return
 	elif state == Global.scenes.START_AREA:
 		current_scene = load(start_area).instance()
 	elif state == Global.scenes.CAVE:
@@ -122,6 +133,9 @@ func _change_scene_to(state):
 		stopall()
 		$BGM/arena.play()
 		current_scene = load(arena_minigame).instance()
+	elif state == Global.scenes.RHYTHM_MINIGAME:
+		stopall()
+		current_scene = load(rhythm_minigame).instance()
 	elif state == Global.scenes.GAMEOVER:
 		stopall()
 		$BGM/gameover.play()
@@ -235,7 +249,7 @@ func _on_chatbox_message_sent(msg,is_whisper,username_to_send_to):
 		yield(ServerConnection.send_text_async_whisper(msg,username_to_send_to), "completed")
 	else:
 		#send message to general
-		yield(ServerConnection.send_text_async_general(msg), "completed")
+		ServerConnection.send_chat_message(msg)
 
 """
 /*
@@ -275,6 +289,8 @@ func initialize_fps_label():
 func not_popup(state) -> bool:
 	match state:
 		Global.scenes.OPTIONS_FROM_MAIN:
+			return false
+		Global.scenes.CREDITS:
 			return false
 		_:
 			return true

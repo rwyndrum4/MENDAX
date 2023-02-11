@@ -1,0 +1,78 @@
+[gd_scene load_steps=18 format=2]
+
+[ext_resource path="res://Scenes/minigames/rhythm/hit_buttons.gd" type="Script" id=1]
+[ext_resource path="res://Assets/rhythm/orange/normal_orange.png" type="Texture" id=2]
+[ext_resource path="res://Assets/rhythm/orange/1.png" type="Texture" id=3]
+[ext_resource path="res://Assets/rhythm/blue/2.png" type="Texture" id=4]
+[ext_resource path="res://Assets/rhythm/red/normal_red.png" type="Texture" id=5]
+[ext_resource path="res://Assets/rhythm/red/1.png" type="Texture" id=6]
+[ext_resource path="res://Assets/rhythm/red/2.png" type="Texture" id=7]
+[ext_resource path="res://Assets/rhythm/orange/2.png" type="Texture" id=8]
+[ext_resource path="res://Assets/rhythm/blue/normal_blue.png" type="Texture" id=9]
+[ext_resource path="res://Assets/rhythm/blue/1.png" type="Texture" id=10]
+[ext_resource path="res://Assets/rhythm/green/normal_green.png" type="Texture" id=11]
+[ext_resource path="res://Assets/rhythm/green/1.png" type="Texture" id=12]
+[ext_resource path="res://Assets/rhythm/green/2.png" type="Texture" id=13]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 9 ), ExtResource( 10 ), ExtResource( 4 ), ExtResource( 10 ), ExtResource( 9 ) ],
+"loop": false,
+"name": "blue",
+"speed": 6.0
+}, {
+"frames": [ ExtResource( 11 ), ExtResource( 12 ), ExtResource( 13 ), ExtResource( 12 ), ExtResource( 11 ) ],
+"loop": false,
+"name": "green",
+"speed": 6.0
+}, {
+"frames": [ ExtResource( 2 ), ExtResource( 3 ), ExtResource( 8 ), ExtResource( 3 ), ExtResource( 2 ) ],
+"loop": false,
+"name": "orange",
+"speed": 6.0
+}, {
+"frames": [ ExtResource( 5 ), ExtResource( 6 ), ExtResource( 7 ), ExtResource( 6 ), ExtResource( 5 ) ],
+"loop": false,
+"name": "red",
+"speed": 6.0
+} ]
+
+[sub_resource type="CircleShape2D" id=2]
+radius = 7.0
+
+[sub_resource type="CircleShape2D" id=3]
+radius = 24.0
+
+[sub_resource type="CircleShape2D" id=4]
+radius = 58.0
+
+[node name="AnimatedSprite" type="AnimatedSprite"]
+frames = SubResource( 1 )
+animation = "red"
+frame = 4
+script = ExtResource( 1 )
+
+[node name="perfect_area" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="perfect_area"]
+position = Vector2( 1, 1 )
+shape = SubResource( 2 )
+
+[node name="good_area" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="good_area"]
+position = Vector2( 1, 1 )
+shape = SubResource( 3 )
+
+[node name="okay_area" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="okay_area"]
+position = Vector2( 1, 1 )
+shape = SubResource( 4 )
+
+[connection signal="area_entered" from="perfect_area" to="." method="_on_perfect_area_area_entered"]
+[connection signal="area_exited" from="perfect_area" to="." method="_on_perfect_area_area_exited"]
+[connection signal="area_entered" from="good_area" to="." method="_on_good_area_area_entered"]
+[connection signal="area_exited" from="good_area" to="." method="_on_good_area_area_exited"]
+[connection signal="area_entered" from="okay_area" to="." method="_on_okay_area_area_entered"]
+[connection signal="area_exited" from="okay_area" to="." method="_on_okay_area_area_exited"]

@@ -10,6 +10,8 @@
 	10/1/2022 - Fixed options menu movment
 	11/4/2022 - Adding server functionality 
 	11/13/2022 - add test functionality
+	12/19/2022 - fixed bugs dealing with players spawning
+	1/10/2022 - Adding ability to swap to match chat
 	1/29/2023 - added sfx for buttons
 """
 extends Control
@@ -32,6 +34,7 @@ var num_players: int = 0
 #max players allowed
 const MAX_PLAYERS: int = 4
 
+
 ### Member Variables ###
 #popup that is displayed when creating a new game
 var game_init_popup:AcceptDialog
@@ -39,6 +42,8 @@ var game_init_popup:AcceptDialog
 var get_user_input:AcceptDialog
 #bool to let menu know if player is typing code
 var typing_code: bool = false
+#code for multiplayer match
+var _match_code: String = ""
 
 """
 /*
@@ -113,6 +118,7 @@ func _on_Start_pressed():
 */
 """
 func _on_Options_pressed():
+	#Open the options pop-up menu
 	Global.state = Global.scenes.OPTIONS_FROM_MAIN
 
 """
@@ -124,8 +130,8 @@ func _on_Options_pressed():
 * @knownFaults resets join code to default (XXXX)
 */
 """
-#When button pressed switches to Store scene
 func _on_Market_pressed():
+	#When button pressed switches to Store scene
 	Global.state = Global.scenes.MARKET
 
 """
@@ -137,12 +143,9 @@ func _on_Market_pressed():
 */
 """
 func _on_Tests_pressed():
-	"""
-	/*
-	*Global.state = Global.scenes.CAVE
-*/
-"""
+	#Global.state = Global.scenes.CAVE
 	Global.state=Global.scenes.QUIZ
+
 """
 /*
 * @pre Credits Button is pressed
@@ -152,7 +155,8 @@ func _on_Tests_pressed():
 */
 """
 func _on_Credits_pressed():
-	$credits.popup_centered()
+	#Tell globalScope to open credits popup
+	Global.state = Global.scenes.CREDITS
 
 """
 /*
@@ -163,6 +167,11 @@ func _on_Credits_pressed():
 */
 """
 func _on_Quit_pressed():
+	#If player was in a lobby, force them to leave
+	if ServerConnection.match_exists():
+		ServerConnection.leave_match(ServerConnection._match_id)
+		ServerConnection.leave_match_group()
+	#Quit out of the game
 	get_tree().quit()
 
 """
@@ -208,12 +217,35 @@ func getRandAlphInd(rng):
 func initialize_menu():
 	#Grab focus on start button so keys can be used to navigate buttons
 	startButton.grab_focus()
+	#reset any online stuff if they came from a previous game
+	reset_multiplayer()
 	#check if there is a username
 	if Save.game_data.username == "":
 		var win_text = "Welcome to Mendax!"
 		var d_text = "Username required!\nPlease enter username:\n"
 		d_text += "(Single word, you can change it afterward in settings)"
 		create_get_user_window(win_text,d_text)
+
+"""
+/*
+* @pre Called on main menu initialization
+* @post Resets any of the multiplayer parts of the game
+* @param None
+* @return None
+*/
+"""
+func reset_multiplayer():
+	#Reset multiplayer match
+	if ServerConnection.match_exists():
+		ServerConnection.leave_match(_match_code)
+		ServerConnection.leave_match_group()
+	_match_code = ""
+	#Delete any leftover objects
+	for player in player_objects:
+		delete_player_obj(player['player_obj'],player['text_obj'])
+	#Reset player trackers
+	player_objects = []
+	num_players = 0
 
 """
 /*
@@ -228,7 +260,7 @@ func spawn_character(player_name:String):
 	if num_players == MAX_PLAYERS:
 		return
 	#Add animated player to scene
-	var char_pos = get_char_pos(len(player_objects))
+	var char_pos = get_char_pos(num_players)
 	var obj_arr = create_spawn_player(char_pos,player_name)
 	var spawned_player = obj_arr[0]
 	var text_name = obj_arr[1]
@@ -239,6 +271,7 @@ func spawn_character(player_name:String):
 		'text_obj': text_name
 	})
 	Global.player_positions[str(num_players+1)] = Vector2(char_pos.x*5,char_pos.y*5)
+	Global.player_names[str(num_players+1)] = player_name
 	num_players += 1
 	if player_name == Save.game_data.username:
 		ServerConnection._player_num = num_players
@@ -258,11 +291,9 @@ func despawn_character(player_name:String):
 	for dict in player_objects:
 		if dict['name'] != player_name:
 			player_names_copy.append(dict['name'])
-	#delete player objects
-	for player in player_objects:
-			if player['name'] == player_name and player['player_obj'] != null and player['text_obj'] != null:
-				delete_player_obj(player['player_obj'],player['text_obj'])
 	#respawn players again with the one deleted
+	for player in player_objects:
+		delete_player_obj(player['player_obj'],player['text_obj'])
 	player_objects = []
 	for _name in player_names_copy:
 		spawn_character(_name)
@@ -285,26 +316,28 @@ func _on_createGameButton_pressed():
 
 func no_game_created():
 	var code: String = generate_random_code()
-	game_init_popup = AcceptDialog.new()
+	_match_code = code
 	if not ServerConnection.get_server_status():
-		create_game_init_window(
-			"Server not available",
-			"Multiplayer not available, you are not connected to a game"
-		)
+		get_parent().chat_box.chat_event_message("Server not available", "red")
 	else:
+		yield(ServerConnection.create_match_group(code), "completed") #create new group
+		yield(ServerConnection.join_chat_async_group(), "completed") #join group chat
+		ServerConnection.switch_chat_methods() #switch from using glabal to match chat
 		yield(ServerConnection.create_match(code), "completed")
-		yield(ServerConnection.create_match_group(code), "completed")
-		create_game_init_window(
-			"New game created!",
-			"Your code is: " + code + "\nPlease share it with your friends!"
-		)
+		get_parent().chat_box.chat_event_message("New game created!", "white")
+		get_parent().chat_box.chat_event_message("Switched from global chat to match chat", "pink")
 		$showLobbyCode/code.text = code
 		$createGameButton.text = "Leave match"
 
 func game_already_created():
+	num_players = 0
 	yield(ServerConnection.leave_match(ServerConnection._match_id), "completed")
 	yield(ServerConnection.leave_match_group(), "completed")
-	despawn_character(Save.game_data.username)
+	yield(ServerConnection.leave_match_group_chat(), "completed")
+	ServerConnection.switch_chat_methods() #switch back to using global chat
+	get_parent().chat_box.chat_event_message("Switched from match chat to global chat", "blue")
+	for p in player_objects:
+		delete_player_obj(p['player_obj'],p["text_obj"])
 	$createGameButton.text = "Create match"
 	$showLobbyCode/code.text = "XXXX"
 
@@ -341,36 +374,31 @@ func _on_enterLobbyCode_focus_entered():
 */
 """
 func _on_enterLobbyCode_text_entered(new_text):
-	var match_code = new_text.to_upper()
-	if len(match_code) != 4:
-		create_game_init_window(
-			"Invalid code",
-			"Please enter an alphabetical code with a length of 4"
-		)
+	var code = new_text.to_upper()
+	if len(code) != 4:
+		get_parent().chat_box.chat_event_message("Invalid code", "pink")
 	else:
 		if ServerConnection.get_server_status():
-			if Global.match_exists(match_code) and not ServerConnection.match_exists():
+			if Global.match_exists(code) and not ServerConnection.match_exists():
 				#yield(ServerConnection.leave_match(ServerConnection._match_id), "completed")
-				var users_in_menu = yield(ServerConnection.join_match(Global.get_match(match_code)), "completed")
+				var long_code = Global.get_match(code) #code of match in server
+				var users_in_menu = yield(ServerConnection.join_match(long_code), "completed")
+				ServerConnection._group_id = Global.get_match_group_id(code)
+				yield(ServerConnection.join_match_group(), "completed") #join group
+				yield(ServerConnection.join_chat_async_group(), "completed") #join general group chat
+				ServerConnection.switch_chat_methods() #switch chat id to new general id
+				get_parent().chat_box.chat_event_message("Switched from global chat to match chat", "pink")
 				#Spawn users that are currently in game and you
 				for user in users_in_menu:
 					spawn_character(user.username)
-				$showLobbyCode/code.text = match_code
+				$showLobbyCode/code.text = code
 				$createGameButton.text = "Leave match"
-				create_game_init_window(
-					"Joined match " + match_code,
-					"Start the game with your friends when you want"
-				)
+				_match_code = code
+				get_parent().chat_box.chat_event_message("Joined match", "white")
 			else:
-				create_game_init_window(
-					"Match not available",
-					"Please try retyping the code or start a new game"
-			)
+				get_parent().chat_box.chat_event_message("Match not available", "red")
 		else:
-			create_game_init_window(
-				"Server not available",
-				"Multiplayer not available, you are not connected to a game"
-			)
+			get_parent().chat_box.chat_event_message("Server not available", "red")
 			code_line_edit.text = ""
 			code_line_edit.hide()
 
