@@ -95,13 +95,15 @@ func _on_Start_pressed():
 	if ServerConnection.match_exists() and ServerConnection.get_server_status():
 		if num_players == 1:
 			get_parent().chat_box.chat_event_message(
-				"Disconnecting from match, single player mode started"
+				"Disconnecting from match, single player mode started",
+				"white"
 			)
 			yield(ServerConnection.leave_match(ServerConnection._match_id), "completed")
 			yield(ServerConnection.leave_match_group(), "completed")
 		else:
 			get_parent().chat_box.chat_event_message(
-				"Switched from global chat to match chat"
+				"Switched from global chat to match chat",
+				"blue"
 			)
 	#change scene to start area
 	SceneTrans.change_scene(Global.scenes.START_AREA)
