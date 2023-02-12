@@ -55,7 +55,6 @@ var _match_code: String = ""
 """
 func _ready():
 	initialize_menu()
-	#$bgm.play()
 	# warning-ignore:return_value_discarded
 	ServerConnection.connect("character_spawned",self,"spawn_character")
 	# warning-ignore:return_value_discarded
@@ -262,7 +261,7 @@ func spawn_character(player_name:String):
 	if num_players == MAX_PLAYERS:
 		return
 	#Add animated player to scene
-	var char_pos = get_char_pos(num_players)
+	var char_pos = get_char_pos(len(player_objects))
 	var obj_arr = create_spawn_player(char_pos,player_name)
 	var spawned_player = obj_arr[0]
 	var text_name = obj_arr[1]
