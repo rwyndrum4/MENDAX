@@ -391,11 +391,10 @@ func _on_enterLobbyCode_text_entered(new_text):
 				$showLobbyCode/code.text = code
 				$createGameButton.text = "Leave match"
 				_match_code = code
-				get_parent().chat_box.chat_event_message("Joined match", "white")
 				yield(ServerConnection.join_match_group(), "completed") #join group
 				yield(ServerConnection.join_chat_async_group(), "completed") #join general group chat
 				ServerConnection.switch_chat_methods() #switch chat id to new general id
-				get_parent().chat_box.chat_event_message("Switched from global chat to match chat", "pink")
+				get_parent().chat_box.chat_event_message("Joined match and swapped to match chat", "pink")
 			else:
 				get_parent().chat_box.chat_event_message("Match not available", "red")
 		else:

@@ -594,7 +594,6 @@ func _on_notification(p_notification : NakamaAPI.ApiNotification):
 """
 func _on_NakamaSocket_received_match_precence(p_match_presence_event : NakamaRTAPI.MatchPresenceEvent):
 	for p in p_match_presence_event.joins:
-		var test = p.user_id
 		connected_opponents[p.user_id] = p
 		emit_signal("character_spawned", p.username)
 	for p in p_match_presence_event.leaves:
