@@ -25,7 +25,8 @@ func sub_item_quantity(amount):
 func set_item(name, amount):
 	item_name = name
 	item_quantity = amount
-	#TODO, once more items are added, this is where to change textures
+	
+	$TextureRect.texture = load("res://Assets/InventoryIcons/" + item_name + ".png")
 	
 	var stack_size = int(INV.item_data[item_name]["StackSize"])
 	if stack_size == 1:

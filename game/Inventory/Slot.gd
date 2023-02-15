@@ -18,6 +18,13 @@ var item = null
 var ItemClass = preload("res://Inventory/Item.tscn")
 var slot_index
 
+enum SlotType {
+	HOTBAR = 0,
+	INVENTORY,
+}
+
+var slotType = null
+
 func refresh_style(): # useful for having a new empty inventory slot icon
 	pass
 
@@ -26,7 +33,6 @@ func _ready():
 	default_style = StyleBoxTexture.new()
 	empty_style = StyleBoxTexture.new()
 	refresh_style()
-
 
 func pickFromSlot():
 	remove_child(item)
