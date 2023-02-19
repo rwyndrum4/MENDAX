@@ -65,6 +65,9 @@ func _process(_delta): #change to delta if used
 	timerText.text = convert_time(myTimer.time_left)
 	if not stop_steam_control:
 		control_steam()
+	# Check for completion of boss stage 1
+	if Global.progress == 4:
+		Global.state = Global.scenes.DILEMMA
 
 """
 /*

@@ -19,7 +19,10 @@ var in_anim: int = 0
 var minigame: int = 0
 var players_in_minigame: int = 0
 
-# Singals
+# Counter tracking progression in final boss fight
+var progress = 0
+
+# Signals
 signal all_players_arrived()
 
 """
@@ -46,8 +49,9 @@ enum scenes {
 	RIDDLER_MINIGAME,
 	ARENA_MINIGAME,
 	RHYTHM_MINIGAME,
-	GAMEOVER
-	QUIZ
+	GAMEOVER,
+	QUIZ,
+	DILEMMA
 }
 
 # Hold dictionary mapping player num to name
