@@ -7,6 +7,8 @@
 extends Node2D
 
 onready var textBox = $textBox
+var _players
+var _num_players
 
 
 """
@@ -18,6 +20,10 @@ onready var textBox = $textBox
 */
 """
 func _ready():
+	_players = Global.player_names.values()
+	_num_players = len(_players)
+	if not ServerConnection.match_exists() or not ServerConnection.get_server_status():
+		Global.state = Global.scenes.CAVE
 	# Turn off player's torch
 	$Player.get_node("Torch1").hide()
 	textBox.queue_text("It seems I was wrong to underestimate you, hero.")
@@ -40,13 +46,19 @@ func _ready():
 """
 func _process(_delta):
 	if textBox.text_queue.empty():
-		$Button1.show()
-		$Button2.show()
-		$Button3.show()
+		if _num_players > 1:
+			$Button1.text = "Betray" + _players["1"]
+			$Button1.show()
+			$ButtonGlow1.show()
+		if _num_players > 2:
+			$Button2.text = "Betray" + _players["2"]
+			$Button2.show()
+			$ButtonGlow2.show()
+		if _num_players > 3:
+			$Button3.text = "Betray" + _players["3"]
+			$Button3.show()
+			$ButtonGlow3.show()
 		$Button4.show()
-		$ButtonGlow1.show()
-		$ButtonGlow2.show()
-		$ButtonGlow3.show()
 		$ButtonGlow4.show()
 
 
