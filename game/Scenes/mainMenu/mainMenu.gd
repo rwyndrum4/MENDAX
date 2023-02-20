@@ -102,6 +102,8 @@ func _on_Start_pressed():
 			yield(ServerConnection.leave_match_group_chat(), "completed")
 			ServerConnection.switch_chat_methods() #switch back to using global chat
 			yield(ServerConnection.join_chat_async_general(), "completed") #rejoin global chat
+		else:
+			yield(ServerConnection.leave_general_chat(), "completed")
 	#change scene to start area
 	SceneTrans.change_scene(Global.scenes.START_AREA)
 
@@ -324,7 +326,6 @@ func no_game_created():
 		yield(ServerConnection.join_chat_async_group(), "completed") #join group chat
 		yield(ServerConnection.create_match(code), "completed")
 		ServerConnection.switch_chat_methods() #switch from using glabal to match chat
-		yield(ServerConnection.leave_general_chat(), "completed")
 		get_parent().chat_box.chat_event_message("New game created!", "white")
 		get_parent().chat_box.chat_event_message("Switched from global chat to match chat", "pink")
 		$showLobbyCode/code.text = code
