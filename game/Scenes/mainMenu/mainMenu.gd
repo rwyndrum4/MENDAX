@@ -55,7 +55,6 @@ var _match_code: String = ""
 """
 func _ready():
 	initialize_menu()
-	#$bgm.play()
 	# warning-ignore:return_value_discarded
 	ServerConnection.connect("character_spawned",self,"spawn_character")
 	# warning-ignore:return_value_discarded
@@ -95,13 +94,15 @@ func _on_Start_pressed():
 	if ServerConnection.match_exists() and ServerConnection.get_server_status():
 		if num_players == 1:
 			get_parent().chat_box.chat_event_message(
-				"Disconnecting from match, single player mode started"
+				"Disconnecting from match, single player mode started",
+				"white"
 			)
 			yield(ServerConnection.leave_match(ServerConnection._match_id), "completed")
 			yield(ServerConnection.leave_match_group(), "completed")
 		else:
 			get_parent().chat_box.chat_event_message(
-				"Switched from global chat to match chat"
+				"Switched from global chat to match chat",
+				"blue"
 			)
 	#change scene to start area
 	SceneTrans.change_scene(Global.scenes.START_AREA)
@@ -260,7 +261,7 @@ func spawn_character(player_name:String):
 	if num_players == MAX_PLAYERS:
 		return
 	#Add animated player to scene
-	var char_pos = get_char_pos(num_players)
+	var char_pos = get_char_pos(len(player_objects))
 	var obj_arr = create_spawn_player(char_pos,player_name)
 	var spawned_player = obj_arr[0]
 	var text_name = obj_arr[1]
@@ -384,17 +385,16 @@ func _on_enterLobbyCode_text_entered(new_text):
 				var long_code = Global.get_match(code) #code of match in server
 				var users_in_menu = yield(ServerConnection.join_match(long_code), "completed")
 				ServerConnection._group_id = Global.get_match_group_id(code)
-				yield(ServerConnection.join_match_group(), "completed") #join group
-				yield(ServerConnection.join_chat_async_group(), "completed") #join general group chat
-				ServerConnection.switch_chat_methods() #switch chat id to new general id
-				get_parent().chat_box.chat_event_message("Switched from global chat to match chat", "pink")
 				#Spawn users that are currently in game and you
 				for user in users_in_menu:
 					spawn_character(user.username)
 				$showLobbyCode/code.text = code
 				$createGameButton.text = "Leave match"
 				_match_code = code
-				get_parent().chat_box.chat_event_message("Joined match", "white")
+				yield(ServerConnection.join_match_group(), "completed") #join group
+				yield(ServerConnection.join_chat_async_group(), "completed") #join general group chat
+				ServerConnection.switch_chat_methods() #switch chat id to new general id
+				get_parent().chat_box.chat_event_message("Joined match and swapped to match chat", "pink")
 			else:
 				get_parent().chat_box.chat_event_message("Match not available", "red")
 		else:

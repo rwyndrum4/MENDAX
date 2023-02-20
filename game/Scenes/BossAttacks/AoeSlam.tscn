@@ -1,0 +1,32 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://Scenes/BossAttacks/AoeSlam.gd" type="Script" id=1]
+[ext_resource path="res://Assets/final_boss_attack/frame0005.png" type="Texture" id=2]
+[ext_resource path="res://Assets/final_boss_attack/frame0000.png" type="Texture" id=3]
+[ext_resource path="res://Assets/final_boss_attack/frame0001.png" type="Texture" id=4]
+[ext_resource path="res://Assets/final_boss_attack/frame0004.png" type="Texture" id=5]
+[ext_resource path="res://Assets/final_boss_attack/frame0006.png" type="Texture" id=6]
+[ext_resource path="res://Assets/final_boss_attack/frame0002.png" type="Texture" id=7]
+[ext_resource path="res://Assets/final_boss_attack/frame0003.png" type="Texture" id=8]
+
+[sub_resource type="CircleShape2D" id=1]
+
+[sub_resource type="SpriteFrames" id=2]
+animations = [ {
+"frames": [ ExtResource( 3 ), ExtResource( 4 ), ExtResource( 7 ), ExtResource( 8 ), ExtResource( 5 ), ExtResource( 2 ), ExtResource( 6 ) ],
+"loop": true,
+"name": "default",
+"speed": 42.0
+} ]
+
+[node name="AoEAttack" type="Area2D"]
+script = ExtResource( 1 )
+
+[node name="CircleShape" type="CollisionShape2D" parent="."]
+shape = SubResource( 1 )
+
+[node name="anim_drawing" type="AnimatedSprite" parent="."]
+scale = Vector2( 0.35, 0.35 )
+frames = SubResource( 2 )
+
+[connection signal="area_entered" from="." to="." method="_on_AoEAttack_area_entered"]

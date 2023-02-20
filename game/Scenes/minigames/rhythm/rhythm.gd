@@ -244,6 +244,16 @@ func change_score(p_name: String, new_points: int):
 		_score_dict.get(p_name).text = cleaned_data + str(int(current_score) + added_score)
 	check_placement() #check if scores need to be reordered
 
+func change_score_from_server(p_name:String, new_points:int):
+	var added_score = new_points * _combo_multiplier
+	if _score_dict.has(p_name):
+		#get the current score as a string
+		var label_txt = _score_dict.get(p_name).text
+		var current_score = label_txt.get_slice(" ",1)
+		var cleaned_data = label_txt.replace(current_score,"")
+		_score_dict.get(p_name).text = cleaned_data + str(int(current_score) + added_score)
+	check_placement() #check if scores need to be reordered
+
 #Custom sort function for check_placement
 class myCustomSorter:
 	static func sort_asc(a,b):
