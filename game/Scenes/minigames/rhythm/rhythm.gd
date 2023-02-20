@@ -185,7 +185,8 @@ func _delete_instr_and_start_song(instr_scn):
 	wait_timer.start()
 	yield(wait_timer, "timeout")
 	wait_timer.queue_free()
-	conductor.play_with_beat_offset(0)
+	conductor.play_from_beat(380,0)
+	#conductor.play_with_beat_offset(0)
 
 """
 /*
@@ -244,14 +245,14 @@ func change_score(p_name: String, new_points: int):
 		_score_dict.get(p_name).text = cleaned_data + str(int(current_score) + added_score)
 	check_placement() #check if scores need to be reordered
 
+#Same as above but adapted for when a score comes from another player
 func change_score_from_server(p_name:String, new_points:int):
-	var added_score = int(new_points * _combo_multiplier)
 	if _score_dict.has(p_name):
 		#get the current score as a string
 		var label_txt = _score_dict.get(p_name).text
 		var current_score = label_txt.get_slice(" ",1)
 		var cleaned_data = label_txt.replace(current_score,"")
-		_score_dict.get(p_name).text = cleaned_data + str(int(current_score) + added_score)
+		_score_dict.get(p_name).text = cleaned_data + str(int(current_score) + int(new_points))
 	check_placement() #check if scores need to be reordered
 
 #Custom sort function for check_placement
