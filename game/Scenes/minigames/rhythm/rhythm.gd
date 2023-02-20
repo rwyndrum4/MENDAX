@@ -185,8 +185,7 @@ func _delete_instr_and_start_song(instr_scn):
 	wait_timer.start()
 	yield(wait_timer, "timeout")
 	wait_timer.queue_free()
-	conductor.play_from_beat(380,0)
-	#conductor.play_with_beat_offset(0)
+	conductor.play_with_beat_offset(0)
 
 """
 /*
