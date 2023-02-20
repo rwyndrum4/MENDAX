@@ -99,11 +99,9 @@ func _on_Start_pressed():
 			)
 			yield(ServerConnection.leave_match(ServerConnection._match_id), "completed")
 			yield(ServerConnection.leave_match_group(), "completed")
-		else:
-			get_parent().chat_box.chat_event_message(
-				"Switched from global chat to match chat",
-				"blue"
-			)
+			yield(ServerConnection.leave_match_group_chat(), "completed")
+			ServerConnection.switch_chat_methods() #switch back to using global chat
+			yield(ServerConnection.join_chat_async_general(), "completed") #rejoin global chat
 	#change scene to start area
 	SceneTrans.change_scene(Global.scenes.START_AREA)
 
@@ -238,8 +236,9 @@ func initialize_menu():
 func reset_multiplayer():
 	#Reset multiplayer match
 	if ServerConnection.match_exists():
-		ServerConnection.leave_match(_match_code)
-		ServerConnection.leave_match_group()
+		yield(ServerConnection.leave_match(ServerConnection._match_id), "completed")
+		yield(ServerConnection.leave_match_group(), "completed")
+		yield(ServerConnection.leave_match_group_chat(), "completed")
 	_match_code = ""
 	#Delete any leftover objects
 	for player in player_objects:
@@ -324,6 +323,7 @@ func no_game_created():
 		yield(ServerConnection.create_match_group(code), "completed") #create new group
 		yield(ServerConnection.join_chat_async_group(), "completed") #join group chat
 		ServerConnection.switch_chat_methods() #switch from using glabal to match chat
+		ServerConnection.leave_general_chat()
 		yield(ServerConnection.create_match(code), "completed")
 		get_parent().chat_box.chat_event_message("New game created!", "white")
 		get_parent().chat_box.chat_event_message("Switched from global chat to match chat", "pink")
@@ -332,13 +332,10 @@ func no_game_created():
 
 func game_already_created():
 	num_players = 0
-	yield(ServerConnection.leave_match(ServerConnection._match_id), "completed")
-	yield(ServerConnection.leave_match_group(), "completed")
-	yield(ServerConnection.leave_match_group_chat(), "completed")
+	reset_multiplayer()
 	ServerConnection.switch_chat_methods() #switch back to using global chat
+	ServerConnection.join_chat_async_general() #rejoin global chat
 	get_parent().chat_box.chat_event_message("Switched from match chat to global chat", "blue")
-	for p in player_objects:
-		delete_player_obj(p['player_obj'],p["text_obj"])
 	$createGameButton.text = "Create match"
 	$showLobbyCode/code.text = "XXXX"
 
