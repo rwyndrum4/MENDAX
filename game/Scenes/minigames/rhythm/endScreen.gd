@@ -3,8 +3,7 @@ extends Popup
 func add_results(results:Array):
 	var res_str: String = "[center][color=#202124]Results[/color][/center]\n"
 	var count: int = 0
-	for x in results.size():
-		var arr = results[-x-1]
+	for arr in results:
 		count += 1
 		if count == 1:
 			res_str += "[center][color=#f5a02a]1st: "
