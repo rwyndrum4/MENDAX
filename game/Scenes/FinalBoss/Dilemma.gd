@@ -47,15 +47,15 @@ func _ready():
 func _process(_delta):
 	if textBox.text_queue.empty():
 		if _num_players > 1:
-			$Button1.text = "Betray" + _players["1"]
+			$Button1.text = "Betray" + _players[0]
 			$Button1.show()
 			$ButtonGlow1.show()
 		if _num_players > 2:
-			$Button2.text = "Betray" + _players["2"]
+			$Button2.text = "Betray" + _players[1]
 			$Button2.show()
 			$ButtonGlow2.show()
 		if _num_players > 3:
-			$Button3.text = "Betray" + _players["3"]
+			$Button3.text = "Betray" + _players[2]
 			$Button3.show()
 			$ButtonGlow3.show()
 		$Button4.show()

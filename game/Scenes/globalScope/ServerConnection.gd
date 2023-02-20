@@ -43,12 +43,10 @@ signal minigame_rhythm_score(id, score)
 signal chat_message_received(msg,type,user_sent,from_user) #signal to tell game a chat message has come in
 
 const KEY := "nakama_mendax" #key that is stored in the server
-var IP_ADDRESS: String = "3.128.91.117" #ip address of server
+var IP_ADDRESS: String = "18.189.21.183" #ip address of server
 
 var _session: NakamaSession #user session
 
-#bens server: 18.118.82.24
-#jasons server: 52.205.252.95
 var _client := Nakama.create_client(KEY, IP_ADDRESS, 7350, "http") #server client
 var _socket : NakamaSocket #server socket connection
 
