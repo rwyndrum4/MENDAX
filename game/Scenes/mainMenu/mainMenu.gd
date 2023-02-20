@@ -322,9 +322,9 @@ func no_game_created():
 	else:
 		yield(ServerConnection.create_match_group(code), "completed") #create new group
 		yield(ServerConnection.join_chat_async_group(), "completed") #join group chat
-		ServerConnection.switch_chat_methods() #switch from using glabal to match chat
-		ServerConnection.leave_general_chat()
 		yield(ServerConnection.create_match(code), "completed")
+		ServerConnection.switch_chat_methods() #switch from using glabal to match chat
+		yield(ServerConnection.leave_general_chat(), "completed")
 		get_parent().chat_box.chat_event_message("New game created!", "white")
 		get_parent().chat_box.chat_event_message("Switched from global chat to match chat", "pink")
 		$showLobbyCode/code.text = code
