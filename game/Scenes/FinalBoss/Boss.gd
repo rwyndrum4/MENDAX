@@ -1,4 +1,6 @@
 extends StaticBody2D
+var _timer:float = 0
+var _prev_timer:float = 0
 
 var aoe_attack = preload("res://Scenes/BossAttacks/AoeSlam.tscn")
 
@@ -25,5 +27,8 @@ func spawn_aoe_attack() -> void:
 func _delete_aoe_atk(atk:Area2D) -> void:
 	atk.queue_free()
 	
-func _process(_delta):
-	spawn_aoe_attack()
+func _process(delta):
+	_timer += delta
+	if _timer - _prev_timer > 2:
+		spawn_aoe_attack()
+		_prev_timer = _timer

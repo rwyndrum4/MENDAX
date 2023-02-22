@@ -119,7 +119,8 @@ range_item_cull_mask = 3
 
 [node name="Player" parent="." instance=ExtResource( 2 )]
 position = Vector2( 855, 1540 )
-collision_layer = 1
+collision_layer = 9
+collision_mask = 17
 __meta__ = {
 "_edit_group_": true
 }
@@ -253,6 +254,7 @@ animation = "mist"
 
 [node name="right_side" type="Area2D" parent="steamControl/enrtyAreas"]
 position = Vector2( -1272, 2993 )
+collision_mask = 0
 
 [node name="right_side_collider" type="CollisionShape2D" parent="steamControl/enrtyAreas/right_side"]
 position = Vector2( 0, 3 )
@@ -260,6 +262,7 @@ shape = SubResource( 8 )
 
 [node name="left_side" type="Area2D" parent="steamControl/enrtyAreas"]
 position = Vector2( -5832, 2993 )
+collision_mask = 0
 
 [node name="left_side_collider" type="CollisionShape2D" parent="steamControl/enrtyAreas/left_side"]
 position = Vector2( -32, 6 )
