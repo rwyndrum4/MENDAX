@@ -176,6 +176,7 @@ align = 1
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="steamControl/steamAnimations"]
 visible = false
+light_mask = 0
 position = Vector2( -1580, 2723 )
 scale = Vector2( 6, 6 )
 frames = SubResource( 9 )
@@ -183,6 +184,7 @@ animation = "mist"
 
 [node name="AnimatedSprite2" type="AnimatedSprite" parent="steamControl/steamAnimations"]
 visible = false
+light_mask = 0
 position = Vector2( -1885, 3281 )
 rotation = 3.13913
 scale = Vector2( 6, 6 )
@@ -191,6 +193,7 @@ animation = "mist"
 
 [node name="AnimatedSprite3" type="AnimatedSprite" parent="steamControl/steamAnimations"]
 visible = false
+light_mask = 0
 position = Vector2( -2731, 2720 )
 scale = Vector2( 6, 6 )
 frames = SubResource( 9 )
@@ -198,6 +201,7 @@ animation = "mist"
 
 [node name="AnimatedSprite4" type="AnimatedSprite" parent="steamControl/steamAnimations"]
 visible = false
+light_mask = 0
 position = Vector2( -3039, 3277 )
 rotation = 3.13307
 scale = Vector2( 6, 6 )
@@ -206,6 +210,7 @@ animation = "mist"
 
 [node name="AnimatedSprite5" type="AnimatedSprite" parent="steamControl/steamAnimations"]
 visible = false
+light_mask = 0
 position = Vector2( -3321, 3278 )
 rotation = 3.13857
 scale = Vector2( 6, 6 )
@@ -214,6 +219,7 @@ animation = "mist"
 
 [node name="AnimatedSprite6" type="AnimatedSprite" parent="steamControl/steamAnimations"]
 visible = false
+light_mask = 0
 position = Vector2( -4172, 2722 )
 scale = Vector2( 6, 6 )
 frames = SubResource( 9 )
@@ -221,6 +227,7 @@ animation = "mist"
 
 [node name="AnimatedSprite7" type="AnimatedSprite" parent="steamControl/steamAnimations"]
 visible = false
+light_mask = 0
 position = Vector2( -4479, 3277 )
 rotation = 3.13735
 scale = Vector2( 6, 6 )
@@ -229,6 +236,7 @@ animation = "mist"
 
 [node name="AnimatedSprite8" type="AnimatedSprite" parent="steamControl/steamAnimations"]
 visible = false
+light_mask = 0
 position = Vector2( -5322, 2722 )
 scale = Vector2( 6, 6 )
 frames = SubResource( 9 )
@@ -236,6 +244,7 @@ animation = "mist"
 
 [node name="AnimatedSprite9" type="AnimatedSprite" parent="steamControl/steamAnimations"]
 visible = false
+light_mask = 0
 position = Vector2( -5630, 3280 )
 rotation = 3.1366
 scale = Vector2( 6, 6 )
@@ -244,6 +253,7 @@ animation = "mist"
 
 [node name="AnimatedSprite10" type="AnimatedSprite" parent="steamControl/steamAnimations"]
 visible = false
+light_mask = 0
 position = Vector2( -5922, 3278 )
 rotation = 3.13277
 scale = Vector2( 6, 6 )

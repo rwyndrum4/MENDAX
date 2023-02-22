@@ -139,6 +139,7 @@ func get_match_group_id(lobby_name: String) -> String:
 */
 """
 func remove_match(lobby_name: String):
+	# warning-ignore:return_value_discarded
 	current_matches.erase(lobby_name)
 
 """
