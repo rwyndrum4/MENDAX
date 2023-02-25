@@ -1,4 +1,4 @@
-[gd_scene load_steps=142 format=2]
+[gd_scene load_steps=156 format=2]
 
 [ext_resource path="res://Assets/ben-character/red/rolling/11.png" type="Texture" id=1]
 [ext_resource path="res://Assets/ben-character/greeen/rolling/1.png" type="Texture" id=2]
@@ -129,9 +129,27 @@
 [ext_resource path="res://Scenes/player/Torch1.gd" type="Script" id=127]
 [ext_resource path="res://Scenes/player/Sword/MyHurtBox.gd" type="Script" id=128]
 [ext_resource path="res://Scenes/Mobs/imposter.gd" type="Script" id=129]
+[ext_resource path="res://Assets/explosion/frame0011.png" type="Texture" id=130]
+[ext_resource path="res://Assets/explosion/frame0004.png" type="Texture" id=131]
+[ext_resource path="res://Assets/explosion/frame0001.png" type="Texture" id=132]
+[ext_resource path="res://Assets/explosion/frame0002.png" type="Texture" id=133]
+[ext_resource path="res://Assets/explosion/frame0005.png" type="Texture" id=134]
+[ext_resource path="res://Assets/explosion/frame0010.png" type="Texture" id=135]
+[ext_resource path="res://Assets/explosion/frame0012.png" type="Texture" id=136]
+[ext_resource path="res://Assets/explosion/frame0007.png" type="Texture" id=137]
+[ext_resource path="res://Assets/explosion/frame0003.png" type="Texture" id=138]
+[ext_resource path="res://Assets/explosion/frame0008.png" type="Texture" id=139]
+[ext_resource path="res://Assets/explosion/frame0006.png" type="Texture" id=140]
+[ext_resource path="res://Assets/explosion/frame0000.png" type="Texture" id=141]
+[ext_resource path="res://Assets/explosion/frame0009.png" type="Texture" id=142]
 
 [sub_resource type="SpriteFrames" id=13]
 animations = [ {
+"frames": [ ExtResource( 141 ), ExtResource( 132 ), ExtResource( 133 ), ExtResource( 138 ), ExtResource( 131 ), ExtResource( 134 ), ExtResource( 140 ), ExtResource( 137 ), ExtResource( 139 ), ExtResource( 142 ), ExtResource( 135 ), ExtResource( 130 ), ExtResource( 136 ) ],
+"loop": true,
+"name": "explosion",
+"speed": 5.0
+}, {
 "frames": [ ExtResource( 90 ), ExtResource( 124 ), ExtResource( 119 ), ExtResource( 122 ), ExtResource( 104 ), ExtResource( 99 ), ExtResource( 93 ) ],
 "loop": true,
 "name": "idle_blue",
@@ -290,7 +308,10 @@ animations = [ {
 [sub_resource type="RectangleShape2D" id=12]
 extents = Vector2( 9.7, 9.35279 )
 
-[node name="KinematicBody2D" type="KinematicBody2D"]
+[sub_resource type="RectangleShape2D" id=18]
+extents = Vector2( 28.75, 29.25 )
+
+[node name="Imposter" type="KinematicBody2D"]
 script = ExtResource( 129 )
 
 [node name="position" type="Position2D" parent="."]
@@ -298,7 +319,8 @@ script = ExtResource( 129 )
 [node name="animated_sprite" type="AnimatedSprite" parent="position"]
 scale = Vector2( 3.53642, 3.53642 )
 frames = SubResource( 13 )
-animation = "roll_southeast_green"
+animation = "explosion"
+frame = 12
 
 [node name="ProgressBar" type="ProgressBar" parent="."]
 visible = false
@@ -344,4 +366,8 @@ scale = Vector2( 5, 4.97178 )
 position = Vector2( 0.0999999, -0.100567 )
 shape = SubResource( 12 )
 
-[connection signal="area_entered" from="Area2D" to="." method="_on_Area2D_area_entered"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( -1, -2 )
+shape = SubResource( 18 )
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]

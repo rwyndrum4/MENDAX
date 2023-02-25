@@ -67,7 +67,7 @@ func _physics_process(delta):
 	# Initialize input velocity
 	var input_velocity = Vector2.ZERO
 	# Inverted controls if invert is active <------------------------------------------------BEN I CHANGED THIS
-	if Input.is_action_pressed("invert_controls"):
+	if isInverted == true:
 		input_velocity.x = Input.get_axis("ui_right", "ui_left")
 		input_velocity.y = Input.get_axis("ui_down", "ui_up") 
 	else:

@@ -3,6 +3,7 @@ extends KinematicBody2D
 onready var character = $position/animated_sprite
 onready var char_pos = $position
 onready var hitbox_imposter = $Area2D/playerHitbox
+onready var light = $Torch1
 var imposter_color
 var rng
 
@@ -12,26 +13,29 @@ var BASE_SPEED = 0.7
 var BASE_ACCELERATION = 500
 
 func _ready():
+	randomize()
 	rng = randi() % 4
-	if rng == 1:
+	print(rng) 
+	if rng == 0:
 		imposter_color = "green"
-	if rng == 2:
+	if rng == 1:
 		imposter_color = "blue"
-	if rng == 3:
+	if rng == 2:
 		imposter_color = "orange"
-	if rng == 4:
+	else:
 		imposter_color = "red"
 	
 func _physics_process(_delta):
 	var player_pos = null
 
-	if not get_parent()._player_dead:
-		player_pos = get_parent().get_node("Player").position
-		control_animations(velocity)
-	else:
-		velocity = move_and_slide(velocity.move_toward(BASE_SPEED*Vector2.ZERO, BASE_ACCELERATION*_delta))
-		control_animations(velocity)
-		return
+	#if not get_parent()._player_dead:
+	player_pos = get_parent().get_node("Player").position
+	velocity = move_and_slide(velocity.move_toward(BASE_SPEED*(player_pos - position), BASE_ACCELERATION*_delta))
+	control_animations(velocity)
+	#else:
+	
+	#control_animations(velocity)
+	
 	
 	
 
@@ -72,6 +76,20 @@ func control_animations(vel:Vector2):
 		character.play("idle_" + imposter_color)
 
 
-func _on_Area2D_area_entered(area):
-	#blow up and deal damage in area
-	pass # Replace with function body.
+
+func _on_Area2D_body_entered(body):
+		if "Player" in body.name:
+			set_physics_process(false)
+			character.play("explosion")
+			var Player = get_parent().get_node("Player")
+			#enter health bar stuff here
+			Player.take_damage(10)
+			print("player got exploded 10 dmg")
+			light.visible = false
+			yield(character, "animation_finished")
+			print("invert the controls")
+			Player.isInverted = true
+			Player.
+			
+			queue_free()
+
