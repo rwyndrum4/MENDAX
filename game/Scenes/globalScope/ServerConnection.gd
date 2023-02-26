@@ -33,7 +33,7 @@ signal character_despawned(char_name) #signal to tell if someone has despawned
 signal riddle_received(riddle) #signal to tell game it has received a riddle from server
 signal arena_player_swung_sword(id, direction) #signal to tell arena minigame someone swung sword
 signal arena_player_lost_health(id, health) #signal to tell if player has lost health
-signal arena_enemy_hit(enemmy_hit, damage_taken) #signal to tell if an enemy has been hit
+signal arena_enemy_hit(enemmy_hit, damage_taken,id) #signal to tell if an enemy has been hit
 signal minigame_can_start() #signal that the minigame can be started
 signal minigame_player_spawned(id) #signal to tell if a player has arrived to a scene
 
@@ -416,7 +416,7 @@ func send_arena_player_health(health_in: int):
 """
 func send_arena_enemy_hit(damage: int, enemy_hit: int):
 	if _socket:
-		var payload := {enemy = enemy_hit, dmg = damage}
+		var payload := {id = _player_num,enemy = enemy_hit, dmg = damage}
 		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_ARENA_ENEMY_HIT, JSON.print(payload))
 
 func send_minigame_can_start():
@@ -556,8 +556,9 @@ func _on_NakamaSocket_received_match_state(match_state: NakamaRTAPI.MatchData) -
 			
 			var enemy: int = int(decoded.enemy)
 			var dmg_taken: int = int(decoded.dmg)
+			var id: int = int(decoded.id)
 			
-			emit_signal("arena_enemy_hit", enemy, dmg_taken)
+			emit_signal("arena_enemy_hit", enemy, dmg_taken,id)
 		OpCodes.UPDATE_CAN_START_GAME:
 			emit_signal("minigame_can_start")
 		OpCodes.SPAWNED:

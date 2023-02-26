@@ -365,7 +365,7 @@ func other_player_hit(player_id: int, player_health: int):
 * @return None
 */
 """
-func someone_hit_enemy(enemy_id: int, dmg_taken: int):
+func someone_hit_enemy(enemy_id: int, dmg_taken: int,player_id: int):
 	if enemy_id == EnemyTypes.SKELETON:
 		if is_instance_valid(SkeletonEnemy):
 			SkeletonEnemy.take_damage_server(dmg_taken)
