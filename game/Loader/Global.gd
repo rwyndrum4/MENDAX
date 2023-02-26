@@ -54,6 +54,10 @@ var player_positions:Dictionary = {}
 var player_input_vectors:Dictionary = {}
 # Hold current matches, for joining matches
 var current_matches: Dictionary = {}
+#keeps track of damage dealt to enemy for each player
+var enemy_damage: Dictionary = {"1":0,"2":0,"3":0,"4":0}
+#keeps track of health of each player
+var player_health: Dictionary ={"1":0,"2":0,"3":0,"4":0}
 
 """
 /*
