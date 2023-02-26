@@ -68,6 +68,8 @@ func _process(_delta): #change to delta if used
 	# Check for completion of boss stage 1
 	if Global.progress == 4:
 		Global.state = Global.scenes.DILEMMA
+	if Global.progress == 5:
+		load_boss(2)
 
 """
 /*
@@ -163,7 +165,7 @@ func _on_Timer_timeout():
 		Global.minigame = 3
 		Global.state = Global.scenes.RHYTHM_MINIGAME
 	else: 
-		begin_final_boss()
+		load_boss(1)
 
 """
 /*
@@ -355,28 +357,36 @@ func set_init_player_pos():
 * @return Currently, timer stops and four bezier objects spawn
 */
 """			
-func begin_final_boss():
+func load_boss(stage_num:int):
 	myTimer.stop()
-	# Generate beziers
-	var bez1 = preload("res://Scenes/FinalBoss/Bezier.tscn").instance()
-	var bez2 = preload("res://Scenes/FinalBoss/Bezier.tscn").instance()
-	var bez3 = preload("res://Scenes/FinalBoss/Bezier.tscn").instance()
-	var bez4 = preload("res://Scenes/FinalBoss/Bezier.tscn").instance()
-	# Assign ids (for the purpose of differentiating signals)
-	bez1._id = 1
-	bez2._id = 2
-	bez3._id = 3
-	bez4._id = 4
-	# Place beziers
-	bez1.set("position", Vector2(2750, 2000))
-	bez2.set("position", Vector2(1500, 0))
-	bez3.set("position", Vector2(-10000, 4000))
-	bez4.set("position", Vector2(-7750, 3250))
-	# Add beziers to scene
-	add_child_below_node($Darkness, bez1)
-	add_child_below_node($Darkness, bez2)
-	add_child_below_node($Darkness, bez3)
-	add_child_below_node($Darkness, bez4)
+	if stage_num == 1:
+		# Generate beziers
+		var bez1 = preload("res://Scenes/FinalBoss/Bezier.tscn").instance()
+		var bez2 = preload("res://Scenes/FinalBoss/Bezier.tscn").instance()
+		var bez3 = preload("res://Scenes/FinalBoss/Bezier.tscn").instance()
+		var bez4 = preload("res://Scenes/FinalBoss/Bezier.tscn").instance()
+		# Assign ids (for the purpose of differentiating signals)
+		bez1._id = 1
+		bez2._id = 2
+		bez3._id = 3
+		bez4._id = 4
+		# Place beziers
+		bez1.set("position", Vector2(2750, 2000))
+		bez2.set("position", Vector2(1500, 0))
+		bez3.set("position", Vector2(-10000, 4000))
+		bez4.set("position", Vector2(-7750, 3250))
+		# Add beziers to scene
+		add_child_below_node($Darkness, bez1)
+		add_child_below_node($Darkness, bez2)
+		add_child_below_node($Darkness, bez3)
+		add_child_below_node($Darkness, bez4)
+	if stage_num == 2:
+		# Light up the cave
+		$Darkness.hide()
+		# Hide light from cave entrance
+		$Light2D.hide()
+		# Hide player torch light
+		$Player.get_node("Torch1").hide()
 	# Initialize, place, and spawn boss
 	var boss = preload("res://Scenes/FinalBoss/Boss.tscn").instance()
 	boss.set("position", Vector2(-4250, 2160))
