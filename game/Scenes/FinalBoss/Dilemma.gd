@@ -21,6 +21,10 @@ var _num_players
 """
 func _ready():
 	_players = Global.player_names.values()
+	for i in range(0, len(_players)):
+		if _players[i] == Global.get_player_name(ServerConnection._player_num):
+			print("removed" + _players[i] )
+			_players.remove(i)
 	_num_players = len(_players)
 	if not ServerConnection.match_exists() or not ServerConnection.get_server_status():
 		Global.state = Global.scenes.CAVE
