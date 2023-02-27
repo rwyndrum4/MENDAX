@@ -102,6 +102,9 @@ func take_damage(amount: int) -> void:
 	ServerConnection.send_arena_enemy_hit(amount,2)
 	$AudioStreamPlayer2D.play()
 	healthbar.value = healthbar.value - amount
+	
+	Global.chandelier_damage[str(1)]+=amount
+	#print(Global.chandelier_damage[str(1)])
 	if healthbar.value == 0:
 		_isDead = true
 		chandelierAnim.play("death")

@@ -65,6 +65,14 @@ var player_input_vectors:Dictionary = {}
 # Hold current matches, for joining matches
 # Example: "random_match_code": [nakama_code, group_chat_code]
 var current_matches: Dictionary = {}
+#keeps track of damage dealt to skeleton for each player
+var skeleton_damage: Dictionary = {"1":0,"2":0,"3":0,"4":0}
+#keeps track of health of each player
+var player_health: Dictionary ={"1":0,"2":0,"3":0,"4":0}
+#keeps track of damage dealt to chandelier for each player
+var chandelier_damage: Dictionary = {"1":0,"2":0,"3":0,"4":0}
+#keeps track of damage dealt to bod for each player
+var bod_damage: Dictionary = {"1":0,"2":0,"3":0,"4":0}
 #Dictionary that stores how player colors are distributed
 var player_colors: Dictionary = {1:"blue",2:"red",3:"green",4:"orange"}
 
