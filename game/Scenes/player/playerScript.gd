@@ -8,6 +8,7 @@
 	10/14/2022 - Added signals to stop player when in options or textbox scene
 	10/27/2022 - Added character animation
 	11/28/2022 - Added death handling
+	2/14/2023  - Added inverted controls option
 """
 extends KinematicBody2D
 
@@ -15,9 +16,11 @@ extends KinematicBody2D
 onready var character = $position/animated_sprite
 onready var char_pos = $position
 onready var healthbar = $ProgressBar
+onready var isInverted = false
 onready var shield = $Shield
 var is_stopped = false
 var player_color:String = ""
+
 
 # Player physics constants
 const ACCELERATION = 25000
@@ -65,8 +68,13 @@ func _physics_process(delta):
 	
 	# Initialize input velocity
 	var input_velocity = Vector2.ZERO
-	input_velocity.x = Input.get_axis("ui_left", "ui_right")
-	input_velocity.y = Input.get_axis("ui_up", "ui_down") 
+	# Inverted controls if invert is active <------------------------------------------------BEN I CHANGED THIS
+	if isInverted == true:
+		input_velocity.x = Input.get_axis("ui_right", "ui_left")
+		input_velocity.y = Input.get_axis("ui_down", "ui_up") 
+	else:
+		input_velocity.x = Input.get_axis("ui_left", "ui_right")
+		input_velocity.y = Input.get_axis("ui_up", "ui_down") 
 	
 	input_velocity = input_velocity.normalized()
 	
@@ -96,6 +104,7 @@ func _physics_process(delta):
 	velocity = move_and_slide(velocity)
 	#Animate character
 	control_animations(velocity)
+
 
 """
 /*
@@ -158,10 +167,11 @@ func take_damage(amount: int) -> void:
 		var new_health = healthbar.value - amount
 		ServerConnection.send_arena_player_health(new_health)
 		healthbar.value = new_health
-		if healthbar.value == 0:
+		print(healthbar.value)
+		if healthbar.value == 0 and Global.state == Global.scenes.ARENA_MINIGAME: #should fix it
 			get_parent()._player_dead = true
 			_game_over()
-			queue_free()	
+			queue_free()
 
 
 func set_color(player_num:int):
