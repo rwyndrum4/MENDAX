@@ -65,6 +65,8 @@ var player_input_vectors:Dictionary = {}
 # Hold current matches, for joining matches
 # Example: "random_match_code": [nakama_code, group_chat_code]
 var current_matches: Dictionary = {}
+#Dictionary that stores how player colors are distributed
+var player_colors: Dictionary = {1:"blue",2:"red",3:"green",4:"orange"}
 
 """
 /*
@@ -137,6 +139,7 @@ func get_match_group_id(lobby_name: String) -> String:
 */
 """
 func remove_match(lobby_name: String):
+	# warning-ignore:return_value_discarded
 	current_matches.erase(lobby_name)
 
 """

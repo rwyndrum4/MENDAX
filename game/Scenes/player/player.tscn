@@ -1,4 +1,4 @@
-[gd_scene load_steps=142 format=2]
+[gd_scene load_steps=144 format=2]
 
 [ext_resource path="res://Assets/ben-character/blue/rolling/5.png" type="Texture" id=1]
 [ext_resource path="res://Scenes/player/playerScript.gd" type="Script" id=2]
@@ -129,6 +129,8 @@
 [ext_resource path="res://Assets/TorchLight3.png" type="Texture" id=127]
 [ext_resource path="res://Assets/torch_spritesheet.png" type="Texture" id=128]
 [ext_resource path="res://Scenes/player/Torch1.gd" type="Script" id=129]
+[ext_resource path="res://Assets/shieldFull.png" type="Texture" id=130]
+[ext_resource path="res://Scenes/player/Shield.gd" type="Script" id=131]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 9, 9 )
@@ -302,6 +304,7 @@ shape = SubResource( 1 )
 [node name="position" type="Position2D" parent="."]
 
 [node name="animated_sprite" type="AnimatedSprite" parent="position"]
+light_mask = 0
 scale = Vector2( 3.53642, 3.53642 )
 frames = SubResource( 2 )
 animation = "roll_southeast_green"
@@ -339,8 +342,19 @@ color = Color( 0.839216, 0.454902, 0.0980392, 1 )
 script = ExtResource( 129 )
 
 [node name="light" type="AnimatedSprite" parent="Torch1"]
+light_mask = 0
 position = Vector2( 18.054, 0 )
 scale = Vector2( 22.5675, 21.6575 )
 frames = SubResource( 12 )
-frame = 4
+frame = 3
 playing = true
+
+[node name="Shield" type="Sprite" parent="."]
+light_mask = 0
+position = Vector2( -0.500003, -1.49999 )
+scale = Vector2( 1.13, 1.11 )
+texture = ExtResource( 130 )
+script = ExtResource( 131 )
+
+[node name="ShieldDelay" type="Timer" parent="Shield"]
+one_shot = true

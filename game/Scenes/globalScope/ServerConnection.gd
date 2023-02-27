@@ -196,6 +196,21 @@ func join_chat_async_general() -> int:
 
 """
 /*
+* @pre None
+* @post leaves the match group chat
+* @param None
+* @return None
+*/
+"""
+func leave_general_chat():
+	var result: NakamaAsyncResult = yield(_socket.leave_chat_async(_general_chat_id), "completed")
+	_general_chat_id = ""
+	if result.is_exception():
+		printerr("An error occurred: %s" % result)
+		return
+
+"""
+/*
 * @pre called when joining a whisper chat
 * @post sends whisper message corresponding to username
 * @param input -> String, has_id_already -> bool
@@ -239,7 +254,6 @@ func join_chat_async_group() -> int:
 	_group_chat_id = channel.id 
 	print("Connected to group channel: '%s'" % [channel.id])
 	return OK
-
 
 """
 /*
@@ -295,8 +309,6 @@ func leave_match_group_chat():
 	if result.is_exception():
 		printerr("An error occurred: %s" % result)
 		return
-
-	print("Left group chat")
 
 """
 /*
