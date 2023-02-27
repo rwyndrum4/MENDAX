@@ -11,11 +11,12 @@ extends StaticBody2D
 var _in_radius
 var _id
 var _lit
+onready var myTimer: Timer = $Timer
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	_in_radius = -1
-	_lit = false
+	_lit = 0
 	
 """
 /*
@@ -27,12 +28,25 @@ func _ready():
 """
 func _input(_ev):
 	if _in_radius == _id:
-		if Input.is_action_just_pressed("ui_accept",false) and not Input.is_action_just_pressed("ui_enter_chat") and not _lit:
-			$Light2D.show()
-			$TileTexture.set("texture", preload("res://Assets/tiles/TilesCorrected/BezierLit.png"))
-			$FireHitbox.set("disabled", false)
-			Global.progress+=1
-			_lit = true
+		if Input.is_action_just_pressed("ui_accept",false) and not Input.is_action_just_pressed("ui_enter_chat") and _lit == 0:
+			myTimer.start(3)
+			_lit = 1
+			
+"""
+/*
+* @pre Called when the timer hits 0
+* @post None
+* @param None
+* @return String (text of current time left)
+*/
+"""
+func _on_Timer_timeout():
+	if _lit == 1:
+		$Light2D.show()
+		$TileTexture.set("texture", preload("res://Assets/tiles/TilesCorrected/BezierLit.png"))
+		$FireHitbox.set("disabled", false)
+		Global.progress+=1
+		_lit = 2
 			
 
 """	
@@ -56,3 +70,5 @@ func _on_ActivationRadius_body_entered(body):
 func _on_ActivationRadius_body_exited(body):
 	if body.name == "Player":
 		_in_radius = -1
+		if _lit == 1:
+			_lit = 0
