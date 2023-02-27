@@ -669,10 +669,7 @@ func _on_NakamaSocket_received_match_state(match_state: NakamaRTAPI.MatchData) -
 			var dmg_taken: int = int(decoded.dmg)
 			var id: int = int(decoded.id)
 			
-<<<<<<< HEAD
 			emit_signal("arena_enemy_hit", enemy, dmg_taken,id)
-=======
-			emit_signal("arena_enemy_hit", enemy, dmg_taken)
 		OpCodes.UPDATE_RHYTHM_SCORE:
 			var decoded: Dictionary = JSON.parse(raw).result
 			
@@ -680,7 +677,6 @@ func _on_NakamaSocket_received_match_state(match_state: NakamaRTAPI.MatchData) -
 			var score: int = int(decoded.score)
 			
 			emit_signal("minigame_rhythm_score", id, score)
->>>>>>> main
 		OpCodes.UPDATE_CAN_START_GAME:
 			emit_signal("minigame_can_start")
 		OpCodes.SPAWNED:
