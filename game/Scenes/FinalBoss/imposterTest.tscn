@@ -1,12 +1,26 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://Scenes/minigames/arena/arenaMap.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Scenes/player/Sword/Sword.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Scenes/Mobs/imposter.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Scenes/player/player.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Assets/Confuzzle/confuzzle0008.png" type="Texture" id=5]
+[ext_resource path="res://Assets/Confuzzle/confuzzle0002.png" type="Texture" id=6]
+[ext_resource path="res://Assets/Confuzzle/confuzzle0007.png" type="Texture" id=7]
+[ext_resource path="res://Assets/Confuzzle/confuzzle0000.png" type="Texture" id=8]
+[ext_resource path="res://Assets/Confuzzle/confuzzle0010.png" type="Texture" id=9]
+[ext_resource path="res://Assets/Confuzzle/confuzzle0005.png" type="Texture" id=10]
 
 [sub_resource type="OccluderPolygon2D" id=1]
 polygon = PoolVector2Array( -48.9833, -45.9201, -50.0482, 47.9166, -50.0482, 47.9166, 50.0482, 46.9184, 50.0482, 46.9184, 48.9833, -48.9149, 47.9185, -50.9114 )
+
+[sub_resource type="SpriteFrames" id=2]
+animations = [ {
+"frames": [ ExtResource( 8 ), ExtResource( 6 ), ExtResource( 10 ), ExtResource( 7 ), ExtResource( 5 ), ExtResource( 9 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
 
 [node name="Node2D" type="Node2D"]
 
@@ -29,3 +43,9 @@ occluder = SubResource( 1 )
 current = true
 
 [node name="Sword" parent="Player" instance=ExtResource( 2 )]
+
+[node name="confuzzle" type="AnimatedSprite" parent="Player"]
+position = Vector2( 0, -45 )
+frames = SubResource( 2 )
+frame = 5
+playing = true

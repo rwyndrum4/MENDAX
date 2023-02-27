@@ -89,7 +89,6 @@ func _on_Area2D_body_entered(body):
 			yield(character, "animation_finished")
 			print("invert the controls")
 			Player.isInverted = true
-			Player.
 			
 			queue_free()
 
