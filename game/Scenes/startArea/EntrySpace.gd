@@ -74,7 +74,7 @@ func _process(_delta): #change to delta if used
 		Global.state = Global.scenes.DILEMMA
 	if Global.progress == 5:
 		load_boss(2)
-	if Global.progress == 6:
+	if Global.progress == 6 or Global.progress == 8:
 		if sword.direction == "right":
 			sword.get_node("pivot").position = $Player.position + Vector2(60,0)
 		elif sword.direction == "left":
@@ -83,6 +83,8 @@ func _process(_delta): #change to delta if used
 		confuzzed.visible = true
 	else:
 		confuzzed.visible = false
+	if Global.progress == 7:
+		load_boss(3)
 
 """
 /*
@@ -424,9 +426,28 @@ func load_boss(stage_num:int):
 		wait_for_start.start()
 		# warning-ignore:return_value_discarded
 		wait_for_start.connect("timeout",self, "_imposter_spawn")
-		
+	if stage_num == 3:
+		# Light up the cave
+		$Darkness.hide()
+		# Hide light from cave entrance
+		$Light2D.hide()
+		# Hide player torch light
+		$Player.get_node("Torch1").hide()
+		# Give player a sword
+		sword = preload("res://Scenes/player/Sword/Sword.tscn").instance()
+		sword.direction = "right"
+		sword.get_node("pivot").position = $Player.position + Vector2(60,20)
+		add_child_below_node($Player, sword)
+		Global.progress = 8
+		#imposter spawns
+		var wait_for_start: Timer = Timer.new()
+		add_child(wait_for_start)
+		wait_for_start.wait_time = 5
+		wait_for_start.one_shot = false
+		wait_for_start.start()
+		# warning-ignore:return_value_discarded
+		wait_for_start.connect("timeout",self, "_imposter_spawn")
 	# Initialize, place, and spawn boss
-	
 	boss.set("position", Vector2(-4250, 2160))
 	add_child_below_node($worldMap, boss)
 	# Zoom out camera so player can view Mendax in all his glory
