@@ -17,6 +17,7 @@ onready var character = $position/animated_sprite
 onready var char_pos = $position
 onready var healthbar = $ProgressBar
 onready var isInverted = false
+onready var shield = $Shield
 var is_stopped = false
 var player_color:String = ""
 
@@ -46,6 +47,7 @@ func _ready():
 	# if server wasnt' connected
 	if player_color == "":
 		player_color = "blue"
+		
 	#Initially have character idle
 	character.play("idle_" + player_color)
 	
@@ -158,13 +160,17 @@ func control_animations(vel:Vector2):
 */
 """
 func take_damage(amount: int) -> void:
-	var new_health = healthbar.value - amount
-	ServerConnection.send_arena_player_health(new_health)
-	healthbar.value = new_health
-	if healthbar.value == 0:
-		get_parent()._player_dead = true
-		_game_over()
-		queue_free()
+	if shield.isUp():
+		shield.takeDamage()
+	else:
+		var new_health = healthbar.value - amount
+		ServerConnection.send_arena_player_health(new_health)
+		healthbar.value = new_health
+		if healthbar.value == 0:
+			get_parent()._player_dead = true
+			_game_over()
+			queue_free()	
+
 
 func set_color(player_num:int):
 	match player_num:

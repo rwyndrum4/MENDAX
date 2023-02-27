@@ -65,6 +65,9 @@ func _process(_delta): #change to delta if used
 	timerText.text = convert_time(myTimer.time_left)
 	if not stop_steam_control:
 		control_steam()
+	# Check for completion of boss stage 1
+	if Global.progress == 4:
+		Global.state = Global.scenes.DILEMMA
 
 """
 /*
@@ -182,7 +185,10 @@ func chatbox_use(value):
 * @return None
 */
 """
-func _on_right_side_area_entered(_area):
+func _on_right_side_area_entered(area):
+	if ServerConnection.match_exists() and ServerConnection.get_server_status():
+		if area.get_parent().player_color != Global.player_colors[ServerConnection._player_num]:
+			return
 	var pos = $Player.position
 	if pos.x > -1200.0:
 		steam_area_activated()
@@ -197,7 +203,10 @@ func _on_right_side_area_entered(_area):
 * @return None
 */
 """
-func _on_left_side_area_entered(_area):
+func _on_left_side_area_entered(area):
+	if ServerConnection.match_exists() and ServerConnection.get_server_status():
+		if area.get_parent().player_color != Global.player_colors[ServerConnection._player_num]:
+			return
 	var pos = $Player.position
 	if pos.x < -5800:
 		steam_area_activated()
