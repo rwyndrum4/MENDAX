@@ -31,5 +31,8 @@ texture = ExtResource( 3 )
 texture_scale = 10.0
 color = Color( 0.913725, 0.517647, 0.172549, 1 )
 
+[node name="Timer" type="Timer" parent="."]
+
 [connection signal="body_entered" from="ActivationRadius" to="." method="_on_ActivationRadius_body_entered"]
 [connection signal="body_exited" from="ActivationRadius" to="." method="_on_ActivationRadius_body_exited"]
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
