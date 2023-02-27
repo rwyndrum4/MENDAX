@@ -356,7 +356,7 @@ func other_player_hit(player_id: int, player_health: int):
 			var p_obj = o_player.get('player_obj')
 			p_obj.take_damage(player_health)
 			Global.player_health[str(player_id)]=player_health
-			print(Global.player_health[str(player_id)])
+			#print(Global.player_health[str(player_id)])
 			break
 
 """
@@ -381,7 +381,7 @@ func someone_hit_enemy(enemy_id: int, dmg_taken: int,player_id: int):
 	elif enemy_id == EnemyTypes.CHANDELIER:
 		if is_instance_valid(ChandelierEnemy):
 			ChandelierEnemy.take_damage_server(dmg_taken)
-			Global.chandelier_damage_damage[str(player_id)]+=dmg_taken
+			Global.chandelier_damage[str(player_id)]+=dmg_taken
 			print(Global.chandelier_damage[str(player_id)])
 
 """
@@ -425,7 +425,7 @@ func _enemy_defeated(_enemyID:int):
 	enemies_remaining = enemies_remaining - 1
 	if enemies_remaining == 0:
 		textBox.queue_text("Those strongest among you who remain have leave to prepare for the next trial.")
-		print(Global.enemy_damage["1"])
+		#print(Global.enemy_damage["1"])
 		# Wait 5 seconds
 		var t = Timer.new()
 		t.set_wait_time(5)
