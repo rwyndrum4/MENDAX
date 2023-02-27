@@ -31,6 +31,7 @@ func _ready():
 		if _players[i] == Global.get_player_name(ServerConnection._player_num):
 			print("removed" + _players[i] )
 			_players.remove(i)
+			break
 	_num_players = len(_players)
 	# Turn off player's torch
 	$Player.get_node("Torch1").hide()
@@ -59,15 +60,15 @@ func _process(_delta):
 		Global.progress = 5
 		Global.state = Global.scenes.CAVE
 	if textBox.text_queue.empty():
-		if _num_players > 1:
+		if _num_players >= 1:
 			$Button1.text = "Betray" + _players[0]
 			$Button1.show()
 			$ButtonGlow1.show()
-		if _num_players > 2:
+		if _num_players >= 2:
 			$Button2.text = "Betray" + _players[1]
 			$Button2.show()
 			$ButtonGlow2.show()
-		if _num_players > 3:
+		if _num_players >= 3:
 			$Button3.text = "Betray" + _players[2]
 			$Button3.show()
 			$ButtonGlow3.show()
