@@ -11,6 +11,8 @@ var _timer:float = 0
 var _prev_timer:float = 0
 var _dmgCap
 
+
+
 var aoe_attack = preload("res://Scenes/BossAttacks/AoeSlam.tscn")
 var boulder = preload("res://Scenes/BossAttacks/Boulder.tscn")
 var atkWarningAnimation = preload("res://Scenes/BossAttacks/atkWarning.tscn")
@@ -100,6 +102,7 @@ func spawn_aoe_attack() -> void:
 	get_parent().add_child(x_sprite)
 	get_parent().add_child(bdr)
 	bdr.connect("boulder_done",self,"_atk_can_go", [atk,x_sprite])
+	
 
 """
 /*
@@ -171,4 +174,3 @@ func take_damage_server(amount: int):
 	healthbar.value = healthbar.value - amount
 	if healthbar.value == 50:
 		Global.state = Global.scenes.QUIZ
-

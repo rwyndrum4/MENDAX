@@ -18,6 +18,8 @@ var stop_steam_control = false #variable to tell whether process function needs 
 var steam_modulate:float = 0 #modualte value that is gradually added to modulate of steam
 var at_lever = false
 var at_ladder = false
+var imposter =preload("res://Scenes/Mobs/imposter.tscn")
+onready var confuzzed = $Player/confuzzle
 onready var instructions: Label = $exitCaveArea/exitDirections
 onready var myTimer: Timer = $GUI/Timer
 onready var timerText: Label = $GUI/Timer/timerText
@@ -77,6 +79,10 @@ func _process(_delta): #change to delta if used
 			sword.get_node("pivot").position = $Player.position + Vector2(60,0)
 		elif sword.direction == "left":
 			sword.get_node("pivot").position = $Player.position + Vector2(-60,0)
+	if player.isInverted == true:
+		confuzzed.visible = true
+	else:
+		confuzzed.visible = false
 
 """
 /*
@@ -375,6 +381,7 @@ func set_init_player_pos():
 """			
 func load_boss(stage_num:int):
 	myTimer.stop()
+	var boss = preload("res://Scenes/FinalBoss/Boss.tscn").instance()
 	if stage_num == 1:
 		# Generate beziers
 		var bez1 = preload("res://Scenes/FinalBoss/Bezier.tscn").instance()
@@ -409,10 +416,31 @@ func load_boss(stage_num:int):
 		sword.get_node("pivot").position = $Player.position + Vector2(60,20)
 		add_child_below_node($Player, sword)
 		Global.progress = 6
+		#imposter spawns
+		var wait_for_start: Timer = Timer.new()
+		add_child(wait_for_start)
+		wait_for_start.wait_time = 5
+		wait_for_start.one_shot = false
+		wait_for_start.start()
+		# warning-ignore:return_value_discarded
+		wait_for_start.connect("timeout",self, "_imposter_spawn")
+		
 	# Initialize, place, and spawn boss
-	var boss = preload("res://Scenes/FinalBoss/Boss.tscn").instance()
+	
 	boss.set("position", Vector2(-4250, 2160))
 	add_child_below_node($worldMap, boss)
 	# Zoom out camera so player can view Mendax in all his glory
 	$Player.get_node("Camera2D").set("zoom", Vector2(2, 2))
 	
+"""
+/*
+* @pre Called once start time expires (happens once)
+* @post deletes timer and starts game if necessary
+* @param timer -> Timer
+* @return None
+*/
+"""
+func _imposter_spawn():
+	var new_imposter = imposter.instance()
+	new_imposter.position = Vector2(0, 3000)
+	add_child(new_imposter)
