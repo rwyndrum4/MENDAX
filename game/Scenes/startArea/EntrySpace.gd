@@ -96,15 +96,15 @@ func _input(_ev):
 	#DEBUG PURPOSES - REMOVE FOR FINAL GAME!!!
 	#IF YOU PRESS P -> TIMER WILL REDUCE TO 3 SECONDS
 	if Input.is_action_just_pressed("timer_debug_key",false):
-		if Global.minigame > 2:
-			Global.progress = 4
-			Global.state = Global.scenes.DILEMMA
 		myTimer.start(3)
 	#IF YOU PRESS O (capital 'o') -> TIMER WILL INCREASE TO ARBITRARILY MANY SECONDS
 	if Input.is_action_just_pressed("minigame_debug_key",false):
 		Global.minigame = Global.minigame + 1
 	#IF YOU PRESS Q -> MINIGAME COUNTER WILL INCREASE BY 1 (1 press at start will set next to Arena, > 1 will prevent minigame from loading
 	if Input.is_action_just_pressed("extend_timer_debug_key",false):
+		if Global.minigame > 2:
+			Global.progress = 4
+			Global.state = Global.scenes.DILEMMA
 		myTimer.start(30000)
 """
 /*
