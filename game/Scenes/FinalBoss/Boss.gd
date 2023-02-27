@@ -1,3 +1,11 @@
+"""
+* Programmer Name - Freeman Spray, Ben Moeller
+* Description - Code for controlling the boss enemy
+* Date Created - 2/19/2023
+* Date Revisions:
+	2/26/2022 - Added health bar
+"""
+
 extends StaticBody2D
 var _timer:float = 0
 var _prev_timer:float = 0
@@ -21,6 +29,14 @@ onready var bossBox = $MyHurtBox/hitbox
 func _ready():
 	healthbar.value = 100;
 
+"""
+/*
+* @pre Called in the process function whenever an attack occurs
+* @post Animates boss
+* @param None
+* @return None
+*/
+"""
 func move_boss() -> void:
 	position.y -= 100
 	var back_timer = Timer.new()
@@ -30,10 +46,26 @@ func move_boss() -> void:
 	back_timer.connect("timeout",self,"_del_timer",[back_timer])
 	back_timer.start()
 
+"""
+/*
+* @pre Called by a timeout signal connected in the cleanup process of move_boss()
+* @post Frees timer
+* @param tmr, a timer.
+* @return None
+*/
+"""
 func _del_timer(tmr):
 	position.y += 100
 	tmr.queue_free()
 
+"""
+/*
+* @pre Called in the process function
+* @post spawns an aoe attack
+* @param None
+* @return None
+*/
+"""
 func spawn_aoe_attack() -> void:
 	var rng = RandomNumberGenerator.new()
 	rng.randomize()
@@ -69,17 +101,49 @@ func spawn_aoe_attack() -> void:
 	get_parent().add_child(bdr)
 	bdr.connect("boulder_done",self,"_atk_can_go", [atk,x_sprite])
 
+"""
+/*
+* @pre Called by a completion signal connected in the cleanup process of spawn_aoe_attack()
+* @post Frees animation
+* @param warAni, an animation node.
+* @return None
+*/
+"""
 func _del_animation(warAni):
 	warAni.queue_free()
 
+"""
+/*
+* @pre Called by a completion signal connected in the cleanup process of spawn_aoe_attack()
+* @post 
+* @param atk, an Area2D node. x_sprite, a sprite
+* @return None
+*/
+"""
 func _atk_can_go(atk,x_sprite):
 	x_sprite.queue_free()
 	get_parent().add_child(atk)
 	atk.connect("aoe_attack_hit",self,"_delete_aoe_atk", [atk])
 
+"""
+/*
+* @pre Called by a completion signal connected in the cleanup process of _atk_can_go()
+* @post Frees timer
+* @param atk, an Area2D node.
+* @return None
+*/
+"""
 func _delete_aoe_atk(atk:Area2D) -> void:
 	atk.queue_free()
-	
+
+"""
+/*
+* @pre Called every frame
+* @post Spawns attacks based on the timer
+* @param delta, the time between frames
+* @return None
+*/
+"""
 func _process(delta):
 	_timer += delta
 	if _timer - _prev_timer > 2:
