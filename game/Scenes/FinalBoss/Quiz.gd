@@ -97,6 +97,8 @@ func show_result():
 	RestartButton.show()
 	var score=round(correct/items.size()*100)
 	DisplayText.text="Your score is "+str(score)
+	Global.progress = 7
+	Global.state = Global.scenes.CAVE
 func show_question():
 	ListItem.show()
 	RestartButton.hide()

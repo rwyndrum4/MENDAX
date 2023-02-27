@@ -19,6 +19,8 @@ var steam_modulate:float = 0 #modualte value that is gradually added to modulate
 var at_lever = false
 var at_ladder = false
 var shield_spawn: Area2D
+var imposter =preload("res://Scenes/Mobs/imposter.tscn")
+onready var confuzzed = $Player/confuzzle
 onready var instructions: Label = $exitCaveArea/exitDirections
 onready var myTimer: Timer = $GUI/Timer
 onready var timerText: Label = $GUI/Timer/timerText
@@ -30,7 +32,9 @@ onready var ladder = $worldMap/Node2D_1/Ladder1x1
 onready var pitfall = $worldMap/Node2D_1/Pitfall1x1_2
 onready var player = $Player
 
+
 var other_player = "res://Scenes/player/other_players/other_players.tscn"
+var sword = null
 
 """
 /*
@@ -71,6 +75,17 @@ func _process(_delta): #change to delta if used
 		Global.state = Global.scenes.DILEMMA
 	if Global.progress == 5:
 		load_boss(2)
+	if Global.progress == 6 or Global.progress == 8:
+		if sword.direction == "right":
+			sword.get_node("pivot").position = $Player.position + Vector2(60,0)
+		elif sword.direction == "left":
+			sword.get_node("pivot").position = $Player.position + Vector2(-60,0)
+	if player.isInverted == true:
+		confuzzed.visible = true
+	else:
+		confuzzed.visible = false
+	if Global.progress == 7:
+		load_boss(3)
 
 """
 /*
@@ -369,6 +384,7 @@ func set_init_player_pos():
 """			
 func load_boss(stage_num:int):
 	myTimer.stop()
+	var boss = preload("res://Scenes/FinalBoss/Boss.tscn").instance()
 	if stage_num == 1:
 		# Generate shild spawn
 		shield_spawn = Area2D.new()
@@ -413,9 +429,42 @@ func load_boss(stage_num:int):
 		$Light2D.hide()
 		# Hide player torch light
 		$Player.get_node("Torch1").hide()
+		# Give player a sword
+		sword = preload("res://Scenes/player/Sword/Sword.tscn").instance()
+		sword.direction = "right"
+		sword.get_node("pivot").position = $Player.position + Vector2(60,20)
+		add_child_below_node($Player, sword)
 		Global.progress = 6
+		#imposter spawns
+		var wait_for_start: Timer = Timer.new()
+		add_child(wait_for_start)
+		wait_for_start.wait_time = 5
+		wait_for_start.one_shot = false
+		wait_for_start.start()
+		# warning-ignore:return_value_discarded
+		wait_for_start.connect("timeout",self, "_imposter_spawn")
+	if stage_num == 3:
+		# Light up the cave
+		$Darkness.hide()
+		# Hide light from cave entrance
+		$Light2D.hide()
+		# Hide player torch light
+		$Player.get_node("Torch1").hide()
+		# Give player a sword
+		sword = preload("res://Scenes/player/Sword/Sword.tscn").instance()
+		sword.direction = "right"
+		sword.get_node("pivot").position = $Player.position + Vector2(60,20)
+		add_child_below_node($Player, sword)
+		Global.progress = 8
+		#imposter spawns
+		var wait_for_start: Timer = Timer.new()
+		add_child(wait_for_start)
+		wait_for_start.wait_time = 5
+		wait_for_start.one_shot = false
+		wait_for_start.start()
+		# warning-ignore:return_value_discarded
+		wait_for_start.connect("timeout",self, "_imposter_spawn")
 	# Initialize, place, and spawn boss
-	var boss = preload("res://Scenes/FinalBoss/Boss.tscn").instance()
 	boss.set("position", Vector2(-4250, 2160))
 	add_child_below_node($worldMap, boss)
 	# Zoom out camera so player can view Mendax in all his glory
@@ -423,3 +472,15 @@ func load_boss(stage_num:int):
 	
 func give_shield(_area):
 	player.shield.giveShield()
+"""
+/*
+* @pre Called once start time expires (happens once)
+* @post deletes timer and starts game if necessary
+* @param timer -> Timer
+* @return None
+*/
+"""
+func _imposter_spawn():
+	var new_imposter = imposter.instance()
+	new_imposter.position = Vector2(0, 3000)
+	add_child(new_imposter)
