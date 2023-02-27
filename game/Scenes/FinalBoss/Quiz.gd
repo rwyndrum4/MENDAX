@@ -46,6 +46,15 @@ var item : Dictionary
 var index_item : int
 var correct : float=0
 
+
+"""
+/*
+* @pre enter quiz scene
+* @post sets correct answers for quiz
+* @param None
+* @return None
+*/
+"""
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	refresh_scene() # Replace with function body.
