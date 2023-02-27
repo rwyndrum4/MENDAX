@@ -208,7 +208,7 @@ func chatbox_use(value):
 """
 func _on_right_side_area_entered(area):
 	if ServerConnection.match_exists() and ServerConnection.get_server_status():
-		if area.get_parent().player_color == "imposer":
+		if area.get_parent().player_color == "imposter":
 			return
 		if area.get_parent().player_color != Global.player_colors[ServerConnection._player_num]:
 			return
@@ -228,7 +228,7 @@ func _on_right_side_area_entered(area):
 """
 func _on_left_side_area_entered(area):
 	if ServerConnection.match_exists() and ServerConnection.get_server_status():
-		if area.get_parent().player_color == "imposer":
+		if area.get_parent().player_color == "imposter":
 			return
 		if area.get_parent().player_color != Global.player_colors[ServerConnection._player_num]:
 			return
