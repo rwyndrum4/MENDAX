@@ -18,6 +18,7 @@ var stop_steam_control = false #variable to tell whether process function needs 
 var steam_modulate:float = 0 #modualte value that is gradually added to modulate of steam
 var at_lever = false
 var at_ladder = false
+var shield_spawn: Area2D
 onready var instructions: Label = $exitCaveArea/exitDirections
 onready var myTimer: Timer = $GUI/Timer
 onready var timerText: Label = $GUI/Timer/timerText
@@ -369,6 +370,22 @@ func set_init_player_pos():
 func load_boss(stage_num:int):
 	myTimer.stop()
 	if stage_num == 1:
+		# Generate shild spawn
+		shield_spawn = Area2D.new()
+		var col_2d = CollisionShape2D.new()
+		var shape = CircleShape2D.new()
+		shape.set_radius(80)
+		col_2d.set_shape(shape)
+		shield_spawn.position = Vector2(-4000,3000)
+		var shield_sprite = Sprite.new()
+		shield_sprite.texture = load("res://Assets/shieldFull.png")
+		shield_sprite.scale = Vector2(2,2)
+		shield_sprite.position = Vector2(-4000,3000)
+		add_child(shield_spawn)
+		shield_spawn.add_child(col_2d)
+		#add_child_below_node(shield_spawn,col_2d)
+		add_child_below_node(shield_spawn,shield_sprite)
+		shield_spawn.connect("area_entered",self,"give_shield")
 		# Generate beziers
 		var bez1 = preload("res://Scenes/FinalBoss/Bezier.tscn").instance()
 		var bez2 = preload("res://Scenes/FinalBoss/Bezier.tscn").instance()
@@ -404,3 +421,5 @@ func load_boss(stage_num:int):
 	# Zoom out camera so player can view Mendax in all his glory
 	$Player.get_node("Camera2D").set("zoom", Vector2(2, 2))
 	
+func give_shield(_area):
+	player.shield.giveShield()
