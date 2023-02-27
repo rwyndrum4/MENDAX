@@ -371,18 +371,18 @@ func someone_hit_enemy(enemy_id: int, dmg_taken: int,player_id: int):
 	if enemy_id == EnemyTypes.SKELETON:
 		if is_instance_valid(SkeletonEnemy):
 			SkeletonEnemy.take_damage_server(dmg_taken)
-			Global.enemy[str(player_id)]+=dmg_taken
-			print(Global.enemy[str(player_id)])
+			Global.skeleton_damage[str(player_id)]+=dmg_taken
+			print(Global.skeleton_damage[str(player_id)])
 	elif enemy_id == EnemyTypes.BOD:
 		if is_instance_valid(BodEnemy):
 			BodEnemy.take_damage_server(dmg_taken)
-			Global.enemy_damage[str(player_id)]+=dmg_taken
-			print(Global.enemy[str(player_id)])
+			Global.bod_damage[str(player_id)]+=dmg_taken
+			print(Global.bod_damage[str(player_id)])
 	elif enemy_id == EnemyTypes.CHANDELIER:
 		if is_instance_valid(ChandelierEnemy):
 			ChandelierEnemy.take_damage_server(dmg_taken)
-			Global.enemy_damage[str(player_id)]+=dmg_taken
-			print(Global.enemy[str(player_id)])
+			Global.chandelier_damage_damage[str(player_id)]+=dmg_taken
+			print(Global.chandelier_damage[str(player_id)])
 
 """
 /*
