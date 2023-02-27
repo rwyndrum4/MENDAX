@@ -29,7 +29,9 @@ onready var ladder = $worldMap/Node2D_1/Ladder1x1
 onready var pitfall = $worldMap/Node2D_1/Pitfall1x1_2
 onready var player = $Player
 
+
 var other_player = "res://Scenes/player/other_players/other_players.tscn"
+var sword = null
 
 """
 /*
@@ -70,6 +72,11 @@ func _process(_delta): #change to delta if used
 		Global.state = Global.scenes.DILEMMA
 	if Global.progress == 5:
 		load_boss(2)
+	if Global.progress == 6:
+		if sword.direction == "right":
+			sword.get_node("pivot").position = $Player.position + Vector2(60,0)
+		elif sword.direction == "left":
+			sword.get_node("pivot").position = $Player.position + Vector2(-60,0)
 
 """
 /*
@@ -396,6 +403,11 @@ func load_boss(stage_num:int):
 		$Light2D.hide()
 		# Hide player torch light
 		$Player.get_node("Torch1").hide()
+		# Give player a sword
+		sword = preload("res://Scenes/player/Sword/Sword.tscn").instance()
+		sword.direction = "right"
+		sword.get_node("pivot").position = $Player.position + Vector2(60,20)
+		add_child_below_node($Player, sword)
 		Global.progress = 6
 	# Initialize, place, and spawn boss
 	var boss = preload("res://Scenes/FinalBoss/Boss.tscn").instance()

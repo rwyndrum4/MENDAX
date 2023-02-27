@@ -1,10 +1,25 @@
 extends StaticBody2D
 var _timer:float = 0
 var _prev_timer:float = 0
+var _dmgCap
 
 var aoe_attack = preload("res://Scenes/BossAttacks/AoeSlam.tscn")
 var boulder = preload("res://Scenes/BossAttacks/Boulder.tscn")
 var atkWarningAnimation = preload("res://Scenes/BossAttacks/atkWarning.tscn")
+
+onready var healthbar = $ProgressBar
+onready var bossBox = $MyHurtBox/hitbox
+
+"""
+/*
+* @pre Called once when boss is initialized
+* @post Initializes boss health
+* @param None
+* @return None
+*/
+"""
+func _ready():
+	healthbar.value = 100;
 
 func move_boss() -> void:
 	position.y -= 100
@@ -71,3 +86,25 @@ func _process(delta):
 		move_boss()
 		spawn_aoe_attack()
 		_prev_timer = _timer
+		
+"""
+/*
+* @pre Called by when it detects a "hit" from a hitbox
+* @post Mob takes damage and is reflected by the healthbar
+* @param Takes in a damage value
+* @return None
+*/
+"""
+func take_damage(amount: int) -> void:
+	ServerConnection.send_arena_enemy_hit(amount,1) #1 is the type of enemy, reference EnemyTypes in arenaGame.gd
+	healthbar.value = healthbar.value - amount
+
+	if healthbar.value == 50:
+		Global.state = Global.scenes.QUIZ
+
+#Same function as above but doesn't send data to the server
+func take_damage_server(amount: int):
+	healthbar.value = healthbar.value - amount
+	if healthbar.value == 50:
+		Global.state = Global.scenes.QUIZ
+
