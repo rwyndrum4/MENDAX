@@ -135,6 +135,7 @@ func take_damage(amount: int) -> void:
 	ServerConnection.send_arena_enemy_hit(amount,1) #1 is the type of enemy, reference EnemyTypes in arenaGame.gd
 	healthbar.value = healthbar.value - amount
 	skeletonAnim.play("hit")
+	Global.skeleton_damage[str(1)]+=amount
 	if healthbar.value == 0:
 		isDead = 1
 		skeletonAnim.play("death")

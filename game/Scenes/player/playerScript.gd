@@ -153,6 +153,8 @@ func take_damage(amount: int) -> void:
 	var new_health = healthbar.value - amount
 	ServerConnection.send_arena_player_health(new_health)
 	healthbar.value = new_health
+	Global.player_health[str(1)]=new_health
+	print(Global.player_health[str(1)])
 	if healthbar.value == 0:
 		get_parent()._player_dead = true
 		_game_over()

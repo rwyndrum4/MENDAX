@@ -6,17 +6,17 @@ onready var ListItem=$VBoxContainer/ItemList
 onready var RestartButton=$VBoxContainer/Button
 var data=[
 	{
-		"question": "Who inflicted the most damage?",
-		"options": ["Ben", "Freeman", "Mohit"],
+		"question": "Which player inflicted the most damage?",
+		"options": ["1", "2", "3","4"],
 		"correctOptionIndex": 0
 	},	
 	{
-		"question": "Placeholder 2",
-		"options": ["1", "2", "3"],
+		"question": "Which player has the lowest health?",
+		"options": ["1", "2", "3","4"],
 		"correctOptionIndex": 2
 	},
 	{
-		"question": "Placeholder 3",
+		"question": "Which player inflicted the most damage on the chandelier?",
 		"options": ["1", "2", "3"],
 		"correctOptionIndex": 0
 	},	
