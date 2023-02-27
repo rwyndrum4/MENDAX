@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/Anxiety.mp3-9f35b9b5f0efe67af933bf46270e9c0b.mp3str"
+
+[deps]
+
+source_file="res://Assets/SFX/bgm/Anxiety.mp3"
+dest_files=[ "res://.import/Anxiety.mp3-9f35b9b5f0efe67af933bf46270e9c0b.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

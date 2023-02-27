@@ -273,10 +273,11 @@ func _end_game():
 	#Turn off player healthbar
 	playerHealth.visible = false
 	#Delete online player objects if they have not already died
-	for o_player in online_players:
-		var obj = o_player.get('player_obj')
+	for o_player in server_players:
+		var obj = o_player.get('player_obj') 
 		if obj != null:
 			obj.queue_free()
+	Global.reset_minigame_players()
 	Global.state = Global.scenes.CAVE
 
 func chatbox_use(value):
@@ -425,7 +426,6 @@ func _enemy_defeated(_enemyID:int):
 	enemies_remaining = enemies_remaining - 1
 	if enemies_remaining == 0:
 		textBox.queue_text("Those strongest among you who remain have leave to prepare for the next trial.")
-		#print(Global.enemy_damage["1"])
 		# Wait 5 seconds
 		var t = Timer.new()
 		t.set_wait_time(5)
@@ -434,7 +434,5 @@ func _enemy_defeated(_enemyID:int):
 		t.start()
 		yield(t, "timeout")
 		t.queue_free()
-		
-		# Transition back to 
-		playerHealth.visible = false
-		Global.state = Global.scenes.CAVE
+		#Go back to cave
+		_end_game()

@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/hi_hataka_Failed_whistle.mp3-c6364466ac8b2e763b48e5cedc6a89af.mp3str"
+
+[deps]
+
+source_file="res://Assets/rhythm/hi_hataka_Failed_whistle.mp3"
+dest_files=[ "res://.import/hi_hataka_Failed_whistle.mp3-c6364466ac8b2e763b48e5cedc6a89af.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/Static Motion.mp3-8a42995668b41a9df9baf16390d6bac9.mp3str"
+
+[deps]
+
+source_file="res://Assets/SFX/bgm/Static Motion.mp3"
+dest_files=[ "res://.import/Static Motion.mp3-8a42995668b41a9df9baf16390d6bac9.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

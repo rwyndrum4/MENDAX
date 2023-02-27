@@ -20,7 +20,7 @@ onready var pos2d = $Position2D
 onready var player_detector_box = $detector/box
 
 var isIn = false
-var isDead = 0
+var isDead = false
 var _player_target: int = 1
 
 # Global velocity
@@ -134,26 +134,28 @@ func take_damage(amount: int) -> void:
 	$AudioStreamPlayer2D.play()
 	ServerConnection.send_arena_enemy_hit(amount,1) #1 is the type of enemy, reference EnemyTypes in arenaGame.gd
 	healthbar.value = healthbar.value - amount
-	skeletonAnim.play("hit")
+
 	Global.skeleton_damage[str(1)]+=amount
 	if healthbar.value == 0:
-		isDead = 1
+		isDead = true
 		skeletonAnim.play("death")
 		#have to defer disabling the skeleton, got an error otherwise
 		#put the line of code in function below since call_deferred only takes functions as input
 		call_deferred("defer_disabling_skeleton")
-		
+	else:
+		skeletonAnim.play("hit")
 
 #Same function as above but doesn't send data to the server
 func take_damage_server(amount: int):
 	healthbar.value = healthbar.value - amount
-	skeletonAnim.play("hit")
 	if healthbar.value == 0:
+		isDead = true
 		skeletonAnim.play("death")
 		#have to defer disabling the skeleton, got an error otherwise
 		#put the line of code in function below since call_deferred only takes functions as input
 		call_deferred("defer_disabling_skeleton")
-		isDead = 1
+	else:
+		skeletonAnim.play("hit")
 
 #function for disabling skeleton, needs to be deferred for reasons above
 func defer_disabling_skeleton():
@@ -169,7 +171,8 @@ func defer_disabling_skeleton():
 """
 func _on_detector_body_entered(_body):
 	isIn = true
-	skeletonAnim.play("attack1")
+	if not isDead:
+		skeletonAnim.play("attack1")
 
 """
 /*
@@ -200,7 +203,6 @@ func _on_skeletonAnimationPlayer_animation_finished(_anim_name):
 		set_physics_process(false)
 		$death.play()
 		yield($death, "finished")
-		
 		GlobalSignals.emit_signal("enemyDefeated", 0) #replace 0 with indication of enemy ID later
 		
 		queue_free()

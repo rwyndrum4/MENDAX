@@ -65,6 +65,11 @@ func _process(_delta): #change to delta if used
 	timerText.text = convert_time(myTimer.time_left)
 	if not stop_steam_control:
 		control_steam()
+	# Check for completion of boss stage 1
+	if Global.progress == 4:
+		Global.state = Global.scenes.DILEMMA
+	if Global.progress == 5:
+		load_boss(2)
 
 """
 /*
@@ -97,6 +102,9 @@ func _input(_ev):
 		Global.minigame = Global.minigame + 1
 	#IF YOU PRESS Q -> MINIGAME COUNTER WILL INCREASE BY 1 (1 press at start will set next to Arena, > 1 will prevent minigame from loading
 	if Input.is_action_just_pressed("extend_timer_debug_key",false):
+		if Global.minigame > 2:
+			Global.progress = 4
+			Global.state = Global.scenes.DILEMMA
 		myTimer.start(30000)
 """
 /*
@@ -155,8 +163,12 @@ func _on_Timer_timeout():
 	elif Global.minigame == 1:
 		Global.minigame = 2
 		Global.state = Global.scenes.ARENA_MINIGAME
+	#change scene to rhythm minigame
+	elif Global.minigame == 2:
+		Global.minigame = 3
+		Global.state = Global.scenes.RHYTHM_MINIGAME
 	else: 
-		begin_final_boss()
+		load_boss(1)
 
 """
 /*
@@ -178,7 +190,10 @@ func chatbox_use(value):
 * @return None
 */
 """
-func _on_right_side_area_entered(_area):
+func _on_right_side_area_entered(area):
+	if ServerConnection.match_exists() and ServerConnection.get_server_status():
+		if area.get_parent().player_color != Global.player_colors[ServerConnection._player_num]:
+			return
 	var pos = $Player.position
 	if pos.x > -1200.0:
 		steam_area_activated()
@@ -193,7 +208,10 @@ func _on_right_side_area_entered(_area):
 * @return None
 */
 """
-func _on_left_side_area_entered(_area):
+func _on_left_side_area_entered(area):
+	if ServerConnection.match_exists() and ServerConnection.get_server_status():
+		if area.get_parent().player_color != Global.player_colors[ServerConnection._player_num]:
+			return
 	var pos = $Player.position
 	if pos.x < -5800:
 		steam_area_activated()
@@ -348,28 +366,37 @@ func set_init_player_pos():
 * @return Currently, timer stops and four bezier objects spawn
 */
 """			
-func begin_final_boss():
+func load_boss(stage_num:int):
 	myTimer.stop()
-	# Generate beziers
-	var bez1 = preload("res://Scenes/FinalBoss/Bezier.tscn").instance()
-	var bez2 = preload("res://Scenes/FinalBoss/Bezier.tscn").instance()
-	var bez3 = preload("res://Scenes/FinalBoss/Bezier.tscn").instance()
-	var bez4 = preload("res://Scenes/FinalBoss/Bezier.tscn").instance()
-	# Assign ids (for the purpose of differentiating signals)
-	bez1._id = 1
-	bez2._id = 2
-	bez3._id = 3
-	bez4._id = 4
-	# Place beziers
-	bez1.set("position", Vector2(2750, 2000))
-	bez2.set("position", Vector2(1500, 0))
-	bez3.set("position", Vector2(-10000, 4000))
-	bez4.set("position", Vector2(-7750, 3250))
-	# Add beziers to scene
-	add_child_below_node($Darkness, bez1)
-	add_child_below_node($Darkness, bez2)
-	add_child_below_node($Darkness, bez3)
-	add_child_below_node($Darkness, bez4)
+	if stage_num == 1:
+		# Generate beziers
+		var bez1 = preload("res://Scenes/FinalBoss/Bezier.tscn").instance()
+		var bez2 = preload("res://Scenes/FinalBoss/Bezier.tscn").instance()
+		var bez3 = preload("res://Scenes/FinalBoss/Bezier.tscn").instance()
+		var bez4 = preload("res://Scenes/FinalBoss/Bezier.tscn").instance()
+		# Assign ids (for the purpose of differentiating signals)
+		bez1._id = 1
+		bez2._id = 2
+		bez3._id = 3
+		bez4._id = 4
+		# Place beziers
+		bez1.set("position", Vector2(2750, 2000))
+		bez2.set("position", Vector2(1500, 0))
+		bez3.set("position", Vector2(-10000, 4000))
+		bez4.set("position", Vector2(-7750, 3250))
+		# Add beziers to scene
+		add_child_below_node($Darkness, bez1)
+		add_child_below_node($Darkness, bez2)
+		add_child_below_node($Darkness, bez3)
+		add_child_below_node($Darkness, bez4)
+	if stage_num == 2:
+		# Light up the cave
+		$Darkness.hide()
+		# Hide light from cave entrance
+		$Light2D.hide()
+		# Hide player torch light
+		$Player.get_node("Torch1").hide()
+		Global.progress = 6
 	# Initialize, place, and spawn boss
 	var boss = preload("res://Scenes/FinalBoss/Boss.tscn").instance()
 	boss.set("position", Vector2(-4250, 2160))

@@ -19,7 +19,10 @@ var in_anim: int = 0
 var minigame: int = 0
 var players_in_minigame: int = 0
 
-# Singals
+# Counter tracking progression in final boss fight
+var progress = 0
+
+# Signals
 signal all_players_arrived()
 
 """
@@ -40,19 +43,27 @@ enum scenes {
 	MAIN_MENU,
 	OPTIONS_FROM_MAIN,
 	MARKET,
+	CREDITS,
 	START_AREA,
 	CAVE,
 	RIDDLER_MINIGAME,
 	ARENA_MINIGAME,
-	GAMEOVER
-	QUIZ
+	RHYTHM_MINIGAME,
+	GAMEOVER,
+	QUIZ,
+	DILEMMA
 }
 
+# Hold dictionary mapping player num to name
+# Ex. {"1": "Bob", "2": Mary, ...}
+var player_names: Dictionary = {}
 # Hold dictionary of player positions
+# Ex. {"1": Vector2(44,70), "2": Vector2(0,5) ...}
 var player_positions:Dictionary = {}
 # Hold dictionary of player input vectors
 var player_input_vectors:Dictionary = {}
 # Hold current matches, for joining matches
+# Example: "random_match_code": [nakama_code, group_chat_code]
 var current_matches: Dictionary = {}
 #keeps track of damage dealt to skeleton for each player
 var skeleton_damage: Dictionary = {"1":0,"2":0,"3":0,"4":0}
@@ -62,6 +73,8 @@ var player_health: Dictionary ={"1":0,"2":0,"3":0,"4":0}
 var chandelier_damage: Dictionary = {"1":0,"2":0,"3":0,"4":0}
 #keeps track of damage dealt to bod for each player
 var bod_damage: Dictionary = {"1":0,"2":0,"3":0,"4":0}
+#Dictionary that stores how player colors are distributed
+var player_colors: Dictionary = {1:"blue",2:"red",3:"green",4:"orange"}
 
 """
 /*
@@ -83,13 +96,24 @@ func _ready():
 /*
 * @pre None
 * @post adds a match to the current_matches variable
-* @param lobby_name -> String, match_id -> String
+* @param lobby_name -> String, match_id -> String, private_chat_id -> String
 * @return None
 */
 """
-func add_match(lobby_name:String,match_id:String):
+func add_match(lobby_name:String,match_id:String,private_chat_id:String):
 	#adds to dictionary
-	current_matches[lobby_name] = match_id
+	current_matches[lobby_name] = [match_id, private_chat_id]
+
+"""
+/*
+* @pre None
+* @post returns player name dependent on what number they are
+* @param player_num -> int (number player was assigned)
+* @return None
+*/
+"""
+func get_player_name(player_num: int) -> String:
+	return player_names[str(player_num)]
 
 """
 /*
@@ -101,7 +125,30 @@ func add_match(lobby_name:String,match_id:String):
 """
 func get_match(lobby_name:String) -> String:
 	#returns the really long match id
-	return current_matches[lobby_name]
+	return current_matches[lobby_name][0]
+
+"""
+/*
+* @pre None
+* @post returns the group chat id for the match needed
+* @param lobby_name -> String
+* @return String
+*/
+"""
+func get_match_group_id(lobby_name: String) -> String:
+	return current_matches[lobby_name][1]
+
+"""
+/*
+* @pre None
+* @post removes match from match pool
+* @param lobby_name -> String
+* @return None
+*/
+"""
+func remove_match(lobby_name: String):
+	# warning-ignore:return_value_discarded
+	current_matches.erase(lobby_name)
 
 """
 /*

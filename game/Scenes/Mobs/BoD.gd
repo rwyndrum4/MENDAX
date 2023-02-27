@@ -13,7 +13,7 @@ onready var pos2d = $Position2D
 onready var player_detector_box = $detector/box
 
 var isIn: bool = false
-var isDead: int = 0
+var isDead:bool = false
 
 """
 /*
@@ -80,21 +80,24 @@ func take_damage(amount: int) -> void:
 	$AudioStreamPlayer2D.play()
 	ServerConnection.send_arena_enemy_hit(amount,3) #3 is the type of enemy, reference EnemyTypes in arenaGame.gd
 	healthbar.value = healthbar.value - amount
-	BodAnim.play("hit")
+	
 	Global.bod_damage[str(1)]+=amount
 	if healthbar.value == 0:
-		isDead = 1
+		isDead = true
 		BodAnim.play("death")
 		call_deferred("defer_disabling_BoD")
+	else:
+		BodAnim.play("hit")
 
 #Same as above function except it doesn't send data to server
 func take_damage_server(amount: int):
 	healthbar.value = healthbar.value - amount
-	BodAnim.play("hit")
 	if healthbar.value == 0:
+		isDead = true
 		BodAnim.play("death")
 		call_deferred("defer_disabling_BoD")
-		isDead = 1
+	else:
+		BodAnim.play("hit")
 
 #function for disabling skeleton, needs to be deferred for reasons above
 func defer_disabling_BoD():
@@ -109,7 +112,6 @@ func defer_disabling_BoD():
 */
 """
 func _on_AnimationPlayer_animation_finished(_anim_name):
-		
 	if !isDead:
 		if !isIn:			
 			BodAnim.play("idle")
@@ -119,7 +121,6 @@ func _on_AnimationPlayer_animation_finished(_anim_name):
 		$death.play()
 		yield($death, "finished")
 		GlobalSignals.emit_signal("enemyDefeated", 0) #replace 0 with indication of enemy ID later
-		
 		queue_free()
 
 """
@@ -132,7 +133,8 @@ func _on_AnimationPlayer_animation_finished(_anim_name):
 """
 func _on_detector_body_entered(_body):
 	isIn = true
-	BodAnim.play("attack1")
+	if not isDead:
+		BodAnim.play("attack1")
 	
 
 

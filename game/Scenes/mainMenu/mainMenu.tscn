@@ -1,11 +1,11 @@
 [gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://Scenes/mainMenu/mainMenu.gd" type="Script" id=1]
-[ext_resource path="res://Scenes/mainMenu/creditsWindow.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Assets/mainMenuAssets/BAUHS93.TTF" type="DynamicFontData" id=3]
 [ext_resource path="res://Assets/mainMenuBG.png" type="Texture" id=4]
 [ext_resource path="res://Assets/SFX/myTongue.wav" type="AudioStream" id=5]
 [ext_resource path="res://Assets/fire5.png" type="Texture" id=6]
+[ext_resource path="res://Assets/SFX/bgm/Magic Forest.mp3" type="AudioStream" id=7]
 [ext_resource path="res://Assets/ARIALBD.TTF" type="DynamicFontData" id=8]
 [ext_resource path="res://Assets/Teko-Light.ttf" type="DynamicFontData" id=10]
 [ext_resource path="res://Assets/SFX/click.wav" type="AudioStream" id=11]
@@ -193,8 +193,6 @@ position = Vector2( 899, 404 )
 scale = Vector2( 0.40332, 0.37793 )
 texture = ExtResource( 6 )
 
-[node name="credits" parent="." instance=ExtResource( 2 )]
-
 [node name="click" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 11 )
 volume_db = 24.0
@@ -203,6 +201,11 @@ bus = "SFX"
 [node name="button_down" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 5 )
 volume_db = 4.522
+
+[node name="bgm" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 7 )
+volume_db = -15.072
+bus = "Music"
 
 [connection signal="pressed" from="menuButtons/Start" to="." method="_on_Start_pressed"]
 [connection signal="pressed" from="menuButtons/Options" to="." method="_on_Options_pressed"]

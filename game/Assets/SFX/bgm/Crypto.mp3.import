@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/Crypto.mp3-f1f16b2bedf6581869594764995e7709.mp3str"
+
+[deps]
+
+source_file="res://Assets/SFX/bgm/Crypto.mp3"
+dest_files=[ "res://.import/Crypto.mp3-f1f16b2bedf6581869594764995e7709.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0
