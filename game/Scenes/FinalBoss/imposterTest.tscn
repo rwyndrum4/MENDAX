@@ -35,6 +35,7 @@ position = Vector2( 1270, 1140 )
 
 [node name="Player" parent="." instance=ExtResource( 4 )]
 position = Vector2( 2226, 1156 )
+script = null
 
 [node name="LightOccluder2D2" type="LightOccluder2D" parent="Player"]
 occluder = SubResource( 1 )
@@ -45,7 +46,15 @@ current = true
 [node name="Sword" parent="Player" instance=ExtResource( 2 )]
 
 [node name="confuzzle" type="AnimatedSprite" parent="Player"]
+visible = false
 position = Vector2( 0, -45 )
 frames = SubResource( 2 )
-frame = 5
+frame = 4
 playing = true
+
+[node name="Timer" type="Timer" parent="."]
+process_mode = 0
+wait_time = 5.0
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
