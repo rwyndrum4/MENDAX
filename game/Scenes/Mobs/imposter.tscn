@@ -1,4 +1,4 @@
-[gd_scene load_steps=156 format=2]
+[gd_scene load_steps=144 format=2]
 
 [ext_resource path="res://Assets/ben-character/red/rolling/11.png" type="Texture" id=1]
 [ext_resource path="res://Assets/ben-character/greeen/rolling/1.png" type="Texture" id=2]
@@ -124,10 +124,6 @@
 [ext_resource path="res://Assets/ben-character/blue/idle/3.png" type="Texture" id=122]
 [ext_resource path="res://Assets/ben-character/blue/rolling/6.png" type="Texture" id=123]
 [ext_resource path="res://Assets/ben-character/blue/idle/1.png" type="Texture" id=124]
-[ext_resource path="res://Assets/torch_spritesheet.png" type="Texture" id=125]
-[ext_resource path="res://Assets/TorchLight3.png" type="Texture" id=126]
-[ext_resource path="res://Scenes/player/Torch1.gd" type="Script" id=127]
-[ext_resource path="res://Scenes/player/Sword/MyHurtBox.gd" type="Script" id=128]
 [ext_resource path="res://Scenes/Mobs/imposter.gd" type="Script" id=129]
 [ext_resource path="res://Assets/explosion/frame0011.png" type="Texture" id=130]
 [ext_resource path="res://Assets/explosion/frame0004.png" type="Texture" id=131]
@@ -261,49 +257,8 @@ border_color = Color( 0.0705882, 0.027451, 0.027451, 0 )
 border_blend = true
 anti_aliasing_size = 0.235
 
-[sub_resource type="CircleShape2D" id=15]
-radius = 39.0128
-
 [sub_resource type="OccluderPolygon2D" id=16]
 polygon = PoolVector2Array( 0, -43, -17, -39, -29, -30, -39, -19, -42, 0, -40, 18, -31, 30, -18, 37, 0, 40, 17, 36, 31, 28, 39, 18, 42, 0, 39, -16, 29, -29, 18, -38 )
-
-[sub_resource type="AtlasTexture" id=6]
-flags = 4
-atlas = ExtResource( 125 )
-region = Rect2( 0, 0, 16, 16 )
-
-[sub_resource type="AtlasTexture" id=7]
-flags = 4
-atlas = ExtResource( 125 )
-region = Rect2( 16, 0, 16, 16 )
-
-[sub_resource type="AtlasTexture" id=8]
-flags = 4
-atlas = ExtResource( 125 )
-region = Rect2( 32, 0, 16, 16 )
-
-[sub_resource type="AtlasTexture" id=9]
-flags = 4
-atlas = ExtResource( 125 )
-region = Rect2( 48, 0, 16, 16 )
-
-[sub_resource type="AtlasTexture" id=10]
-flags = 4
-atlas = ExtResource( 125 )
-region = Rect2( 64, 0, 16, 16 )
-
-[sub_resource type="AtlasTexture" id=11]
-flags = 4
-atlas = ExtResource( 125 )
-region = Rect2( 80, 0, 16, 16 )
-
-[sub_resource type="SpriteFrames" id=17]
-animations = [ {
-"frames": [ SubResource( 6 ), SubResource( 7 ), SubResource( 8 ), SubResource( 9 ), SubResource( 10 ), SubResource( 11 ) ],
-"loop": true,
-"name": "default",
-"speed": 5.0
-} ]
 
 [sub_resource type="RectangleShape2D" id=12]
 extents = Vector2( 9.7, 9.35279 )
@@ -333,30 +288,8 @@ custom_styles/fg = SubResource( 14 )
 value = 40.0
 percent_visible = false
 
-[node name="MyHurtBox" type="Area2D" parent="."]
-script = ExtResource( 128 )
-
-[node name="hitbox" type="CollisionShape2D" parent="MyHurtBox"]
-position = Vector2( -1, 0 )
-shape = SubResource( 15 )
-
 [node name="LightOccluder2D" type="LightOccluder2D" parent="."]
 occluder = SubResource( 16 )
-
-[node name="Torch1" type="Light2D" parent="."]
-position = Vector2( -60, -37 )
-scale = Vector2( 0.166168, 0.159722 )
-texture = ExtResource( 126 )
-texture_scale = 20.0
-color = Color( 0.839216, 0.454902, 0.0980392, 1 )
-script = ExtResource( 127 )
-
-[node name="light" type="AnimatedSprite" parent="Torch1"]
-position = Vector2( 18.054, 0 )
-scale = Vector2( 22.5675, 21.6575 )
-frames = SubResource( 17 )
-frame = 5
-playing = true
 
 [node name="Area2D" type="Area2D" parent="."]
 position = Vector2( 0, -1.19209e-06 )
@@ -370,4 +303,10 @@ shape = SubResource( 12 )
 position = Vector2( -1, -2 )
 shape = SubResource( 18 )
 
+[node name="Timer" type="Timer" parent="."]
+wait_time = 10.0
+one_shot = true
+autostart = true
+
 [connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]

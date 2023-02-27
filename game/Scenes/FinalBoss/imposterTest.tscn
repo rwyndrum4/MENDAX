@@ -54,7 +54,7 @@ current = true
 visible = false
 position = Vector2( 0, -45 )
 frames = SubResource( 2 )
-frame = 3
+frame = 4
 playing = true
 
 [connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]

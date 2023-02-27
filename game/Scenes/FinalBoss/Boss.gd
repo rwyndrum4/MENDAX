@@ -2,6 +2,8 @@ extends StaticBody2D
 var _timer:float = 0
 var _prev_timer:float = 0
 
+
+
 var aoe_attack = preload("res://Scenes/BossAttacks/AoeSlam.tscn")
 var boulder = preload("res://Scenes/BossAttacks/Boulder.tscn")
 var atkWarningAnimation = preload("res://Scenes/BossAttacks/atkWarning.tscn")
@@ -53,6 +55,7 @@ func spawn_aoe_attack() -> void:
 	get_parent().add_child(x_sprite)
 	get_parent().add_child(bdr)
 	bdr.connect("boulder_done",self,"_atk_can_go", [atk,x_sprite])
+	
 
 func _del_animation(warAni):
 	warAni.queue_free()
@@ -71,3 +74,6 @@ func _process(delta):
 		move_boss()
 		spawn_aoe_attack()
 		_prev_timer = _timer
+		
+
+
