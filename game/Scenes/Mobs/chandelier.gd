@@ -120,7 +120,7 @@ func take_damage_server(amount: int):
 	if healthbar.value == 0:
 		_isDead = true
 		chandelierAnim.play("death")
-		call_deferred("defer_disabling_BoD")
+		call_deferred("defer_disabling_chandelier")
 	else:
 		chandelierAnim.play("hit")
 

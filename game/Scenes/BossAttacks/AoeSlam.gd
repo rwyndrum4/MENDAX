@@ -21,4 +21,5 @@ func _process(_delta):
 
 func _on_AoEAttack_area_entered(_area):
 	if not _got_too_big:
+		get_parent().player.take_damage(5)
 		emit_signal("aoe_attack_hit")
