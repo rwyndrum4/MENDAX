@@ -90,5 +90,6 @@ func _on_Area2D_body_entered(body):
 			print("invert the controls")
 			Player.isInverted = true
 			
+			
 			queue_free()
 

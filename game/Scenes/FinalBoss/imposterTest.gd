@@ -1,16 +1,18 @@
 extends Node2D
+var imposter =preload("res://Scenes/Mobs/imposter.tscn")
+onready var player = $Player
+onready var confuzzed = $Player/confuzzle
 
-func _ready():
-	pass
-
-
-func _process(_delta):
-	pass
-	
-	
+func _process(delta):
+	if player.isInverted == true:
+		confuzzed.visible = true
+	else:
+		confuzzed.visible = false
+		
 func spawn():
-	var imposter =preload("res://Scenes/Mobs/imposter.tscn")
-	imposter.instance()
+	var new_imposter = imposter.instance()
+	new_imposter.position = Vector2(750, 1200)
+	add_child(new_imposter)
 	
 
 

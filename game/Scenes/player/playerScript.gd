@@ -105,6 +105,7 @@ func _physics_process(delta):
 	#Animate character
 	control_animations(velocity)
 
+
 """
 /*
 * @pre Called when signal is received from GlobalSignals
@@ -166,10 +167,11 @@ func take_damage(amount: int) -> void:
 		var new_health = healthbar.value - amount
 		ServerConnection.send_arena_player_health(new_health)
 		healthbar.value = new_health
-		if healthbar.value == 0:
+		print(healthbar.value)
+		if healthbar.value == 0 and Global.state == Global.scenes.ARENA_MINIGAME: #should fix it
 			get_parent()._player_dead = true
 			_game_over()
-			queue_free()	
+			queue_free()
 
 
 func set_color(player_num:int):
