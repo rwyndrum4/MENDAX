@@ -3,7 +3,8 @@ extends KinematicBody2D
 onready var character = $position/animated_sprite
 onready var char_pos = $position
 onready var hitbox_imposter = $Area2D/playerHitbox
-onready var light = $Torch1
+onready var area2d = $Area2D
+onready var collisionbox = $CollisionShape2D
 var imposter_color
 var rng
 
@@ -80,14 +81,16 @@ func control_animations(vel:Vector2):
 func _on_Area2D_body_entered(body):
 		if "Player" in body.name:
 			set_physics_process(false)
+			area2d.queue_free()
+			collisionbox.queue_free()
 			character.play("explosion")
 			var Player = get_parent().get_node("Player")
 			#enter health bar stuff here
 			Player.take_damage(10)
 			print("player got exploded 10 dmg")
-			light.visible = false
 			yield(character, "animation_finished")
 			print("invert the controls")
+			
 			Player.isInverted = true
 			
 			
