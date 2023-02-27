@@ -96,6 +96,9 @@ func _input(_ev):
 	#DEBUG PURPOSES - REMOVE FOR FINAL GAME!!!
 	#IF YOU PRESS P -> TIMER WILL REDUCE TO 3 SECONDS
 	if Input.is_action_just_pressed("timer_debug_key",false):
+		if Global.minigame > 2:
+			Global.progress = 4
+			Global.state = Global.scenes.DILEMMA
 		myTimer.start(3)
 	#IF YOU PRESS O (capital 'o') -> TIMER WILL INCREASE TO ARBITRARILY MANY SECONDS
 	if Input.is_action_just_pressed("minigame_debug_key",false):
@@ -387,6 +390,7 @@ func load_boss(stage_num:int):
 		$Light2D.hide()
 		# Hide player torch light
 		$Player.get_node("Torch1").hide()
+		Global.progress = 6
 	# Initialize, place, and spawn boss
 	var boss = preload("res://Scenes/FinalBoss/Boss.tscn").instance()
 	boss.set("position", Vector2(-4250, 2160))
