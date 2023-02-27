@@ -267,7 +267,6 @@ extents = Vector2( 9.7, 9.35279 )
 extents = Vector2( 28.75, 29.25 )
 
 [node name="Imposter" type="KinematicBody2D"]
-collision_layer = 32
 script = ExtResource( 129 )
 
 [node name="position" type="Position2D" parent="."]

@@ -6,6 +6,7 @@ onready var hitbox_imposter = $Area2D/playerHitbox
 onready var area2d = $Area2D
 onready var collisionbox = $CollisionShape2D
 onready var timer = $Timer
+var player_color = "imposter"
 var imposter_color
 var rng
 
