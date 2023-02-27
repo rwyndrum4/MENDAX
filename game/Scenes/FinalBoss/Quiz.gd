@@ -10,26 +10,31 @@ onready var currentmin=0
 onready var currentmax=0
 var data=[
 	{
+		"number": 1,
 		"question": "Which player inflicted the most damage?",
 		"options": ["1", "2", "3","4"],
-		"correctOptionIndex": maxdamage
+		"correctOptionIndex": 1
 	},	
 	{
+		"number": 2,
 		"question": "Which player had the lowest health after the second minigame?",
 		"options": ["1", "2", "3","4"],
-		"correctOptionIndex": minhealth
+		"correctOptionIndex": 2
 	},
 	{
+		"number": 3,
 		"question": "Which player inflicted the most damage on the chandelier?",
 		"options": ["1", "2", "3","4"],
 		"correctOptionIndex": 1
 	},	
 	{
+		"number": 4,
 		"question": "Placeholder 4",
 		"options": ["1", "2", "3","4"],
 		"correctOptionIndex": 1
 	},
 	{
+		"number": 5,
 		"question": "Placeholder 5",
 		"options": ["1", "2", "3","4"],
 		"correctOptionIndex": 1
@@ -46,13 +51,18 @@ func _ready():
 	refresh_scene() # Replace with function body.
 	maxdmgdict()
 	minhealthdict()
-	print(maxdamage)
+	for d in data:
+		if d.get("number")==1:
+			d["correctOptionIndex"]=maxdamage
+		if d.get("number")==2:
+			d["correctOptionIndex"]=minhealth
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
 func maxdmgdict():
 	currentmax=0
+	#maxdamage=2
 	for i in 4:
 		if (Global.bod_damage[str(i+1)]+Global.skeleton_damage[str(i+1)]+Global.chandelier_damage[str(i+1)]>currentmax):
 			maxdamage=i+1
@@ -60,12 +70,15 @@ func maxdmgdict():
 		
 func minhealthdict():	
 	currentmin=1000
+	#minhealth=2
 	for i in 4:
 		if(Global.player_health[str(i+1)]<currentmin):
 			currentmin=Global.player_health[str(i+1)]
 			minhealth=i+1
 		
 func refresh_scene():
+	minhealthdict()
+	maxdmgdict()
 	if index_item>=items.size():
 		show_result()
 	else:
@@ -96,6 +109,8 @@ func read_json_file(filename):
 
 
 func _on_ItemList_item_selected(index):
+	print(item.question)
+	print(item.correctOptionIndex)
 	if index==item.correctOptionIndex:
 		correct+=1
 	index_item +=1
