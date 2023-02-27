@@ -43,12 +43,10 @@ signal minigame_rhythm_score(id, score)
 signal chat_message_received(msg,type,user_sent,from_user) #signal to tell game a chat message has come in
 
 const KEY := "nakama_mendax" #key that is stored in the server
-var IP_ADDRESS: String = "3.128.91.117" #ip address of server
+var IP_ADDRESS: String = "18.189.21.183" #ip address of server
 
 var _session: NakamaSession #user session
 
-#bens server: 18.118.82.24
-#jasons server: 52.205.252.95
 var _client := Nakama.create_client(KEY, IP_ADDRESS, 7350, "http") #server client
 var _socket : NakamaSocket #server socket connection
 
@@ -198,6 +196,21 @@ func join_chat_async_general() -> int:
 
 """
 /*
+* @pre None
+* @post leaves the match group chat
+* @param None
+* @return None
+*/
+"""
+func leave_general_chat():
+	var result: NakamaAsyncResult = yield(_socket.leave_chat_async(_general_chat_id), "completed")
+	_general_chat_id = ""
+	if result.is_exception():
+		printerr("An error occurred: %s" % result)
+		return
+
+"""
+/*
 * @pre called when joining a whisper chat
 * @post sends whisper message corresponding to username
 * @param input -> String, has_id_already -> bool
@@ -241,7 +254,6 @@ func join_chat_async_group() -> int:
 	_group_chat_id = channel.id 
 	print("Connected to group channel: '%s'" % [channel.id])
 	return OK
-
 
 """
 /*
@@ -297,8 +309,6 @@ func leave_match_group_chat():
 	if result.is_exception():
 		printerr("An error occurred: %s" % result)
 		return
-
-	print("Left group chat")
 
 """
 /*

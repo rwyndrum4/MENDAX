@@ -10,10 +10,12 @@ extends StaticBody2D
 
 var _in_radius
 var _id
+var _lit
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	_in_radius = -1
+	_lit = false
 	
 """
 /*
@@ -25,10 +27,12 @@ func _ready():
 """
 func _input(_ev):
 	if _in_radius == _id:
-		if Input.is_action_just_pressed("ui_accept",false) and not Input.is_action_just_pressed("ui_enter_chat"):
+		if Input.is_action_just_pressed("ui_accept",false) and not Input.is_action_just_pressed("ui_enter_chat") and not _lit:
 			$Light2D.show()
 			$TileTexture.set("texture", preload("res://Assets/tiles/TilesCorrected/BezierLit.png"))
 			$FireHitbox.set("disabled", false)
+			Global.progress+=1
+			_lit = true
 			
 
 """	

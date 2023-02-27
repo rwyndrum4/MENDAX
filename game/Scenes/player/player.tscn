@@ -304,6 +304,7 @@ shape = SubResource( 1 )
 [node name="position" type="Position2D" parent="."]
 
 [node name="animated_sprite" type="AnimatedSprite" parent="position"]
+light_mask = 0
 scale = Vector2( 3.53642, 3.53642 )
 frames = SubResource( 2 )
 animation = "roll_southeast_green"

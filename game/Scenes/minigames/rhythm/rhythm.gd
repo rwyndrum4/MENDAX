@@ -233,7 +233,7 @@ func add_player_score(p_name: String):
 */
 """
 func change_score(p_name: String, new_points: int):
-	var added_score = new_points * _combo_multiplier
+	var added_score = int(new_points * _combo_multiplier)
 	if ServerConnection.match_exists() and ServerConnection.get_server_status():
 		onlineHandler.send_score_to_server(added_score)
 	if _score_dict.has(p_name):
@@ -244,14 +244,14 @@ func change_score(p_name: String, new_points: int):
 		_score_dict.get(p_name).text = cleaned_data + str(int(current_score) + added_score)
 	check_placement() #check if scores need to be reordered
 
+#Same as above but adapted for when a score comes from another player
 func change_score_from_server(p_name:String, new_points:int):
-	var added_score = new_points * _combo_multiplier
 	if _score_dict.has(p_name):
 		#get the current score as a string
 		var label_txt = _score_dict.get(p_name).text
 		var current_score = label_txt.get_slice(" ",1)
 		var cleaned_data = label_txt.replace(current_score,"")
-		_score_dict.get(p_name).text = cleaned_data + str(int(current_score) + added_score)
+		_score_dict.get(p_name).text = cleaned_data + str(int(current_score) + int(new_points))
 	check_placement() #check if scores need to be reordered
 
 #Custom sort function for check_placement
@@ -277,6 +277,13 @@ func check_placement():
 	for obj in ordered_places:
 		$Scores.move_child(_score_dict[obj[0]], inc)
 		inc += 1
+
+func get_sorted_results() -> Array:
+	var ordered_places: Array = []
+	for p_name in _score_dict.keys():
+		ordered_places.append([p_name, int(_score_dict[p_name].text)])
+	ordered_places.sort_custom(myCustomSorter, "sort_asc")
+	return ordered_places
 """
 /*
 * @pre None
@@ -344,7 +351,6 @@ func _on_Conductor_measure(measure_position):
 """
 func _on_Conductor_beat(beat_position):
 	_song_position_in_beats = beat_position
-	print(_song_position_in_beats)
 	if _song_position_in_beats == 410 and _never_missed:
 		full_combo.start_ani(true)
 	elif _song_position_in_beats == 410 and (not _never_missed):
@@ -359,14 +365,10 @@ func _on_Conductor_beat(beat_position):
 */
 """
 func end_rhythm_game():
-	var result_dict = {}
-	for res in _score_dict.keys():
-		var label_txt = _score_dict[res]
-		var current_score = int(label_txt.text.get_slice(" ",1))
-		result_dict[res] = current_score
+	var results = get_sorted_results()
 	var end_screen:Popup = load("res://Scenes/minigames/rhythm/endScreen.tscn").instance()
 	$Frame.add_child(end_screen)
-	end_screen.add_results(result_dict)
+	end_screen.add_results(results)
 	end_screen.popup_centered()
 	var wait_timer_look_leaderboard = Timer.new()
 	full_combo.hide()
@@ -377,6 +379,7 @@ func end_rhythm_game():
 	yield(wait_timer_look_leaderboard, "timeout")
 	wait_timer_look_leaderboard.queue_free()
 	get_parent().toggle_hotbar(true)
+	Global.reset_minigame_players()
 	Global.state = Global.scenes.CAVE
 
 """
