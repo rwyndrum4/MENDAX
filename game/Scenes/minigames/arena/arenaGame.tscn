@@ -1,17 +1,14 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://Scenes/minigames/arena/arenaGame.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/minigames/arena/arenaMap.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Assets/Teko-Light.ttf" type="DynamicFontData" id=3]
 [ext_resource path="res://Scenes/textBox/textBox.tscn" type="PackedScene" id=4]
-[ext_resource path="res://Scenes/Mobs/skeleton.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Scenes/player/player.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Assets/Silver.ttf" type="DynamicFontData" id=7]
 [ext_resource path="res://Scenes/player/Sword/Sword.tscn" type="PackedScene" id=8]
 [ext_resource path="res://Scenes/minigames/arena/littleGuy.png" type="Texture" id=9]
 [ext_resource path="res://Scenes/minigames/arena/littleGuy.gd" type="Script" id=10]
-[ext_resource path="res://Scenes/Mobs/BoD.tscn" type="PackedScene" id=11]
-[ext_resource path="res://Scenes/Mobs/chandelier.tscn" type="PackedScene" id=12]
 
 [sub_resource type="OccluderPolygon2D" id=1]
 polygon = PoolVector2Array( -48.9833, -45.9201, -50.0482, 47.9166, -50.0482, 47.9166, 50.0482, 46.9184, 50.0482, 46.9184, 48.9833, -48.9149, 47.9185, -50.9114 )
@@ -56,12 +53,6 @@ current = true
 
 [node name="Sword" parent="Player" instance=ExtResource( 8 )]
 
-[node name="Skeleton" parent="." instance=ExtResource( 5 )]
-position = Vector2( 929, 838 )
-scale = Vector2( 3, 3 )
-collision_layer = 262148
-collision_mask = 262144
-
 [node name="GUI" type="CanvasLayer" parent="."]
 
 [node name="Timer" type="Timer" parent="GUI"]
@@ -100,12 +91,5 @@ shape = SubResource( 5 )
 [node name="AnimatedSprite" type="AnimatedSprite" parent="littleGuy"]
 frames = SubResource( 6 )
 animation = "crawl"
-
-[node name="BoD" parent="." instance=ExtResource( 11 )]
-position = Vector2( 1594, 825 )
-scale = Vector2( 3, 3 )
-
-[node name="chandelier" parent="." instance=ExtResource( 12 )]
-scale = Vector2( 3, 3 )
 
 [connection signal="timeout" from="GUI/Timer" to="." method="_on_Timer_timeout"]

@@ -11,6 +11,8 @@ onready var healthbar = $ProgressBar
 onready var chandelierBox = $MyHurtBox/hitbox
 onready var chandelierAtkBox = $MyHitBox/CollisionShape2D
 
+var _name = "c"
+var _my_id: int = 0
 var _isIn = false
 var _isFiring = false
 var _isDead = false
@@ -19,7 +21,7 @@ var _leveled_up: bool = false
 #motion vector for enemy
 var _motion=Vector2()
 var _timer=0;
-var _fire_wait_time: int = 4
+var _fire_wait_time: int = 3
 
 """
 /*
@@ -36,7 +38,6 @@ func _ready():
 	healthbar.value = 200;
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("textbox_empty",self,"turn_on_physics")
-	position=Vector2(500,500)
 
 """
 /*
@@ -102,12 +103,10 @@ func fire(extra_angle = Vector2(0,0)):
 */
 """
 func take_damage(amount: int) -> void:
-	ServerConnection.send_arena_enemy_hit(amount,2)
+	ServerConnection.send_arena_enemy_hit(amount,_my_id, _name)
 	$AudioStreamPlayer2D.play()
 	healthbar.value = healthbar.value - amount
-	
 	Global.chandelier_damage[str(1)]+=amount
-	#print(Global.chandelier_damage[str(1)])
 	if healthbar.value == 0:
 		_isDead = true
 		set_physics_process(false)
@@ -146,7 +145,7 @@ func _on_AnimationPlayer_animation_finished(_anim_name):
 	if _isDead:
 		$death.play()
 		yield($death, "finished")
-		GlobalSignals.emit_signal("enemyDefeated", 0) #replace 0 with indication of enemy ID later
+		GlobalSignals.emit_signal("enemyDefeated", _my_id)
 		queue_free()
 
 """
@@ -174,7 +173,7 @@ func _on_detector_body_exited(_body):
 
 func level_up():
 	_leveled_up = true
-	_fire_wait_time = 1
+	_fire_wait_time = 2
 	healthbar.value = healthbar.value + 40
 	#New timer that makes it so that BoD teleports ever 4 sec
 	var teleport_timer: Timer = Timer.new()
@@ -197,3 +196,9 @@ func _tp_timer_expired():
 	var x = randi() % 3500 + 500
 	var y = randi() % 3250 + 500
 	position = Vector2(x,y)
+
+func set_id(id_num:int) -> void:
+	_my_id = id_num
+
+func get_id() -> int:
+	return _my_id

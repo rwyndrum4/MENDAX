@@ -19,6 +19,8 @@ onready var skeleAtkBox = $MyHitBox/CollisionShape2D
 onready var pos2d = $Position2D
 onready var player_detector_box = $detector/box
 
+var _name = "s"
+var _my_id: int = 0
 var isIn = false
 var isDead = false
 var _player_target: int = 1
@@ -63,10 +65,7 @@ func _physics_process(delta):
 		else:
 			velocity = move_and_slide(velocity.move_toward(BASE_SPEED*Vector2.ZERO, BASE_ACCELERATION*delta))
 			return
-	velocity = move_and_slide(velocity.move_toward(
-		BASE_SPEED*((player_pos - get_player_offset(player_pos)) - position), 
-		BASE_ACCELERATION*delta)
-	)
+	velocity = move_and_slide(velocity.move_toward(BASE_SPEED*((player_pos - get_player_offset(player_pos)) - position), BASE_ACCELERATION*delta))
 	#Handle making skeleton turn around
 	if player_pos.x < position.x:
 		pos2d.scale.x = -1
@@ -151,7 +150,7 @@ func _accel_timer_expired(timer:Timer):
 """
 func take_damage(amount: int) -> void:
 	$AudioStreamPlayer2D.play()
-	ServerConnection.send_arena_enemy_hit(amount,1) #1 is the type of enemy, reference EnemyTypes in arenaGame.gd
+	ServerConnection.send_arena_enemy_hit(amount,_my_id, _name) #1 is the type of enemy, reference EnemyTypes in arenaGame.gd
 	healthbar.value = healthbar.value - amount
 	Global.skeleton_damage[str(1)]+=amount
 	if healthbar.value == 0:
@@ -217,7 +216,7 @@ func _on_skeletonAnimationPlayer_animation_finished(_anim_name):
 		set_physics_process(false)
 		$death.play()
 		yield($death, "finished")
-		GlobalSignals.emit_signal("enemyDefeated", 0) #replace 0 with indication of enemy ID later
+		GlobalSignals.emit_signal("enemyDefeated", _my_id)
 		queue_free()
 
 """
@@ -233,3 +232,9 @@ func level_up():
 	BASE_SPEED = 1.6
 	BASE_ACCELERATION = 1000
 	$MyHitBox.damage = 30
+
+func set_id(id_num:int) -> void:
+	_my_id = id_num
+
+func get_id() -> int:
+	return _my_id

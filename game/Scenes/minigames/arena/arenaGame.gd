@@ -10,8 +10,10 @@
 extends Control
 
 # Member Variables
+const TOTAL_TIME = 180
+var _enemies: Array = []
 var game_started = false
-var enemies_remaining = 3
+var enemies_remaining = 9
 onready var myGUI = $GUI
 onready var myTimer: Timer = $GUI/Timer
 onready var timerText: Label = $GUI/Timer/timerText
@@ -20,9 +22,9 @@ onready var main_player = $Player
 onready var swordPivot = $Player/Sword/pivot
 onready var sword = $Player/Sword
 onready var playerHealth = $Player/ProgressBar
-onready var SkeletonEnemy = $Skeleton
-onready var BodEnemy = $BoD
-onready var ChandelierEnemy = $chandelier
+onready var SkeletonEnemy = preload("res://Scenes/Mobs/skeleton.tscn")
+onready var BodEnemy = preload("res://Scenes/Mobs/BoD.tscn")
+onready var ChandelierEnemy = preload("res://Scenes/Mobs/chandelier.tscn")
 #Scene for players that online oppenents use
 var online_players = "res://Scenes/player/arena_player/arena_player.tscn"
 
@@ -48,6 +50,7 @@ var _player_dead = false #variable to track if player 1 has died
 */
 """
 func _ready():
+	randomize()
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("openChatbox", self, "chatbox_use")
 	# warning-ignore:return_value_discarded
@@ -61,9 +64,6 @@ func _ready():
 	sword.direction = "right"
 	swordPivot.position = main_player.position + Vector2(60,20)
 	#If there is a server connection, spawn all players
-	SkeletonEnemy.set_physics_process(false)
-	BodEnemy.set_physics_process(false)
-	ChandelierEnemy.set_physics_process(false)
 	if ServerConnection.match_exists() and ServerConnection.get_server_status():
 		ServerConnection.send_spawn_notif()
 		spawn_players()
@@ -99,8 +99,53 @@ func _ready():
 		change_target_timer.connect("timeout",self, "_target_timer_expired")
 	#else if single player game
 	else:
-		myTimer.start(60)
+		myTimer.start(TOTAL_TIME)
 		start_arena_game()
+
+"""
+/*
+* @pre Called in ready function
+* @post spawns all enemies in
+* @param None
+* @return None
+*/
+"""
+func spawn_enemies() -> void:
+	var enemy_id = 0
+	#Spawn 3 Skeletons
+	var Skel_positions = [Vector2(1750,700),Vector2(2400,700),Vector2(2900,3000)]
+	for i in range(3):
+		var s = SkeletonEnemy.instance()
+		s.position = Skel_positions[i]
+		s.scale = Vector2(3,3)
+		if i == 0:
+			add_child(s)
+		s.set_physics_process(false)
+		s.set_id(enemy_id)
+		_enemies.append(s)
+		enemy_id += 1
+	#Spawn 2 BoDs
+	var BoD_positions = [Vector2(2750,750), Vector2(1000,3000)]
+	for i in range(2):
+		var b = BodEnemy.instance()
+		b.position = BoD_positions[i]
+		b.scale = Vector2(3,3)
+		add_child(b)
+		b.set_physics_process(false)
+		b.set_id(enemy_id)
+		_enemies.append(b)
+		enemy_id += 1
+	#Spawn 4 Chandeliers
+	var Cha_positions = [Vector2(500,500),Vector2(3300,500),Vector2(500,3250), Vector2(3300,3250)]
+	for i in range(4):
+		var c = ChandelierEnemy.instance()
+		c.position = Cha_positions[i]
+		c.scale = Vector2(3,3)
+		add_child(c)
+		c.set_physics_process(false)
+		c.set_id(enemy_id)
+		_enemies.append(c)
+		enemy_id += 1
 
 """
 /*
@@ -128,7 +173,7 @@ func _start_timer_expired(timer):
 func _can_start_game():
 	game_started = true
 	ServerConnection.send_minigame_can_start()
-	myTimer.start(60)
+	myTimer.start(TOTAL_TIME)
 	start_arena_game()
 
 """
@@ -142,7 +187,7 @@ func _can_start_game():
 func _can_start_game_other():
 	if not game_started:
 		game_started = true
-		myTimer.start(60)
+		myTimer.start(TOTAL_TIME)
 		start_arena_game()
 
 """
@@ -159,6 +204,7 @@ func start_arena_game():
 	textBox.queue_text("Each enemy will become stronger once this time has passed.")
 	textBox.queue_text("If any one of you dies, I will reset the timer.")
 	textBox.queue_text("Let the strongest among you prevail.")
+	spawn_enemies()
 	#game will start once all text in textBox is out of the queue
 
 """
@@ -223,15 +269,10 @@ func convert_time(time_in:float) -> String:
 """
 func _on_Timer_timeout():
 	#Make enemies harder ( ´ ｰ `)
-	if is_instance_valid(SkeletonEnemy):
-		SkeletonEnemy.level_up()
-		SkeletonEnemy.set_physics_process(false)
-	if is_instance_valid(BodEnemy):
-		BodEnemy.level_up()
-		BodEnemy.set_physics_process(false)
-	if is_instance_valid(ChandelierEnemy):
-		ChandelierEnemy.level_up()
-		ChandelierEnemy.set_physics_process(false)
+	for en in _enemies:
+		if is_instance_valid(en):
+			en.level_up()
+			en.set_physics_process(false)
 	textBox.queue_text("OUT OF TIME. NOW PERISH.")
 	myTimer.queue_free()
 
@@ -257,9 +298,11 @@ func _target_timer_expired():
 	if p_tgt == 0:
 		p_tgt = alive_players.keys()[0]
 		alive_players[p_tgt] = true
-	if is_instance_valid(SkeletonEnemy):
-		SkeletonEnemy.slow_speed()
-		SkeletonEnemy.update_target(p_tgt)
+	for en in _enemies:
+		if is_instance_valid(en):
+			if en._name == "s":
+				en.slow_speed()
+				en.update_target(p_tgt)
 
 """
 /*
@@ -368,22 +411,16 @@ func other_player_hit(player_id: int, player_health: int):
 * @return None
 */
 """
-func someone_hit_enemy(enemy_id: int, dmg_taken: int,player_id: int):
-	if enemy_id == EnemyTypes.SKELETON:
-		if is_instance_valid(SkeletonEnemy):
-			SkeletonEnemy.take_damage_server(dmg_taken)
-			Global.skeleton_damage[str(player_id)]+=dmg_taken
-			print(Global.skeleton_damage[str(player_id)])
-	elif enemy_id == EnemyTypes.BOD:
-		if is_instance_valid(BodEnemy):
-			BodEnemy.take_damage_server(dmg_taken)
-			Global.bod_damage[str(player_id)]+=dmg_taken
-			print(Global.bod_damage[str(player_id)])
-	elif enemy_id == EnemyTypes.CHANDELIER:
-		if is_instance_valid(ChandelierEnemy):
-			ChandelierEnemy.take_damage_server(dmg_taken)
+func someone_hit_enemy(enemy_id: int, dmg_taken: int, player_id: int,enemy_type:String):
+	if is_instance_valid(_enemies[enemy_id]):
+		var e = _enemies[enemy_id]
+		e.take_damage_server(dmg_taken)
+		if enemy_type == "c":
 			Global.chandelier_damage[str(player_id)]+=dmg_taken
-			print(Global.chandelier_damage[str(player_id)])
+		elif enemy_type == "s":
+			Global.skeleton_damage[str(player_id)]+=dmg_taken
+		elif enemy_type == "d":
+			Global.bod_damage[str(player_id)]+=dmg_taken
 
 """
 /*
@@ -422,13 +459,21 @@ func _extend_timer(p_id: int):
 * @return None
 */
 """	
-func _enemy_defeated(_enemyID:int):
+func _enemy_defeated(enemyID:int):
 	enemies_remaining = enemies_remaining - 1
+	#Spawn another skeleton after one before it dies
+	#enemyID 0 and 1 were skeletons, and 2 will be the last that spawns
+	#there will be 3 in total
+	if enemyID == 0:
+		add_child(_enemies[1])
+	if enemyID == 1:
+		add_child(_enemies[2])
+	#If no more enemies remaining
 	if enemies_remaining == 0:
 		textBox.queue_text("Those strongest among you who remain have leave to prepare for the next trial.")
 		# Wait 5 seconds
 		var t = Timer.new()
-		t.set_wait_time(5)
+		t.set_wait_time(3)
 		t.set_one_shot(false)
 		self.add_child(t)
 		t.start()

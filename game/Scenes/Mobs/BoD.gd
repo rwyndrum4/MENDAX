@@ -12,6 +12,8 @@ onready var BodAtkBox = $MyHitBox/CollisionShape2D
 onready var pos2d = $Position2D
 onready var player_detector_box = $detector/box
 
+var _name = "b"
+var _my_id: int = 0
 var isIn: bool = false
 var isDead:bool = false
 
@@ -28,8 +30,6 @@ func _ready():
 	anim.set_loop(true)
 	BodAnim.play("idle")
 	healthbar.value = 200;
-	# warning-ignore:return_value_discarded
-	#ServerConnection.connect("arena_enemy_hit",self, "took_damage_from_server")
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("textbox_empty",self,"turn_on_physics")
 
@@ -78,7 +78,7 @@ func turn_on_physics():
 """
 func take_damage(amount: int) -> void:
 	$AudioStreamPlayer2D.play()
-	ServerConnection.send_arena_enemy_hit(amount,3) #3 is the type of enemy, reference EnemyTypes in arenaGame.gd
+	ServerConnection.send_arena_enemy_hit(amount,_my_id, _name)
 	healthbar.value = healthbar.value - amount
 	
 	Global.bod_damage[str(1)]+=amount
@@ -120,7 +120,7 @@ func _on_AnimationPlayer_animation_finished(_anim_name):
 	else:
 		$death.play()
 		yield($death, "finished")
-		GlobalSignals.emit_signal("enemyDefeated", 0) #replace 0 with indication of enemy ID later
+		GlobalSignals.emit_signal("enemyDefeated", _my_id)
 		queue_free()
 
 """
@@ -185,3 +185,9 @@ func _tp_timer_expired():
 			x *= -1
 			y *= -1
 		position = get_parent().get_node("Player").position + Vector2(x,y)
+
+func set_id(id_num:int) -> void:
+	_my_id = id_num
+
+func get_id() -> int:
+	return _my_id
