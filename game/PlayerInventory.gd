@@ -4,12 +4,9 @@ const SlotClass = preload("res://Inventory/Slot.gd")
 const ItemClass = preload("res://Inventory/Item.gd")
 const NUM_INVENTORY_SLOTS = 20
 
+#--> slot_index: [item_name, item_quantity]
 var inventory = {
-	0: ["Coin", 54],  #--> slot_index: [item_name, item_quantity]
-	1: ["Coin", 54],  #--> slot_index: [item_name, item_quantity]
-	4: ["Coin", 54],  #--> slot_index: [item_name, item_quantity]
-	5: ["Coin", 54],  #--> slot_index: [item_name, item_quantity]
-	8: ["Coin", 1],  #--> slot_index: [item_name, item_quantity]
+	0: ["Coin", 0],
 }
 
 var hotbar = {

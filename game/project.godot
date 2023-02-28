@@ -138,6 +138,7 @@ Nakama="*res://Loader/Nakama/com.heroiclabs.nakama/Nakama.gd"
 INV="*res://JSONdata.gd"
 PlayerInventory="*res://PlayerInventory.gd"
 ServerConnection="*res://Scenes/globalScope/ServerConnection.gd"
+GameLoot="*res://Loader/GameLoot.gd"
 
 [debug]
 

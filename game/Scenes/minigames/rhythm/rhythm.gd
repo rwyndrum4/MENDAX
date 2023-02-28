@@ -78,6 +78,7 @@ onready var _map = beatmap_file.new()
 func _ready():
 	randomize()
 	get_parent().toggle_hotbar(false)
+	get_parent().show_money(false)
 	# warning-ignore:return_value_discarded
 	conductor.connect("finished",self,"end_rhythm_game")
 	# warning-ignore:return_value_discarded
@@ -365,7 +366,19 @@ func _on_Conductor_beat(beat_position):
 */
 """
 func end_rhythm_game():
+	#Final results sorted
 	var results = get_sorted_results()
+	#Giving players money based on results
+	var ctr = 1
+	for arr in results:
+		var n = Global.get_player_num(arr[0])
+		GameLoot.add_to_coin(n,(5 - ctr) * 5)
+		var total_coin = GameLoot.get_coin_val(n)
+		get_parent().change_money(total_coin)
+		if arr[0] == Save.game_data.username:
+			PlayerInventory.add_item("Coin", total_coin)
+		ctr += 1
+	#Load ending scene
 	var end_screen:Popup = load("res://Scenes/minigames/rhythm/endScreen.tscn").instance()
 	$Frame.add_child(end_screen)
 	end_screen.add_results(results)
@@ -379,6 +392,8 @@ func end_rhythm_game():
 	yield(wait_timer_look_leaderboard, "timeout")
 	wait_timer_look_leaderboard.queue_free()
 	get_parent().toggle_hotbar(true)
+	get_parent().show_money(true)
+	#Reset minigame players and go to cave scene
 	Global.reset_minigame_players()
 	Global.state = Global.scenes.CAVE
 
