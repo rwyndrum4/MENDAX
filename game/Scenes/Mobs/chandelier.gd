@@ -12,6 +12,7 @@ onready var chandelierBox = $MyHurtBox/hitbox
 onready var chandelierAtkBox = $MyHitBox/CollisionShape2D
 
 var _isIn = false
+var _isFiring = false
 var _isDead = false
 var _leveled_up: bool = false
 
@@ -50,7 +51,9 @@ func _physics_process(delta):
 	if _timer > _fire_wait_time:
 		_timer=0;
 		chandelierAnim.play("attack1")
+		_isFiring = true
 		yield(chandelierAnim, "animation_finished")
+		_isFiring = false
 		fire();
 		if _leveled_up:
 			fire(Vector2(-200, -200))
@@ -107,22 +110,26 @@ func take_damage(amount: int) -> void:
 	#print(Global.chandelier_damage[str(1)])
 	if healthbar.value == 0:
 		_isDead = true
+		set_physics_process(false)
 		chandelierAnim.play("death")
 		#have to defer disabling the skeleton, got an error otherwise
 		#put the line of code in function below since call_deferred only takes functions as input
 		call_deferred("defer_disabling_chandelier")
 	else:
-		chandelierAnim.play("hit")
+		if not _isDead and not _isFiring:
+			chandelierAnim.play("hit")
 	
 #Same as above function except it doesn't send data to server
 func take_damage_server(amount: int):
 	healthbar.value = healthbar.value - amount
 	if healthbar.value == 0:
 		_isDead = true
+		set_physics_process(false)
 		chandelierAnim.play("death")
 		call_deferred("defer_disabling_chandelier")
 	else:
-		chandelierAnim.play("hit")
+		if not _isDead and not _isFiring:
+			chandelierAnim.play("hit")
 
 func defer_disabling_chandelier():
 	chandelierBox.disabled = true

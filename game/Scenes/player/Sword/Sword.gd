@@ -17,7 +17,7 @@ var direction
 */
 """
 func _process(_delta):
-	if Input.is_action_just_pressed("mouse_click_left", false) or Input.is_action_just_pressed("jump", false):
+	if Input.is_action_just_pressed("mouse_click_left", false):
 		if direction == "right":
 			ServerConnection.send_arena_sword("right")
 			

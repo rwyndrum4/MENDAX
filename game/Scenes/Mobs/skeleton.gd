@@ -51,7 +51,7 @@ func _ready():
 * @param delta : elapsed time (in seconds) since previous frame. Should be constant across sequential calls
 * @return None
 */
-"""		
+"""
 func _physics_process(delta):
 	var player_pos = null
 	#Get player position 
@@ -63,7 +63,10 @@ func _physics_process(delta):
 		else:
 			velocity = move_and_slide(velocity.move_toward(BASE_SPEED*Vector2.ZERO, BASE_ACCELERATION*delta))
 			return
-	velocity = move_and_slide(velocity.move_toward(BASE_SPEED*(player_pos - position), BASE_ACCELERATION*delta))
+	velocity = move_and_slide(velocity.move_toward(
+		BASE_SPEED*((player_pos - get_player_offset(player_pos)) - position), 
+		BASE_ACCELERATION*delta)
+	)
 	#Handle making skeleton turn around
 	if player_pos.x < position.x:
 		pos2d.scale.x = -1
@@ -73,7 +76,23 @@ func _physics_process(delta):
 		pos2d.scale.x = 1
 		player_detector_box.position = Vector2(50,0)
 		skeleAtkBox.position = Vector2(60,0)
-		
+
+"""
+/*
+* @pre Called when skeleton wants to know where to go towards
+* @post skeleton will move left or right to get to player's side
+* @param None
+* @return Vector2 (offset to get to player)
+*/
+"""
+func get_player_offset(player_pos:Vector2) -> Vector2:
+	if player_pos.x > 3200:
+		return Vector2(120,0)
+	elif player_pos.x < 700:
+		return Vector2(-120,0)
+	else:
+		return Vector2(-120,0)
+
 """
 /*
 * @pre Called before player 1 sends who to target data
@@ -134,7 +153,6 @@ func take_damage(amount: int) -> void:
 	$AudioStreamPlayer2D.play()
 	ServerConnection.send_arena_enemy_hit(amount,1) #1 is the type of enemy, reference EnemyTypes in arenaGame.gd
 	healthbar.value = healthbar.value - amount
-
 	Global.skeleton_damage[str(1)]+=amount
 	if healthbar.value == 0:
 		isDead = true
@@ -142,8 +160,6 @@ func take_damage(amount: int) -> void:
 		#have to defer disabling the skeleton, got an error otherwise
 		#put the line of code in function below since call_deferred only takes functions as input
 		call_deferred("defer_disabling_skeleton")
-	else:
-		skeletonAnim.play("hit")
 
 #Same function as above but doesn't send data to the server
 func take_damage_server(amount: int):
@@ -154,8 +170,6 @@ func take_damage_server(amount: int):
 		#have to defer disabling the skeleton, got an error otherwise
 		#put the line of code in function below since call_deferred only takes functions as input
 		call_deferred("defer_disabling_skeleton")
-	else:
-		skeletonAnim.play("hit")
 
 #function for disabling skeleton, needs to be deferred for reasons above
 func defer_disabling_skeleton():
@@ -204,7 +218,6 @@ func _on_skeletonAnimationPlayer_animation_finished(_anim_name):
 		$death.play()
 		yield($death, "finished")
 		GlobalSignals.emit_signal("enemyDefeated", 0) #replace 0 with indication of enemy ID later
-		
 		queue_free()
 
 """

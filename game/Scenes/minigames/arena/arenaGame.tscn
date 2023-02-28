@@ -16,9 +16,6 @@
 [sub_resource type="OccluderPolygon2D" id=1]
 polygon = PoolVector2Array( -48.9833, -45.9201, -50.0482, 47.9166, -50.0482, 47.9166, 50.0482, 46.9184, 50.0482, 46.9184, 48.9833, -48.9149, 47.9185, -50.9114 )
 
-[sub_resource type="RectangleShape2D" id=5]
-extents = Vector2( 3.66668, 17.6191 )
-
 [sub_resource type="DynamicFont" id=4]
 size = 40
 font_data = ExtResource( 3 )
@@ -26,6 +23,9 @@ font_data = ExtResource( 3 )
 [sub_resource type="DynamicFont" id=7]
 size = 75
 font_data = ExtResource( 7 )
+
+[sub_resource type="RectangleShape2D" id=5]
+extents = Vector2( 3.66668, 17.6191 )
 
 [sub_resource type="SpriteFrames" id=6]
 animations = [ {
@@ -61,15 +61,6 @@ position = Vector2( 929, 838 )
 scale = Vector2( 3, 3 )
 collision_layer = 262148
 collision_mask = 262144
-
-[node name="StaticBody2D" type="StaticBody2D" parent="Skeleton"]
-position = Vector2( 0.333328, 0 )
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Skeleton/StaticBody2D"]
-position = Vector2( 1.33334, 27.3333 )
-rotation = 1.5708
-scale = Vector2( 0.5, 0.7 )
-shape = SubResource( 5 )
 
 [node name="GUI" type="CanvasLayer" parent="."]
 

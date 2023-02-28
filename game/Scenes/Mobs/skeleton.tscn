@@ -1,4 +1,4 @@
-[gd_scene load_steps=63 format=2]
+[gd_scene load_steps=64 format=2]
 
 [ext_resource path="res://Assets/Mobs/Skeleton/Idle.png" type="Texture" id=1]
 [ext_resource path="res://Scenes/Mobs/skeleton.gd" type="Script" id=2]
@@ -514,6 +514,9 @@ tracks/3/keys = {
 [sub_resource type="RectangleShape2D" id=46]
 extents = Vector2( 31, 27 )
 
+[sub_resource type="RectangleShape2D" id=47]
+extents = Vector2( 3.66668, 17.6191 )
+
 [node name="Skeleton" type="KinematicBody2D"]
 collision_layer = 2
 script = ExtResource( 2 )
@@ -525,7 +528,7 @@ visible = false
 position = Vector2( 0, 5 )
 frames = SubResource( 2 )
 animation = "attack1"
-frame = 2
+frame = 7
 playing = true
 
 [node name="sprite" type="Sprite" parent="Position2D"]
@@ -587,6 +590,15 @@ volume_db = -8.0
 max_distance = 1000.0
 attenuation = 2.21914
 bus = "SFX"
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+position = Vector2( 0.333328, 0 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2( 1.33334, 27.3333 )
+rotation = 1.5708
+scale = Vector2( 0.5, 0.7 )
+shape = SubResource( 47 )
 
 [connection signal="animation_finished" from="skeletonAnimationPlayer" to="." method="_on_skeletonAnimationPlayer_animation_finished"]
 [connection signal="body_entered" from="detector" to="." method="_on_detector_body_entered"]

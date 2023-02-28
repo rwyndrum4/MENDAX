@@ -1,5 +1,5 @@
 """
-* Programmer Name - Freeman Spray
+* Programmer Name - Freeman Spray, Ben Moeller
 * Description - Code for controlling the Arena minigame
 * Date Created - 11/5/2022
 * Date Revisions: 11/12/2022 - added physics process to manage Skeleton positioning
