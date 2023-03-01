@@ -1,0 +1,56 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://Scenes/minigames/arena/littleGuy.png" type="Texture" id=1]
+[ext_resource path="res://Scenes/minigames/arena/littleGuy.gd" type="Script" id=2]
+[ext_resource path="res://Assets/ARIALBD.TTF" type="DynamicFontData" id=3]
+
+[sub_resource type="RectangleShape2D" id=3]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 3.66668, 17.6191 )
+
+[sub_resource type="SpriteFrames" id=2]
+animations = [ {
+"frames": [ ExtResource( 1 ), null ],
+"loop": true,
+"name": "crawl",
+"speed": 5.0
+}, {
+"frames": [  ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="DynamicFont" id=4]
+size = 17
+font_data = ExtResource( 3 )
+
+[node name="KinematicBody2D" type="KinematicBody2D"]
+collision_layer = 0
+collision_mask = 0
+script = ExtResource( 2 )
+
+[node name="hit_detector" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="hit_detector"]
+scale = Vector2( 3.40034, 3.40034 )
+shape = SubResource( 3 )
+
+[node name="guyHitbox" type="CollisionShape2D" parent="."]
+shape = SubResource( 1 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+frames = SubResource( 2 )
+animation = "crawl"
+
+[node name="slowed" type="Label" parent="."]
+visible = false
+margin_left = -31.0
+margin_top = -56.0
+margin_right = 37.0
+margin_bottom = -33.0
+custom_fonts/font = SubResource( 4 )
+text = "Slowed"
+
+[connection signal="area_entered" from="hit_detector" to="." method="_on_hit_detector_area_entered"]

@@ -23,8 +23,8 @@ var player_color:String = ""
 
 
 # Player physics constants
-const ACCELERATION = 25000
-const MAX_SPEED = 500
+var ACCELERATION = 25000
+var MAX_SPEED = 500
 const FRICTION = 500
 
 # Global velocity
@@ -39,6 +39,9 @@ var velocity = Vector2.ZERO
 */
 """
 func _ready():
+	#adding area 2d to this group, can be checked in area2d signals
+	#example in littleGuy.gd
+	$MyHurtBox.add_to_group("player")
 	#Connects singal to GlobalSignals, will stop/unstop player when called from "textbBox.gd"
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("textbox_shift",self,"stop_go_player")
@@ -105,6 +108,27 @@ func _physics_process(delta):
 	#Animate character
 	control_animations(velocity)
 
+"""
+/*
+* @pre Called in arena game, when player hit by littleGuy
+* @post slows the player's speed by 1/2
+* @param None
+* @return None
+*/
+"""
+func temporary_slow():
+	MAX_SPEED /= 2
+	var tmr = Timer.new()
+	tmr.one_shot = true
+	tmr.wait_time = 3
+	add_child(tmr)
+	tmr.connect("timeout",self,"_tmr_unslow_player", [tmr])
+	tmr.start()
+
+#Function that goes off based on code above
+func _tmr_unslow_player(tmr:Timer):
+	tmr.queue_free()
+	MAX_SPEED *= 2
 
 """
 /*
@@ -168,9 +192,9 @@ func take_damage(amount: int) -> void:
 		Global.player_health[str(1)]=new_health
 		ServerConnection.send_arena_player_health(new_health)
 		healthbar.value = new_health
-		if healthbar.value == 0 and Global.state == Global.scenes.ARENA_MINIGAME: #should fix it
+		if healthbar.value <= 0 and Global.state == Global.scenes.ARENA_MINIGAME: #should fix it
 			get_parent()._player_dead = true
-			_game_over()
+			get_parent().spectate_mode()
 			queue_free()
 
 

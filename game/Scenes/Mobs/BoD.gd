@@ -14,8 +14,10 @@ onready var player_detector_box = $detector/box
 
 var _name = "b"
 var _my_id: int = 0
+var _can_atk = true
 var isIn: bool = false
 var isDead:bool = false
+var teleport_timer:Timer = null
 
 """
 /*
@@ -32,6 +34,13 @@ func _ready():
 	healthbar.value = 200;
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("textbox_empty",self,"turn_on_physics")
+	teleport_timer= Timer.new()
+	add_child(teleport_timer)
+	teleport_timer.wait_time = 6
+	teleport_timer.one_shot = false
+	teleport_timer.start()
+	# warning-ignore:return_value_discarded
+	teleport_timer.connect("timeout",self, "_tp_timer_expired")
 
 """
 /*
@@ -86,8 +95,6 @@ func take_damage(amount: int) -> void:
 		isDead = true
 		BodAnim.play("death")
 		call_deferred("defer_disabling_BoD")
-	else:
-		BodAnim.play("hit")
 
 #Same as above function except it doesn't send data to server
 func take_damage_server(amount: int):
@@ -96,8 +103,6 @@ func take_damage_server(amount: int):
 		isDead = true
 		BodAnim.play("death")
 		call_deferred("defer_disabling_BoD")
-	else:
-		BodAnim.play("hit")
 
 #function for disabling skeleton, needs to be deferred for reasons above
 func defer_disabling_BoD():
@@ -133,10 +138,8 @@ func _on_AnimationPlayer_animation_finished(_anim_name):
 """
 func _on_detector_body_entered(_body):
 	isIn = true
-	if not isDead:
+	if not isDead and _can_atk:
 		BodAnim.play("attack1")
-	
-
 
 """
 /*
@@ -159,14 +162,7 @@ func _on_detector_body_exited(_body):
 """
 func level_up():
 	healthbar.value = healthbar.value + 40
-	#New timer that makes it so that BoD teleports ever 4 sec
-	var teleport_timer: Timer = Timer.new()
-	add_child(teleport_timer)
 	teleport_timer.wait_time = 4
-	teleport_timer.one_shot = false
-	teleport_timer.start()
-	# warning-ignore:return_value_discarded
-	teleport_timer.connect("timeout",self, "_tp_timer_expired")
 
 """
 /*
@@ -184,7 +180,29 @@ func _tp_timer_expired():
 		if randf() > 0.5:
 			x *= -1
 			y *= -1
-		position = get_parent().get_node("Player").position + Vector2(x,y)
+		if ServerConnection.match_exists() and ServerConnection.get_server_status():
+			var server_players:Array = get_parent().server_players
+			var total = Vector2.ZERO
+			var ctr = 0
+			for p in server_players:
+				var obj = p.get('player_obj') 
+				if obj != null:
+					ctr += 1
+					total += obj.position
+			var your_pos = get_parent().get_node("Player").position
+			total += your_pos
+			position = total / (ctr + 1)
+		else:
+			x *= 5
+			y *= 5
+			position = get_parent().get_node("Player").position + Vector2(x,y)
+		#Play animation to give player time to react
+		BodAnim.play("spellatk")
+		$detector.disconnect("body_entered",self,"_on_detector_body_entered")
+		yield(BodAnim,"animation_finished")
+		# warning-ignore:return_value_discarded
+		$detector.connect("body_entered",self,"_on_detector_body_entered")
+		BodAnim.play_backwards("spellatk")
 
 func set_id(id_num:int) -> void:
 	_my_id = id_num

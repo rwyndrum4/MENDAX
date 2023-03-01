@@ -10,10 +10,16 @@
 extends Control
 
 # Member Variables
-const TOTAL_TIME = 180
-var _enemies: Array = []
-var game_started = false
-var enemies_remaining = 9
+const TOTAL_TIME = 180 #Total time for game until hard mode starts
+const EXTRA_TIME: float = 20.0 #Extra time that is added when someone dies
+var enemies_remaining = 9 #How many enemies are left, if 0 you win
+var _enemies: Array = [] #Array that holds enemy objects, enemy_id == index
+var server_players: Array = [] #Array to hold objects of other players (not your own)
+var alive_players: Dictionary = {} #Dictionary that holds who is alive (4 online play)
+var game_started = false #track if game has started or not
+var _player_dead = false #variable to track if player 1 has died
+
+# Game objects
 onready var myGUI = $GUI
 onready var myTimer: Timer = $GUI/Timer
 onready var timerText: Label = $GUI/Timer/timerText
@@ -25,21 +31,8 @@ onready var playerHealth = $Player/ProgressBar
 onready var SkeletonEnemy = preload("res://Scenes/Mobs/skeleton.tscn")
 onready var BodEnemy = preload("res://Scenes/Mobs/BoD.tscn")
 onready var ChandelierEnemy = preload("res://Scenes/Mobs/chandelier.tscn")
-#Scene for players that online oppenents use
-var online_players = "res://Scenes/player/arena_player/arena_player.tscn"
-
-#Enemy Types in terms of numbers, used with server code
-enum EnemyTypes {
-	SKELETON = 1,
-	CHANDELIER,
-	BOD
-}
-#Array to hold objects of other players (not your own player)
-var server_players: Array = []
-var alive_players: Dictionary = {}
-var in_menu = false
-var EXTRA_TIME: float = 20.0
-var _player_dead = false #variable to track if player 1 has died
+onready var littleGuyEnemy = preload("res://Scenes/minigames/arena/littleGuy.tscn")
+onready var onlinePlayer = preload("res://Scenes/player/arena_player/arena_player.tscn")
 
 """
 /*
@@ -52,15 +45,13 @@ var _player_dead = false #variable to track if player 1 has died
 func _ready():
 	randomize()
 	# warning-ignore:return_value_discarded
-	GlobalSignals.connect("openChatbox", self, "chatbox_use")
-	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("enemyDefeated",self,"_enemy_defeated")
 	# warning-ignore:return_value_discarded
 	Global.connect("all_players_arrived", self, "_can_start_game")
 	# warning-ignore:return_value_discarded
 	ServerConnection.connect("minigame_can_start", self, "_can_start_game_other")
 	playerHealth.visible = true
-	playerHealth.value = 100
+	playerHealth.value = 150
 	sword.direction = "right"
 	swordPivot.position = main_player.position + Vector2(60,20)
 	#If there is a server connection, spawn all players
@@ -104,48 +95,23 @@ func _ready():
 
 """
 /*
-* @pre Called in ready function
-* @post spawns all enemies in
-* @param None
+* @pre Called for every frame
+* @post updates timer and changes scenes if player presses enter and is in the zone
+* @param _delta -> time variable that can be optionally used
 * @return None
 */
 """
-func spawn_enemies() -> void:
-	var enemy_id = 0
-	#Spawn 3 Skeletons
-	var Skel_positions = [Vector2(1750,700),Vector2(2400,700),Vector2(2900,3000)]
-	for i in range(3):
-		var s = SkeletonEnemy.instance()
-		s.position = Skel_positions[i]
-		s.scale = Vector2(3,3)
-		if i == 0:
-			add_child(s)
-		s.set_physics_process(false)
-		s.set_id(enemy_id)
-		_enemies.append(s)
-		enemy_id += 1
-	#Spawn 2 BoDs
-	var BoD_positions = [Vector2(2750,750), Vector2(1000,3000)]
-	for i in range(2):
-		var b = BodEnemy.instance()
-		b.position = BoD_positions[i]
-		b.scale = Vector2(3,3)
-		add_child(b)
-		b.set_physics_process(false)
-		b.set_id(enemy_id)
-		_enemies.append(b)
-		enemy_id += 1
-	#Spawn 4 Chandeliers
-	var Cha_positions = [Vector2(500,500),Vector2(3300,500),Vector2(500,3250), Vector2(3300,3250)]
-	for i in range(4):
-		var c = ChandelierEnemy.instance()
-		c.position = Cha_positions[i]
-		c.scale = Vector2(3,3)
-		add_child(c)
-		c.set_physics_process(false)
-		c.set_id(enemy_id)
-		_enemies.append(c)
-		enemy_id += 1
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(_delta): #change to delta if used
+	#Game is over if all players dead
+	if is_instance_valid(myTimer):
+		timerText.text = convert_time(myTimer.time_left)
+	if not is_instance_valid(main_player):
+		return
+	if sword.direction == "right":
+		swordPivot.position = main_player.position + Vector2(60,0)
+	elif sword.direction == "left":
+		swordPivot.position = main_player.position + Vector2(-60,0)
 
 """
 /*
@@ -206,25 +172,6 @@ func start_arena_game():
 	textBox.queue_text("Let the strongest among you prevail.")
 	spawn_enemies()
 	#game will start once all text in textBox is out of the queue
-
-"""
-/*
-* @pre Called for every frame
-* @post updates timer and changes scenes if player presses enter and is in the zone
-* @param _delta -> time variable that can be optionally used
-* @return None
-*/
-"""
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta): #change to delta if used
-	if is_instance_valid(myTimer):
-		timerText.text = convert_time(myTimer.time_left)
-	if not is_instance_valid(main_player):
-		return
-	if sword.direction == "right":
-		swordPivot.position = main_player.position + Vector2(60,0)
-	elif sword.direction == "left":
-		swordPivot.position = main_player.position + Vector2(-60,0)
 
 """
 /*
@@ -312,9 +259,18 @@ func _target_timer_expired():
 * @return String (text of current time left)
 */
 """
-func _end_game():
-	#Turn off player healthbar
-	playerHealth.visible = false
+func _end_game(won_game:bool):
+	var text = "Those strongest among you who remain have leave to prepare for the next trial."
+	if not won_game:
+		text = "You lot have failed, I expect better next time"
+	textBox.queue_text(text)
+	var t = Timer.new()
+	t.set_wait_time(5)
+	t.set_one_shot(false)
+	self.add_child(t)
+	t.start()
+	yield(t, "timeout")
+	t.queue_free()
 	#Delete online player objects if they have not already died
 	for o_player in server_players:
 		var obj = o_player.get('player_obj') 
@@ -323,9 +279,57 @@ func _end_game():
 	Global.reset_minigame_players()
 	Global.state = Global.scenes.CAVE
 
-func chatbox_use(value):
-	if value:
-		in_menu = true
+"""
+/*
+* @pre Called in ready function
+* @post spawns all enemies in
+* @param None
+* @return None
+*/
+"""
+func spawn_enemies() -> void:
+	var enemy_id = 0
+	#Spawn 3 Skeletons
+	var Skel_positions = [Vector2(1750,700),Vector2(2400,700),Vector2(2900,3000)]
+	for i in range(3):
+		var s = SkeletonEnemy.instance()
+		s.position = Skel_positions[i]
+		s.scale = Vector2(3,3)
+		if i == 0:
+			add_child(s)
+		s.set_physics_process(false)
+		s.set_id(enemy_id)
+		_enemies.append(s)
+		enemy_id += 1
+	#Spawn 2 BoDs
+	var BoD_positions = [Vector2(2750,750), Vector2(1000,3000)]
+	for i in range(2):
+		var b = BodEnemy.instance()
+		b.position = BoD_positions[i]
+		b.scale = Vector2(3,3)
+		if i == 0:
+			add_child(b)
+		b.set_physics_process(false)
+		b.set_id(enemy_id)
+		_enemies.append(b)
+		enemy_id += 1
+	#Spawn 4 Chandeliers
+	var Cha_positions = [Vector2(500,500),Vector2(3300,500),Vector2(500,3250), Vector2(3300,3250)]
+	for i in range(4):
+		var c = ChandelierEnemy.instance()
+		c.position = Cha_positions[i]
+		c.scale = Vector2(3,3)
+		add_child(c)
+		c.set_physics_process(false)
+		c.set_id(enemy_id)
+		_enemies.append(c)
+		enemy_id += 1
+	#Spawn 4 littleGuys
+	var Guy_positions = [Vector2(1000,750),Vector2(1000,1500),Vector2(1000,2100),Vector2(1000,3000)]
+	for i in range(4):
+		var l = littleGuyEnemy.instance()
+		l.position = Guy_positions[i]
+		add_child(l)
 
 """
 /*
@@ -347,7 +351,7 @@ func spawn_players():
 			main_player.set_color(num)
 		#if the player is another online player
 		else:
-			var new_player:KinematicBody2D = load(online_players).instance()
+			var new_player:KinematicBody2D = onlinePlayer.instance()
 			new_player.set_player_id(num)
 			new_player.set_color(num)
 			#Change size and pos of sprite
@@ -448,6 +452,8 @@ func other_player_swung_sword(player_id: int, direction: String):
 func _extend_timer(p_id: int):
 	# warning-ignore:return_value_discarded
 	alive_players.erase(p_id)
+	if len(alive_players) == 0:
+		_end_game(true)
 	var new_time: float = myTimer.time_left + EXTRA_TIME
 	myTimer.start(new_time)
 			
@@ -468,16 +474,29 @@ func _enemy_defeated(enemyID:int):
 		add_child(_enemies[1])
 	if enemyID == 1:
 		add_child(_enemies[2])
-	#If no more enemies remaining
+	#Same logic as above, but spawn extra BoD
+	if enemyID == 3:
+		add_child(_enemies[4])
+	#If no more enemies remaining you win!!!
 	if enemies_remaining == 0:
-		textBox.queue_text("Those strongest among you who remain have leave to prepare for the next trial.")
-		# Wait 5 seconds
-		var t = Timer.new()
-		t.set_wait_time(3)
-		t.set_one_shot(false)
-		self.add_child(t)
-		t.start()
-		yield(t, "timeout")
-		t.queue_free()
-		#Go back to cave
-		_end_game()
+		_end_game(true)
+
+"""
+/*
+* @pre Called when a player dies in the arena
+* @post zoom out to watch other players
+* @param None
+* @return None
+*/
+"""
+func spectate_mode():
+	var spec_cam = Camera2D.new()
+	add_child(spec_cam)
+	spec_cam.clear_current()
+	spec_cam.make_current()
+	spec_cam.zoom = Vector2(5,5)
+	spec_cam.position = Vector2(1900,1920)
+	$GUI/YouDied.show()
+	if len(alive_players) == 0:
+		_end_game(false)
+		return
