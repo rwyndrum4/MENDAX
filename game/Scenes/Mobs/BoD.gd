@@ -175,8 +175,8 @@ func level_up():
 func _tp_timer_expired():
 	BodAnim.stop() #stop previous animation if it had one
 	if not get_parent()._player_dead:
-		var x = randi() % 75
-		var y = randi() % 75
+		var x = randi() % 80 + 25
+		var y = randi() % 80 + 25
 		if randf() > 0.5:
 			x *= -1
 			y *= -1
@@ -191,16 +191,31 @@ func _tp_timer_expired():
 					total += obj.position
 			var your_pos = get_parent().get_node("Player").position
 			total += your_pos
-			position = total / (ctr + 1)
+			position = check_pos(total / (ctr + 1))
 		else:
 			x *= 5
 			y *= 5
-			position = get_parent().get_node("Player").position + Vector2(x,y)
+			var final_pos = check_pos(get_parent().get_node("Player").position + Vector2(x,y))
+			position = final_pos
 		#Play animation to give player time to react
 		_can_atk = false
 		BodAnim.play("spellatk")
 		yield(BodAnim,"animation_finished")
 		_can_atk = true
+
+func check_pos(pos2check:Vector2) -> Vector2:
+	var HIGH = 3250
+	var LOW = 500
+	var result:Vector2 = pos2check
+	if pos2check.x < LOW:
+		result.x = 600
+	elif pos2check.x > HIGH:
+		result.x = 3000
+	if pos2check.y < LOW:
+		result.y = 600
+	elif pos2check.y > HIGH:
+		result.y = 3000
+	return result
 
 func set_id(id_num:int) -> void:
 	_my_id = id_num
