@@ -20,7 +20,9 @@ enum OpCodes {
 	UPDATE_ARENA_ENEMY_MOVE = 7,
 	UPDATE_CAN_START_GAME = 8,
 	UPDATE_RHYTHM_SCORE = 9,
-	SPAWNED = 10
+	PLAYER_BOOOPED = 10,
+	SHIELD_TAKEN = 11,
+	SPAWNED = 12
 }
 
 #Variable that checks if connected to server
@@ -30,6 +32,7 @@ var server_status: bool = false
 signal state_updated(id, position) #state of game has been updated
 signal input_updated(id, vec) #input of player has changed and received
 signal character_spawned(char_name) #singal to tell if someone has spawned
+signal character_took_shield(p_id, spawn_num) #someone whent over a shield spawn
 signal character_despawned(char_name) #signal to tell if someone has despawned
 signal riddle_received(riddle) #signal to tell game it has received a riddle from server
 signal arena_player_swung_sword(id, direction) #signal to tell arena minigame someone swung sword
@@ -37,7 +40,8 @@ signal arena_player_lost_health(id, health) #signal to tell if player has lost h
 signal arena_enemy_hit(enemy_id, damage_taken,player_id,enemy_type) #signal to tell if an enemy has been hit
 signal minigame_can_start() #signal that the minigame can be started
 signal minigame_player_spawned(id) #signal to tell if a player has arrived to a scene
-signal minigame_rhythm_score(id, score)
+signal player_booped(id, posX, posY) #signal to tell where a player should be booped too
+signal minigame_rhythm_score(id, score) #send current score of rhythm game player
 
 #Other signals
 signal chat_message_received(msg,type,user_sent,from_user) #signal to tell game a chat message has come in
@@ -537,6 +541,33 @@ func send_rhythm_score(new_score:int):
 
 """
 /*
+* @pre called when someone picks up a shield object
+* @post tells server which player picked up which shield
+* @param spawn_number (number corresponding to shield spot)
+* @return None
+*/
+"""
+func send_shield_notif(spawn_number:int = 0):
+	if _socket:
+		var payload := {id = _player_num, s_num = spawn_number}
+		_socket.send_match_state_async(_match_id, OpCodes.SHIELD_TAKEN, JSON.print(payload))
+
+"""
+/*
+* @pre called when someone gets hit by a sword
+* @post tells server which player should be booped where
+* @param p_pos (Vector2 of where player should be booped)
+* @return None
+*/
+"""
+func send_player_booped(p_id: int, p_pos:Vector2):
+	if _socket:
+		#For this one, send player id of person who GOT HIT
+		var payload := {id = p_id, xPos = p_pos.x, yPos = p_pos.y}
+		_socket.send_match_state_async(_match_id, OpCodes.PLAYER_BOOOPED, JSON.print(payload))
+
+"""
+/*
 * @pre called when player spawns in an area
 * @post tells other players they are there, used for syncing players together
 * @param None
@@ -680,6 +711,21 @@ func _on_NakamaSocket_received_match_state(match_state: NakamaRTAPI.MatchData) -
 			emit_signal("minigame_rhythm_score", id, score)
 		OpCodes.UPDATE_CAN_START_GAME:
 			emit_signal("minigame_can_start")
+		OpCodes.PLAYER_BOOOPED:
+			var decoded: Dictionary = JSON.parse(raw).result
+			
+			var id: int = int(decoded.id)
+			var x: int = int(decoded.xPos)
+			var y: int = int(decoded.yPos)
+			
+			emit_signal("player_booped",id,x,y)
+		OpCodes.SHIELD_TAKEN:
+			var decoded: Dictionary = JSON.parse(raw).result
+			
+			var id:int = int(decoded.id)
+			var spawn_num: int = int(decoded.s_num)
+			
+			emit_signal("character_took_shield",id,spawn_num)
 		OpCodes.SPAWNED:
 			var decoded: Dictionary = JSON.parse(raw).result
 			

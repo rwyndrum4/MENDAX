@@ -18,6 +18,8 @@ var server_players: Array = [] #Array to hold objects of other players (not your
 var alive_players: Dictionary = {} #Dictionary that holds who is alive (4 online play)
 var game_started = false #track if game has started or not
 var _player_dead = false #variable to track if player 1 has died
+var _shield_spawn = null
+var _shield_available:bool = true
 
 # Game objects
 onready var myGUI = $GUI
@@ -43,6 +45,11 @@ onready var onlinePlayer = preload("res://Scenes/player/arena_player/arena_playe
 */
 """
 func _ready():
+	var new_player:KinematicBody2D = onlinePlayer.instance()
+	new_player.set_color(2)
+	new_player.position = Vector2(1000,1000)
+	add_child(new_player)
+	new_player.set_physics_process(false)
 	randomize()
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("enemyDefeated",self,"_enemy_defeated")
@@ -64,6 +71,10 @@ func _ready():
 		ServerConnection.connect("arena_player_lost_health",self,"other_player_hit")
 		# warning-ignore:return_value_discarded
 		ServerConnection.connect("arena_player_swung_sword",self,"other_player_swung_sword")
+		# warning-ignore:return_value_discarded
+		ServerConnection.connect("character_took_shield",self,"someone_took_shild")
+		# warning-ignore:return_value_discarded
+		ServerConnection.connect("player_booped",self,"someone_got_booped")
 		if ServerConnection._player_num == 1:
 			#in case p1 is last player to get to minigame
 			if Global.get_minigame_players() == Global.get_num_players() - 1:
@@ -171,6 +182,7 @@ func start_arena_game():
 	textBox.queue_text("If any one of you dies, I will reset the timer.")
 	textBox.queue_text("Let the strongest among you prevail.")
 	spawn_enemies()
+	spawn_shield()
 	#game will start once all text in textBox is out of the queue
 
 """
@@ -299,6 +311,7 @@ func spawn_enemies() -> void:
 			add_child(s)
 		s.set_physics_process(false)
 		s.set_id(enemy_id)
+		s.set_name("skeleton" + str(enemy_id))
 		_enemies.append(s)
 		enemy_id += 1
 	#Spawn 2 BoDs
@@ -311,6 +324,7 @@ func spawn_enemies() -> void:
 			add_child(b)
 		b.set_physics_process(false)
 		b.set_id(enemy_id)
+		b.set_name("BoD" + str(enemy_id))
 		_enemies.append(b)
 		enemy_id += 1
 	#Spawn 4 Chandeliers
@@ -322,6 +336,7 @@ func spawn_enemies() -> void:
 		add_child(c)
 		c.set_physics_process(false)
 		c.set_id(enemy_id)
+		c.set_name("chandelier" + str(enemy_id))
 		_enemies.append(c)
 		enemy_id += 1
 	#Spawn 4 littleGuys
@@ -500,3 +515,109 @@ func spectate_mode():
 	if len(alive_players) == 0:
 		_end_game(false)
 		return
+
+"""
+/*
+* @pre Called when a player dies in the arena
+* @post zoom out to watch other players
+* @param None
+* @return None
+*/
+"""
+func spawn_shield():
+	# Generate shild spawn
+	_shield_spawn = Area2D.new()
+	var col_2d = CollisionShape2D.new()
+	var shape = CircleShape2D.new()
+	shape.set_radius(80)
+	col_2d.set_shape(shape)
+	_shield_spawn.position = Vector2(1882,1900)
+	var shield_sprite = Sprite.new()
+	shield_sprite.texture = load("res://Assets/shieldFull.png")
+	shield_sprite.scale = Vector2(2,2)
+	shield_sprite.position = Vector2(1882,1900)
+	shield_sprite.set_name("shield_sprite")
+	add_child(_shield_spawn)
+	_shield_spawn.add_child(col_2d)
+	#add_child_below_node(shield_spawn,col_2d)
+	add_child_below_node(_shield_spawn,shield_sprite)
+	_shield_spawn.connect("area_entered",self,"give_shield")
+
+"""
+/*
+* @pre Called when a player grabs a shield from spawn
+* @post give player shield and let server know its taken
+* @param area
+* @return None
+*/
+"""
+func give_shield(area):
+	if area.is_in_group("player") and _shield_available:
+		ServerConnection.send_shield_notif()
+		_shield_available = false
+		main_player.shield.giveShield()
+		get_node("shield_sprite").hide()
+		start_shield_timer()
+
+"""
+/*
+* @pre Called when server says someone stepped on shield
+* @post Shield becomes unavailable for a time period
+* @param p_id -> int (player who stepped on it)
+*		 shield_num -> int (which spawn it was)
+* @return None
+*/
+"""
+func someone_took_shild(player_id,_shield_num):
+	_shield_available = false
+	get_node("shield_sprite").hide()
+	for o_player in server_players:
+		if player_id == o_player.get('num'):
+			o_player.get('player_obj').shield.giveShield()
+			break
+
+"""
+/*
+* @pre Shield was stepped on
+* @post start timer to respawn shield when done
+* @param None
+* @return None
+*/
+"""
+func start_shield_timer():
+	var s_tmr: Timer = Timer.new()
+	add_child(s_tmr)
+	s_tmr.wait_time = 15
+	s_tmr.one_shot = true
+	s_tmr.start()
+	# warning-ignore:return_value_discarded
+	s_tmr.connect("timeout",self, "_respawn_shield", [s_tmr])
+
+"""
+/*
+* @pre Timer went off
+* @post respawn the shield
+* @param tmr (timer to get rid of)
+* @return None
+*/
+"""
+func _respawn_shield(tmr:Timer):
+	tmr.queue_free()
+	_shield_available = true
+	get_node("shield_sprite").show()
+
+"""
+/*
+* @pre Someone got hit by a sword
+* @post move them to right position
+* @param player_id -> int (id of player)
+* 		 x -> int (x position to go to)
+*		 y -> int (y position to go to)
+* @return None
+*/
+"""
+func someone_got_booped(player_id: int, x: int, y: int):
+	for o_player in server_players:
+		if player_id == o_player.get('num'):
+			o_player.get('player_obj').was_booped(Vector2(x,y))
+			break

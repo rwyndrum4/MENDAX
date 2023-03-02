@@ -1,4 +1,4 @@
-[gd_scene load_steps=137 format=2]
+[gd_scene load_steps=140 format=2]
 
 [ext_resource path="res://Assets/ben-character/blue/rolling/3.png" type="Texture" id=1]
 [ext_resource path="res://Assets/ben-character/greeen/idle/0.png" type="Texture" id=2]
@@ -126,6 +126,8 @@
 [ext_resource path="res://Assets/ben-character/red/rolling/0.png" type="Texture" id=124]
 [ext_resource path="res://Scenes/player/arena_player/arena_player.gd" type="Script" id=125]
 [ext_resource path="res://Assets/ben-character/mc_sword.png" type="Texture" id=126]
+[ext_resource path="res://Scenes/player/Shield.gd" type="Script" id=127]
+[ext_resource path="res://Assets/shieldFull.png" type="Texture" id=128]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 9, 9 )
@@ -451,6 +453,8 @@ tracks/0/keys = {
 "values": [ 92.0, -18.0 ]
 }
 
+[sub_resource type="RectangleShape2D" id=11]
+
 [node name="Player" type="KinematicBody2D"]
 script = ExtResource( 125 )
 
@@ -494,3 +498,21 @@ anims/idle = SubResource( 6 )
 anims/slash = SubResource( 8 )
 anims/slashLeft = SubResource( 9 )
 anims/slash_rev = SubResource( 10 )
+
+[node name="sword_detector" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="sword_detector"]
+scale = Vector2( 4.53373, 4.42955 )
+shape = SubResource( 11 )
+
+[node name="Shield" type="Sprite" parent="."]
+light_mask = 0
+position = Vector2( -0.500003, -1.49999 )
+scale = Vector2( 1.13, 1.11 )
+texture = ExtResource( 128 )
+script = ExtResource( 127 )
+
+[node name="ShieldDelay" type="Timer" parent="Shield"]
+one_shot = true
+
+[connection signal="area_entered" from="sword_detector" to="." method="_on_sword_detector_area_entered"]

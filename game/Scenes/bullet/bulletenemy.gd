@@ -23,9 +23,7 @@ func _on_Area2D2_body_entered(body):
 	if  !"chandelier" in body.name and not "BoD" in body.name and not "skeleton" in body.name and not "StaticBody2D" in body.name:
 		queue_free() 
 	if "Player" in body.name:
-		
-		var Player = get_parent().get_node("Player")
-		
-		#enter health bar stuff here
-		Player.take_damage(10)
-		print("player got shot 10 dmg")
+		if not get_parent()._player_dead:
+			var Player = get_parent().get_node("Player")
+			#enter health bar stuff here
+			Player.take_damage(10)

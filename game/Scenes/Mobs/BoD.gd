@@ -197,12 +197,10 @@ func _tp_timer_expired():
 			y *= 5
 			position = get_parent().get_node("Player").position + Vector2(x,y)
 		#Play animation to give player time to react
+		_can_atk = false
 		BodAnim.play("spellatk")
-		$detector.disconnect("body_entered",self,"_on_detector_body_entered")
 		yield(BodAnim,"animation_finished")
-		# warning-ignore:return_value_discarded
-		$detector.connect("body_entered",self,"_on_detector_body_entered")
-		BodAnim.play_backwards("spellatk")
+		_can_atk = true
 
 func set_id(id_num:int) -> void:
 	_my_id = id_num

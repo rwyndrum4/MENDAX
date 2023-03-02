@@ -10,6 +10,17 @@ var direction
 
 """
 /*
+* @pre Called once when spawned
+* @post Adds its area2d to the sword group
+* @param None
+* @return None
+*/
+"""
+func _ready():
+	$pivot/Sprite/MyHitBox.add_to_group("sword")
+
+"""
+/*
 * @pre Called for every frame
 * @post Does actions according to inputs detected
 * @param _delta -> time variable that can be optionally used

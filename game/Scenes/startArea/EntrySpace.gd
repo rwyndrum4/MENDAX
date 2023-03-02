@@ -18,7 +18,8 @@ var stop_steam_control = false #variable to tell whether process function needs 
 var steam_modulate:float = 0 #modualte value that is gradually added to modulate of steam
 var at_lever = false
 var at_ladder = false
-var shield_spawn: Area2D
+var shield_spawn: Area2D = null
+var _shield_available: bool = true
 var imposter =preload("res://Scenes/Mobs/imposter.tscn")
 onready var confuzzed = $Player/confuzzle
 onready var instructions: Label = $exitCaveArea/exitDirections
@@ -45,17 +46,17 @@ var sword = null
 */
 """
 func _ready():
-	#Spawn the players if a match is ongoing
-	if ServerConnection.match_exists():
-		spawn_players()
 	#hide cave instructions at start
 	instructions.hide()
 	myTimer.start(90)
 	$fogSprite.modulate.a8 = 0
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("openChatbox", self, "chatbox_use")
-	
-
+	#Spawn the players if a match is ongoing
+	if ServerConnection.match_exists() and ServerConnection.get_server_status():
+		spawn_players()
+		# warning-ignore:return_value_discarded
+		ServerConnection.connect("character_took_shield",self,"someone_took_shild")
 
 """
 /*
@@ -401,6 +402,7 @@ func load_boss(stage_num:int):
 		shield_sprite.texture = load("res://Assets/shieldFull.png")
 		shield_sprite.scale = Vector2(2,2)
 		shield_sprite.position = Vector2(-4000,3000)
+		shield_sprite.set_name("shield_sprite")
 		add_child(shield_spawn)
 		shield_spawn.add_child(col_2d)
 		#add_child_below_node(shield_spawn,col_2d)
@@ -474,8 +476,44 @@ func load_boss(stage_num:int):
 	# Zoom out camera so player can view Mendax in all his glory
 	$Player.get_node("Camera2D").set("zoom", Vector2(2, 2))
 	
-func give_shield(_area):
-	player.shield.giveShield()
+func give_shield(area):
+	if area.is_in_group("player") and _shield_available:
+		ServerConnection.send_shield_notif()
+		_shield_available = false
+		player.shield.giveShield()
+		get_node("shield_sprite").hide()
+		start_shield_timer()
+
+"""
+/*
+* @pre Shield was stepped on
+* @post start timer to respawn shield when done
+* @param None
+* @return None
+*/
+"""
+func start_shield_timer():
+	var s_tmr: Timer = Timer.new()
+	add_child(s_tmr)
+	s_tmr.wait_time = 15
+	s_tmr.one_shot = true
+	s_tmr.start()
+	# warning-ignore:return_value_discarded
+	s_tmr.connect("timeout",self, "_respawn_shield", [s_tmr])
+
+"""
+/*
+* @pre Timer went off
+* @post respawn the shield
+* @param tmr (timer to get rid of)
+* @return None
+*/
+"""
+func _respawn_shield(tmr:Timer):
+	tmr.queue_free()
+	_shield_available = true
+	get_node("shield_sprite").show()
+
 """
 /*
 * @pre Called once start time expires (happens once)
@@ -488,3 +526,4 @@ func _imposter_spawn():
 	var new_imposter = imposter.instance()
 	new_imposter.position = Vector2(0, 3000)
 	add_child(new_imposter)
+
