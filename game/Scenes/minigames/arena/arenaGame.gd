@@ -18,8 +18,8 @@ var server_players: Array = [] #Array to hold objects of other players (not your
 var alive_players: Dictionary = {} #Dictionary that holds who is alive (4 online play)
 var game_started = false #track if game has started or not
 var _player_dead = false #variable to track if player 1 has died
-var _shield_spawn = null
-var _shield_available:bool = true
+var _shield_spawn = null #track where shield is
+var _shield_available:bool = true #track if shield can be taken
 
 # Game objects
 onready var myGUI = $GUI
@@ -45,11 +45,6 @@ onready var onlinePlayer = preload("res://Scenes/player/arena_player/arena_playe
 */
 """
 func _ready():
-	var new_player:KinematicBody2D = onlinePlayer.instance()
-	new_player.set_color(2)
-	new_player.position = Vector2(1000,1000)
-	add_child(new_player)
-	new_player.set_physics_process(false)
 	randomize()
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("enemyDefeated",self,"_enemy_defeated")
@@ -272,10 +267,18 @@ func _target_timer_expired():
 */
 """
 func _end_game(won_game:bool):
+	#Display text letting them know how the game went
 	var text = "Those strongest among you who remain have leave to prepare for the next trial."
 	if not won_game:
 		text = "You lot have failed, I expect better next time"
 	textBox.queue_text(text)
+	#Spawn and show end screen with results
+	var end_screen:Popup = load("res://Scenes/minigames/arena/arenaResults.tscn").instance()
+	$GUI.add_child(end_screen)
+	var server_status = ServerConnection.match_exists() and ServerConnection.get_server_status()
+	end_screen.add_results(gen_results(server_status))
+	end_screen.popup_centered()
+	#Give players 5 seconds to read everything
 	var t = Timer.new()
 	t.set_wait_time(5)
 	t.set_one_shot(false)
@@ -283,6 +286,7 @@ func _end_game(won_game:bool):
 	t.start()
 	yield(t, "timeout")
 	t.queue_free()
+	#Cleanup objects and leave minigame
 	#Delete online player objects if they have not already died
 	for o_player in server_players:
 		var obj = o_player.get('player_obj') 
@@ -290,6 +294,38 @@ func _end_game(won_game:bool):
 			obj.queue_free()
 	Global.reset_minigame_players()
 	Global.state = Global.scenes.CAVE
+
+
+"""
+/*
+* @pre game has ended
+* @post generates results based on if server is being used or not
+* @param server_status -> bool (if server is on or not)
+* @return Dictionary
+*/
+"""
+func gen_results(server_on:bool) -> Dictionary:
+	if server_on:
+		var res: Dictionary = {}
+		for p in server_players:
+			var p_num = p.get('num')
+			var p_name = Global.get_player_name(p_num)
+			if p.get('player_obj') == null:
+				res[p_name] = "Dead"
+			else:
+				GameLoot.add_to_coin(p_num,20)
+				if Save.game_data.username == p_name:
+					PlayerInventory.add_item("Coin", 20)
+				res[p_name] = "Lived"
+		res[Save.game_data.username] = "Dead" if _player_dead else "Lived"
+		get_parent().change_money(GameLoot.get_coin_val(ServerConnection._player_num))
+		return res
+	else:
+		if not _player_dead:
+			GameLoot.add_to_coin(1,20)
+			PlayerInventory.add_item("Coin", 20)
+		get_parent().change_money(GameLoot.get_coin_val(1))
+		return {Save.game_data.username: "Dead" if _player_dead else "Lived"}
 
 """
 /*
@@ -419,7 +455,6 @@ func other_player_hit(player_id: int, player_health: int):
 			var p_obj = o_player.get('player_obj')
 			p_obj.take_damage(player_health)
 			Global.player_health[str(player_id)]=player_health
-			#print(Global.player_health[str(player_id)])
 			break
 
 """

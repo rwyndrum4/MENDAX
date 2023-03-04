@@ -35,7 +35,12 @@ func _ready():
 	var anim = get_node("AnimationPlayer").get_animation("idle")
 	anim.set_loop(true)
 	chandelierAnim.play("idle")
-	healthbar.value = 200;
+	if not (ServerConnection.match_exists() and ServerConnection.get_server_status()):
+		healthbar.value = 100
+		healthbar.max_value = 100
+	else:
+		healthbar.value = 200
+		healthbar.max_value = 200
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("textbox_empty",self,"turn_on_physics")
 
@@ -83,10 +88,10 @@ func turn_on_physics():
 */
 """	
 func fire(extra_angle = Vector2(0,0)):
-	if get_parent()._player_dead:
+	if get_parent()._player_dead or _isDead:
 		return
-	var Player=get_parent().get_node("Player")
-	var bullete =preload("res://Scenes/bullet/bulletenemy.tscn")
+	var Player = get_parent().get_node("Player")
+	var bullete = preload("res://Scenes/bullet/bulletenemy.tscn")
 	var bulenemy = bullete.instance()
 	get_parent().add_child(bulenemy)
 	bulenemy.global_position = global_position + Vector2(0, -90)
@@ -107,7 +112,7 @@ func take_damage(amount: int) -> void:
 	$AudioStreamPlayer2D.play()
 	healthbar.value = healthbar.value - amount
 	Global.chandelier_damage[str(1)]+=amount
-	if healthbar.value == 0:
+	if healthbar.value <= 0 and not _isDead:
 		_isDead = true
 		set_physics_process(false)
 		chandelierAnim.play("death")
@@ -159,7 +164,6 @@ func _on_AnimationPlayer_animation_finished(_anim_name):
 func _on_detector_body_entered(_body):
 	_isIn = true
 
-
 """
 /*
 * @pre Called once a body leaves the 2D area
@@ -178,7 +182,7 @@ func level_up():
 	#New timer that makes it so that BoD teleports ever 4 sec
 	var teleport_timer: Timer = Timer.new()
 	add_child(teleport_timer)
-	teleport_timer.wait_time = 10
+	teleport_timer.wait_time = 16
 	teleport_timer.one_shot = false
 	teleport_timer.start()
 	# warning-ignore:return_value_discarded
@@ -193,8 +197,9 @@ func level_up():
 */
 """
 func _tp_timer_expired():
-	var x = randi() % 3500 + 500
-	var y = randi() % 3250 + 500
+	randomize()
+	var x = rand_range(500,3250)
+	var y = rand_range(500,3250)
 	position = Vector2(x,y)
 
 func set_id(id_num:int) -> void:

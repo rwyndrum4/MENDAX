@@ -9,7 +9,7 @@
 
 [node name="Node2D" type="Control"]
 
-[node name="collisionElements" type="StaticBody2D" parent="."]
+[node name="collisionElements" type="StaticBody2D" parent="." groups=["wall"]]
 collision_mask = 2
 
 [node name="northWall" type="CollisionPolygon2D" parent="collisionElements"]

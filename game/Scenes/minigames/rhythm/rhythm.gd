@@ -372,11 +372,12 @@ func end_rhythm_game():
 	var ctr = 1
 	for arr in results:
 		var n = Global.get_player_num(arr[0])
-		GameLoot.add_to_coin(n,(5 - ctr) * 5)
+		var score = (5 - ctr) * 5
+		GameLoot.add_to_coin(n,score)
 		var total_coin = GameLoot.get_coin_val(n)
-		get_parent().change_money(total_coin)
+		get_parent().change_money(total_coin)	
 		if arr[0] == Save.game_data.username:
-			PlayerInventory.add_item("Coin", total_coin)
+			PlayerInventory.add_item("Coin", score)
 		ctr += 1
 	#Load ending scene
 	var end_screen:Popup = load("res://Scenes/minigames/rhythm/endScreen.tscn").instance()

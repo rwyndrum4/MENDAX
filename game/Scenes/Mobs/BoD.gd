@@ -173,10 +173,13 @@ func level_up():
 */
 """
 func _tp_timer_expired():
+	if isDead:
+		return
 	BodAnim.stop() #stop previous animation if it had one
 	if not get_parent()._player_dead:
-		var x = randi() % 80 + 25
-		var y = randi() % 80 + 25
+		randomize()
+		var x = rand_range(25,80)
+		var y = rand_range(25,80)
 		if randf() > 0.5:
 			x *= -1
 			y *= -1
