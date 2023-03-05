@@ -53,8 +53,6 @@ signal textWait()
 func _ready():
 	init_playerpos=$Player.position
 	# warning-ignore:return_value_discarded
-	GlobalSignals.connect("answer_received",self,"_check_answer")
-	# warning-ignore:return_value_discarded
 	ServerConnection.connect("riddle_received", self, "set_riddle_from_server")
 	# warning-ignore:return_value_discarded
 	Global.connect("all_players_arrived", self, "_can_send_riddle")
@@ -62,6 +60,8 @@ func _ready():
 	GlobalSignals.connect("openChatbox", self, "chatbox_use")
 	#If there is a multiplayer match
 	if ServerConnection.match_exists() and ServerConnection.get_server_status():
+		# warning-ignore:return_value_discarded
+		GlobalSignals.connect("answer_received",self,"_check_answer")
 		ServerConnection.send_spawn_notif()
 		spawn_players()
 		#Send riddle if player is player 1
@@ -84,6 +84,7 @@ func _ready():
 			wait_for_riddle_timer.connect("timeout",self, "_riddle_timer_expired", [wait_for_riddle_timer])
 	#If there is a single player game, start game right away
 	else:
+		get_parent().chat_box.connect("message_sent", self, "_single_player_check_answer")
 		init_riddle(riddlefile) #initalizes riddle randomly
 		init_hiddenitems() #initalizes hidden items array and other things needed
 		start_riddle_game()
@@ -112,8 +113,6 @@ func _input(_ev):
 	if textBox.queue_text_length() == 0 and Global.in_anim == 1:
 		Global.in_anim = 0
 		emit_signal("textWait")
-	if Input.is_key_pressed(KEY_SEMICOLON):
-		PlayerInventory.add_item("Coin", 1)
 	#DEBUG PURPOSES - REMOVE FOR FINAL GAME!!!
 	#IF YOU PRESS P -> TIMER WILL REDUCE TO 3 SECONDS
 	if Input.is_action_just_pressed("timer_debug_key",false):
@@ -258,15 +257,61 @@ func init_riddle(file):
 
 """
 /*
-* @pre Called when someone guesses an answer
+* @pre Called when someone in server game guesses an answer
 * @post Leaves scene if they guess right
-* @param answer -> String
+* @param answer -> String, from_user -> String (who message came from)
 * @return None
 */
 """
-func _check_answer(answer_in:String):
+func _check_answer(answer_in:String, from_user: String):
 	if answer == answer_in:
 		Global.reset_minigame_players()
+		handle_coins(from_user)
+		Global.state = Global.scenes.CAVE
+
+"""
+/*
+* @pre Game has ended
+* @post Records the coin values for all players
+* @param who_won -> String (name of person who won)
+* @return None
+*/
+"""
+func handle_coins(who_won:String):
+	for p_name in Global.player_names.values():
+		var how_much: int = 0
+		if p_name == who_won:
+			get_parent().chat_box.chat_event_message("Correct answer! +20 gold for you", "blue")
+			how_much = 20
+		else:
+			get_parent().chat_box.chat_event_message(
+				"Someone else found the answer, +5 gold for you",
+				"blue"
+			)
+			how_much = 5
+		var n = Global.get_player_num(p_name)
+		GameLoot.add_to_coin(n,how_much)
+		if p_name == Save.game_data.username:
+			var total_coin = GameLoot.get_coin_val(n)
+			get_parent().change_money(total_coin)
+			PlayerInventory.add_item("Coin", 20)
+
+"""
+/*
+* @pre Called when someone guesses an answer in single player mode
+* @post Leaves scene if they guess right
+* @param message_in -> String (guess at answer)
+* @return None
+*/
+"""
+func _single_player_check_answer(message_in:String, _whisper, _username):
+	if answer == message_in:
+		Global.reset_minigame_players()
+		get_parent().chat_box.chat_event_message("Correct answer! +20 gold for you", "blue")
+		GameLoot.add_to_coin(1,20)
+		var total_coin = GameLoot.get_coin_val(1)
+		get_parent().change_money(total_coin)
+		PlayerInventory.add_item("Coin", 20)
 		Global.state = Global.scenes.CAVE
 
 """
@@ -333,7 +378,7 @@ func init_hiddenitems():
 	var overlap;#1 if overlap found in for loop 2 if overlap found
 	var x;
 	var y;
-	for hint in hints:
+	for local_hint in hints:
 		overlap=1
 		while overlap==1:
 			x=rand_range(0, 3000) #range of game map reduced  due to size of hint area
@@ -347,7 +392,7 @@ func init_hiddenitems():
 			if overlap==1:
 				overlap=2 
 				
-		hint.position = Vector2(x,y)
+		local_hint.position = Vector2(x,y)
 		#set overlaps for hint using hintcounter
 		x_overlap[hintcounter][0]=x-150; #left endpoint of hint area box
 		x_overlap[hintcounter][1]=x+150;# right endpoint of hint area box
@@ -482,37 +527,37 @@ func _on_item1_body_entered(_body:PhysicsBody2D)->void:
 	if itemarray[0]==0 and answerlength>=1:
 		enterarea($item1/Sprite,1)
 		
-		textBox.queue_text("MONEY!!")
+
 func _on_item2_body_entered(_body:PhysicsBody2D)->void:
 	if itemarray[1]==0 and answerlength>=2:
 		enterarea($item2/Sprite,2)
 		item = ItemClass.instance()
 		
-		textBox.queue_text("MONEY!!")
+
 func _on_item3_body_entered(_body:PhysicsBody2D)->void:
 	if itemarray[2]==0 and answerlength>=3:
 		enterarea($item3/Sprite,3)
 		item = ItemClass.instance()
 		
-		textBox.queue_text("MONEY!!")
+
 func _on_item4_body_entered(_body:PhysicsBody2D)->void:
 	if itemarray[3]==0 and answerlength>=4:
 		enterarea($item4/Sprite,4)
 		item = ItemClass.instance()
 		
-		textBox.queue_text("MONEY!!")
+
 func _on_item5_body_entered(_body:PhysicsBody2D)->void:
 	if itemarray[4]==0 and answerlength>=5:
 		enterarea($item5/Sprite,5)
 		item = ItemClass.instance()
 		
-		textBox.queue_text("MONEY!!")
+
 func _on_item6_body_entered(_body:PhysicsBody2D)->void:
 	if itemarray[5]==0 and answerlength>=6:
 		enterarea($item6/Sprite,6)
 		item = ItemClass.instance()
 		
-		textBox.queue_text("MONEY!!")
+
 """
 /*
 * @pre Called when player has found item and is leaving called for all 6 items

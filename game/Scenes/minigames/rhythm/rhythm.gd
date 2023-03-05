@@ -375,7 +375,7 @@ func end_rhythm_game():
 		var score = (5 - ctr) * 5
 		GameLoot.add_to_coin(n,score)
 		var total_coin = GameLoot.get_coin_val(n)
-		get_parent().change_money(total_coin)	
+		get_parent().change_money(total_coin)
 		if arr[0] == Save.game_data.username:
 			PlayerInventory.add_item("Coin", score)
 		ctr += 1

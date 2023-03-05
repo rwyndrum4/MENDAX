@@ -9,9 +9,6 @@ extends Control
 
 signal message_sent(msg,is_whisper,username)
 
-# set to true if you want to test chatbox locally
-var DEBUG_ON = false
-
 # Member Variables
 onready var chatLog = $textHolder/pastText
 onready var playerInput = $textHolder/inputField/playerInput
@@ -150,6 +147,9 @@ func handle_match_data(text):
 */
 """
 func add_err_message():
+	#No need for error message when in riddle minigame, uses chatbox regardless
+	if Global.state == Global.scenes.RIDDLER_MINIGAME:
+		return
 	var color:String = get_chat_color("error")
 	var err_msg = "[color=" + color + "]"
 	err_msg += "Not connected to server, please wait[/color]"
@@ -207,16 +207,15 @@ func _on_playerInput_text_entered(new_text):
 			var receiving_user = arr_of_str.pop_front() #get and pop user to send to
 			new_text = array_to_string(arr_of_str) #change new_text to edited message
 			emit_signal("message_sent",new_text,true,receiving_user)
-			if DEBUG_ON:
-				add_message(new_text,"whisper",receiving_user,Save.game_data.username)
 		#If the user wants to clear the chatLog
 		elif new_text == "/clear":
 			chatLog.bbcode_text = ""
 		#Else it is a message to send to general
 		else:
 			emit_signal("message_sent",new_text,false,"")
-			if DEBUG_ON:
-				add_message(new_text,"general","everyone",Save.game_data.username)
+			if not (ServerConnection.match_exists() and ServerConnection.get_server_status()):
+				if Global.state == Global.scenes.RIDDLER_MINIGAME:
+					add_message(new_text,"general","everyone",Save.game_data.username)
 	#Reset the InputBox once message sent
 	playerInput.text = ""
 
