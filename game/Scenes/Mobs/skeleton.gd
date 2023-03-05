@@ -86,11 +86,11 @@ func _physics_process(delta):
 """
 func get_player_offset(player_pos:Vector2) -> Vector2:
 	if player_pos.x > 3200:
-		return Vector2(120,0)
+		return Vector2(120,-55)
 	elif player_pos.x < 700:
-		return Vector2(-120,0)
+		return Vector2(-120,-55)
 	else:
-		return Vector2(-120,0)
+		return Vector2(-120,-55)
 
 """
 /*

@@ -34,13 +34,6 @@ func _ready():
 	healthbar.value = 200;
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("textbox_empty",self,"turn_on_physics")
-	teleport_timer= Timer.new()
-	add_child(teleport_timer)
-	teleport_timer.wait_time = 6
-	teleport_timer.one_shot = false
-	teleport_timer.start()
-	# warning-ignore:return_value_discarded
-	teleport_timer.connect("timeout",self, "_tp_timer_expired")
 
 """
 /*
@@ -76,6 +69,14 @@ func _physics_process(_delta):
 """		
 func turn_on_physics():
 	set_physics_process(true)
+	#Now that BoD can move, allow them to teleport
+	teleport_timer= Timer.new()
+	add_child(teleport_timer)
+	teleport_timer.wait_time = 6
+	teleport_timer.one_shot = false
+	teleport_timer.start()
+	# warning-ignore:return_value_discarded
+	teleport_timer.connect("timeout",self, "_tp_timer_expired")
 
 """
 /*

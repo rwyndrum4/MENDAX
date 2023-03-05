@@ -391,23 +391,7 @@ func load_boss(stage_num:int):
 	myTimer.stop()
 	var boss = preload("res://Scenes/FinalBoss/Boss.tscn").instance()
 	if stage_num == 1:
-		# Generate shild spawn
-		shield_spawn = Area2D.new()
-		var col_2d = CollisionShape2D.new()
-		var shape = CircleShape2D.new()
-		shape.set_radius(80)
-		col_2d.set_shape(shape)
-		shield_spawn.position = Vector2(-4000,3000)
-		var shield_sprite = Sprite.new()
-		shield_sprite.texture = load("res://Assets/shieldFull.png")
-		shield_sprite.scale = Vector2(2,2)
-		shield_sprite.position = Vector2(-4000,3000)
-		shield_sprite.set_name("shield_sprite")
-		add_child(shield_spawn)
-		shield_spawn.add_child(col_2d)
-		#add_child_below_node(shield_spawn,col_2d)
-		add_child_below_node(shield_spawn,shield_sprite)
-		shield_spawn.connect("area_entered",self,"give_shield")
+		spawn_shield()
 		# Generate beziers
 		var bez1 = preload("res://Scenes/FinalBoss/Bezier.tscn").instance()
 		var bez2 = preload("res://Scenes/FinalBoss/Bezier.tscn").instance()
@@ -483,6 +467,39 @@ func give_shield(area):
 		player.shield.giveShield()
 		get_node("shield_sprite").hide()
 		start_shield_timer()
+
+"""
+/*
+* @pre None
+* @post Shield is spawned inside of game
+* @param None
+* @return None
+*/
+"""
+func spawn_shield():
+	# Generate shild spawn
+	shield_spawn = Area2D.new()
+	var col_2d = CollisionShape2D.new()
+	var shape = CircleShape2D.new()
+	shape.set_radius(80)
+	col_2d.set_shape(shape)
+	shield_spawn.position = Vector2(-4000,3000)
+	var shield_sprite = Sprite.new()
+	var spawn_sprite = Sprite.new()
+	shield_sprite.texture = load("res://Assets/shieldFull.png")
+	shield_sprite.scale = Vector2(1.5,1.5)
+	shield_sprite.position = Vector2(-4000,3000)
+	shield_sprite.set_name("shield_sprite")
+	spawn_sprite.texture = load("res://Assets/shield_spawn.png")
+	spawn_sprite.scale = Vector2(4,4)
+	spawn_sprite.position = Vector2(-4000,3000)
+	spawn_sprite.set_name("shield_spawn")
+	add_child(shield_spawn)
+	shield_spawn.add_child(col_2d)
+	#add_child_below_node(shield_spawn,col_2d)
+	add_child_below_node(shield_spawn,shield_sprite)
+	add_child_below_node(shield_spawn,spawn_sprite)
+	shield_spawn.connect("area_entered",self,"give_shield")
 
 """
 /*

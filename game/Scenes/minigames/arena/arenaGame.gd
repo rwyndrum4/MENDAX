@@ -10,7 +10,7 @@
 extends Control
 
 # Member Variables
-const TOTAL_TIME = 180 #Total time for game until hard mode starts
+var TOTAL_TIME = 180 #Total time for game until hard mode starts
 const EXTRA_TIME: float = 20.0 #Extra time that is added when someone dies
 var enemies_remaining = 9 #How many enemies are left, if 0 you win
 var _enemies: Array = [] #Array that holds enemy objects, enemy_id == index
@@ -58,6 +58,7 @@ func _ready():
 	swordPivot.position = main_player.position + Vector2(60,20)
 	#If there is a server connection, spawn all players
 	if ServerConnection.match_exists() and ServerConnection.get_server_status():
+		TOTAL_TIME = 60
 		ServerConnection.send_spawn_notif()
 		spawn_players()
 		# warning-ignore:return_value_discarded
@@ -96,6 +97,7 @@ func _ready():
 		change_target_timer.connect("timeout",self, "_target_timer_expired")
 	#else if single player game
 	else:
+		TOTAL_TIME = 180
 		myTimer.start(TOTAL_TIME)
 		start_arena_game()
 
@@ -172,9 +174,10 @@ func _can_start_game_other():
 """
 func start_arena_game():
 	$GUI/wait_on_players.queue_free()
-	textBox.queue_text("You have a minute to defeat all enemies.")
+	var var_time: String = "a minute" if TOTAL_TIME == 120 else "two minutes"
+	textBox.queue_text("You have " + var_time + " to defeat all enemies.")
 	textBox.queue_text("Each enemy will become stronger once this time has passed.")
-	textBox.queue_text("If any one of you dies, I will reset the timer.")
+	textBox.queue_text("If any one of you dies, I will add more time.")
 	textBox.queue_text("Let the strongest among you prevail.")
 	spawn_enemies()
 	spawn_shield()
@@ -267,6 +270,7 @@ func _target_timer_expired():
 */
 """
 func _end_game(won_game:bool):
+	$GUI/YouDied.hide()
 	#Display text letting them know how the game went
 	var text = "Those strongest among you who remain have leave to prepare for the next trial."
 	if not won_game:
@@ -311,13 +315,13 @@ func gen_results(server_on:bool) -> Dictionary:
 			var p_num = p.get('num')
 			var p_name = Global.get_player_name(p_num)
 			if p.get('player_obj') == null:
-				res[p_name] = "Dead"
+				res[p_name] = "Died"
 			else:
 				GameLoot.add_to_coin(p_num,20)
 				if Save.game_data.username == p_name:
 					PlayerInventory.add_item("Coin", 20)
 				res[p_name] = "Lived"
-		res[Save.game_data.username] = "Dead" if _player_dead else "Lived"
+		res[Save.game_data.username] = "Died" if _player_dead else "Lived"
 		get_parent().change_money(GameLoot.get_coin_val(ServerConnection._player_num))
 		return res
 	else:
@@ -325,7 +329,7 @@ func gen_results(server_on:bool) -> Dictionary:
 			GameLoot.add_to_coin(1,20)
 			PlayerInventory.add_item("Coin", 20)
 		get_parent().change_money(GameLoot.get_coin_val(1))
-		return {Save.game_data.username: "Dead" if _player_dead else "Lived"}
+		return {Save.game_data.username: "Died" if _player_dead else "Lived"}
 
 """
 /*
@@ -553,8 +557,8 @@ func spectate_mode():
 
 """
 /*
-* @pre Called when a player dies in the arena
-* @post zoom out to watch other players
+* @pre None
+* @post Shield is spawned inside of game
 * @param None
 * @return None
 */
@@ -568,14 +572,20 @@ func spawn_shield():
 	col_2d.set_shape(shape)
 	_shield_spawn.position = Vector2(1882,1900)
 	var shield_sprite = Sprite.new()
+	var spawn_sprite = Sprite.new()
 	shield_sprite.texture = load("res://Assets/shieldFull.png")
-	shield_sprite.scale = Vector2(2,2)
+	shield_sprite.scale = Vector2(1.5,1.5)
 	shield_sprite.position = Vector2(1882,1900)
 	shield_sprite.set_name("shield_sprite")
+	spawn_sprite.texture = load("res://Assets/shield_spawn.png")
+	spawn_sprite.scale = Vector2(4,4)
+	spawn_sprite.position = Vector2(1882,1900)
+	spawn_sprite.set_name("shield_spawn")
 	add_child(_shield_spawn)
 	_shield_spawn.add_child(col_2d)
 	#add_child_below_node(shield_spawn,col_2d)
 	add_child_below_node(_shield_spawn,shield_sprite)
+	add_child_below_node(_shield_spawn,spawn_sprite)
 	_shield_spawn.connect("area_entered",self,"give_shield")
 
 """
