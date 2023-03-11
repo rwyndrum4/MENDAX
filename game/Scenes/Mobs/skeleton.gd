@@ -125,13 +125,13 @@ func turn_on_physics():
 """
 func slow_speed():
 	BASE_SPEED = 0.2
-	var reset_accel_timer: Timer = Timer.new()
-	add_child(reset_accel_timer)
-	reset_accel_timer.wait_time = 2
-	reset_accel_timer.one_shot = true
-	reset_accel_timer.start()
+	var reset_tmr = Timer.new()
+	reset_tmr.wait_time = 2
+	reset_tmr.one_shot = true
+	add_child(reset_tmr)
+	reset_tmr.start()
 	# warning-ignore:return_value_discarded
-	reset_accel_timer.connect("timeout",self, "_accel_timer_expired", [reset_accel_timer])
+	reset_tmr.connect("timeout",self, "_accel_timer_expired", [reset_tmr])
 
 func _accel_timer_expired(timer:Timer):
 	timer.queue_free()

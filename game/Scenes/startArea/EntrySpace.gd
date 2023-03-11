@@ -520,6 +520,24 @@ func start_shield_timer():
 
 """
 /*
+* @pre Called when server says someone stepped on shield
+* @post Shield becomes unavailable for a time period
+* @param p_id -> int (player who stepped on it)
+*		 shield_num -> int (which spawn it was)
+* @return None
+*/
+"""
+#func someone_took_shild(player_id,_shield_num):
+#	_shield_available = false
+#	get_node("shield_sprite").hide()
+#	start_shield_timer()
+#	for o_player in server_players:
+#		if player_id == o_player.get('num'):
+#			o_player.get('player_obj').shield.giveShield()
+#			break
+
+"""
+/*
 * @pre Timer went off
 * @post respawn the shield
 * @param tmr (timer to get rid of)

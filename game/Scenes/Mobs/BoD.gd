@@ -163,7 +163,6 @@ func _on_detector_body_exited(_body):
 """
 func level_up():
 	healthbar.value = healthbar.value + 40
-	teleport_timer.wait_time = 4
 
 """
 /*
