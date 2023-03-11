@@ -47,7 +47,7 @@ signal minigame_rhythm_score(id, score) #send current score of rhythm game playe
 signal chat_message_received(msg,type,user_sent,from_user) #signal to tell game a chat message has come in
 
 const KEY := "nakama_mendax" #key that is stored in the server
-var IP_ADDRESS: String = "3.143.211.132" #ip address of server
+var IP_ADDRESS: String = "3.16.41.210" #ip address of server
 
 var _session: NakamaSession #user session
 
@@ -524,7 +524,7 @@ func send_arena_enemy_hit(damage: int, enemy_id_in: int, enemy_type_in:String):
 func send_minigame_can_start():
 	if _socket:
 		var payload := {}
-		_socket.send_match_state_async(_match_id, OpCodes.dATE_CAN_START_GAME, JSON.print(payload))
+		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_CAN_START_GAME, JSON.print(payload))
 
 """
 /*

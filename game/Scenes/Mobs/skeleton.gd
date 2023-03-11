@@ -228,10 +228,11 @@ func _on_skeletonAnimationPlayer_animation_finished(_anim_name):
 */
 """
 func level_up():
-	healthbar.value = healthbar.value + 40
-	BASE_SPEED = 1.6
-	BASE_ACCELERATION = 1000
-	$MyHitBox.damage = 30
+	if is_instance_valid(healthbar):
+		healthbar.value = healthbar.value + 40
+		BASE_SPEED = 1.6
+		BASE_ACCELERATION = 1000
+		$MyHitBox.damage = 30
 
 func set_id(id_num:int) -> void:
 	_my_id = id_num
