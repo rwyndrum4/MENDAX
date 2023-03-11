@@ -32,6 +32,7 @@ var rhythm_minigame = "res://Scenes/minigames/rhythm/rhythm.tscn"
 var gameover = "res://Scenes/mainMenu/gameOver.tscn"
 var quiz="res://Scenes/FinalBoss/Quiz.tscn"
 var dilemma = "res://Scenes/FinalBoss/Dilemma.tscn"
+var endscreen = "res://Scenes/EndScene/EndScene.tscn"
 
 #Current scene running
 var current_scene = null
@@ -147,6 +148,9 @@ func _change_scene_to(state):
 	elif state == Global.scenes.DILEMMA:
 		stopall()
 		current_scene = load(dilemma).instance()
+	elif state == Global.scenes.END_SCREEN:
+		stopall()
+		current_scene = load(endscreen).instance()
 	#add scene to tree and revise local state
 	add_child(current_scene)
 	local_state = Global.state
