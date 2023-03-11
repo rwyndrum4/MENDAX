@@ -54,5 +54,4 @@ script = ExtResource( 4 )
 
 [node name="hitbox" type="CollisionShape2D" parent="MyHurtBox"]
 position = Vector2( -0.1, -5.15 )
-scale = Vector2( 1, 1 )
 shape = SubResource( 4 )
