@@ -1,4 +1,4 @@
-extends Reference
+extends RefCounted
 class_name NakamaWriteStorageObject
 # warnings-disable
 var collection : String
@@ -8,7 +8,7 @@ var permission_write : int = 0
 var value : String
 var version : String
 
-func _init(p_collection : String, p_key : String, p_permission_read : int,
+func _init():,
 		p_permission_write : int, p_value : String, p_version : String):
 	collection = p_collection
 	key = p_key

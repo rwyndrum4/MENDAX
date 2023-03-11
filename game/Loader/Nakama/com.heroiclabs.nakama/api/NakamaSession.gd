@@ -2,34 +2,34 @@ extends NakamaAsyncResult
 class_name NakamaSession
 # warnings-disable
 
-var created : bool = false setget _no_set
-var token : String = "" setget _no_set
-var create_time : int = 0 setget _no_set
-var expire_time : int = 0 setget _no_set
-var expired : bool = true setget _no_set, is_expired
-var vars : Dictionary = {} setget _no_set
-var username : String = "" setget _no_set
-var user_id : String = "" setget _no_set
-var refresh_token : String = "" setget _no_set
-var refresh_expire_time : int = 0 setget _no_set
-var valid : bool = false setget _no_set, is_valid
+var created : bool = false : set = _no_set
+var token : String = "" : set = _no_set
+var create_time : int = 0 : set = _no_set
+var expire_time : int = 0 : set = _no_set
+var expired : bool = true : get = is_expired, set = _no_set
+var vars : Dictionary = {} : set = _no_set
+var username : String = "" : set = _no_set
+var user_id : String = "" : set = _no_set
+var refresh_token : String = "" : set = _no_set
+var refresh_expire_time : int = 0 : set = _no_set
+var valid : bool = false : get = is_valid, set = _no_set
 
 func _no_set(v):
 	return
 
 func is_expired() -> bool:
-	return expire_time < OS.get_unix_time()
+	return expire_time < Time.get_unix_time_from_system()
 
 func would_expire_in(p_secs : int) -> bool:
-	return expire_time < OS.get_unix_time() + p_secs
+	return expire_time < Time.get_unix_time_from_system() + p_secs
 
 func is_refresh_expired() -> bool:
-	return refresh_expire_time < OS.get_unix_time()
+	return refresh_expire_time < Time.get_unix_time_from_system()
 
 func is_valid():
 	return valid
 
-func _init(p_token = null, p_created : bool = false, p_refresh_token = null, p_exception = null).(p_exception):
+func _init(p_token = null,p_created : bool = false,p_refresh_token = null,p_exception = null,p_exception):
 	if p_token:
 		created = p_created
 		_parse_token(p_token)
@@ -44,12 +44,12 @@ func refresh(p_session):
 
 func _parse_token(p_token):
 	var decoded = _jwt_unpack(p_token)
-	if decoded.empty():
+	if decoded.is_empty():
 		valid = false
 		return
 	valid = true
 	token = p_token
-	create_time = OS.get_unix_time()
+	create_time = Time.get_unix_time_from_system()
 	expire_time = int(decoded.get("exp", 0))
 	username = str(decoded.get("usn", ""))
 	user_id = str(decoded.get("uid", ""))
@@ -60,7 +60,7 @@ func _parse_token(p_token):
 
 func _parse_refresh_token(p_refresh_token):
 	var decoded = _jwt_unpack(p_refresh_token)
-	if decoded.empty():
+	if decoded.is_empty():
 		return
 	refresh_expire_time = int(decoded.get("exp", 0))
 	refresh_token = p_refresh_token
@@ -84,7 +84,9 @@ func _jwt_unpack(p_token : String) -> Dictionary:
 	payload = payload.replace("-", "+").replace("_", "/")
 	var unpacked = Marshalls.base64_to_utf8(payload)
 	if not validate_json(unpacked):
-		var decoded = parse_json(unpacked)
+		var test_json_conv = JSON.new()
+		test_json_conv.parse(unpacked)
+		var decoded = test_json_conv.get_data()
 		if typeof(decoded) == TYPE_DICTIONARY:
 			return decoded
 	_ex = NakamaException.new("Unable to unpack token: %s" % p_token)

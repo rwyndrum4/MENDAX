@@ -21,29 +21,29 @@ func _process(_delta):
 		if direction == "right":
 			ServerConnection.send_arena_sword("right")
 			
-			if $pivot/Sprite/swing.playing == false:
-				$pivot/Sprite/swing.play()
+			if $pivot/Sprite2D/swing.playing == false:
+				$pivot/Sprite2D/swing.play()
 			$AnimationPlayer.play("slash")
-			yield($AnimationPlayer, 'animation_finished')
+			await $AnimationPlayer.animation_finished
 			$AnimationPlayer.play("slash_rev")
-			yield($AnimationPlayer, 'animation_finished')
+			await $AnimationPlayer.animation_finished
 		else:
-			if $pivot/Sprite/swing.playing == false:
-				$pivot/Sprite/swing.play()
+			if $pivot/Sprite2D/swing.playing == false:
+				$pivot/Sprite2D/swing.play()
 			ServerConnection.send_arena_sword("left")
 			$AnimationPlayer.play("slashLeft")
-			yield($AnimationPlayer, 'animation_finished')
+			await $AnimationPlayer.animation_finished
 	
 	if Input.is_action_just_pressed("ui_left", false):
 		$AnimationPlayer.play("RESET2")
-		yield($AnimationPlayer, 'animation_finished')
+		await $AnimationPlayer.animation_finished
 		$pivot.scale.x = -1
 
 		direction = "left"
 
 	if Input.is_action_just_pressed("ui_right", false):
 		$AnimationPlayer.play("RESET")
-		yield($AnimationPlayer, 'animation_finished')
+		await $AnimationPlayer.animation_finished
 		$pivot.scale.x = 1
 		
 		direction = "right"

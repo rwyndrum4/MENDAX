@@ -9,15 +9,15 @@
 extends Node2D
 
 # Member Variables
-onready var scores_tab = $Scores
-onready var conductor = $Conductor
-onready var combo_count = $Combo/combo_count
-onready var perfect_count = $Combo/perfect_count
-onready var good_count = $Combo/good_count
-onready var okay_count = $Combo/okay_count
-onready var misses_count = $Combo/misses_count
-onready var onlineHandler = $onlineHandler
-onready var full_combo = $Frame/FULL_COMBO
+@onready var scores_tab = $Scores
+@onready var conductor = $Conductor
+@onready var combo_count = $Combo/combo_count
+@onready var perfect_count = $Combo/perfect_count
+@onready var good_count = $Combo/good_count
+@onready var okay_count = $Combo/okay_count
+@onready var misses_count = $Combo/misses_count
+@onready var onlineHandler = $onlineHandler
+@onready var full_combo = $Frame/FULL_COMBO
 
 ## Global Variables ##
 
@@ -65,7 +65,7 @@ var	_measure_three_beat = 1
 var	_measure_four_beat = 1
 
 const beatmap_file = preload("res://Scenes/minigames/rhythm/beatmap.gd")
-onready var _map = beatmap_file.new()
+@onready var _map = beatmap_file.new()
 
 """
 /*
@@ -79,15 +79,15 @@ func _ready():
 	randomize()
 	get_parent().toggle_hotbar(false)
 	# warning-ignore:return_value_discarded
-	conductor.connect("finished",self,"end_rhythm_game")
+	conductor.connect("finished",Callable(self,"end_rhythm_game"))
 	# warning-ignore:return_value_discarded
-	Global.connect("all_players_arrived", self, "_can_start_game")
+	Global.connect("all_players_arrived",Callable(self,"_can_start_game"))
 	# warning-ignore:return_value_discarded
-	ServerConnection.connect("minigame_can_start", self, "_can_start_game_other")
+	ServerConnection.connect("minigame_can_start",Callable(self,"_can_start_game_other"))
 	# warning-ignore:return_value_discarded
-	conductor.connect("measure", self, "_on_Conductor_measure")
+	conductor.connect("measure",Callable(self,"_on_Conductor_measure"))
 	# warning-ignore:return_value_discarded
-	conductor.connect("beat", self, "_on_Conductor_beat")
+	conductor.connect("beat",Callable(self,"_on_Conductor_beat"))
 	var username = Save.game_data.username
 	add_player_score(username)
 	initialize_combo_scores()
@@ -107,7 +107,7 @@ func _ready():
 			wait_for_start.one_shot = true
 			wait_for_start.start()
 			# warning-ignore:return_value_discarded
-			wait_for_start.connect("timeout",self, "_start_timer_expired", [wait_for_start])
+			wait_for_start.connect("timeout",Callable(self,"_start_timer_expired").bind(wait_for_start))
 	#else if single player game
 	else:
 		start_rhythm_game()
@@ -163,10 +163,10 @@ func _can_start_game_other():
 """
 func start_rhythm_game():
 	$Frame/wait_on_players.queue_free()
-	var instructions:Popup = load("res://Scenes/minigames/rhythm/instructions.tscn").instance()
+	var instructions:Popup = load("res://Scenes/minigames/rhythm/instructions.tscn").instantiate()
 	$Frame.add_child(instructions)
 	instructions.popup_centered()
-	instructions.connect("done_explaining",self, "_delete_instr_and_start_song", [instructions])
+	instructions.connect("done_explaining",Callable(self,"_delete_instr_and_start_song").bind(instructions))
 
 """
 /*
@@ -183,7 +183,7 @@ func _delete_instr_and_start_song(instr_scn):
 	wait_timer.wait_time = 2
 	wait_timer.one_shot = true
 	wait_timer.start()
-	yield(wait_timer, "timeout")
+	await wait_timer.timeout
 	wait_timer.queue_free()
 	conductor.play_with_beat_offset(0)
 
@@ -211,7 +211,7 @@ func initialize_combo_scores():
 */
 """
 func add_player_score(p_name: String):
-	var silver_font = DynamicFont.new()
+	var silver_font = FontFile.new()
 	silver_font.font_data = load("res://Assets/Silver.ttf")
 	silver_font.size = 40
 	silver_font.outline_size = 4
@@ -219,8 +219,8 @@ func add_player_score(p_name: String):
 	silver_font.use_filter = true
 	var score_label: Label = Label.new()
 	score_label.text = p_name + ": 0000"
-	score_label.add_font_override("font",silver_font)
-	score_label.add_color_override("font_color",Color.white)
+	score_label.add_theme_font_override("font",silver_font)
+	score_label.add_theme_color_override("font_color",Color.WHITE)
 	_score_dict[p_name] = score_label
 	scores_tab.add_child(score_label)
 
@@ -272,7 +272,7 @@ func check_placement():
 	var ordered_places: Array = []
 	for p_name in _score_dict.keys():
 		ordered_places.append([p_name, int(_score_dict[p_name].text)])
-	ordered_places.sort_custom(myCustomSorter, "sort_asc")
+	ordered_places.sort_custom(Callable(myCustomSorter,"sort_asc"))
 	var inc = 1
 	for obj in ordered_places:
 		$Scores.move_child(_score_dict[obj[0]], inc)
@@ -282,7 +282,7 @@ func get_sorted_results() -> Array:
 	var ordered_places: Array = []
 	for p_name in _score_dict.keys():
 		ordered_places.append([p_name, int(_score_dict[p_name].text)])
-	ordered_places.sort_custom(myCustomSorter, "sort_asc")
+	ordered_places.sort_custom(Callable(myCustomSorter,"sort_asc"))
 	return ordered_places
 """
 /*
@@ -366,7 +366,7 @@ func _on_Conductor_beat(beat_position):
 """
 func end_rhythm_game():
 	var results = get_sorted_results()
-	var end_screen:Popup = load("res://Scenes/minigames/rhythm/endScreen.tscn").instance()
+	var end_screen:Popup = load("res://Scenes/minigames/rhythm/endScreen.tscn").instantiate()
 	$Frame.add_child(end_screen)
 	end_screen.add_results(results)
 	end_screen.popup_centered()
@@ -376,7 +376,7 @@ func end_rhythm_game():
 	wait_timer_look_leaderboard.wait_time = 6
 	wait_timer_look_leaderboard.one_shot = true
 	wait_timer_look_leaderboard.start()
-	yield(wait_timer_look_leaderboard, "timeout")
+	await wait_timer_look_leaderboard.timeout
 	wait_timer_look_leaderboard.queue_free()
 	get_parent().toggle_hotbar(true)
 	Global.reset_minigame_players()
@@ -410,7 +410,7 @@ func _spawn_note_fixed_note(beat_pos:int):
 		match note_type:
 			_note_types.NOTE: local_note = note
 			_note_types.HOLD: local_note = hold_note
-		note_instance = local_note.instance()
+		note_instance = local_note.instantiate()
 		if note_type == _note_types.HOLD:
 			note_instance.set_height(heights[i])
 		note_instance.initialize(lanes[i], FAST)
@@ -443,7 +443,7 @@ func _spawn_notes_random(to_spawn: int):
 	var local_note = gen_rand_note()
 	if to_spawn > 0:
 		lane = randi() % MAX_LANES
-		note_instance = local_note.instance()
+		note_instance = local_note.instantiate()
 		note_instance.initialize(lane, FAST)
 		add_child(note_instance)
 	if to_spawn > 1:
@@ -451,6 +451,6 @@ func _spawn_notes_random(to_spawn: int):
 			while rand == lane:
 				rand = randi() % MAX_LANES
 			lane = rand
-			note_instance = local_note.instance()
+			note_instance = local_note.instantiate()
 			note_instance.initialize(lane, FAST)
 			add_child(note_instance)

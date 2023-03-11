@@ -2,8 +2,8 @@
 
 extends AudioStreamPlayer
 
-export var bpm := 140
-export var measures := 4
+@export var bpm := 140
+@export var measures := 4
 
 # Tracking the beat and song position
 var song_position = 0.0

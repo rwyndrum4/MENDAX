@@ -1,4 +1,4 @@
-extends Reference
+extends RefCounted
 # warnings-disable
 # A socket to interact with Nakama server.
 class_name NakamaSocket
@@ -86,7 +86,7 @@ func _resume_conn(p_err : int):
 		call_deferred("_survive", _conn)
 		_conn = null
 
-func _init(p_adapter : NakamaSocketAdapter,
+func _init():amaSocketAdapter,
 		p_host : String,
 		p_port : int,
 		p_scheme : String,
@@ -99,10 +99,10 @@ func _init(p_adapter : NakamaSocketAdapter,
 		port = ":%d" % p_port
 	_base_uri = "%s://%s%s" % [p_scheme, p_host, port]
 	_free_adapter = p_free_adapter
-	_adapter.connect("closed", self, "_closed")
-	_adapter.connect("connected", self, "_connected")
-	_adapter.connect("received_error", self, "_connection_error")
-	_adapter.connect("received", self, "_received")
+	_adapter.connect("closed",Callable(self,"_closed"))
+	_adapter.connect("connected",Callable(self,"_connected"))
+	_adapter.connect("received_error",Callable(self,"_connection_error"))
+	_adapter.connect("received",Callable(self,"_received"))
 
 func _notification(what):
 	if what == NOTIFICATION_PREDELETE:
@@ -136,9 +136,11 @@ func _connected():
 	emit_signal("connected")
 	_resume_conn(OK)
 
-func _received(p_bytes : PoolByteArray):
+func _received(p_bytes : PackedByteArray):
 	var json_str = p_bytes.get_string_from_utf8()
-	var json := JSON.parse(json_str)
+	var test_json_conv = JSON.new()
+	test_json_conv.parse(json_str)
+	var json := test_json_conv.get_data()
 	if json.error != OK or typeof(json.result) != TYPE_DICTIONARY:
 		logger.error("Unable to parse response: %s" % json_str)
 		return
@@ -214,7 +216,7 @@ func _resume_response(p_id : String, p_data):
 
 func _cancel_response(p_id : String):
 	logger.debug("Cancelling response: %s" % [p_id])
-	_resume_response(p_id, NakamaException.new("Request cancelled."))
+	_resume_response(p_id, NakamaException.new("Request canceled."))
 
 func _clear_responses():
 	var ids = _responses.keys()
@@ -236,7 +238,7 @@ func _parse_result(p_responses : Dictionary, p_id : String, p_type, p_ns : GDScr
 	call_deferred("_survive", p_responses[p_id])
 	p_responses.erase(p_id) # Remove this request from the list of responses
 
-	# We got an exception, maybe the task was cancelled?
+	# We got an exception, maybe the task was canceled?
 	if data is NakamaException:
 		return p_type.new(data as NakamaException)
 	# Error from server
@@ -270,11 +272,11 @@ func _send_async(p_message, p_parse_type = NakamaAsyncResult, p_ns = NakamaRTAPI
 	var id = str(_last_id)
 	_last_id += 1
 	_responses[id] = _parse_result(_responses, id, p_parse_type, p_ns, p_result_key)
-	var json := JSON.print({
+	var json := JSON.stringify({
 		"cid": id,
 		msg: p_message.serialize()
 	})
-	var err = _adapter.send(json.to_utf8())
+	var err = _adapter.send(json.to_utf8_buffer())
 	if err != OK:
 		call_deferred("_cancel_response", id)
 	return _responses[id]
@@ -332,7 +334,7 @@ func create_match_async(p_name : String = ''):
 # @param p_user_ids - The IDs of users.
 # @param p_usernames - The usernames of the users.
 # Returns a task which resolves to the current statuses for the users.
-func follow_users_async(p_ids : PoolStringArray, p_usernames : PoolStringArray = []) -> NakamaRTAPI.Status:
+func follow_users_async(p_ids : PackedStringArray, p_usernames : PackedStringArray = []) -> NakamaRTAPI.Status:
 	return _send_async(NakamaRTMessage.StatusFollow.new(p_ids, p_usernames), NakamaRTAPI.Status)
 
 # Join a chat channel on the server.
@@ -406,7 +408,7 @@ func rpc_async(p_func_id : String, p_payload = null) -> NakamaAPI.ApiRpc:
 		TYPE_NIL, TYPE_STRING:
 			pass
 		_:
-			payload = JSON.print(p_payload)
+			payload = JSON.stringify(p_payload)
 	return _send_async(NakamaAPI.ApiRpc.create(NakamaAPI, {
 		"id": p_func_id,
 		"payload": payload
@@ -438,7 +440,7 @@ func send_match_state_async(p_match_id, p_op_code : int, p_data : String, p_pres
 # @param p_data - The input data to send.
 # @param p_presences - The presences in the match who should receive the input.
 # Returns a task which represents the asynchronous operation.
-func send_match_state_raw_async(p_match_id, p_op_code : int, p_data : PoolByteArray, p_presences = null):
+func send_match_state_raw_async(p_match_id, p_op_code : int, p_data : PackedByteArray, p_presences = null):
 	var req = _send_async(NakamaRTMessage.MatchDataSend.new(
 		p_match_id,
 		p_op_code,
@@ -453,7 +455,7 @@ func send_match_state_raw_async(p_match_id, p_op_code : int, p_data : PoolByteAr
 # Unfollow one or more users from their status updates.
 # @param p_user_ids - An array of user ids to unfollow.
 # Returns a task which represents the asynchronous operation.
-func unfollow_users_async(p_ids : PoolStringArray):
+func unfollow_users_async(p_ids : PackedStringArray):
 	return _send_async(NakamaRTMessage.StatusUnfollow.new(p_ids))
 
 # Update a chat message on a chat channel in the server.
@@ -463,7 +465,7 @@ func unfollow_users_async(p_ids : PoolStringArray):
 # Returns a task which resolves to an acknowledgement of the updated message.
 func update_chat_message_async(p_channel_id : String, p_message_id : String, p_content : Dictionary):
 	return _send_async(
-		NakamaRTMessage.ChannelMessageUpdate.new(p_channel_id, p_message_id, JSON.print(p_content)),
+		NakamaRTMessage.ChannelMessageUpdate.new(p_channel_id, p_message_id, JSON.stringify(p_content)),
 		NakamaRTAPI.ChannelMessageAck
 	)
 
@@ -479,7 +481,7 @@ func update_status_async(p_status : String):
 # Returns a task which resolves to the acknowledgement of the chat message write.
 func write_chat_message_async(p_channel_id : String, p_content : Dictionary):
 	return _send_async(
-		NakamaRTMessage.ChannelMessageSend.new(p_channel_id, JSON.print(p_content)),
+		NakamaRTMessage.ChannelMessageSend.new(p_channel_id, JSON.stringify(p_content)),
 		NakamaRTAPI.ChannelMessageAck
 	)
 
@@ -572,7 +574,7 @@ func remove_party_member_async(p_party_id : String, p_presence : NakamaRTAPI.Use
 # @param data - Data payload, if any.
 # Returns a task which represents the asynchronous operation.
 func send_party_data_async(p_party_id : String, p_op_code : int, p_data:String = ""):
-	var base64_data = null if p_data.empty() else Marshalls.utf8_to_base64(p_data)
+	var base64_data = null if p_data.is_empty() else Marshalls.utf8_to_base64(p_data)
 	return _send_async(NakamaRTMessage.PartyDataSend.new(p_party_id, p_op_code, base64_data))
 
 # Send data to a party.
@@ -580,6 +582,6 @@ func send_party_data_async(p_party_id : String, p_op_code : int, p_data:String =
 # @param p_op_code - Op code value.
 # @param data - Data payload, if any.
 # Returns a task which represents the asynchronous operation.
-func send_party_data_raw_async(p_party_id : String, p_op_code : int, p_data:PoolByteArray):
-	var base64_data = null if p_data.empty() else Marshalls.raw_to_base64(p_data)
+func send_party_data_raw_async(p_party_id : String, p_op_code : int, p_data:PackedByteArray):
+	var base64_data = null if p_data.is_empty() else Marshalls.raw_to_base64(p_data)
 	return _send_async(NakamaRTMessage.PartyDataSend.new(p_party_id, p_op_code, base64_data))

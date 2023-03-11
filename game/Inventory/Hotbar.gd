@@ -1,7 +1,7 @@
 extends Node2D
 
-onready var hotbar = $HotbarSlots
-onready var slots = hotbar.get_children()
+@onready var hotbar = $HotbarSlots
+@onready var slots = hotbar.get_children()
 
 func _ready():
 	for i in range(slots.size()):

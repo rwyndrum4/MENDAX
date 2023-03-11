@@ -11,9 +11,9 @@ extends Control
 
 # Member Variables:
 var in_cave = false
-onready var player_one = $Player
-onready var instructions: Label = $enterCaveArea/enterDirections
-onready var textBox = $GUI/textBox
+@onready var player_one = $Player
+@onready var instructions: Label = $enterCaveArea/enterDirections
+@onready var textBox = $GUI/textBox
 
 var other_player = "res://Scenes/player/other_players/other_players.tscn"
 
@@ -49,7 +49,7 @@ func _process(_delta): #change to delta if using it
 			# warning-ignore:return_value_discarded
 			$Enter.play()
 			#change scene to cave area
-			CaveInTrans.change_scene(Global.scenes.CAVE)
+			CaveInTrans.change_scene_to_file(Global.scenes.CAVE)
 
 """
 /*
@@ -91,7 +91,7 @@ func spawn_players():
 			player_one.position = Global.player_positions[str(num)]
 			player_one.set_color(num)
 		else:
-			var new_player:KinematicBody2D = load(other_player).instance()
+			var new_player:CharacterBody2D = load(other_player).instantiate()
 			new_player.set_player_id(num)
 			new_player.set_color(num)
 			#Change size and pos of sprite

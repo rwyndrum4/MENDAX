@@ -18,26 +18,26 @@ var ItemClass = preload("res://Inventory/Item.tscn")
 var other_player = "res://Scenes/player/other_players/other_players.tscn" #Scene for players that online oppenents use
 
 # Scene Nodes
-onready var myTimer: Timer = $GUI/Timer
-onready var timerText: Label = $GUI/Timer/timerText
-onready var textBox = $GUI/textBox
-onready var hintbox=$GUI/show_letter
-onready var itemarray=[] #determines if items have been found
-onready var hint="";# set in init riddle
-onready var riddle="";#set in init riddle
-onready var riddlefile = 'res://Assets/riddle_jester/riddles.txt'
-onready var currenthints=""; #keeps track of currenhints found
-onready var hintlength=0#keeps track of hintlength to give random letter clues
-onready var answerlength=0 #keeps track of asnwer length is constant
-onready var itemsleft=6;#helps  withi giving hints
-onready var lettersleft=0;#helps with giving hints
-onready var x_overlap=[] #array to prevent horizontal overlap with hints 
-onready var y_overlap=[]#array to prevent vertical overlap with hints 
-onready var init_playerpos; #initial player position helps with hint placement
-onready var transCam = $Path2D/PathFollow2D/camTrans
-onready var riddler = $riddler
-onready var playerCam = $Player/Camera2D
-onready var player_one = $Player #Player object of player YOU control
+@onready var myTimer: Timer = $GUI/Timer
+@onready var timerText: Label = $GUI/Timer/timerText
+@onready var textBox = $GUI/textBox
+@onready var hintbox=$GUI/show_letter
+@onready var itemarray=[] #determines if items have been found
+@onready var hint="";# set in init riddle
+@onready var riddle="";#set in init riddle
+@onready var riddlefile = 'res://Assets/riddle_jester/riddles.txt'
+@onready var currenthints=""; #keeps track of currenhints found
+@onready var hintlength=0#keeps track of hintlength to give random letter clues
+@onready var answerlength=0 #keeps track of asnwer length is constant
+@onready var itemsleft=6;#helps  withi giving hints
+@onready var lettersleft=0;#helps with giving hints
+@onready var x_overlap=[] #array to prevent horizontal overlap with hints 
+@onready var y_overlap=[]#array to prevent vertical overlap with hints 
+@onready var init_playerpos; #initial player position helps with hint placement
+@onready var transCam = $Path2D/PathFollow2D/camTrans
+@onready var riddler = $riddler
+@onready var playerCam = $Player/Camera2D
+@onready var player_one = $Player #Player object of player YOU control
 
 #signals
 signal textWait()
@@ -53,13 +53,13 @@ signal textWait()
 func _ready():
 	init_playerpos=$Player.position
 	# warning-ignore:return_value_discarded
-	GlobalSignals.connect("answer_received",self,"_check_answer")
+	GlobalSignals.connect("answer_received",Callable(self,"_check_answer"))
 	# warning-ignore:return_value_discarded
-	ServerConnection.connect("riddle_received", self, "set_riddle_from_server")
+	ServerConnection.connect("riddle_received",Callable(self,"set_riddle_from_server"))
 	# warning-ignore:return_value_discarded
-	Global.connect("all_players_arrived", self, "_can_send_riddle")
+	Global.connect("all_players_arrived",Callable(self,"_can_send_riddle"))
 	# warning-ignore:return_value_discarded
-	GlobalSignals.connect("openChatbox", self, "chatbox_use")
+	GlobalSignals.connect("openChatbox",Callable(self,"chatbox_use"))
 	#If there is a multiplayer match
 	if ServerConnection.match_exists() and ServerConnection.get_server_status():
 		ServerConnection.send_spawn_notif()
@@ -81,7 +81,7 @@ func _ready():
 			wait_for_riddle_timer.one_shot = true
 			wait_for_riddle_timer.start()
 			# warning-ignore:return_value_discarded
-			wait_for_riddle_timer.connect("timeout",self, "_riddle_timer_expired", [wait_for_riddle_timer])
+			wait_for_riddle_timer.connect("timeout",Callable(self,"_riddle_timer_expired").bind(wait_for_riddle_timer))
 	#If there is a single player game, start game right away
 	else:
 		init_riddle(riddlefile) #initalizes riddle randomly
@@ -137,12 +137,12 @@ func _finish_anim():
 	self.add_child(t)
 		
 	t.start()
-	yield(t, "timeout")
+	await t.timeout
 
 	$Path2D/AnimationPlayer.play_backwards("BEGIN")
-	yield($Path2D/AnimationPlayer, "animation_finished")
+	await $Path2D/AnimationPlayer.animation_finished
 	t.start()
-	yield(t, "timeout")
+	await t.timeout
 	
 	#start timer
 	textBox.queue_text("Time starts now!")
@@ -174,15 +174,15 @@ func start_riddle_game():
 	#Begin scene dialogue
 	textBox.queue_text("Oh who do we have here?")
 	t.start()
-	yield(t, "timeout")
+	await t.timeout
 	t.queue_free()
 	$Path2D/AnimationPlayer.play("BEGIN")
-	yield($Path2D/AnimationPlayer, "animation_finished")
+	await $Path2D/AnimationPlayer.animation_finished
 	textBox.queue_text("In order to pass you must solve this riddle...")
 	textBox.queue_text(riddle)
 	textBox.queue_text("Please enter the answer in the chat once you have it, there are hints hidden here if you need them (:")
 	# warning-ignore:return_value_discarded
-	connect("textWait", self, "_finish_anim")
+	connect("textWait",Callable(self,"_finish_anim"))
 	Global.in_anim = 1;
 
 """
@@ -200,7 +200,7 @@ func _riddle_timer_expired(timer:Timer):
 		textBox.queue_text("Never received riddle from server, you have your own riddle")
 		start_riddle_game()
 		#Make it so server can't change riddle anymore
-		ServerConnection.disconnect( "riddle_received", self, "set_riddle_from_server")
+		ServerConnection.disconnect("riddle_received",Callable(self,"set_riddle_from_server"))
 	timer.queue_free()
 
 """
@@ -336,8 +336,8 @@ func init_hiddenitems():
 	for hint in hints:
 		overlap=1
 		while overlap==1:
-			x=rand_range(0, 3000) #range of game map reduced  due to size of hint area
-			y=rand_range(0,3000)#range of game map reduced  due to size of hint area
+			x=randf_range(0, 3000) #range of game map reduced  due to size of hint area
+			y=randf_range(0,3000)#range of game map reduced  due to size of hint area
 			for i in range(0, hintcounter):
 				if ((x+150)>=x_overlap[i][0] or (x-150)<=x_overlap[i][1]) and ((y+150)>=y_overlap[i][0] or (y-150)<=y_overlap[i][1]): #overlap in both x and y direcitons indicates overlap
 					overlap=2
@@ -480,37 +480,37 @@ func _on_item6area_body_exited(_body:PhysicsBody2D)->void:
 """
 func _on_item1_body_entered(_body:PhysicsBody2D)->void:
 	if itemarray[0]==0 and answerlength>=1:
-		enterarea($item1/Sprite,1)
+		enterarea($item1/Sprite2D,1)
 		
 		textBox.queue_text("MONEY!!")
 func _on_item2_body_entered(_body:PhysicsBody2D)->void:
 	if itemarray[1]==0 and answerlength>=2:
-		enterarea($item2/Sprite,2)
-		item = ItemClass.instance()
+		enterarea($item2/Sprite2D,2)
+		item = ItemClass.instantiate()
 		
 		textBox.queue_text("MONEY!!")
 func _on_item3_body_entered(_body:PhysicsBody2D)->void:
 	if itemarray[2]==0 and answerlength>=3:
-		enterarea($item3/Sprite,3)
-		item = ItemClass.instance()
+		enterarea($item3/Sprite2D,3)
+		item = ItemClass.instantiate()
 		
 		textBox.queue_text("MONEY!!")
 func _on_item4_body_entered(_body:PhysicsBody2D)->void:
 	if itemarray[3]==0 and answerlength>=4:
-		enterarea($item4/Sprite,4)
-		item = ItemClass.instance()
+		enterarea($item4/Sprite2D,4)
+		item = ItemClass.instantiate()
 		
 		textBox.queue_text("MONEY!!")
 func _on_item5_body_entered(_body:PhysicsBody2D)->void:
 	if itemarray[4]==0 and answerlength>=5:
-		enterarea($item5/Sprite,5)
-		item = ItemClass.instance()
+		enterarea($item5/Sprite2D,5)
+		item = ItemClass.instantiate()
 		
 		textBox.queue_text("MONEY!!")
 func _on_item6_body_entered(_body:PhysicsBody2D)->void:
 	if itemarray[5]==0 and answerlength>=6:
-		enterarea($item6/Sprite,6)
-		item = ItemClass.instance()
+		enterarea($item6/Sprite2D,6)
+		item = ItemClass.instantiate()
 		
 		textBox.queue_text("MONEY!!")
 """
@@ -522,22 +522,22 @@ func _on_item6_body_entered(_body:PhysicsBody2D)->void:
 */
 """
 func _on_item1_body_exited(_body:PhysicsBody2D)->void:
-	$item1/Sprite.hide()
+	$item1/Sprite2D.hide()
 	hintbox.hide()
 func _on_item2_body_exited(_body:PhysicsBody2D)->void:
-	$item2/Sprite.hide()
+	$item2/Sprite2D.hide()
 	hintbox.hide()
 func _on_item3_body_exited(_body:PhysicsBody2D)->void:
-	$item3/Sprite.hide()
+	$item3/Sprite2D.hide()
 	hintbox.hide()
 func _on_item4_body_exited(_body:PhysicsBody2D)->void:
-	$item4/Sprite.hide()
+	$item4/Sprite2D.hide()
 	hintbox.hide()
 func _on_item5_body_exited(_body:PhysicsBody2D)->void:
-	$item5/Sprite.hide()
+	$item5/Sprite2D.hide()
 	hintbox.hide()
 func _on_item6_body_exited(_body):
-	$item6/Sprite.hide()
+	$item6/Sprite2D.hide()
 	hintbox.hide()
 
 """
@@ -560,7 +560,7 @@ func spawn_players():
 			player_one.set_color(num)
 		#if the player is another online player
 		else:
-			var new_player:KinematicBody2D = load(other_player).instance()
+			var new_player:CharacterBody2D = load(other_player).instantiate()
 			new_player.set_player_id(num)
 			new_player.set_color(num)
 			#Change size and pos of sprite

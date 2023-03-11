@@ -13,8 +13,8 @@ signal message_sent(msg,is_whisper,username)
 var DEBUG_ON = false
 
 # Member Variables
-onready var chatLog = $textHolder/pastText
-onready var playerInput = $textHolder/inputField/playerInput
+@onready var chatLog = $textHolder/pastText
+@onready var playerInput = $textHolder/inputField/playerInput
 
 #Boolean that says if user is using chatbox
 var in_chatbox = false
@@ -95,15 +95,15 @@ func _input(event):
 				#Auto fill for whisper
 				if playerInput.text in "/whisper" and playerInput.text != "/":
 					playerInput.text = "/whisper "
-					playerInput.set_cursor_position(len(playerInput.text) +1)
+					playerInput.set_caret_column(len(playerInput.text) +1)
 				#Autofill for clear
 				elif playerInput.text in "/clear" and playerInput.text != "/":
 					playerInput.text = "/clear"
-					playerInput.set_cursor_position(len(playerInput.text) +1)
+					playerInput.set_caret_column(len(playerInput.text) +1)
 				#Auto fill for current players
 				elif "/whisper " in playerInput.text and ServerConnection.get_chatroom_players().size() > 0:
 					playerInput.text = "/whisper " + ServerConnection.get_chatroom_players().keys()[current_usr] + " "
-					playerInput.set_cursor_position(len(playerInput.text) +1)
+					playerInput.set_caret_column(len(playerInput.text) +1)
 					current_usr += 1
 					if current_usr == ServerConnection.get_chatroom_players().size():
 						current_usr = 0
@@ -125,17 +125,19 @@ func add_message(text:String,type:String,user_sent:String,from_user:String):
 	var color:String = get_chat_color(type)
 	if from_user == Save.game_data.username and type == "whisper":
 		user = "To [ "+user_sent+" ]"
-	chatLog.bbcode_text += "[color=" + color + "]"
-	chatLog.bbcode_text += user + ': '
-	chatLog.bbcode_text += text
-	chatLog.bbcode_text += "[/color]"
-	chatLog.bbcode_text += '\n'
+	chatLog.text += "[color=" + color + "]"
+	chatLog.text += user + ': '
+	chatLog.text += text
+	chatLog.text += "[/color]"
+	chatLog.text += '\n'
 
 func handle_match_data(text):
 	#clean the string of match received
 	var clean_data = text.replace("MATCH_RECEIVED ","")
 	#get a dictionary from the string
-	var match_dict:Dictionary = parse_json(clean_data)
+	var test_json_conv = JSON.new()
+	test_json_conv.parse(clean_data)
+	var match_dict:Dictionary = test_json_conv.get_data()
 	#add matches to current dictionary if not already in there
 	for key in match_dict.keys():
 		if not Global.match_exists(key):
@@ -153,8 +155,8 @@ func add_err_message():
 	var color:String = get_chat_color("error")
 	var err_msg = "[color=" + color + "]"
 	err_msg += "Not connected to server, please wait[/color]"
-	chatLog.bbcode_text += err_msg
-	chatLog.bbcode_text += "\n"
+	chatLog.text += err_msg
+	chatLog.text += "\n"
 
 """
 /*
@@ -168,8 +170,8 @@ func chat_event_message(event_message: String, color:String):
 	var _color: String = get_chat_color(color)
 	var event_msg = "[color=" + _color + "]"
 	event_msg += event_message
-	chatLog.bbcode_text += event_msg
-	chatLog.bbcode_text += "\n"
+	chatLog.text += event_msg
+	chatLog.text += "\n"
 	chatLog.modulate.a8 = CHAT_LOG_MODULATE_MAX
 	var mod_timer: Timer = Timer.new()
 	add_child(mod_timer)
@@ -177,7 +179,7 @@ func chat_event_message(event_message: String, color:String):
 	mod_timer.one_shot = true
 	mod_timer.start()
 	# warning-ignore:return_value_discarded
-	mod_timer.connect("timeout",self, "_chat_timer_expired", [mod_timer])
+	mod_timer.connect("timeout",Callable(self,"_chat_timer_expired").bind(mod_timer))
 
 func _chat_timer_expired(timer_in):
 	timer_in.queue_free()
@@ -211,7 +213,7 @@ func _on_playerInput_text_entered(new_text):
 				add_message(new_text,"whisper",receiving_user,Save.game_data.username)
 		#If the user wants to clear the chatLog
 		elif new_text == "/clear":
-			chatLog.bbcode_text = ""
+			chatLog.text = ""
 		#Else it is a message to send to general
 		else:
 			emit_signal("message_sent",new_text,false,"")
@@ -286,7 +288,7 @@ func text_overflow_warning():
 	var dialog = AcceptDialog.new()
 	dialog.dialog_text = "Please keep messages <= 256 characters"
 	dialog.window_title = "Message is too large"
-	dialog.connect('modal_closed', dialog, 'queue_free')
+	dialog.connect('modal_closed',Callable(dialog,'queue_free'))
 	add_child(dialog)
 	dialog.popup_centered()
 

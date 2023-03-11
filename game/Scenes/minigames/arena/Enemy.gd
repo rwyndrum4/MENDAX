@@ -1,4 +1,4 @@
-extends KinematicBody2D
+extends CharacterBody2D
 
 #motion vector for enemy
 var motion=Vector2()
@@ -36,7 +36,7 @@ func _physics_process(delta):
 var bullete =preload("res://Scenes/bullet/bulletenemy.tscn")
 func fire():
 	var Player=get_parent().get_node("Player")
-	var bulenemy = bullete.instance()
+	var bulenemy = bullete.instantiate()
 	
 	#get_tree().get_root().add_child(bulenemy)
 	get_parent().add_child(bulenemy)

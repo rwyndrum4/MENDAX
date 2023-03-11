@@ -16,7 +16,7 @@ extends Area2D
 * @return void
 */
 """
-func _init() -> void:
+func _init():
 	collision_layer = 0
 	collision_mask = 19
 
@@ -30,7 +30,7 @@ func _init() -> void:
 """
 func _ready() -> void:
 	# warning-ignore:return_value_discarded
-	connect("area_entered", self, "_on_area_entered")
+	connect("area_entered",Callable(self,"_on_area_entered"))
 	
 
 """

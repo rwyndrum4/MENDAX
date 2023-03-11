@@ -10,14 +10,14 @@
 extends Node2D
 
 const SlotClass = preload("res://Inventory/Slot.gd")
-onready var inventory_slots = $GridContainer
+@onready var inventory_slots = $GridContainer
 var holding_item = null
 
 # Called when the node enters the scene tree for the first time. Reworked to index slots
 func _ready():
 	var slots = inventory_slots.get_children()
 	for i in range(slots.size()):
-		slots[i].connect("gui_input", self, "slot_gui_input", [slots[i]])
+		slots[i].connect("gui_input",Callable(self,"slot_gui_input").bind(slots[i))
 		slots[i].slot_index = i
 	initialize_inventory()
 
@@ -29,7 +29,7 @@ func initialize_inventory():
 
 func slot_gui_input(event: InputEvent, slot: SlotClass):
 	if event is InputEventMouseButton:
-		if event.button_index == BUTTON_LEFT && event.pressed:
+		if event.button_index == MOUSE_BUTTON_LEFT && event.pressed:
 			if holding_item != null:
 				if !slot.item:
 					left_click_empty(slot)

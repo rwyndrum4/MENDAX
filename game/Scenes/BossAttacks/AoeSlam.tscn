@@ -1,13 +1,13 @@
 [gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Scenes/BossAttacks/AoeSlam.gd" type="Script" id=1]
-[ext_resource path="res://Assets/final_boss_attack/frame0005.png" type="Texture" id=2]
-[ext_resource path="res://Assets/final_boss_attack/frame0000.png" type="Texture" id=3]
-[ext_resource path="res://Assets/final_boss_attack/frame0001.png" type="Texture" id=4]
-[ext_resource path="res://Assets/final_boss_attack/frame0004.png" type="Texture" id=5]
-[ext_resource path="res://Assets/final_boss_attack/frame0006.png" type="Texture" id=6]
-[ext_resource path="res://Assets/final_boss_attack/frame0002.png" type="Texture" id=7]
-[ext_resource path="res://Assets/final_boss_attack/frame0003.png" type="Texture" id=8]
+[ext_resource path="res://Assets/final_boss_attack/frame0005.png" type="Texture2D" id=2]
+[ext_resource path="res://Assets/final_boss_attack/frame0000.png" type="Texture2D" id=3]
+[ext_resource path="res://Assets/final_boss_attack/frame0001.png" type="Texture2D" id=4]
+[ext_resource path="res://Assets/final_boss_attack/frame0004.png" type="Texture2D" id=5]
+[ext_resource path="res://Assets/final_boss_attack/frame0006.png" type="Texture2D" id=6]
+[ext_resource path="res://Assets/final_boss_attack/frame0002.png" type="Texture2D" id=7]
+[ext_resource path="res://Assets/final_boss_attack/frame0003.png" type="Texture2D" id=8]
 
 [sub_resource type="CircleShape2D" id=1]
 
@@ -27,7 +27,7 @@ script = ExtResource( 1 )
 [node name="CircleShape" type="CollisionShape2D" parent="."]
 shape = SubResource( 1 )
 
-[node name="anim_drawing" type="AnimatedSprite" parent="."]
+[node name="anim_drawing" type="AnimatedSprite2D" parent="."]
 scale = Vector2( 0.35, 0.35 )
 frames = SubResource( 2 )
 

@@ -20,7 +20,7 @@ namespace Nakama {
     /// <summary>
     /// A logger which prints to the Godot console.
     /// </summary>
-    public class GodotLogger : ILogger {
+    public partial class GodotLogger : ILogger {
 
         /// <summary>
         /// The log level.

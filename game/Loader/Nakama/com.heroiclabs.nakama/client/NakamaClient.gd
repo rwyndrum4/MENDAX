@@ -1,4 +1,4 @@
-extends Reference
+extends RefCounted
 # warnings-disable
 # A client for the API in Nakama server.
 class_name NakamaClient
@@ -12,30 +12,30 @@ func _no_get():
 	return null
 
 # The host address of the server. Defaults to "127.0.0.1".
-var host : String setget _no_set
+var host : String : set = _no_set
 
 # The port number of the server. Defaults to 7350.
-var port : int setget _no_set
+var port : int : set = _no_set
 
 # The protocol scheme used to connect with the server. Must be either "http" or "https".
-var scheme : String setget _no_set
+var scheme : String : set = _no_set
 
 # The key used to authenticate with the server without a session. Defaults to "defaultkey".
-var server_key : String = "defaultkey" setget _no_set
+var server_key : String = "defaultkey" : set = _no_set
 
 # Set the timeout in seconds on requests sent to the server.
 var timeout : int
 
 var logger : NakamaLogger = null
 
-var _api_client : NakamaAPI.ApiClient setget _no_set, _no_get
+var _api_client : NakamaAPI.ApiClient : get = _no_get, set = _no_set
 
-var auto_refresh : bool = true setget set_auto_refresh, get_auto_refresh
-var auto_refresh_seconds : int = true setget set_auto_refresh_seconds, get_auto_refresh_seconds
-var auto_retry : bool = true setget set_auto_retry, get_auto_retry
-var auto_retry_count setget set_auto_retry_count, get_auto_retry_count
-var auto_retry_backoff_base setget set_auto_retry_backoff_base, get_auto_retry_backoff_base
-var last_cancel_token setget _no_set, get_last_cancel_token
+var auto_refresh : bool = true : get = get_auto_refresh, set = set_auto_refresh
+var auto_refresh_seconds : int = true : get = get_auto_refresh_seconds, set = set_auto_refresh_seconds
+var auto_retry : bool = true : get = get_auto_retry, set = set_auto_retry
+var auto_retry_count : get = get_auto_retry_count, set = set_auto_retry_count
+var auto_retry_backoff_base : get = get_auto_retry_backoff_base, set = set_auto_retry_backoff_base
+var last_cancel_token : get = get_last_cancel_token, set = _no_set
 
 func get_auto_refresh():
 	return _api_client.auto_refresh
@@ -73,7 +73,7 @@ func set_auto_retry_backoff_base(p_value):
 func cancel_request(p_token):
 	_api_client.cancel_request(p_token)
 
-func _init(p_adapter : NakamaHTTPAdapter,
+func _init():amaHTTPAdapter,
 		p_server_key : String,
 		p_scheme : String,
 		p_host : String,
@@ -118,7 +118,7 @@ func add_friends_async(p_session : NakamaSession, p_ids = null, p_usernames = nu
 # @param p_group_id - The id of the group to add users into.
 # @param p_ids - The ids of the users to add or invite to the group.
 # Returns a task which represents the asynchronous operation.
-func add_group_users_async(p_session : NakamaSession, p_group_id : String, p_ids : PoolStringArray) -> NakamaAsyncResult:
+func add_group_users_async(p_session : NakamaSession, p_group_id : String, p_ids : PackedStringArray) -> NakamaAsyncResult:
 	return _api_client.add_group_users_async(p_session, p_group_id, p_ids);
 
 # Authenticate a user with an Apple ID against the server.
@@ -257,7 +257,7 @@ func authenticate_steam_async(p_token : String, p_username = null, p_create : bo
 # @param p_ids - The ids of the users to block.
 # @param p_usernames - The usernames of the users to block.
 # Returns a task which represents the asynchronous operation.
-func block_friends_async(p_session : NakamaSession, p_ids : PoolStringArray, p_usernames = null) -> NakamaAsyncResult:
+func block_friends_async(p_session : NakamaSession, p_ids : PackedStringArray, p_usernames = null) -> NakamaAsyncResult:
 	return _api_client.block_friends_async(p_session, p_ids, p_usernames);
 
 # Create a group.
@@ -286,7 +286,7 @@ func create_group_async(p_session : NakamaSession, p_name : String, p_descriptio
 # @param p_ids - The user ids to remove as friends.
 # @param p_usernames - The usernames to remove as friends.
 # Returns a task which represents the asynchronous operation.
-func delete_friends_async(p_session : NakamaSession, p_ids : PoolStringArray, p_usernames = null) -> NakamaAsyncResult:
+func delete_friends_async(p_session : NakamaSession, p_ids : PackedStringArray, p_usernames = null) -> NakamaAsyncResult:
 	return _api_client.delete_friends_async(p_session, p_ids, p_usernames)
 
 # Delete a group by id.
@@ -307,7 +307,7 @@ func delete_leaderboard_record_async(p_session : NakamaSession, p_leaderboard_id
 # @param p_session - The session of the user.
 # @param p_ids - The notification ids to remove.
 # Returns a task which represents the asynchronous operation.
-func delete_notifications_async(p_session : NakamaSession, p_ids : PoolStringArray) -> NakamaAsyncResult:
+func delete_notifications_async(p_session : NakamaSession, p_ids : PackedStringArray) -> NakamaAsyncResult:
 	return _api_client.delete_notifications_async(p_session, p_ids)
 
 # Delete one or more storage objects.
@@ -346,7 +346,7 @@ func get_account_async(p_session : NakamaSession): # -> NakamaAPI.ApiAccount:
 # @param p_usernames - The usernames of the users to retrieve.
 # @param p_facebook_ids - The facebook IDs of the users to retrieve.
 # Returns a task which resolves to a collection of user objects.
-func get_users_async(p_session : NakamaSession, p_ids : PoolStringArray, p_usernames = null, p_facebook_ids = null): # -> NakamaAPI.ApiUsers:
+func get_users_async(p_session : NakamaSession, p_ids : PackedStringArray, p_usernames = null, p_facebook_ids = null): # -> NakamaAPI.ApiUsers:
 	return _api_client.get_users_async(p_session, p_ids, p_usernames, p_facebook_ids)
 
 # Import Facebook friends and add them to the user's account.
@@ -394,7 +394,7 @@ func join_tournament_async(p_session : NakamaSession, p_tournament_id : String) 
 # @param p_group_id - The ID of the group.
 # @param p_ids - The IDs of the users to kick.
 # Returns a task which represents the asynchronous operation.
-func kick_group_users_async(p_session : NakamaSession, p_group_id : String, p_ids : PoolStringArray) -> NakamaAsyncResult:
+func kick_group_users_async(p_session : NakamaSession, p_group_id : String, p_ids : PackedStringArray) -> NakamaAsyncResult:
 	return _api_client.kick_group_users_async(p_session, p_group_id, p_ids)
 
 # Leave a group by ID.
@@ -674,7 +674,7 @@ func list_users_storage_objects_async(p_session : NakamaSession,
 # @param p_group_id - The ID of the group to promote users into.
 # @param p_ids - The IDs of the users to promote.
 # Returns a task which represents the asynchronous operation.
-func promote_group_users_async(p_session : NakamaSession, p_group_id : String, p_ids : PoolStringArray) -> NakamaAsyncResult:
+func promote_group_users_async(p_session : NakamaSession, p_group_id : String, p_ids : PackedStringArray) -> NakamaAsyncResult:
 	return _api_client.promote_group_users_async(p_session, p_group_id, p_ids)
 
 # Read one or more objects from the storage engine.

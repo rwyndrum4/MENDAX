@@ -1,8 +1,8 @@
-extends Sprite
+extends Sprite2D
 
 const INVINCIBILITY_TIME = 0.5
 var durability = 0
-onready var shieldTimer = $ShieldDelay
+@onready var shieldTimer = $ShieldDelay
 
 var FullShield = preload("res://Assets/shieldFull.png")
 var SomeDamage = preload("res://Assets/shieldLightDamage.png")

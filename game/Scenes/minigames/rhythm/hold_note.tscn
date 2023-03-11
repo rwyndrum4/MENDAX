@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://Assets/rhythm/note.png" type="Texture" id=1]
+[ext_resource path="res://Assets/rhythm/note.png" type="Texture2D" id=1]
 [ext_resource path="res://Scenes/minigames/rhythm/hold_note.gd" type="Script" id=2]
 [ext_resource path="res://Assets/rhythm/hi_hataka_Failed_whistle.mp3" type="AudioStream" id=3]
 [ext_resource path="res://Assets/rhythm/teeth_noPitch.mp3" type="AudioStream" id=4]
@@ -15,14 +15,14 @@ script = ExtResource( 2 )
 
 [node name="hold_zone" type="ColorRect" parent="hold_pivot_node"]
 modulate = Color( 1, 1, 1, 0.294118 )
-margin_left = 37.0
-margin_right = 109.0
+offset_left = 37.0
+offset_right = 109.0
 grow_horizontal = 2
 grow_vertical = 2
-rect_rotation = -180.0
+rotation = -180.0
 color = Color( 0.0470588, 0.945098, 0.862745, 1 )
 
-[node name="first_sprite" type="Sprite" parent="."]
+[node name="first_sprite" type="Sprite2D" parent="."]
 modulate = Color( 1, 1, 1, 0.509804 )
 texture = ExtResource( 1 )
 
@@ -33,12 +33,12 @@ shape = SubResource( 1 )
 [node name="first_label" type="Node2D" parent="."]
 
 [node name="hit_type" type="Label" parent="first_label"]
-margin_left = -20.0
-margin_top = -7.0
-margin_right = 20.0
-margin_bottom = 7.0
+offset_left = -20.0
+offset_top = -7.0
+offset_right = 20.0
+offset_bottom = 7.0
 
-[node name="second_sprite" type="Sprite" parent="."]
+[node name="second_sprite" type="Sprite2D" parent="."]
 modulate = Color( 1, 1, 1, 0.509804 )
 texture = ExtResource( 1 )
 
@@ -49,10 +49,10 @@ shape = SubResource( 1 )
 [node name="second_label" type="Node2D" parent="."]
 
 [node name="hit_type" type="Label" parent="second_label"]
-margin_left = -20.0
-margin_top = -7.0
-margin_right = 20.0
-margin_bottom = 7.0
+offset_left = -20.0
+offset_top = -7.0
+offset_right = 20.0
+offset_bottom = 7.0
 
 [node name="slide_sound" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource( 3 )

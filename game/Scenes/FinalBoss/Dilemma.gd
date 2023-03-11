@@ -6,7 +6,7 @@
 """
 extends Node2D
 
-onready var textBox = $textBox
+@onready var textBox = $textBox
 var _players
 var _num_players = 0
 var _cancel
@@ -59,7 +59,7 @@ func _process(_delta):
 	if _cancel:
 		Global.progress = 5
 		Global.state = Global.scenes.CAVE
-	if textBox.text_queue.empty():
+	if textBox.text_queue.is_empty():
 		if _num_players >= 1:
 			$Button1.text = "Betray" + _players[0]
 			$Button1.show()

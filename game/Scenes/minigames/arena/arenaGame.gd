@@ -2,8 +2,8 @@
 * Programmer Name - Freeman Spray
 * Description - Code for controlling the Arena minigame
 * Date Created - 11/5/2022
-* Date Revisions: 11/12/2022 - added physics process to manage Skeleton positioning
-*				  11/13/2022 - got Skeleton to track a player
+* Date Revisions: 11/12/2022 - added physics process to manage Skeleton3D positioning
+*				  11/13/2022 - got Skeleton3D to track a player
 * 				  11/15/2022 - move physics process to Skeleton.gd
 				  11/28/2022 - add win condition in form of transition back to cave
 """
@@ -12,17 +12,17 @@ extends Control
 # Member Variables
 var game_started = false
 var enemies_remaining = 3
-onready var myGUI = $GUI
-onready var myTimer: Timer = $GUI/Timer
-onready var timerText: Label = $GUI/Timer/timerText
-onready var textBox = $textBox
-onready var main_player = $Player
-onready var swordPivot = $Player/Sword/pivot
-onready var sword = $Player/Sword
-onready var playerHealth = $Player/ProgressBar
-onready var SkeletonEnemy = $Skeleton
-onready var BodEnemy = $BoD
-onready var ChandelierEnemy = $chandelier
+@onready var myGUI = $GUI
+@onready var myTimer: Timer = $GUI/Timer
+@onready var timerText: Label = $GUI/Timer/timerText
+@onready var textBox = $textBox
+@onready var main_player = $Player
+@onready var swordPivot = $Player/Sword/pivot
+@onready var sword = $Player/Sword
+@onready var playerHealth = $Player/ProgressBar
+@onready var SkeletonEnemy = $Skeleton3D
+@onready var BodEnemy = $BoD
+@onready var ChandelierEnemy = $chandelier
 #Scene for players that online oppenents use
 var online_players = "res://Scenes/player/arena_player/arena_player.tscn"
 
@@ -49,13 +49,13 @@ var _player_dead = false #variable to track if player 1 has died
 """
 func _ready():
 	# warning-ignore:return_value_discarded
-	GlobalSignals.connect("openChatbox", self, "chatbox_use")
+	GlobalSignals.connect("openChatbox",Callable(self,"chatbox_use"))
 	# warning-ignore:return_value_discarded
-	GlobalSignals.connect("enemyDefeated",self,"_enemy_defeated")
+	GlobalSignals.connect("enemyDefeated",Callable(self,"_enemy_defeated"))
 	# warning-ignore:return_value_discarded
-	Global.connect("all_players_arrived", self, "_can_start_game")
+	Global.connect("all_players_arrived",Callable(self,"_can_start_game"))
 	# warning-ignore:return_value_discarded
-	ServerConnection.connect("minigame_can_start", self, "_can_start_game_other")
+	ServerConnection.connect("minigame_can_start",Callable(self,"_can_start_game_other"))
 	playerHealth.visible = true
 	playerHealth.value = 100
 	sword.direction = "right"
@@ -68,11 +68,11 @@ func _ready():
 		ServerConnection.send_spawn_notif()
 		spawn_players()
 		# warning-ignore:return_value_discarded
-		ServerConnection.connect("arena_enemy_hit",self,"someone_hit_enemy")
+		ServerConnection.connect("arena_enemy_hit",Callable(self,"someone_hit_enemy"))
 		# warning-ignore:return_value_discarded
-		ServerConnection.connect("arena_player_lost_health",self,"other_player_hit")
+		ServerConnection.connect("arena_player_lost_health",Callable(self,"other_player_hit"))
 		# warning-ignore:return_value_discarded
-		ServerConnection.connect("arena_player_swung_sword",self,"other_player_swung_sword")
+		ServerConnection.connect("arena_player_swung_sword",Callable(self,"other_player_swung_sword"))
 		if ServerConnection._player_num == 1:
 			#in case p1 is last player to get to minigame
 			if Global.get_minigame_players() == Global.get_num_players() - 1:
@@ -89,14 +89,14 @@ func _ready():
 			wait_for_start.one_shot = true
 			wait_for_start.start()
 			# warning-ignore:return_value_discarded
-			wait_for_start.connect("timeout",self, "_start_timer_expired", [wait_for_start])
+			wait_for_start.connect("timeout",Callable(self,"_start_timer_expired").bind(wait_for_start))
 		var change_target_timer: Timer = Timer.new()
 		add_child(change_target_timer)
 		change_target_timer.wait_time = 8
 		change_target_timer.one_shot = false
 		change_target_timer.start()
 		# warning-ignore:return_value_discarded
-		change_target_timer.connect("timeout",self, "_target_timer_expired")
+		change_target_timer.connect("timeout",Callable(self,"_target_timer_expired"))
 	#else if single player game
 	else:
 		myTimer.start(60)
@@ -304,7 +304,7 @@ func spawn_players():
 			main_player.set_color(num)
 		#if the player is another online player
 		else:
-			var new_player:KinematicBody2D = load(online_players).instance()
+			var new_player:CharacterBody2D = load(online_players).instantiate()
 			new_player.set_player_id(num)
 			new_player.set_color(num)
 			#Change size and pos of sprite
@@ -312,7 +312,7 @@ func spawn_players():
 			#Add child to the scene
 			add_child(new_player)
 			# warning-ignore:return_value_discarded
-			new_player.connect("player_died", self, "_extend_timer")
+			new_player.connect("player_died",Callable(self,"_extend_timer"))
 			server_players.append({
 				'num': num,
 				'player_obj': new_player,
@@ -432,7 +432,7 @@ func _enemy_defeated(_enemyID:int):
 		t.set_one_shot(false)
 		self.add_child(t)
 		t.start()
-		yield(t, "timeout")
+		await t.timeout
 		t.queue_free()
 		#Go back to cave
 		_end_game()

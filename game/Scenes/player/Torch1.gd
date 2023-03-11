@@ -4,7 +4,7 @@
 * Date Created - 1/29/2023
 			
 """
-extends Light2D
+extends PointLight2D
 
 
 var _ticks = 0

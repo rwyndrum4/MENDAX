@@ -16,11 +16,11 @@ extends CanvasLayer
 */
 """
 #Fade to black transition
-func change_scene(target) -> void:
+func change_scene_to_file(target) -> void:
 	$AnimationPlayer.play("DISSOLVE")
-	yield($AnimationPlayer, 'animation_finished')
+	await $AnimationPlayer.animation_finished
 	$AnimationPlayer.play("ENTERCAVE")
-	yield($AnimationPlayer, 'animation_finished')
+	await $AnimationPlayer.animation_finished
 	$Exit.play()
 	# warning-ignore:return_value_discarded
 	Global.state = target

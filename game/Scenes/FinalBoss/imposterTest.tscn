@@ -4,16 +4,16 @@
 [ext_resource path="res://Scenes/player/Sword/Sword.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Scenes/Mobs/imposter.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Scenes/player/player.tscn" type="PackedScene" id=4]
-[ext_resource path="res://Assets/Confuzzle/confuzzle0008.png" type="Texture" id=5]
-[ext_resource path="res://Assets/Confuzzle/confuzzle0002.png" type="Texture" id=6]
-[ext_resource path="res://Assets/Confuzzle/confuzzle0007.png" type="Texture" id=7]
-[ext_resource path="res://Assets/Confuzzle/confuzzle0000.png" type="Texture" id=8]
-[ext_resource path="res://Assets/Confuzzle/confuzzle0010.png" type="Texture" id=9]
-[ext_resource path="res://Assets/Confuzzle/confuzzle0005.png" type="Texture" id=10]
+[ext_resource path="res://Assets/Confuzzle/confuzzle0008.png" type="Texture2D" id=5]
+[ext_resource path="res://Assets/Confuzzle/confuzzle0002.png" type="Texture2D" id=6]
+[ext_resource path="res://Assets/Confuzzle/confuzzle0007.png" type="Texture2D" id=7]
+[ext_resource path="res://Assets/Confuzzle/confuzzle0000.png" type="Texture2D" id=8]
+[ext_resource path="res://Assets/Confuzzle/confuzzle0010.png" type="Texture2D" id=9]
+[ext_resource path="res://Assets/Confuzzle/confuzzle0005.png" type="Texture2D" id=10]
 [ext_resource path="res://Scenes/FinalBoss/imposterTest.gd" type="Script" id=11]
 
 [sub_resource type="OccluderPolygon2D" id=1]
-polygon = PoolVector2Array( -48.9833, -45.9201, -50.0482, 47.9166, -50.0482, 47.9166, 50.0482, 46.9184, 50.0482, 46.9184, 48.9833, -48.9149, 47.9185, -50.9114 )
+polygon = PackedVector2Array( -48.9833, -45.9201, -50.0482, 47.9166, -50.0482, 47.9166, 50.0482, 46.9184, 50.0482, 46.9184, 48.9833, -48.9149, 47.9185, -50.9114 )
 
 [sub_resource type="SpriteFrames" id=2]
 animations = [ {
@@ -27,10 +27,10 @@ animations = [ {
 script = ExtResource( 11 )
 
 [node name="arenaMap" parent="." instance=ExtResource( 1 )]
-margin_left = -676.0
-margin_top = -610.0
-margin_right = -676.0
-margin_bottom = -610.0
+offset_left = -676.0
+offset_top = -610.0
+offset_right = -676.0
+offset_bottom = -610.0
 
 [node name="Imposter" parent="." instance=ExtResource( 3 )]
 position = Vector2( 1270, 1140 )
@@ -50,7 +50,7 @@ current = true
 
 [node name="Sword" parent="Player" instance=ExtResource( 2 )]
 
-[node name="confuzzle" type="AnimatedSprite" parent="Player"]
+[node name="confuzzle" type="AnimatedSprite2D" parent="Player"]
 visible = false
 position = Vector2( 0, -45 )
 frames = SubResource( 2 )

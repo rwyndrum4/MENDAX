@@ -1,4 +1,4 @@
-extends Reference
+extends RefCounted
 class_name NakamaRTMessage
 # warnings-disable
 # Send a channel join message to the server.
@@ -25,7 +25,7 @@ class ChannelJoin:
 	var target : String
 	var type : int
 
-	func _init(p_target : String, p_type : int, p_persistence : bool, p_hidden : bool):
+	func _init(p_target : String,p_type : int,p_persistence : bool,p_hidden : bool):
 		persistence = p_persistence
 		hidden = p_hidden
 		target = p_target
@@ -72,7 +72,7 @@ class ChannelMessageRemove extends NakamaAsyncResult:
 	var channel_id : String
 	var message_id : String
 
-	func _init(p_channel_id : String, p_message_id):
+	func _init(p_channel_id : String,p_message_id):
 		channel_id = p_channel_id
 		message_id = p_message_id
 
@@ -97,7 +97,7 @@ class ChannelMessageSend extends NakamaAsyncResult:
 	var channel_id : String
 	var content : String
 
-	func _init(p_channel_id : String, p_content):
+	func _init(p_channel_id : String,p_content):
 		channel_id = p_channel_id
 		content = p_content
 
@@ -123,7 +123,7 @@ class ChannelMessageUpdate extends NakamaAsyncResult:
 	var message_id : String
 	var content : String
 
-	func _init(p_channel_id : String, p_message_id, p_content : String):
+	func _init(p_channel_id : String,p_message_id,p_content : String):
 		channel_id = p_channel_id
 		message_id = p_message_id
 		content = p_content
@@ -174,7 +174,7 @@ class MatchJoin extends NakamaAsyncResult:
 	var token = null
 	var metadata = null
 
-	func _init(p_ex=null).(p_ex):
+	func _init(p_ex=null,p_ex):
 		pass
 
 	func serialize() -> Dictionary:
@@ -223,7 +223,7 @@ class MatchDataSend extends NakamaAsyncResult:
 	var op_code : int
 	var data : String
 
-	func _init(p_match_id : String, p_op_code : int, p_data : String, p_presences):
+	func _init(p_match_id : String,p_op_code : int,p_data : String,p_presences):
 		match_id = p_match_id
 		presences = p_presences
 		op_code = p_op_code
@@ -246,7 +246,7 @@ class MatchmakerAdd extends NakamaAsyncResult:
 		"query": {"name": "query", "type": TYPE_STRING, "required": true},
 		"max_count": {"name": "max_count", "type": TYPE_INT, "required": true},
 		"min_count": {"name": "min_count", "type": TYPE_INT, "required": true},
-		"numeric_properties": {"name": "numeric_properties", "type": TYPE_DICTIONARY, "required": false, "content": TYPE_REAL},
+		"numeric_properties": {"name": "numeric_properties", "type": TYPE_DICTIONARY, "required": false, "content": TYPE_FLOAT},
 		"string_properties": {"name": "string_properties", "type": TYPE_DICTIONARY, "required": false, "content": TYPE_STRING},
 		"count_multiple": {"name": "count_multiple", "type": TYPE_INT, "required": false},
 	}
@@ -261,7 +261,7 @@ class MatchmakerAdd extends NakamaAsyncResult:
 	func _no_set(_val):
 		return
 
-	func _init(p_query : String = "*", p_min_count : int = 2, p_max_count : int = 8,
+	func _init():= 8,
 			p_string_props : Dictionary = Dictionary(), p_numeric_props : Dictionary = Dictionary(),
 			p_count_multiple : int = 0):
 		query = p_query
@@ -311,10 +311,10 @@ class StatusFollow extends NakamaAsyncResult:
 		"usernames": {"name": "usernames", "type": TYPE_DICTIONARY, "required": false, "content": TYPE_STRING},
 	}
 
-	var user_ids := PoolStringArray()
-	var usernames := PoolStringArray()
+	var user_ids := PackedStringArray()
+	var usernames := PackedStringArray()
 
-	func _init(p_ids : PoolStringArray, p_usernames : PoolStringArray):
+	func _init(p_ids : PackedStringArray,p_usernames : PackedStringArray):
 		user_ids = p_ids
 		usernames = p_usernames
 
@@ -335,9 +335,9 @@ class StatusUnfollow extends NakamaAsyncResult:
 		"user_ids": {"name": "user_ids", "type": TYPE_DICTIONARY, "required": false, "content": TYPE_STRING},
 	}
 
-	var user_ids := PoolStringArray()
+	var user_ids := PackedStringArray()
 
-	func _init(p_ids : PoolStringArray):
+	func _init(p_ids : PackedStringArray):
 		user_ids = p_ids
 
 	func serialize():
@@ -383,7 +383,7 @@ class PartyCreate extends NakamaAsyncResult:
 	# Maximum number of party members.
 	var max_size : int
 
-	func _init(p_open : bool, p_max_size : int):
+	func _init(p_open : bool,p_max_size : int):
 		open = p_open
 		max_size = p_max_size
 
@@ -453,7 +453,7 @@ class PartyPromote extends NakamaAsyncResult:
 	# The presence of an existing party member to promote as the new leader.
 	var presence : NakamaRTAPI.UserPresence
 
-	func _init(p_id : String, p_presence : NakamaRTAPI.UserPresence):
+	func _init(p_id : String,p_presence : NakamaRTAPI.UserPresence):
 		party_id = p_id
 		presence = p_presence
 
@@ -478,7 +478,7 @@ class PartyAccept extends NakamaAsyncResult:
 	# The presence to accept as a party member.
 	var presence : NakamaRTAPI.UserPresence
 
-	func _init(p_id : String, p_presence : NakamaRTAPI.UserPresence):
+	func _init(p_id : String,p_presence : NakamaRTAPI.UserPresence):
 		party_id = p_id
 		presence = p_presence
 
@@ -503,7 +503,7 @@ class PartyRemove extends NakamaAsyncResult:
 	# The presence to remove or reject.
 	var presence : NakamaRTAPI.UserPresence
 
-	func _init(p_id : String, p_presence : NakamaRTAPI.UserPresence):
+	func _init(p_id : String,p_presence : NakamaRTAPI.UserPresence):
 		party_id = p_id
 		presence = p_presence
 
@@ -547,7 +547,7 @@ class PartyMatchmakerAdd extends NakamaAsyncResult:
 		"max_count": {"name": "max_count", "type": TYPE_INT, "required": true},
 		"query": {"name": "query", "type": TYPE_STRING, "required": false},
 		"string_properties": {"name": "string_properties", "type": TYPE_DICTIONARY, "required": false, "content": TYPE_STRING},
-		"numeric_properties": {"name": "numeric_properties", "type": TYPE_DICTIONARY, "required": false, "content": TYPE_REAL},
+		"numeric_properties": {"name": "numeric_properties", "type": TYPE_DICTIONARY, "required": false, "content": TYPE_FLOAT},
 	}
 
 	# Party ID.
@@ -565,7 +565,7 @@ class PartyMatchmakerAdd extends NakamaAsyncResult:
 	# Optional multiple of the count that must be satisfied.
 	var count_multiple
 
-	func _init(p_id : String, p_min_count : int, p_max_count : int, p_query : String, p_string_properties = null, p_numeric_properties = null, p_count_multiple = null):
+	func _init(p_id : String,p_min_count : int,p_max_count : int,p_query : String,p_string_properties = null,p_numeric_properties = null,p_count_multiple = null):
 		party_id = p_id
 		min_count = p_min_count
 		max_count = p_max_count
@@ -595,7 +595,7 @@ class PartyMatchmakerRemove extends NakamaAsyncResult:
 	# The ticket to cancel.
 	var ticket : String
 
-	func _init(p_id : String, p_ticket : String):
+	func _init(p_id : String,p_ticket : String):
 		party_id = p_id
 		ticket = p_ticket
 
@@ -623,7 +623,7 @@ class PartyDataSend extends NakamaAsyncResult:
 	# Data payload, if any.
 	var data = null
 
-	func _init(p_id : String, p_op_code : int, p_data = null):
+	func _init(p_id : String,p_op_code : int,p_data = null):
 		party_id = p_id
 		op_code = p_op_code
 		data = p_data

@@ -1,2832 +1,2832 @@
 [gd_scene load_steps=10 format=2]
 
-[ext_resource path="res://Assets/tiles/TilesCorrected/GroundTile.png" type="Texture" id=3]
-[ext_resource path="res://Assets/tiles/TilesCorrected/WallTile_NoTilt_Vert.png" type="Texture" id=4]
-[ext_resource path="res://Assets/tiles/TilesCorrected/BlankTile.png" type="Texture" id=5]
-[ext_resource path="res://Assets/tiles/TilesCorrected/WallTile_NoTilt_Horiz.png" type="Texture" id=6]
-[ext_resource path="res://Assets/tiles/TilesCorrected/WallTile_Tilt.png" type="Texture" id=8]
-[ext_resource path="res://Assets/tiles/TilesCorrected/WallTile_Tilt_Horiz.png" type="Texture" id=9]
-[ext_resource path="res://Assets/tiles/TilesCorrected/WallTile_Tilt_Vert.png" type="Texture" id=11]
-[ext_resource path="res://Assets/tiles/TilesCorrected/CornerTile_A.png" type="Texture" id=14]
-[ext_resource path="res://Assets/tiles/TilesCorrected/CornerTile_B.png" type="Texture" id=15]
+[ext_resource path="res://Assets/tiles/TilesCorrected/GroundTile.png" type="Texture2D" id=3]
+[ext_resource path="res://Assets/tiles/TilesCorrected/WallTile_NoTilt_Vert.png" type="Texture2D" id=4]
+[ext_resource path="res://Assets/tiles/TilesCorrected/BlankTile.png" type="Texture2D" id=5]
+[ext_resource path="res://Assets/tiles/TilesCorrected/WallTile_NoTilt_Horiz.png" type="Texture2D" id=6]
+[ext_resource path="res://Assets/tiles/TilesCorrected/WallTile_Tilt.png" type="Texture2D" id=8]
+[ext_resource path="res://Assets/tiles/TilesCorrected/WallTile_Tilt_Horiz.png" type="Texture2D" id=9]
+[ext_resource path="res://Assets/tiles/TilesCorrected/WallTile_Tilt_Vert.png" type="Texture2D" id=11]
+[ext_resource path="res://Assets/tiles/TilesCorrected/CornerTile_A.png" type="Texture2D" id=14]
+[ext_resource path="res://Assets/tiles/TilesCorrected/CornerTile_B.png" type="Texture2D" id=15]
 
 [node name="Node2D" type="Control"]
-margin_left = -8.0
-margin_top = -8.0
-margin_right = -8.0
-margin_bottom = -8.0
-rect_rotation = -89.9844
+offset_left = -8.0
+offset_top = -8.0
+offset_right = -8.0
+offset_bottom = -8.0
+rotation = -89.9844
 
 [node name="CornerA3x3_1" type="GridContainer" parent="."]
-margin_top = 1.0
-margin_right = 864.0
-margin_bottom = 865.0
-custom_constants/vseparation = 0
-custom_constants/hseparation = 0
+offset_top = 1.0
+offset_right = 864.0
+offset_bottom = 865.0
+custom_constants/v_separation = 0
+custom_constants/h_separation = 0
 columns = 3
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="1_1" type="TextureRect" parent="CornerA3x3_1"]
-margin_right = 288.0
-margin_bottom = 288.0
+offset_right = 288.0
+offset_bottom = 288.0
 texture = ExtResource( 5 )
 
 [node name="1_2" type="TextureRect" parent="CornerA3x3_1"]
-margin_left = 288.0
-margin_right = 576.0
-margin_bottom = 288.0
+offset_left = 288.0
+offset_right = 576.0
+offset_bottom = 288.0
 texture = ExtResource( 11 )
 
 [node name="1_3" type="TextureRect" parent="CornerA3x3_1"]
-margin_left = 576.0
-margin_right = 864.0
-margin_bottom = 288.0
+offset_left = 576.0
+offset_right = 864.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="2_1" type="TextureRect" parent="CornerA3x3_1"]
-margin_top = 288.0
-margin_right = 288.0
-margin_bottom = 576.0
+offset_top = 288.0
+offset_right = 288.0
+offset_bottom = 576.0
 texture = ExtResource( 8 )
 flip_h = true
 
 [node name="2_2" type="TextureRect" parent="CornerA3x3_1"]
-margin_left = 288.0
-margin_top = 288.0
-margin_right = 576.0
-margin_bottom = 576.0
+offset_left = 288.0
+offset_top = 288.0
+offset_right = 576.0
+offset_bottom = 576.0
 texture = ExtResource( 14 )
 flip_h = true
 flip_v = true
 
 [node name="2_3" type="TextureRect" parent="CornerA3x3_1"]
-margin_left = 576.0
-margin_top = 288.0
-margin_right = 864.0
-margin_bottom = 576.0
+offset_left = 576.0
+offset_top = 288.0
+offset_right = 864.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="3_1" type="TextureRect" parent="CornerA3x3_1"]
-margin_top = 576.0
-margin_right = 288.0
-margin_bottom = 864.0
+offset_top = 576.0
+offset_right = 288.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="3_2" type="TextureRect" parent="CornerA3x3_1"]
-margin_left = 288.0
-margin_top = 576.0
-margin_right = 576.0
-margin_bottom = 864.0
+offset_left = 288.0
+offset_top = 576.0
+offset_right = 576.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="3_3" type="TextureRect" parent="CornerA3x3_1"]
-margin_left = 576.0
-margin_top = 576.0
-margin_right = 864.0
-margin_bottom = 864.0
+offset_left = 576.0
+offset_top = 576.0
+offset_right = 864.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="CornerA3x3_6" type="GridContainer" parent="."]
-margin_left = -288.0
-margin_top = 4009.0
-margin_right = 576.0
-margin_bottom = 4873.0
-rect_rotation = 270.0
-custom_constants/vseparation = 0
-custom_constants/hseparation = 0
+offset_left = -288.0
+offset_top = 4009.0
+offset_right = 576.0
+offset_bottom = 4873.0
+rotation = 270.0
+custom_constants/v_separation = 0
+custom_constants/h_separation = 0
 columns = 3
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="1_1" type="TextureRect" parent="CornerA3x3_6"]
-margin_right = 288.0
-margin_bottom = 288.0
+offset_right = 288.0
+offset_bottom = 288.0
 texture = ExtResource( 5 )
 
 [node name="1_2" type="TextureRect" parent="CornerA3x3_6"]
-margin_left = 288.0
-margin_right = 576.0
-margin_bottom = 288.0
+offset_left = 288.0
+offset_right = 576.0
+offset_bottom = 288.0
 texture = ExtResource( 11 )
 
 [node name="1_3" type="TextureRect" parent="CornerA3x3_6"]
-margin_left = 576.0
-margin_right = 864.0
-margin_bottom = 288.0
+offset_left = 576.0
+offset_right = 864.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="2_1" type="TextureRect" parent="CornerA3x3_6"]
-margin_top = 288.0
-margin_right = 288.0
-margin_bottom = 576.0
+offset_top = 288.0
+offset_right = 288.0
+offset_bottom = 576.0
 texture = ExtResource( 8 )
 flip_h = true
 
 [node name="2_2" type="TextureRect" parent="CornerA3x3_6"]
-margin_left = 288.0
-margin_top = 288.0
-margin_right = 576.0
-margin_bottom = 576.0
+offset_left = 288.0
+offset_top = 288.0
+offset_right = 576.0
+offset_bottom = 576.0
 texture = ExtResource( 14 )
 flip_h = true
 flip_v = true
 
 [node name="2_3" type="TextureRect" parent="CornerA3x3_6"]
-margin_left = 576.0
-margin_top = 288.0
-margin_right = 864.0
-margin_bottom = 576.0
+offset_left = 576.0
+offset_top = 288.0
+offset_right = 864.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="3_1" type="TextureRect" parent="CornerA3x3_6"]
-margin_top = 576.0
-margin_right = 288.0
-margin_bottom = 864.0
+offset_top = 576.0
+offset_right = 288.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="3_2" type="TextureRect" parent="CornerA3x3_6"]
-margin_left = 288.0
-margin_top = 576.0
-margin_right = 576.0
-margin_bottom = 864.0
+offset_left = 288.0
+offset_top = 576.0
+offset_right = 576.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="3_3" type="TextureRect" parent="CornerA3x3_6"]
-margin_left = 576.0
-margin_top = 576.0
-margin_right = 864.0
-margin_bottom = 864.0
+offset_left = 576.0
+offset_top = 576.0
+offset_right = 864.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="CornerA3x3_4" type="GridContainer" parent="."]
-margin_left = 1728.0
-margin_top = 1704.0
-margin_right = 2592.0
-margin_bottom = 2568.0
-custom_constants/vseparation = 0
-custom_constants/hseparation = 0
+offset_left = 1728.0
+offset_top = 1704.0
+offset_right = 2592.0
+offset_bottom = 2568.0
+custom_constants/v_separation = 0
+custom_constants/h_separation = 0
 columns = 3
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="1_1" type="TextureRect" parent="CornerA3x3_4"]
-margin_right = 288.0
-margin_bottom = 288.0
+offset_right = 288.0
+offset_bottom = 288.0
 texture = ExtResource( 5 )
 
 [node name="1_2" type="TextureRect" parent="CornerA3x3_4"]
-margin_left = 288.0
-margin_right = 576.0
-margin_bottom = 288.0
+offset_left = 288.0
+offset_right = 576.0
+offset_bottom = 288.0
 texture = ExtResource( 11 )
 
 [node name="1_3" type="TextureRect" parent="CornerA3x3_4"]
-margin_left = 576.0
-margin_right = 864.0
-margin_bottom = 288.0
+offset_left = 576.0
+offset_right = 864.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="2_1" type="TextureRect" parent="CornerA3x3_4"]
-margin_top = 288.0
-margin_right = 288.0
-margin_bottom = 576.0
+offset_top = 288.0
+offset_right = 288.0
+offset_bottom = 576.0
 texture = ExtResource( 8 )
 flip_h = true
 
 [node name="2_2" type="TextureRect" parent="CornerA3x3_4"]
-margin_left = 288.0
-margin_top = 288.0
-margin_right = 576.0
-margin_bottom = 576.0
+offset_left = 288.0
+offset_top = 288.0
+offset_right = 576.0
+offset_bottom = 576.0
 texture = ExtResource( 14 )
 flip_h = true
 flip_v = true
 
 [node name="2_3" type="TextureRect" parent="CornerA3x3_4"]
-margin_left = 576.0
-margin_top = 288.0
-margin_right = 864.0
-margin_bottom = 576.0
+offset_left = 576.0
+offset_top = 288.0
+offset_right = 864.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="3_1" type="TextureRect" parent="CornerA3x3_4"]
-margin_top = 576.0
-margin_right = 288.0
-margin_bottom = 864.0
+offset_top = 576.0
+offset_right = 288.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="3_2" type="TextureRect" parent="CornerA3x3_4"]
-margin_left = 288.0
-margin_top = 576.0
-margin_right = 576.0
-margin_bottom = 864.0
+offset_left = 288.0
+offset_top = 576.0
+offset_right = 576.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="3_3" type="TextureRect" parent="CornerA3x3_4"]
-margin_left = 576.0
-margin_top = 576.0
-margin_right = 864.0
-margin_bottom = 864.0
+offset_left = 576.0
+offset_top = 576.0
+offset_right = 864.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="CornerA3x3_2" type="GridContainer" parent="."]
-margin_left = 1728.0
-margin_top = 1728.0
-margin_right = 2592.0
-margin_bottom = 2592.0
-rect_rotation = 180.0
-custom_constants/vseparation = 0
-custom_constants/hseparation = 0
+offset_left = 1728.0
+offset_top = 1728.0
+offset_right = 2592.0
+offset_bottom = 2592.0
+rotation = 180.0
+custom_constants/v_separation = 0
+custom_constants/h_separation = 0
 columns = 3
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="1_1" type="TextureRect" parent="CornerA3x3_2"]
-margin_right = 288.0
-margin_bottom = 288.0
+offset_right = 288.0
+offset_bottom = 288.0
 texture = ExtResource( 5 )
 
 [node name="1_2" type="TextureRect" parent="CornerA3x3_2"]
-margin_left = 288.0
-margin_right = 576.0
-margin_bottom = 288.0
+offset_left = 288.0
+offset_right = 576.0
+offset_bottom = 288.0
 texture = ExtResource( 11 )
 
 [node name="1_3" type="TextureRect" parent="CornerA3x3_2"]
-margin_left = 576.0
-margin_right = 864.0
-margin_bottom = 288.0
+offset_left = 576.0
+offset_right = 864.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="2_1" type="TextureRect" parent="CornerA3x3_2"]
-margin_top = 288.0
-margin_right = 288.0
-margin_bottom = 576.0
+offset_top = 288.0
+offset_right = 288.0
+offset_bottom = 576.0
 texture = ExtResource( 8 )
 flip_h = true
 
 [node name="2_2" type="TextureRect" parent="CornerA3x3_2"]
-margin_left = 288.0
-margin_top = 288.0
-margin_right = 576.0
-margin_bottom = 576.0
+offset_left = 288.0
+offset_top = 288.0
+offset_right = 576.0
+offset_bottom = 576.0
 texture = ExtResource( 14 )
 flip_h = true
 flip_v = true
 
 [node name="2_3" type="TextureRect" parent="CornerA3x3_2"]
-margin_left = 576.0
-margin_top = 288.0
-margin_right = 864.0
-margin_bottom = 576.0
+offset_left = 576.0
+offset_top = 288.0
+offset_right = 864.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="3_1" type="TextureRect" parent="CornerA3x3_2"]
-margin_top = 576.0
-margin_right = 288.0
-margin_bottom = 864.0
+offset_top = 576.0
+offset_right = 288.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="3_2" type="TextureRect" parent="CornerA3x3_2"]
-margin_left = 288.0
-margin_top = 576.0
-margin_right = 576.0
-margin_bottom = 864.0
+offset_left = 288.0
+offset_top = 576.0
+offset_right = 576.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="3_3" type="TextureRect" parent="CornerA3x3_2"]
-margin_left = 576.0
-margin_top = 576.0
-margin_right = 864.0
-margin_bottom = 864.0
+offset_left = 576.0
+offset_top = 576.0
+offset_right = 864.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="CornerA3x3_3" type="GridContainer" parent="."]
-margin_left = 1728.0
-margin_top = 1704.0
-margin_right = 2592.0
-margin_bottom = 2568.0
-rect_rotation = 90.0
-custom_constants/vseparation = 0
-custom_constants/hseparation = 0
+offset_left = 1728.0
+offset_top = 1704.0
+offset_right = 2592.0
+offset_bottom = 2568.0
+rotation = 90.0
+custom_constants/v_separation = 0
+custom_constants/h_separation = 0
 columns = 3
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="1_1" type="TextureRect" parent="CornerA3x3_3"]
-margin_right = 288.0
-margin_bottom = 288.0
+offset_right = 288.0
+offset_bottom = 288.0
 texture = ExtResource( 5 )
 
 [node name="1_2" type="TextureRect" parent="CornerA3x3_3"]
-margin_left = 288.0
-margin_right = 576.0
-margin_bottom = 288.0
+offset_left = 288.0
+offset_right = 576.0
+offset_bottom = 288.0
 texture = ExtResource( 11 )
 
 [node name="1_3" type="TextureRect" parent="CornerA3x3_3"]
-margin_left = 576.0
-margin_right = 864.0
-margin_bottom = 288.0
+offset_left = 576.0
+offset_right = 864.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="2_1" type="TextureRect" parent="CornerA3x3_3"]
-margin_top = 288.0
-margin_right = 288.0
-margin_bottom = 576.0
+offset_top = 288.0
+offset_right = 288.0
+offset_bottom = 576.0
 texture = ExtResource( 8 )
 flip_h = true
 
 [node name="2_2" type="TextureRect" parent="CornerA3x3_3"]
-margin_left = 288.0
-margin_top = 288.0
-margin_right = 576.0
-margin_bottom = 576.0
+offset_left = 288.0
+offset_top = 288.0
+offset_right = 576.0
+offset_bottom = 576.0
 texture = ExtResource( 14 )
 flip_h = true
 flip_v = true
 
 [node name="2_3" type="TextureRect" parent="CornerA3x3_3"]
-margin_left = 576.0
-margin_top = 288.0
-margin_right = 864.0
-margin_bottom = 576.0
+offset_left = 576.0
+offset_top = 288.0
+offset_right = 864.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="3_1" type="TextureRect" parent="CornerA3x3_3"]
-margin_top = 576.0
-margin_right = 288.0
-margin_bottom = 864.0
+offset_top = 576.0
+offset_right = 288.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="3_2" type="TextureRect" parent="CornerA3x3_3"]
-margin_left = 288.0
-margin_top = 576.0
-margin_right = 576.0
-margin_bottom = 864.0
+offset_left = 288.0
+offset_top = 576.0
+offset_right = 576.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="3_3" type="TextureRect" parent="CornerA3x3_3"]
-margin_left = 576.0
-margin_top = 576.0
-margin_right = 864.0
-margin_bottom = 864.0
+offset_left = 576.0
+offset_top = 576.0
+offset_right = 864.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="CornerA3x3_7" type="GridContainer" parent="."]
-margin_left = 3744.0
-margin_top = 1708.0
-margin_right = 4608.0
-margin_bottom = 2572.0
-rect_rotation = 90.0
-custom_constants/vseparation = 0
-custom_constants/hseparation = 0
+offset_left = 3744.0
+offset_top = 1708.0
+offset_right = 4608.0
+offset_bottom = 2572.0
+rotation = 90.0
+custom_constants/v_separation = 0
+custom_constants/h_separation = 0
 columns = 3
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="1_1" type="TextureRect" parent="CornerA3x3_7"]
-margin_right = 288.0
-margin_bottom = 288.0
+offset_right = 288.0
+offset_bottom = 288.0
 texture = ExtResource( 5 )
 
 [node name="1_2" type="TextureRect" parent="CornerA3x3_7"]
-margin_left = 288.0
-margin_right = 576.0
-margin_bottom = 288.0
+offset_left = 288.0
+offset_right = 576.0
+offset_bottom = 288.0
 texture = ExtResource( 11 )
 
 [node name="1_3" type="TextureRect" parent="CornerA3x3_7"]
-margin_left = 576.0
-margin_right = 864.0
-margin_bottom = 288.0
+offset_left = 576.0
+offset_right = 864.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="2_1" type="TextureRect" parent="CornerA3x3_7"]
-margin_top = 288.0
-margin_right = 288.0
-margin_bottom = 576.0
+offset_top = 288.0
+offset_right = 288.0
+offset_bottom = 576.0
 texture = ExtResource( 8 )
 flip_h = true
 
 [node name="2_2" type="TextureRect" parent="CornerA3x3_7"]
-margin_left = 288.0
-margin_top = 288.0
-margin_right = 576.0
-margin_bottom = 576.0
+offset_left = 288.0
+offset_top = 288.0
+offset_right = 576.0
+offset_bottom = 576.0
 texture = ExtResource( 14 )
 flip_h = true
 flip_v = true
 
 [node name="2_3" type="TextureRect" parent="CornerA3x3_7"]
-margin_left = 576.0
-margin_top = 288.0
-margin_right = 864.0
-margin_bottom = 576.0
+offset_left = 576.0
+offset_top = 288.0
+offset_right = 864.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="3_1" type="TextureRect" parent="CornerA3x3_7"]
-margin_top = 576.0
-margin_right = 288.0
-margin_bottom = 864.0
+offset_top = 576.0
+offset_right = 288.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="3_2" type="TextureRect" parent="CornerA3x3_7"]
-margin_left = 288.0
-margin_top = 576.0
-margin_right = 576.0
-margin_bottom = 864.0
+offset_left = 288.0
+offset_top = 576.0
+offset_right = 576.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="3_3" type="TextureRect" parent="CornerA3x3_7"]
-margin_left = 576.0
-margin_top = 576.0
-margin_right = 864.0
-margin_bottom = 864.0
+offset_left = 576.0
+offset_top = 576.0
+offset_right = 864.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="CornerA3x3_5" type="GridContainer" parent="."]
-margin_left = -1152.0
-margin_top = 1992.0
-margin_right = -288.0
-margin_bottom = 2856.0
-custom_constants/vseparation = 0
-custom_constants/hseparation = 0
+offset_left = -1152.0
+offset_top = 1992.0
+offset_right = -288.0
+offset_bottom = 2856.0
+custom_constants/v_separation = 0
+custom_constants/h_separation = 0
 columns = 3
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="1_1" type="TextureRect" parent="CornerA3x3_5"]
-margin_right = 288.0
-margin_bottom = 288.0
+offset_right = 288.0
+offset_bottom = 288.0
 texture = ExtResource( 5 )
 
 [node name="1_2" type="TextureRect" parent="CornerA3x3_5"]
-margin_left = 288.0
-margin_right = 576.0
-margin_bottom = 288.0
+offset_left = 288.0
+offset_right = 576.0
+offset_bottom = 288.0
 texture = ExtResource( 11 )
 
 [node name="1_3" type="TextureRect" parent="CornerA3x3_5"]
-margin_left = 576.0
-margin_right = 864.0
-margin_bottom = 288.0
+offset_left = 576.0
+offset_right = 864.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="2_1" type="TextureRect" parent="CornerA3x3_5"]
-margin_top = 288.0
-margin_right = 288.0
-margin_bottom = 576.0
+offset_top = 288.0
+offset_right = 288.0
+offset_bottom = 576.0
 texture = ExtResource( 8 )
 flip_h = true
 
 [node name="2_2" type="TextureRect" parent="CornerA3x3_5"]
-margin_left = 288.0
-margin_top = 288.0
-margin_right = 576.0
-margin_bottom = 576.0
+offset_left = 288.0
+offset_top = 288.0
+offset_right = 576.0
+offset_bottom = 576.0
 texture = ExtResource( 14 )
 flip_h = true
 flip_v = true
 
 [node name="2_3" type="TextureRect" parent="CornerA3x3_5"]
-margin_left = 576.0
-margin_top = 288.0
-margin_right = 864.0
-margin_bottom = 576.0
+offset_left = 576.0
+offset_top = 288.0
+offset_right = 864.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="3_1" type="TextureRect" parent="CornerA3x3_5"]
-margin_top = 576.0
-margin_right = 288.0
-margin_bottom = 864.0
+offset_top = 576.0
+offset_right = 288.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="3_2" type="TextureRect" parent="CornerA3x3_5"]
-margin_left = 288.0
-margin_top = 576.0
-margin_right = 576.0
-margin_bottom = 864.0
+offset_left = 288.0
+offset_top = 576.0
+offset_right = 576.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="3_3" type="TextureRect" parent="CornerA3x3_5"]
-margin_left = 576.0
-margin_top = 576.0
-margin_right = 864.0
-margin_bottom = 864.0
+offset_left = 576.0
+offset_top = 576.0
+offset_right = 864.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="CornerB3x3_1" type="GridContainer" parent="."]
-margin_left = 289.0
-margin_top = -863.0
-margin_right = 1153.0
-margin_bottom = 0.999756
-custom_constants/vseparation = 0
-custom_constants/hseparation = 0
+offset_left = 289.0
+offset_top = -863.0
+offset_right = 1153.0
+offset_bottom = 0.999756
+custom_constants/v_separation = 0
+custom_constants/h_separation = 0
 columns = 3
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="1_1" type="TextureRect" parent="CornerB3x3_1"]
-margin_right = 288.0
-margin_bottom = 288.0
+offset_right = 288.0
+offset_bottom = 288.0
 texture = ExtResource( 15 )
 flip_h = true
 flip_v = true
 
 [node name="1_2" type="TextureRect" parent="CornerB3x3_1"]
-margin_left = 288.0
-margin_right = 576.0
-margin_bottom = 288.0
+offset_left = 288.0
+offset_right = 576.0
+offset_bottom = 288.0
 texture = ExtResource( 8 )
 flip_h = true
 
 [node name="1_3" type="TextureRect" parent="CornerB3x3_1"]
-margin_left = 576.0
-margin_right = 864.0
-margin_bottom = 288.0
+offset_left = 576.0
+offset_right = 864.0
+offset_bottom = 288.0
 texture = ExtResource( 8 )
 flip_h = true
 
 [node name="2_1" type="TextureRect" parent="CornerB3x3_1"]
-margin_top = 288.0
-margin_right = 288.0
-margin_bottom = 576.0
+offset_top = 288.0
+offset_right = 288.0
+offset_bottom = 576.0
 texture = ExtResource( 11 )
 
 [node name="2_2" type="TextureRect" parent="CornerB3x3_1"]
-margin_left = 288.0
-margin_top = 288.0
-margin_right = 576.0
-margin_bottom = 576.0
+offset_left = 288.0
+offset_top = 288.0
+offset_right = 576.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="2_3" type="TextureRect" parent="CornerB3x3_1"]
-margin_left = 576.0
-margin_top = 288.0
-margin_right = 864.0
-margin_bottom = 576.0
+offset_left = 576.0
+offset_top = 288.0
+offset_right = 864.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="2_4" type="TextureRect" parent="CornerB3x3_1"]
-margin_top = 576.0
-margin_right = 288.0
-margin_bottom = 864.0
+offset_top = 576.0
+offset_right = 288.0
+offset_bottom = 864.0
 texture = ExtResource( 11 )
 
 [node name="3_2" type="TextureRect" parent="CornerB3x3_1"]
-margin_left = 288.0
-margin_top = 576.0
-margin_right = 576.0
-margin_bottom = 864.0
+offset_left = 288.0
+offset_top = 576.0
+offset_right = 576.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="3_3" type="TextureRect" parent="CornerB3x3_1"]
-margin_left = 576.0
-margin_top = 576.0
-margin_right = 864.0
-margin_bottom = 864.0
+offset_left = 576.0
+offset_top = 576.0
+offset_right = 864.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="CornerB3x3_2" type="GridContainer" parent="."]
-margin_left = -864.0
-margin_top = 288.0
-margin_bottom = 1152.0
-custom_constants/vseparation = 0
-custom_constants/hseparation = 0
+offset_left = -864.0
+offset_top = 288.0
+offset_bottom = 1152.0
+custom_constants/v_separation = 0
+custom_constants/h_separation = 0
 columns = 3
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="1_1" type="TextureRect" parent="CornerB3x3_2"]
-margin_right = 288.0
-margin_bottom = 288.0
+offset_right = 288.0
+offset_bottom = 288.0
 texture = ExtResource( 15 )
 flip_h = true
 flip_v = true
 
 [node name="1_2" type="TextureRect" parent="CornerB3x3_2"]
-margin_left = 288.0
-margin_right = 576.0
-margin_bottom = 288.0
+offset_left = 288.0
+offset_right = 576.0
+offset_bottom = 288.0
 texture = ExtResource( 8 )
 flip_h = true
 
 [node name="1_3" type="TextureRect" parent="CornerB3x3_2"]
-margin_left = 576.0
-margin_right = 864.0
-margin_bottom = 288.0
+offset_left = 576.0
+offset_right = 864.0
+offset_bottom = 288.0
 texture = ExtResource( 8 )
 flip_h = true
 
 [node name="2_1" type="TextureRect" parent="CornerB3x3_2"]
-margin_top = 288.0
-margin_right = 288.0
-margin_bottom = 576.0
+offset_top = 288.0
+offset_right = 288.0
+offset_bottom = 576.0
 texture = ExtResource( 11 )
 
 [node name="2_2" type="TextureRect" parent="CornerB3x3_2"]
-margin_left = 288.0
-margin_top = 288.0
-margin_right = 576.0
-margin_bottom = 576.0
+offset_left = 288.0
+offset_top = 288.0
+offset_right = 576.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="2_3" type="TextureRect" parent="CornerB3x3_2"]
-margin_left = 576.0
-margin_top = 288.0
-margin_right = 864.0
-margin_bottom = 576.0
+offset_left = 576.0
+offset_top = 288.0
+offset_right = 864.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="2_4" type="TextureRect" parent="CornerB3x3_2"]
-margin_top = 576.0
-margin_right = 288.0
-margin_bottom = 864.0
+offset_top = 576.0
+offset_right = 288.0
+offset_bottom = 864.0
 texture = ExtResource( 11 )
 
 [node name="3_2" type="TextureRect" parent="CornerB3x3_2"]
-margin_left = 288.0
-margin_top = 576.0
-margin_right = 576.0
-margin_bottom = 864.0
+offset_left = 288.0
+offset_top = 576.0
+offset_right = 576.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="3_3" type="TextureRect" parent="CornerB3x3_2"]
-margin_left = 576.0
-margin_top = 576.0
-margin_right = 864.0
-margin_bottom = 864.0
+offset_left = 576.0
+offset_top = 576.0
+offset_right = 864.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="Wall3x3_5" type="GridContainer" parent="."]
-margin_left = 3168.0
-margin_top = 844.0
-margin_right = 4032.0
-margin_bottom = 1708.0
-rect_rotation = 90.0
-custom_constants/vseparation = 0
-custom_constants/hseparation = 0
+offset_left = 3168.0
+offset_top = 844.0
+offset_right = 4032.0
+offset_bottom = 1708.0
+rotation = 90.0
+custom_constants/v_separation = 0
+custom_constants/h_separation = 0
 columns = 3
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="1_1" type="TextureRect" parent="Wall3x3_5"]
-margin_right = 288.0
-margin_bottom = 288.0
+offset_right = 288.0
+offset_bottom = 288.0
 texture = ExtResource( 5 )
 flip_h = true
 flip_v = true
 
 [node name="1_2" type="TextureRect" parent="Wall3x3_5"]
-margin_left = 288.0
-margin_right = 576.0
-margin_bottom = 288.0
+offset_left = 288.0
+offset_right = 576.0
+offset_bottom = 288.0
 texture = ExtResource( 5 )
 flip_h = true
 
 [node name="1_3" type="TextureRect" parent="Wall3x3_5"]
-margin_left = 576.0
-margin_right = 864.0
-margin_bottom = 288.0
+offset_left = 576.0
+offset_right = 864.0
+offset_bottom = 288.0
 texture = ExtResource( 4 )
 
 [node name="2_1" type="TextureRect" parent="Wall3x3_5"]
-margin_top = 288.0
-margin_right = 288.0
-margin_bottom = 576.0
+offset_top = 288.0
+offset_right = 288.0
+offset_bottom = 576.0
 texture = ExtResource( 5 )
 
 [node name="2_2" type="TextureRect" parent="Wall3x3_5"]
-margin_left = 288.0
-margin_top = 288.0
-margin_right = 576.0
-margin_bottom = 576.0
+offset_left = 288.0
+offset_top = 288.0
+offset_right = 576.0
+offset_bottom = 576.0
 texture = ExtResource( 5 )
 
 [node name="2_3" type="TextureRect" parent="Wall3x3_5"]
-margin_left = 576.0
-margin_top = 288.0
-margin_right = 864.0
-margin_bottom = 576.0
+offset_left = 576.0
+offset_top = 288.0
+offset_right = 864.0
+offset_bottom = 576.0
 texture = ExtResource( 4 )
 
 [node name="2_4" type="TextureRect" parent="Wall3x3_5"]
-margin_top = 576.0
-margin_right = 288.0
-margin_bottom = 864.0
+offset_top = 576.0
+offset_right = 288.0
+offset_bottom = 864.0
 texture = ExtResource( 5 )
 
 [node name="3_2" type="TextureRect" parent="Wall3x3_5"]
-margin_left = 288.0
-margin_top = 576.0
-margin_right = 576.0
-margin_bottom = 864.0
+offset_left = 288.0
+offset_top = 576.0
+offset_right = 576.0
+offset_bottom = 864.0
 texture = ExtResource( 5 )
 
 [node name="3_3" type="TextureRect" parent="Wall3x3_5"]
-margin_left = 576.0
-margin_top = 576.0
-margin_right = 864.0
-margin_bottom = 864.0
+offset_left = 576.0
+offset_top = 576.0
+offset_right = 864.0
+offset_bottom = 864.0
 texture = ExtResource( 4 )
 
 [node name="Wall3x3_6" type="GridContainer" parent="."]
-margin_left = 4608.0
-margin_top = 3148.0
-margin_right = 5472.0
-margin_bottom = 4012.0
-rect_rotation = 180.0
-custom_constants/vseparation = 0
-custom_constants/hseparation = 0
+offset_left = 4608.0
+offset_top = 3148.0
+offset_right = 5472.0
+offset_bottom = 4012.0
+rotation = 180.0
+custom_constants/v_separation = 0
+custom_constants/h_separation = 0
 columns = 3
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="1_1" type="TextureRect" parent="Wall3x3_6"]
-margin_right = 288.0
-margin_bottom = 288.0
+offset_right = 288.0
+offset_bottom = 288.0
 texture = ExtResource( 5 )
 flip_h = true
 flip_v = true
 
 [node name="1_2" type="TextureRect" parent="Wall3x3_6"]
-margin_left = 288.0
-margin_right = 576.0
-margin_bottom = 288.0
+offset_left = 288.0
+offset_right = 576.0
+offset_bottom = 288.0
 texture = ExtResource( 5 )
 flip_h = true
 
 [node name="1_3" type="TextureRect" parent="Wall3x3_6"]
-margin_left = 576.0
-margin_right = 864.0
-margin_bottom = 288.0
+offset_left = 576.0
+offset_right = 864.0
+offset_bottom = 288.0
 texture = ExtResource( 4 )
 
 [node name="2_1" type="TextureRect" parent="Wall3x3_6"]
-margin_top = 288.0
-margin_right = 288.0
-margin_bottom = 576.0
+offset_top = 288.0
+offset_right = 288.0
+offset_bottom = 576.0
 texture = ExtResource( 5 )
 
 [node name="2_2" type="TextureRect" parent="Wall3x3_6"]
-margin_left = 288.0
-margin_top = 288.0
-margin_right = 576.0
-margin_bottom = 576.0
+offset_left = 288.0
+offset_top = 288.0
+offset_right = 576.0
+offset_bottom = 576.0
 texture = ExtResource( 5 )
 
 [node name="2_3" type="TextureRect" parent="Wall3x3_6"]
-margin_left = 576.0
-margin_top = 288.0
-margin_right = 864.0
-margin_bottom = 576.0
+offset_left = 576.0
+offset_top = 288.0
+offset_right = 864.0
+offset_bottom = 576.0
 texture = ExtResource( 4 )
 
 [node name="2_4" type="TextureRect" parent="Wall3x3_6"]
-margin_top = 576.0
-margin_right = 288.0
-margin_bottom = 864.0
+offset_top = 576.0
+offset_right = 288.0
+offset_bottom = 864.0
 texture = ExtResource( 5 )
 
 [node name="3_2" type="TextureRect" parent="Wall3x3_6"]
-margin_left = 288.0
-margin_top = 576.0
-margin_right = 576.0
-margin_bottom = 864.0
+offset_left = 288.0
+offset_top = 576.0
+offset_right = 576.0
+offset_bottom = 864.0
 texture = ExtResource( 5 )
 
 [node name="3_3" type="TextureRect" parent="Wall3x3_6"]
-margin_left = 576.0
-margin_top = 576.0
-margin_right = 864.0
-margin_bottom = 864.0
+offset_left = 576.0
+offset_top = 576.0
+offset_right = 864.0
+offset_bottom = 864.0
 texture = ExtResource( 4 )
 
 [node name="CornerB3x3_3" type="GridContainer" parent="."]
-margin_left = 2592.0
-margin_top = 1440.0
-margin_right = 3456.0
-margin_bottom = 2304.0
-rect_rotation = 180.0
-custom_constants/vseparation = 0
-custom_constants/hseparation = 0
+offset_left = 2592.0
+offset_top = 1440.0
+offset_right = 3456.0
+offset_bottom = 2304.0
+rotation = 180.0
+custom_constants/v_separation = 0
+custom_constants/h_separation = 0
 columns = 3
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="1_1" type="TextureRect" parent="CornerB3x3_3"]
-margin_right = 288.0
-margin_bottom = 288.0
+offset_right = 288.0
+offset_bottom = 288.0
 texture = ExtResource( 15 )
 flip_h = true
 flip_v = true
 
 [node name="1_2" type="TextureRect" parent="CornerB3x3_3"]
-margin_left = 288.0
-margin_right = 576.0
-margin_bottom = 288.0
+offset_left = 288.0
+offset_right = 576.0
+offset_bottom = 288.0
 texture = ExtResource( 8 )
 flip_h = true
 
 [node name="1_3" type="TextureRect" parent="CornerB3x3_3"]
-margin_left = 576.0
-margin_right = 864.0
-margin_bottom = 288.0
+offset_left = 576.0
+offset_right = 864.0
+offset_bottom = 288.0
 texture = ExtResource( 8 )
 flip_h = true
 
 [node name="2_1" type="TextureRect" parent="CornerB3x3_3"]
-margin_top = 288.0
-margin_right = 288.0
-margin_bottom = 576.0
+offset_top = 288.0
+offset_right = 288.0
+offset_bottom = 576.0
 texture = ExtResource( 11 )
 
 [node name="2_2" type="TextureRect" parent="CornerB3x3_3"]
-margin_left = 288.0
-margin_top = 288.0
-margin_right = 576.0
-margin_bottom = 576.0
+offset_left = 288.0
+offset_top = 288.0
+offset_right = 576.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="2_3" type="TextureRect" parent="CornerB3x3_3"]
-margin_left = 576.0
-margin_top = 288.0
-margin_right = 864.0
-margin_bottom = 576.0
+offset_left = 576.0
+offset_top = 288.0
+offset_right = 864.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="2_4" type="TextureRect" parent="CornerB3x3_3"]
-margin_top = 576.0
-margin_right = 288.0
-margin_bottom = 864.0
+offset_top = 576.0
+offset_right = 288.0
+offset_bottom = 864.0
 texture = ExtResource( 11 )
 
 [node name="3_2" type="TextureRect" parent="CornerB3x3_3"]
-margin_left = 288.0
-margin_top = 576.0
-margin_right = 576.0
-margin_bottom = 864.0
+offset_left = 288.0
+offset_top = 576.0
+offset_right = 576.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="3_3" type="TextureRect" parent="CornerB3x3_3"]
-margin_left = 576.0
-margin_top = 576.0
-margin_right = 864.0
-margin_bottom = 864.0
+offset_left = 576.0
+offset_top = 576.0
+offset_right = 864.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="CornerB3x3_4" type="GridContainer" parent="."]
-margin_left = 2592.0
-margin_top = -288.0
-margin_right = 3456.0
-margin_bottom = 576.0
-rect_rotation = 90.0
-custom_constants/vseparation = 0
-custom_constants/hseparation = 0
+offset_left = 2592.0
+offset_top = -288.0
+offset_right = 3456.0
+offset_bottom = 576.0
+rotation = 90.0
+custom_constants/v_separation = 0
+custom_constants/h_separation = 0
 columns = 3
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="1_1" type="TextureRect" parent="CornerB3x3_4"]
-margin_right = 288.0
-margin_bottom = 288.0
+offset_right = 288.0
+offset_bottom = 288.0
 texture = ExtResource( 15 )
 flip_h = true
 flip_v = true
 
 [node name="1_2" type="TextureRect" parent="CornerB3x3_4"]
-margin_left = 288.0
-margin_right = 576.0
-margin_bottom = 288.0
+offset_left = 288.0
+offset_right = 576.0
+offset_bottom = 288.0
 texture = ExtResource( 8 )
 flip_h = true
 
 [node name="1_3" type="TextureRect" parent="CornerB3x3_4"]
-margin_left = 576.0
-margin_right = 864.0
-margin_bottom = 288.0
+offset_left = 576.0
+offset_right = 864.0
+offset_bottom = 288.0
 texture = ExtResource( 8 )
 flip_h = true
 
 [node name="2_1" type="TextureRect" parent="CornerB3x3_4"]
-margin_top = 288.0
-margin_right = 288.0
-margin_bottom = 576.0
+offset_top = 288.0
+offset_right = 288.0
+offset_bottom = 576.0
 texture = ExtResource( 11 )
 
 [node name="2_2" type="TextureRect" parent="CornerB3x3_4"]
-margin_left = 288.0
-margin_top = 288.0
-margin_right = 576.0
-margin_bottom = 576.0
+offset_left = 288.0
+offset_top = 288.0
+offset_right = 576.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="2_3" type="TextureRect" parent="CornerB3x3_4"]
-margin_left = 576.0
-margin_top = 288.0
-margin_right = 864.0
-margin_bottom = 576.0
+offset_left = 576.0
+offset_top = 288.0
+offset_right = 864.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="2_4" type="TextureRect" parent="CornerB3x3_4"]
-margin_top = 576.0
-margin_right = 288.0
-margin_bottom = 864.0
+offset_top = 576.0
+offset_right = 288.0
+offset_bottom = 864.0
 texture = ExtResource( 11 )
 
 [node name="3_2" type="TextureRect" parent="CornerB3x3_4"]
-margin_left = 288.0
-margin_top = 576.0
-margin_right = 576.0
-margin_bottom = 864.0
+offset_left = 288.0
+offset_top = 576.0
+offset_right = 576.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="3_3" type="TextureRect" parent="CornerB3x3_4"]
-margin_left = 576.0
-margin_top = 576.0
-margin_right = 864.0
-margin_bottom = 864.0
+offset_left = 576.0
+offset_top = 576.0
+offset_right = 864.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="CornerB3x3_5" type="GridContainer" parent="."]
-margin_top = 4869.0
-margin_right = 864.0
-margin_bottom = 5733.0
-rect_rotation = 270.0
-custom_constants/vseparation = 0
-custom_constants/hseparation = 0
+offset_top = 4869.0
+offset_right = 864.0
+offset_bottom = 5733.0
+rotation = 270.0
+custom_constants/v_separation = 0
+custom_constants/h_separation = 0
 columns = 3
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="1_1" type="TextureRect" parent="CornerB3x3_5"]
-margin_right = 288.0
-margin_bottom = 288.0
+offset_right = 288.0
+offset_bottom = 288.0
 texture = ExtResource( 15 )
 flip_h = true
 flip_v = true
 
 [node name="1_2" type="TextureRect" parent="CornerB3x3_5"]
-margin_left = 288.0
-margin_right = 576.0
-margin_bottom = 288.0
+offset_left = 288.0
+offset_right = 576.0
+offset_bottom = 288.0
 texture = ExtResource( 8 )
 flip_h = true
 
 [node name="1_3" type="TextureRect" parent="CornerB3x3_5"]
-margin_left = 576.0
-margin_right = 864.0
-margin_bottom = 288.0
+offset_left = 576.0
+offset_right = 864.0
+offset_bottom = 288.0
 texture = ExtResource( 8 )
 flip_h = true
 
 [node name="2_1" type="TextureRect" parent="CornerB3x3_5"]
-margin_top = 288.0
-margin_right = 288.0
-margin_bottom = 576.0
+offset_top = 288.0
+offset_right = 288.0
+offset_bottom = 576.0
 texture = ExtResource( 11 )
 
 [node name="2_2" type="TextureRect" parent="CornerB3x3_5"]
-margin_left = 288.0
-margin_top = 288.0
-margin_right = 576.0
-margin_bottom = 576.0
+offset_left = 288.0
+offset_top = 288.0
+offset_right = 576.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="2_3" type="TextureRect" parent="CornerB3x3_5"]
-margin_left = 576.0
-margin_top = 288.0
-margin_right = 864.0
-margin_bottom = 576.0
+offset_left = 576.0
+offset_top = 288.0
+offset_right = 864.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="2_4" type="TextureRect" parent="CornerB3x3_5"]
-margin_top = 576.0
-margin_right = 288.0
-margin_bottom = 864.0
+offset_top = 576.0
+offset_right = 288.0
+offset_bottom = 864.0
 texture = ExtResource( 11 )
 
 [node name="3_2" type="TextureRect" parent="CornerB3x3_5"]
-margin_left = 288.0
-margin_top = 576.0
-margin_right = 576.0
-margin_bottom = 864.0
+offset_left = 288.0
+offset_top = 576.0
+offset_right = 576.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="3_3" type="TextureRect" parent="CornerB3x3_5"]
-margin_left = 576.0
-margin_top = 576.0
-margin_right = 864.0
-margin_bottom = 864.0
+offset_left = 576.0
+offset_top = 576.0
+offset_right = 864.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="CornerB3x3_6" type="GridContainer" parent="."]
-margin_left = 1728.0
-margin_top = 4869.0
-margin_right = 2592.0
-margin_bottom = 5733.0
-rect_rotation = 180.0
-custom_constants/vseparation = 0
-custom_constants/hseparation = 0
+offset_left = 1728.0
+offset_top = 4869.0
+offset_right = 2592.0
+offset_bottom = 5733.0
+rotation = 180.0
+custom_constants/v_separation = 0
+custom_constants/h_separation = 0
 columns = 3
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="1_1" type="TextureRect" parent="CornerB3x3_6"]
-margin_right = 288.0
-margin_bottom = 288.0
+offset_right = 288.0
+offset_bottom = 288.0
 texture = ExtResource( 15 )
 flip_h = true
 flip_v = true
 
 [node name="1_2" type="TextureRect" parent="CornerB3x3_6"]
-margin_left = 288.0
-margin_right = 576.0
-margin_bottom = 288.0
+offset_left = 288.0
+offset_right = 576.0
+offset_bottom = 288.0
 texture = ExtResource( 8 )
 flip_h = true
 
 [node name="1_3" type="TextureRect" parent="CornerB3x3_6"]
-margin_left = 576.0
-margin_right = 864.0
-margin_bottom = 288.0
+offset_left = 576.0
+offset_right = 864.0
+offset_bottom = 288.0
 texture = ExtResource( 8 )
 flip_h = true
 
 [node name="2_1" type="TextureRect" parent="CornerB3x3_6"]
-margin_top = 288.0
-margin_right = 288.0
-margin_bottom = 576.0
+offset_top = 288.0
+offset_right = 288.0
+offset_bottom = 576.0
 texture = ExtResource( 11 )
 
 [node name="2_2" type="TextureRect" parent="CornerB3x3_6"]
-margin_left = 288.0
-margin_top = 288.0
-margin_right = 576.0
-margin_bottom = 576.0
+offset_left = 288.0
+offset_top = 288.0
+offset_right = 576.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="2_3" type="TextureRect" parent="CornerB3x3_6"]
-margin_left = 576.0
-margin_top = 288.0
-margin_right = 864.0
-margin_bottom = 576.0
+offset_left = 576.0
+offset_top = 288.0
+offset_right = 864.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="2_4" type="TextureRect" parent="CornerB3x3_6"]
-margin_top = 576.0
-margin_right = 288.0
-margin_bottom = 864.0
+offset_top = 576.0
+offset_right = 288.0
+offset_bottom = 864.0
 texture = ExtResource( 11 )
 
 [node name="3_2" type="TextureRect" parent="CornerB3x3_6"]
-margin_left = 288.0
-margin_top = 576.0
-margin_right = 576.0
-margin_bottom = 864.0
+offset_left = 288.0
+offset_top = 576.0
+offset_right = 576.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="3_3" type="TextureRect" parent="CornerB3x3_6"]
-margin_left = 576.0
-margin_top = 576.0
-margin_right = 864.0
-margin_bottom = 864.0
+offset_left = 576.0
+offset_top = 576.0
+offset_right = 864.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="CornerB3x3_7" type="GridContainer" parent="."]
-margin_left = 3456.0
-margin_top = 4292.0
-margin_right = 4320.0
-margin_bottom = 5156.0
-rect_rotation = 180.0
-custom_constants/vseparation = 0
-custom_constants/hseparation = 0
+offset_left = 3456.0
+offset_top = 4292.0
+offset_right = 4320.0
+offset_bottom = 5156.0
+rotation = 180.0
+custom_constants/v_separation = 0
+custom_constants/h_separation = 0
 columns = 3
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="1_1" type="TextureRect" parent="CornerB3x3_7"]
-margin_right = 288.0
-margin_bottom = 288.0
+offset_right = 288.0
+offset_bottom = 288.0
 texture = ExtResource( 15 )
 flip_h = true
 flip_v = true
 
 [node name="1_2" type="TextureRect" parent="CornerB3x3_7"]
-margin_left = 288.0
-margin_right = 576.0
-margin_bottom = 288.0
+offset_left = 288.0
+offset_right = 576.0
+offset_bottom = 288.0
 texture = ExtResource( 8 )
 flip_h = true
 
 [node name="1_3" type="TextureRect" parent="CornerB3x3_7"]
-margin_left = 576.0
-margin_right = 864.0
-margin_bottom = 288.0
+offset_left = 576.0
+offset_right = 864.0
+offset_bottom = 288.0
 texture = ExtResource( 8 )
 flip_h = true
 
 [node name="2_1" type="TextureRect" parent="CornerB3x3_7"]
-margin_top = 288.0
-margin_right = 288.0
-margin_bottom = 576.0
+offset_top = 288.0
+offset_right = 288.0
+offset_bottom = 576.0
 texture = ExtResource( 11 )
 
 [node name="2_2" type="TextureRect" parent="CornerB3x3_7"]
-margin_left = 288.0
-margin_top = 288.0
-margin_right = 576.0
-margin_bottom = 576.0
+offset_left = 288.0
+offset_top = 288.0
+offset_right = 576.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="2_3" type="TextureRect" parent="CornerB3x3_7"]
-margin_left = 576.0
-margin_top = 288.0
-margin_right = 864.0
-margin_bottom = 576.0
+offset_left = 576.0
+offset_top = 288.0
+offset_right = 864.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="2_4" type="TextureRect" parent="CornerB3x3_7"]
-margin_top = 576.0
-margin_right = 288.0
-margin_bottom = 864.0
+offset_top = 576.0
+offset_right = 288.0
+offset_bottom = 864.0
 texture = ExtResource( 11 )
 
 [node name="3_2" type="TextureRect" parent="CornerB3x3_7"]
-margin_left = 288.0
-margin_top = 576.0
-margin_right = 576.0
-margin_bottom = 864.0
+offset_left = 288.0
+offset_top = 576.0
+offset_right = 576.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="3_3" type="TextureRect" parent="CornerB3x3_7"]
-margin_left = 576.0
-margin_top = 576.0
-margin_right = 864.0
-margin_bottom = 864.0
+offset_left = 576.0
+offset_top = 576.0
+offset_right = 864.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="Ground3x3_1" type="GridContainer" parent="."]
-margin_left = 864.0
-margin_right = 1728.0
-margin_bottom = 864.0
-custom_constants/vseparation = 0
-custom_constants/hseparation = 0
+offset_left = 864.0
+offset_right = 1728.0
+offset_bottom = 864.0
+custom_constants/v_separation = 0
+custom_constants/h_separation = 0
 columns = 3
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="1_1" type="TextureRect" parent="Ground3x3_1"]
-margin_right = 288.0
-margin_bottom = 288.0
+offset_right = 288.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="1_2" type="TextureRect" parent="Ground3x3_1"]
-margin_left = 288.0
-margin_right = 576.0
-margin_bottom = 288.0
+offset_left = 288.0
+offset_right = 576.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="1_3" type="TextureRect" parent="Ground3x3_1"]
-margin_left = 576.0
-margin_right = 864.0
-margin_bottom = 288.0
+offset_left = 576.0
+offset_right = 864.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="2_1" type="TextureRect" parent="Ground3x3_1"]
-margin_top = 288.0
-margin_right = 288.0
-margin_bottom = 576.0
+offset_top = 288.0
+offset_right = 288.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="2_2" type="TextureRect" parent="Ground3x3_1"]
-margin_left = 288.0
-margin_top = 288.0
-margin_right = 576.0
-margin_bottom = 576.0
+offset_left = 288.0
+offset_top = 288.0
+offset_right = 576.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="2_3" type="TextureRect" parent="Ground3x3_1"]
-margin_left = 576.0
-margin_top = 288.0
-margin_right = 864.0
-margin_bottom = 576.0
+offset_left = 576.0
+offset_top = 288.0
+offset_right = 864.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="3_1" type="TextureRect" parent="Ground3x3_1"]
-margin_top = 576.0
-margin_right = 288.0
-margin_bottom = 864.0
+offset_top = 576.0
+offset_right = 288.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="3_2" type="TextureRect" parent="Ground3x3_1"]
-margin_left = 288.0
-margin_top = 576.0
-margin_right = 576.0
-margin_bottom = 864.0
+offset_left = 288.0
+offset_top = 576.0
+offset_right = 576.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="3_3" type="TextureRect" parent="Ground3x3_1"]
-margin_left = 576.0
-margin_top = 576.0
-margin_right = 864.0
-margin_bottom = 864.0
+offset_left = 576.0
+offset_top = 576.0
+offset_right = 864.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="Ground3x3_2" type="GridContainer" parent="."]
-margin_top = 864.0
-margin_right = 864.0
-margin_bottom = 1728.0
-custom_constants/vseparation = 0
-custom_constants/hseparation = 0
+offset_top = 864.0
+offset_right = 864.0
+offset_bottom = 1728.0
+custom_constants/v_separation = 0
+custom_constants/h_separation = 0
 columns = 3
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="1_1" type="TextureRect" parent="Ground3x3_2"]
-margin_right = 288.0
-margin_bottom = 288.0
+offset_right = 288.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="1_2" type="TextureRect" parent="Ground3x3_2"]
-margin_left = 288.0
-margin_right = 576.0
-margin_bottom = 288.0
+offset_left = 288.0
+offset_right = 576.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="1_3" type="TextureRect" parent="Ground3x3_2"]
-margin_left = 576.0
-margin_right = 864.0
-margin_bottom = 288.0
+offset_left = 576.0
+offset_right = 864.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="2_1" type="TextureRect" parent="Ground3x3_2"]
-margin_top = 288.0
-margin_right = 288.0
-margin_bottom = 576.0
+offset_top = 288.0
+offset_right = 288.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="2_2" type="TextureRect" parent="Ground3x3_2"]
-margin_left = 288.0
-margin_top = 288.0
-margin_right = 576.0
-margin_bottom = 576.0
+offset_left = 288.0
+offset_top = 288.0
+offset_right = 576.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="2_3" type="TextureRect" parent="Ground3x3_2"]
-margin_left = 576.0
-margin_top = 288.0
-margin_right = 864.0
-margin_bottom = 576.0
+offset_left = 576.0
+offset_top = 288.0
+offset_right = 864.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="3_1" type="TextureRect" parent="Ground3x3_2"]
-margin_top = 576.0
-margin_right = 288.0
-margin_bottom = 864.0
+offset_top = 576.0
+offset_right = 288.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="3_2" type="TextureRect" parent="Ground3x3_2"]
-margin_left = 288.0
-margin_top = 576.0
-margin_right = 576.0
-margin_bottom = 864.0
+offset_left = 288.0
+offset_top = 576.0
+offset_right = 576.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="3_3" type="TextureRect" parent="Ground3x3_2"]
-margin_left = 576.0
-margin_top = 576.0
-margin_right = 864.0
-margin_bottom = 864.0
+offset_left = 576.0
+offset_top = 576.0
+offset_right = 864.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="Ground3x3_3" type="GridContainer" parent="."]
-margin_top = 1704.0
-margin_right = 864.0
-margin_bottom = 2568.0
-custom_constants/vseparation = 0
-custom_constants/hseparation = 0
+offset_top = 1704.0
+offset_right = 864.0
+offset_bottom = 2568.0
+custom_constants/v_separation = 0
+custom_constants/h_separation = 0
 columns = 3
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="1_1" type="TextureRect" parent="Ground3x3_3"]
-margin_right = 288.0
-margin_bottom = 288.0
+offset_right = 288.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="1_2" type="TextureRect" parent="Ground3x3_3"]
-margin_left = 288.0
-margin_right = 576.0
-margin_bottom = 288.0
+offset_left = 288.0
+offset_right = 576.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="1_3" type="TextureRect" parent="Ground3x3_3"]
-margin_left = 576.0
-margin_right = 864.0
-margin_bottom = 288.0
+offset_left = 576.0
+offset_right = 864.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="2_1" type="TextureRect" parent="Ground3x3_3"]
-margin_top = 288.0
-margin_right = 288.0
-margin_bottom = 576.0
+offset_top = 288.0
+offset_right = 288.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="2_2" type="TextureRect" parent="Ground3x3_3"]
-margin_left = 288.0
-margin_top = 288.0
-margin_right = 576.0
-margin_bottom = 576.0
+offset_left = 288.0
+offset_top = 288.0
+offset_right = 576.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="2_3" type="TextureRect" parent="Ground3x3_3"]
-margin_left = 576.0
-margin_top = 288.0
-margin_right = 864.0
-margin_bottom = 576.0
+offset_left = 576.0
+offset_top = 288.0
+offset_right = 864.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="3_1" type="TextureRect" parent="Ground3x3_3"]
-margin_top = 576.0
-margin_right = 288.0
-margin_bottom = 864.0
+offset_top = 576.0
+offset_right = 288.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="3_2" type="TextureRect" parent="Ground3x3_3"]
-margin_left = 288.0
-margin_top = 576.0
-margin_right = 576.0
-margin_bottom = 864.0
+offset_left = 288.0
+offset_top = 576.0
+offset_right = 576.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="3_3" type="TextureRect" parent="Ground3x3_3"]
-margin_left = 576.0
-margin_top = 576.0
-margin_right = 864.0
-margin_bottom = 864.0
+offset_left = 576.0
+offset_top = 576.0
+offset_right = 864.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="Ground3x3_14" type="GridContainer" parent="."]
-margin_left = -287.078
-margin_top = -286.922
-margin_right = 576.922
-margin_bottom = 577.078
-custom_constants/vseparation = 0
-custom_constants/hseparation = 0
+offset_left = -287.078
+offset_top = -286.922
+offset_right = 576.922
+offset_bottom = 577.078
+custom_constants/v_separation = 0
+custom_constants/h_separation = 0
 columns = 3
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="1_1" type="TextureRect" parent="Ground3x3_14"]
-margin_right = 288.0
-margin_bottom = 288.0
+offset_right = 288.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="1_2" type="TextureRect" parent="Ground3x3_14"]
-margin_left = 288.0
-margin_right = 576.0
-margin_bottom = 288.0
+offset_left = 288.0
+offset_right = 576.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="1_3" type="TextureRect" parent="Ground3x3_14"]
-margin_left = 576.0
-margin_right = 864.0
-margin_bottom = 288.0
+offset_left = 576.0
+offset_right = 864.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="2_1" type="TextureRect" parent="Ground3x3_14"]
-margin_top = 288.0
-margin_right = 288.0
-margin_bottom = 576.0
+offset_top = 288.0
+offset_right = 288.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="2_2" type="TextureRect" parent="Ground3x3_14"]
-margin_left = 288.0
-margin_top = 288.0
-margin_right = 576.0
-margin_bottom = 576.0
+offset_left = 288.0
+offset_top = 288.0
+offset_right = 576.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="2_3" type="TextureRect" parent="Ground3x3_14"]
-margin_left = 576.0
-margin_top = 288.0
-margin_right = 864.0
-margin_bottom = 576.0
+offset_left = 576.0
+offset_top = 288.0
+offset_right = 864.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="3_1" type="TextureRect" parent="Ground3x3_14"]
-margin_top = 576.0
-margin_right = 288.0
-margin_bottom = 864.0
+offset_top = 576.0
+offset_right = 288.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="3_2" type="TextureRect" parent="Ground3x3_14"]
-margin_left = 288.0
-margin_top = 576.0
-margin_right = 576.0
-margin_bottom = 864.0
+offset_left = 288.0
+offset_top = 576.0
+offset_right = 576.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="3_3" type="TextureRect" parent="Ground3x3_14"]
-margin_left = 576.0
-margin_top = 576.0
-margin_right = 864.0
-margin_bottom = 864.0
+offset_left = 576.0
+offset_top = 576.0
+offset_right = 864.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="Ground3x3_4" type="GridContainer" parent="."]
-margin_left = -1152.0
-margin_top = 2568.0
-margin_right = -288.0
-margin_bottom = 3432.0
-custom_constants/vseparation = 0
-custom_constants/hseparation = 0
+offset_left = -1152.0
+offset_top = 2568.0
+offset_right = -288.0
+offset_bottom = 3432.0
+custom_constants/v_separation = 0
+custom_constants/h_separation = 0
 columns = 3
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="1_1" type="TextureRect" parent="Ground3x3_4"]
-margin_right = 288.0
-margin_bottom = 288.0
+offset_right = 288.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="1_2" type="TextureRect" parent="Ground3x3_4"]
-margin_left = 288.0
-margin_right = 576.0
-margin_bottom = 288.0
+offset_left = 288.0
+offset_right = 576.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="1_3" type="TextureRect" parent="Ground3x3_4"]
-margin_left = 576.0
-margin_right = 864.0
-margin_bottom = 288.0
+offset_left = 576.0
+offset_right = 864.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="2_1" type="TextureRect" parent="Ground3x3_4"]
-margin_top = 288.0
-margin_right = 288.0
-margin_bottom = 576.0
+offset_top = 288.0
+offset_right = 288.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="2_2" type="TextureRect" parent="Ground3x3_4"]
-margin_left = 288.0
-margin_top = 288.0
-margin_right = 576.0
-margin_bottom = 576.0
+offset_left = 288.0
+offset_top = 288.0
+offset_right = 576.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="2_3" type="TextureRect" parent="Ground3x3_4"]
-margin_left = 576.0
-margin_top = 288.0
-margin_right = 864.0
-margin_bottom = 576.0
+offset_left = 576.0
+offset_top = 288.0
+offset_right = 864.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="3_1" type="TextureRect" parent="Ground3x3_4"]
-margin_top = 576.0
-margin_right = 288.0
-margin_bottom = 864.0
+offset_top = 576.0
+offset_right = 288.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="3_2" type="TextureRect" parent="Ground3x3_4"]
-margin_left = 288.0
-margin_top = 576.0
-margin_right = 576.0
-margin_bottom = 864.0
+offset_left = 288.0
+offset_top = 576.0
+offset_right = 576.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="3_3" type="TextureRect" parent="Ground3x3_4"]
-margin_left = 576.0
-margin_top = 576.0
-margin_right = 864.0
-margin_bottom = 864.0
+offset_left = 576.0
+offset_top = 576.0
+offset_right = 864.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="Ground3x3_5" type="GridContainer" parent="."]
-margin_left = -288.0
-margin_top = 2568.0
-margin_right = 576.0
-margin_bottom = 3432.0
-custom_constants/vseparation = 0
-custom_constants/hseparation = 0
+offset_left = -288.0
+offset_top = 2568.0
+offset_right = 576.0
+offset_bottom = 3432.0
+custom_constants/v_separation = 0
+custom_constants/h_separation = 0
 columns = 3
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="1_1" type="TextureRect" parent="Ground3x3_5"]
-margin_right = 288.0
-margin_bottom = 288.0
+offset_right = 288.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="1_2" type="TextureRect" parent="Ground3x3_5"]
-margin_left = 288.0
-margin_right = 576.0
-margin_bottom = 288.0
+offset_left = 288.0
+offset_right = 576.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="1_3" type="TextureRect" parent="Ground3x3_5"]
-margin_left = 576.0
-margin_right = 864.0
-margin_bottom = 288.0
+offset_left = 576.0
+offset_right = 864.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="2_1" type="TextureRect" parent="Ground3x3_5"]
-margin_top = 288.0
-margin_right = 288.0
-margin_bottom = 576.0
+offset_top = 288.0
+offset_right = 288.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="2_2" type="TextureRect" parent="Ground3x3_5"]
-margin_left = 288.0
-margin_top = 288.0
-margin_right = 576.0
-margin_bottom = 576.0
+offset_left = 288.0
+offset_top = 288.0
+offset_right = 576.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="2_3" type="TextureRect" parent="Ground3x3_5"]
-margin_left = 576.0
-margin_top = 288.0
-margin_right = 864.0
-margin_bottom = 576.0
+offset_left = 576.0
+offset_top = 288.0
+offset_right = 864.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="3_1" type="TextureRect" parent="Ground3x3_5"]
-margin_top = 576.0
-margin_right = 288.0
-margin_bottom = 864.0
+offset_top = 576.0
+offset_right = 288.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="3_2" type="TextureRect" parent="Ground3x3_5"]
-margin_left = 288.0
-margin_top = 576.0
-margin_right = 576.0
-margin_bottom = 864.0
+offset_left = 288.0
+offset_top = 576.0
+offset_right = 576.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="3_3" type="TextureRect" parent="Ground3x3_5"]
-margin_left = 576.0
-margin_top = 576.0
-margin_right = 864.0
-margin_bottom = 864.0
+offset_left = 576.0
+offset_top = 576.0
+offset_right = 864.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="Ground3x3_6" type="GridContainer" parent="."]
-margin_left = 576.0
-margin_top = 2567.0
-margin_right = 1440.0
-margin_bottom = 3431.0
-custom_constants/vseparation = 0
-custom_constants/hseparation = 0
+offset_left = 576.0
+offset_top = 2567.0
+offset_right = 1440.0
+offset_bottom = 3431.0
+custom_constants/v_separation = 0
+custom_constants/h_separation = 0
 columns = 3
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="1_1" type="TextureRect" parent="Ground3x3_6"]
-margin_right = 288.0
-margin_bottom = 288.0
+offset_right = 288.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="1_2" type="TextureRect" parent="Ground3x3_6"]
-margin_left = 288.0
-margin_right = 576.0
-margin_bottom = 288.0
+offset_left = 288.0
+offset_right = 576.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="1_3" type="TextureRect" parent="Ground3x3_6"]
-margin_left = 576.0
-margin_right = 864.0
-margin_bottom = 288.0
+offset_left = 576.0
+offset_right = 864.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="2_1" type="TextureRect" parent="Ground3x3_6"]
-margin_top = 288.0
-margin_right = 288.0
-margin_bottom = 576.0
+offset_top = 288.0
+offset_right = 288.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="2_2" type="TextureRect" parent="Ground3x3_6"]
-margin_left = 288.0
-margin_top = 288.0
-margin_right = 576.0
-margin_bottom = 576.0
+offset_left = 288.0
+offset_top = 288.0
+offset_right = 576.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="2_3" type="TextureRect" parent="Ground3x3_6"]
-margin_left = 576.0
-margin_top = 288.0
-margin_right = 864.0
-margin_bottom = 576.0
+offset_left = 576.0
+offset_top = 288.0
+offset_right = 864.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="3_1" type="TextureRect" parent="Ground3x3_6"]
-margin_top = 576.0
-margin_right = 288.0
-margin_bottom = 864.0
+offset_top = 576.0
+offset_right = 288.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="3_2" type="TextureRect" parent="Ground3x3_6"]
-margin_left = 288.0
-margin_top = 576.0
-margin_right = 576.0
-margin_bottom = 864.0
+offset_left = 288.0
+offset_top = 576.0
+offset_right = 576.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="3_3" type="TextureRect" parent="Ground3x3_6"]
-margin_left = 576.0
-margin_top = 576.0
-margin_right = 864.0
-margin_bottom = 864.0
+offset_left = 576.0
+offset_top = 576.0
+offset_right = 864.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="Ground3x3_7" type="GridContainer" parent="."]
-margin_left = 1440.0
-margin_top = 2567.0
-margin_right = 2304.0
-margin_bottom = 3431.0
-custom_constants/vseparation = 0
-custom_constants/hseparation = 0
+offset_left = 1440.0
+offset_top = 2567.0
+offset_right = 2304.0
+offset_bottom = 3431.0
+custom_constants/v_separation = 0
+custom_constants/h_separation = 0
 columns = 3
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="1_1" type="TextureRect" parent="Ground3x3_7"]
-margin_right = 288.0
-margin_bottom = 288.0
+offset_right = 288.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="1_2" type="TextureRect" parent="Ground3x3_7"]
-margin_left = 288.0
-margin_right = 576.0
-margin_bottom = 288.0
+offset_left = 288.0
+offset_right = 576.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="1_3" type="TextureRect" parent="Ground3x3_7"]
-margin_left = 576.0
-margin_right = 864.0
-margin_bottom = 288.0
+offset_left = 576.0
+offset_right = 864.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="2_1" type="TextureRect" parent="Ground3x3_7"]
-margin_top = 288.0
-margin_right = 288.0
-margin_bottom = 576.0
+offset_top = 288.0
+offset_right = 288.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="2_2" type="TextureRect" parent="Ground3x3_7"]
-margin_left = 288.0
-margin_top = 288.0
-margin_right = 576.0
-margin_bottom = 576.0
+offset_left = 288.0
+offset_top = 288.0
+offset_right = 576.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="2_3" type="TextureRect" parent="Ground3x3_7"]
-margin_left = 576.0
-margin_top = 288.0
-margin_right = 864.0
-margin_bottom = 576.0
+offset_left = 576.0
+offset_top = 288.0
+offset_right = 864.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="3_1" type="TextureRect" parent="Ground3x3_7"]
-margin_top = 576.0
-margin_right = 288.0
-margin_bottom = 864.0
+offset_top = 576.0
+offset_right = 288.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="3_2" type="TextureRect" parent="Ground3x3_7"]
-margin_left = 288.0
-margin_top = 576.0
-margin_right = 576.0
-margin_bottom = 864.0
+offset_left = 288.0
+offset_top = 576.0
+offset_right = 576.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="3_3" type="TextureRect" parent="Ground3x3_7"]
-margin_left = 576.0
-margin_top = 576.0
-margin_right = 864.0
-margin_bottom = 864.0
+offset_left = 576.0
+offset_top = 576.0
+offset_right = 864.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="Ground3x3_8" type="GridContainer" parent="."]
-margin_left = 2304.0
-margin_top = 1706.0
-margin_right = 3168.0
-margin_bottom = 2570.0
-custom_constants/vseparation = 0
-custom_constants/hseparation = 0
+offset_left = 2304.0
+offset_top = 1706.0
+offset_right = 3168.0
+offset_bottom = 2570.0
+custom_constants/v_separation = 0
+custom_constants/h_separation = 0
 columns = 3
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="1_1" type="TextureRect" parent="Ground3x3_8"]
-margin_right = 288.0
-margin_bottom = 288.0
+offset_right = 288.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="1_2" type="TextureRect" parent="Ground3x3_8"]
-margin_left = 288.0
-margin_right = 576.0
-margin_bottom = 288.0
+offset_left = 288.0
+offset_right = 576.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="1_3" type="TextureRect" parent="Ground3x3_8"]
-margin_left = 576.0
-margin_right = 864.0
-margin_bottom = 288.0
+offset_left = 576.0
+offset_right = 864.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="2_1" type="TextureRect" parent="Ground3x3_8"]
-margin_top = 288.0
-margin_right = 288.0
-margin_bottom = 576.0
+offset_top = 288.0
+offset_right = 288.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="2_2" type="TextureRect" parent="Ground3x3_8"]
-margin_left = 288.0
-margin_top = 288.0
-margin_right = 576.0
-margin_bottom = 576.0
+offset_left = 288.0
+offset_top = 288.0
+offset_right = 576.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="2_3" type="TextureRect" parent="Ground3x3_8"]
-margin_left = 576.0
-margin_top = 288.0
-margin_right = 864.0
-margin_bottom = 576.0
+offset_left = 576.0
+offset_top = 288.0
+offset_right = 864.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="3_1" type="TextureRect" parent="Ground3x3_8"]
-margin_top = 576.0
-margin_right = 288.0
-margin_bottom = 864.0
+offset_top = 576.0
+offset_right = 288.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="3_2" type="TextureRect" parent="Ground3x3_8"]
-margin_left = 288.0
-margin_top = 576.0
-margin_right = 576.0
-margin_bottom = 864.0
+offset_left = 288.0
+offset_top = 576.0
+offset_right = 576.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="3_3" type="TextureRect" parent="Ground3x3_8"]
-margin_left = 576.0
-margin_top = 576.0
-margin_right = 864.0
-margin_bottom = 864.0
+offset_left = 576.0
+offset_top = 576.0
+offset_right = 864.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="Ground3x3_9" type="GridContainer" parent="."]
-margin_left = 2304.0
-margin_top = 2569.0
-margin_right = 3168.0
-margin_bottom = 3433.0
-custom_constants/vseparation = 0
-custom_constants/hseparation = 0
+offset_left = 2304.0
+offset_top = 2569.0
+offset_right = 3168.0
+offset_bottom = 3433.0
+custom_constants/v_separation = 0
+custom_constants/h_separation = 0
 columns = 3
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="1_1" type="TextureRect" parent="Ground3x3_9"]
-margin_right = 288.0
-margin_bottom = 288.0
+offset_right = 288.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="1_2" type="TextureRect" parent="Ground3x3_9"]
-margin_left = 288.0
-margin_right = 576.0
-margin_bottom = 288.0
+offset_left = 288.0
+offset_right = 576.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="1_3" type="TextureRect" parent="Ground3x3_9"]
-margin_left = 576.0
-margin_right = 864.0
-margin_bottom = 288.0
+offset_left = 576.0
+offset_right = 864.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="2_1" type="TextureRect" parent="Ground3x3_9"]
-margin_top = 288.0
-margin_right = 288.0
-margin_bottom = 576.0
+offset_top = 288.0
+offset_right = 288.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="2_2" type="TextureRect" parent="Ground3x3_9"]
-margin_left = 288.0
-margin_top = 288.0
-margin_right = 576.0
-margin_bottom = 576.0
+offset_left = 288.0
+offset_top = 288.0
+offset_right = 576.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="2_3" type="TextureRect" parent="Ground3x3_9"]
-margin_left = 576.0
-margin_top = 288.0
-margin_right = 864.0
-margin_bottom = 576.0
+offset_left = 576.0
+offset_top = 288.0
+offset_right = 864.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="3_1" type="TextureRect" parent="Ground3x3_9"]
-margin_top = 576.0
-margin_right = 288.0
-margin_bottom = 864.0
+offset_top = 576.0
+offset_right = 288.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="3_2" type="TextureRect" parent="Ground3x3_9"]
-margin_left = 288.0
-margin_top = 576.0
-margin_right = 576.0
-margin_bottom = 864.0
+offset_left = 288.0
+offset_top = 576.0
+offset_right = 576.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="3_3" type="TextureRect" parent="Ground3x3_9"]
-margin_left = 576.0
-margin_top = 576.0
-margin_right = 864.0
-margin_bottom = 864.0
+offset_left = 576.0
+offset_top = 576.0
+offset_right = 864.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="Ground3x3_11" type="GridContainer" parent="."]
-margin_left = 576.0
-margin_top = 3431.0
-margin_right = 1440.0
-margin_bottom = 4295.0
-custom_constants/vseparation = 0
-custom_constants/hseparation = 0
+offset_left = 576.0
+offset_top = 3431.0
+offset_right = 1440.0
+offset_bottom = 4295.0
+custom_constants/v_separation = 0
+custom_constants/h_separation = 0
 columns = 3
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="1_1" type="TextureRect" parent="Ground3x3_11"]
-margin_right = 288.0
-margin_bottom = 288.0
+offset_right = 288.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="1_2" type="TextureRect" parent="Ground3x3_11"]
-margin_left = 288.0
-margin_right = 576.0
-margin_bottom = 288.0
+offset_left = 288.0
+offset_right = 576.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="1_3" type="TextureRect" parent="Ground3x3_11"]
-margin_left = 576.0
-margin_right = 864.0
-margin_bottom = 288.0
+offset_left = 576.0
+offset_right = 864.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="2_1" type="TextureRect" parent="Ground3x3_11"]
-margin_top = 288.0
-margin_right = 288.0
-margin_bottom = 576.0
+offset_top = 288.0
+offset_right = 288.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="2_2" type="TextureRect" parent="Ground3x3_11"]
-margin_left = 288.0
-margin_top = 288.0
-margin_right = 576.0
-margin_bottom = 576.0
+offset_left = 288.0
+offset_top = 288.0
+offset_right = 576.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="2_3" type="TextureRect" parent="Ground3x3_11"]
-margin_left = 576.0
-margin_top = 288.0
-margin_right = 864.0
-margin_bottom = 576.0
+offset_left = 576.0
+offset_top = 288.0
+offset_right = 864.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="3_1" type="TextureRect" parent="Ground3x3_11"]
-margin_top = 576.0
-margin_right = 288.0
-margin_bottom = 864.0
+offset_top = 576.0
+offset_right = 288.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="3_2" type="TextureRect" parent="Ground3x3_11"]
-margin_left = 288.0
-margin_top = 576.0
-margin_right = 576.0
-margin_bottom = 864.0
+offset_left = 288.0
+offset_top = 576.0
+offset_right = 576.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="3_3" type="TextureRect" parent="Ground3x3_11"]
-margin_left = 576.0
-margin_top = 576.0
-margin_right = 864.0
-margin_bottom = 864.0
+offset_left = 576.0
+offset_top = 576.0
+offset_right = 864.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="Ground3x3_10" type="GridContainer" parent="."]
-margin_left = 2881.0
-margin_top = 2285.0
-margin_right = 3745.0
-margin_bottom = 3149.0
-custom_constants/vseparation = 0
-custom_constants/hseparation = 0
+offset_left = 2881.0
+offset_top = 2285.0
+offset_right = 3745.0
+offset_bottom = 3149.0
+custom_constants/v_separation = 0
+custom_constants/h_separation = 0
 columns = 3
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="1_1" type="TextureRect" parent="Ground3x3_10"]
-margin_right = 288.0
-margin_bottom = 288.0
+offset_right = 288.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="1_2" type="TextureRect" parent="Ground3x3_10"]
-margin_left = 288.0
-margin_right = 576.0
-margin_bottom = 288.0
+offset_left = 288.0
+offset_right = 576.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="1_3" type="TextureRect" parent="Ground3x3_10"]
-margin_left = 576.0
-margin_right = 864.0
-margin_bottom = 288.0
+offset_left = 576.0
+offset_right = 864.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="2_1" type="TextureRect" parent="Ground3x3_10"]
-margin_top = 288.0
-margin_right = 288.0
-margin_bottom = 576.0
+offset_top = 288.0
+offset_right = 288.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="2_2" type="TextureRect" parent="Ground3x3_10"]
-margin_left = 288.0
-margin_top = 288.0
-margin_right = 576.0
-margin_bottom = 576.0
+offset_left = 288.0
+offset_top = 288.0
+offset_right = 576.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="2_3" type="TextureRect" parent="Ground3x3_10"]
-margin_left = 576.0
-margin_top = 288.0
-margin_right = 864.0
-margin_bottom = 576.0
+offset_left = 576.0
+offset_top = 288.0
+offset_right = 864.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="3_1" type="TextureRect" parent="Ground3x3_10"]
-margin_top = 576.0
-margin_right = 288.0
-margin_bottom = 864.0
+offset_top = 576.0
+offset_right = 288.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="3_2" type="TextureRect" parent="Ground3x3_10"]
-margin_left = 288.0
-margin_top = 576.0
-margin_right = 576.0
-margin_bottom = 864.0
+offset_left = 288.0
+offset_top = 576.0
+offset_right = 576.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="3_3" type="TextureRect" parent="Ground3x3_10"]
-margin_left = 576.0
-margin_top = 576.0
-margin_right = 864.0
-margin_bottom = 864.0
+offset_left = 576.0
+offset_top = 576.0
+offset_right = 864.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="Wall3x3_1" type="GridContainer" parent="."]
-margin_left = -1440.0
-margin_top = 1152.0
-margin_right = -576.0
-margin_bottom = 2016.0
-custom_constants/vseparation = 0
-custom_constants/hseparation = 0
+offset_left = -1440.0
+offset_top = 1152.0
+offset_right = -576.0
+offset_bottom = 2016.0
+custom_constants/v_separation = 0
+custom_constants/h_separation = 0
 columns = 3
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="1_1" type="TextureRect" parent="Wall3x3_1"]
-margin_right = 288.0
-margin_bottom = 288.0
+offset_right = 288.0
+offset_bottom = 288.0
 texture = ExtResource( 5 )
 flip_h = true
 flip_v = true
 
 [node name="1_2" type="TextureRect" parent="Wall3x3_1"]
-margin_left = 288.0
-margin_right = 576.0
-margin_bottom = 288.0
+offset_left = 288.0
+offset_right = 576.0
+offset_bottom = 288.0
 texture = ExtResource( 5 )
 flip_h = true
 
 [node name="1_3" type="TextureRect" parent="Wall3x3_1"]
-margin_left = 576.0
-margin_right = 864.0
-margin_bottom = 288.0
+offset_left = 576.0
+offset_right = 864.0
+offset_bottom = 288.0
 texture = ExtResource( 4 )
 
 [node name="2_1" type="TextureRect" parent="Wall3x3_1"]
-margin_top = 288.0
-margin_right = 288.0
-margin_bottom = 576.0
+offset_top = 288.0
+offset_right = 288.0
+offset_bottom = 576.0
 texture = ExtResource( 5 )
 
 [node name="2_2" type="TextureRect" parent="Wall3x3_1"]
-margin_left = 288.0
-margin_top = 288.0
-margin_right = 576.0
-margin_bottom = 576.0
+offset_left = 288.0
+offset_top = 288.0
+offset_right = 576.0
+offset_bottom = 576.0
 texture = ExtResource( 5 )
 
 [node name="2_3" type="TextureRect" parent="Wall3x3_1"]
-margin_left = 576.0
-margin_top = 288.0
-margin_right = 864.0
-margin_bottom = 576.0
+offset_left = 576.0
+offset_top = 288.0
+offset_right = 864.0
+offset_bottom = 576.0
 texture = ExtResource( 4 )
 
 [node name="2_4" type="TextureRect" parent="Wall3x3_1"]
-margin_top = 576.0
-margin_right = 288.0
-margin_bottom = 864.0
+offset_top = 576.0
+offset_right = 288.0
+offset_bottom = 864.0
 texture = ExtResource( 5 )
 
 [node name="3_2" type="TextureRect" parent="Wall3x3_1"]
-margin_left = 288.0
-margin_top = 576.0
-margin_right = 576.0
-margin_bottom = 864.0
+offset_left = 288.0
+offset_top = 576.0
+offset_right = 576.0
+offset_bottom = 864.0
 texture = ExtResource( 5 )
 
 [node name="3_3" type="TextureRect" parent="Wall3x3_1"]
-margin_left = 576.0
-margin_top = 576.0
-margin_right = 864.0
-margin_bottom = 864.0
+offset_left = 576.0
+offset_top = 576.0
+offset_right = 864.0
+offset_bottom = 864.0
 texture = ExtResource( 4 )
 
 [node name="Wall3x3_2" type="GridContainer" parent="."]
-margin_left = -2016.0
-margin_top = 2568.0
-margin_right = -1152.0
-margin_bottom = 3432.0
-custom_constants/vseparation = 0
-custom_constants/hseparation = 0
+offset_left = -2016.0
+offset_top = 2568.0
+offset_right = -1152.0
+offset_bottom = 3432.0
+custom_constants/v_separation = 0
+custom_constants/h_separation = 0
 columns = 3
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="1_1" type="TextureRect" parent="Wall3x3_2"]
-margin_right = 288.0
-margin_bottom = 288.0
+offset_right = 288.0
+offset_bottom = 288.0
 texture = ExtResource( 5 )
 flip_h = true
 flip_v = true
 
 [node name="1_2" type="TextureRect" parent="Wall3x3_2"]
-margin_left = 288.0
-margin_right = 576.0
-margin_bottom = 288.0
+offset_left = 288.0
+offset_right = 576.0
+offset_bottom = 288.0
 texture = ExtResource( 5 )
 flip_h = true
 
 [node name="1_3" type="TextureRect" parent="Wall3x3_2"]
-margin_left = 576.0
-margin_right = 864.0
-margin_bottom = 288.0
+offset_left = 576.0
+offset_right = 864.0
+offset_bottom = 288.0
 texture = ExtResource( 4 )
 
 [node name="2_1" type="TextureRect" parent="Wall3x3_2"]
-margin_top = 288.0
-margin_right = 288.0
-margin_bottom = 576.0
+offset_top = 288.0
+offset_right = 288.0
+offset_bottom = 576.0
 texture = ExtResource( 5 )
 
 [node name="2_2" type="TextureRect" parent="Wall3x3_2"]
-margin_left = 288.0
-margin_top = 288.0
-margin_right = 576.0
-margin_bottom = 576.0
+offset_left = 288.0
+offset_top = 288.0
+offset_right = 576.0
+offset_bottom = 576.0
 texture = ExtResource( 5 )
 
 [node name="2_3" type="TextureRect" parent="Wall3x3_2"]
-margin_left = 576.0
-margin_top = 288.0
-margin_right = 864.0
-margin_bottom = 576.0
+offset_left = 576.0
+offset_top = 288.0
+offset_right = 864.0
+offset_bottom = 576.0
 texture = ExtResource( 4 )
 
 [node name="2_4" type="TextureRect" parent="Wall3x3_2"]
-margin_top = 576.0
-margin_right = 288.0
-margin_bottom = 864.0
+offset_top = 576.0
+offset_right = 288.0
+offset_bottom = 864.0
 texture = ExtResource( 5 )
 
 [node name="3_2" type="TextureRect" parent="Wall3x3_2"]
-margin_left = 288.0
-margin_top = 576.0
-margin_right = 576.0
-margin_bottom = 864.0
+offset_left = 288.0
+offset_top = 576.0
+offset_right = 576.0
+offset_bottom = 864.0
 texture = ExtResource( 5 )
 
 [node name="3_3" type="TextureRect" parent="Wall3x3_2"]
-margin_left = 576.0
-margin_top = 576.0
-margin_right = 864.0
-margin_bottom = 864.0
+offset_left = 576.0
+offset_top = 576.0
+offset_right = 864.0
+offset_bottom = 864.0
 texture = ExtResource( 4 )
 
 [node name="Wall3x3_3" type="GridContainer" parent="."]
-margin_left = -1152.0
-margin_top = 4296.0
-margin_right = -288.0
-margin_bottom = 5160.0
-rect_rotation = 270.0
-custom_constants/vseparation = 0
-custom_constants/hseparation = 0
+offset_left = -1152.0
+offset_top = 4296.0
+offset_right = -288.0
+offset_bottom = 5160.0
+rotation = 270.0
+custom_constants/v_separation = 0
+custom_constants/h_separation = 0
 columns = 3
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="1_1" type="TextureRect" parent="Wall3x3_3"]
-margin_right = 288.0
-margin_bottom = 288.0
+offset_right = 288.0
+offset_bottom = 288.0
 texture = ExtResource( 5 )
 flip_h = true
 flip_v = true
 
 [node name="1_2" type="TextureRect" parent="Wall3x3_3"]
-margin_left = 288.0
-margin_right = 576.0
-margin_bottom = 288.0
+offset_left = 288.0
+offset_right = 576.0
+offset_bottom = 288.0
 texture = ExtResource( 5 )
 flip_h = true
 
 [node name="1_3" type="TextureRect" parent="Wall3x3_3"]
-margin_left = 576.0
-margin_right = 864.0
-margin_bottom = 288.0
+offset_left = 576.0
+offset_right = 864.0
+offset_bottom = 288.0
 texture = ExtResource( 4 )
 
 [node name="2_1" type="TextureRect" parent="Wall3x3_3"]
-margin_top = 288.0
-margin_right = 288.0
-margin_bottom = 576.0
+offset_top = 288.0
+offset_right = 288.0
+offset_bottom = 576.0
 texture = ExtResource( 5 )
 
 [node name="2_2" type="TextureRect" parent="Wall3x3_3"]
-margin_left = 288.0
-margin_top = 288.0
-margin_right = 576.0
-margin_bottom = 576.0
+offset_left = 288.0
+offset_top = 288.0
+offset_right = 576.0
+offset_bottom = 576.0
 texture = ExtResource( 5 )
 
 [node name="2_3" type="TextureRect" parent="Wall3x3_3"]
-margin_left = 576.0
-margin_top = 288.0
-margin_right = 864.0
-margin_bottom = 576.0
+offset_left = 576.0
+offset_top = 288.0
+offset_right = 864.0
+offset_bottom = 576.0
 texture = ExtResource( 4 )
 
 [node name="2_4" type="TextureRect" parent="Wall3x3_3"]
-margin_top = 576.0
-margin_right = 288.0
-margin_bottom = 864.0
+offset_top = 576.0
+offset_right = 288.0
+offset_bottom = 864.0
 texture = ExtResource( 5 )
 
 [node name="3_2" type="TextureRect" parent="Wall3x3_3"]
-margin_left = 288.0
-margin_top = 576.0
-margin_right = 576.0
-margin_bottom = 864.0
+offset_left = 288.0
+offset_top = 576.0
+offset_right = 576.0
+offset_bottom = 864.0
 texture = ExtResource( 5 )
 
 [node name="3_3" type="TextureRect" parent="Wall3x3_3"]
-margin_left = 576.0
-margin_top = 576.0
-margin_right = 864.0
-margin_bottom = 864.0
+offset_left = 576.0
+offset_top = 576.0
+offset_right = 864.0
+offset_bottom = 864.0
 texture = ExtResource( 4 )
 
 [node name="Ground2_1" type="GridContainer" parent="."]
-margin_left = -576.0
-margin_top = 1152.0
-margin_right = 4.0
-margin_bottom = 1732.0
-custom_constants/vseparation = 0
-custom_constants/hseparation = 0
+offset_left = -576.0
+offset_top = 1152.0
+offset_right = 4.0
+offset_bottom = 1732.0
+custom_constants/v_separation = 0
+custom_constants/h_separation = 0
 columns = 2
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="1_1" type="TextureRect" parent="Ground2_1"]
-margin_right = 288.0
-margin_bottom = 288.0
+offset_right = 288.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="1_2" type="TextureRect" parent="Ground2_1"]
-margin_left = 288.0
-margin_right = 576.0
-margin_bottom = 288.0
+offset_left = 288.0
+offset_right = 576.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="1_3" type="TextureRect" parent="Ground2_1"]
-margin_top = 288.0
-margin_right = 288.0
-margin_bottom = 576.0
+offset_top = 288.0
+offset_right = 288.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="2_1" type="TextureRect" parent="Ground2_1"]
-margin_left = 288.0
-margin_top = 288.0
-margin_right = 576.0
-margin_bottom = 576.0
+offset_left = 288.0
+offset_top = 288.0
+offset_right = 576.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="Ground2_2" type="GridContainer" parent="."]
-margin_left = -577.0
-margin_top = 1704.0
-margin_right = 3.0
-margin_bottom = 2284.0
-custom_constants/vseparation = 0
-custom_constants/hseparation = 0
+offset_left = -577.0
+offset_top = 1704.0
+offset_right = 3.0
+offset_bottom = 2284.0
+custom_constants/v_separation = 0
+custom_constants/h_separation = 0
 columns = 2
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="1_1" type="TextureRect" parent="Ground2_2"]
-margin_right = 288.0
-margin_bottom = 288.0
+offset_right = 288.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="1_2" type="TextureRect" parent="Ground2_2"]
-margin_left = 288.0
-margin_right = 576.0
-margin_bottom = 288.0
+offset_left = 288.0
+offset_right = 576.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="1_3" type="TextureRect" parent="Ground2_2"]
-margin_top = 288.0
-margin_right = 288.0
-margin_bottom = 576.0
+offset_top = 288.0
+offset_right = 288.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="2_1" type="TextureRect" parent="Ground2_2"]
-margin_left = 288.0
-margin_top = 288.0
-margin_right = 576.0
-margin_bottom = 576.0
+offset_left = 288.0
+offset_top = 288.0
+offset_right = 576.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="Ground2_3" type="GridContainer" parent="."]
-margin_left = -577.0
-margin_top = 1704.0
-margin_right = 3.0
-margin_bottom = 2284.0
-custom_constants/vseparation = 0
-custom_constants/hseparation = 0
+offset_left = -577.0
+offset_top = 1704.0
+offset_right = 3.0
+offset_bottom = 2284.0
+custom_constants/v_separation = 0
+custom_constants/h_separation = 0
 columns = 2
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="1_1" type="TextureRect" parent="Ground2_3"]
-margin_right = 288.0
-margin_bottom = 288.0
+offset_right = 288.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="1_2" type="TextureRect" parent="Ground2_3"]
-margin_left = 288.0
-margin_right = 576.0
-margin_bottom = 288.0
+offset_left = 288.0
+offset_right = 576.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="1_3" type="TextureRect" parent="Ground2_3"]
-margin_top = 288.0
-margin_right = 288.0
-margin_bottom = 576.0
+offset_top = 288.0
+offset_right = 288.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="2_1" type="TextureRect" parent="Ground2_3"]
-margin_left = 288.0
-margin_top = 288.0
-margin_right = 576.0
-margin_bottom = 576.0
+offset_left = 288.0
+offset_top = 288.0
+offset_right = 576.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="CornerC2x2_1" type="GridContainer" parent="."]
-margin_left = 1728.0
-margin_top = -576.0
-margin_right = 2304.0
-rect_rotation = 90.0
-custom_constants/vseparation = 0
-custom_constants/hseparation = 0
+offset_left = 1728.0
+offset_top = -576.0
+offset_right = 2304.0
+rotation = 90.0
+custom_constants/v_separation = 0
+custom_constants/h_separation = 0
 columns = 2
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="1_1" type="TextureRect" parent="CornerC2x2_1"]
-margin_right = 288.0
-margin_bottom = 288.0
+offset_right = 288.0
+offset_bottom = 288.0
 texture = ExtResource( 5 )
 
 [node name="1_2" type="TextureRect" parent="CornerC2x2_1"]
-margin_left = 288.0
-margin_right = 576.0
-margin_bottom = 288.0
+offset_left = 288.0
+offset_right = 576.0
+offset_bottom = 288.0
 texture = ExtResource( 11 )
 
 [node name="1_3" type="TextureRect" parent="CornerC2x2_1"]
-margin_top = 288.0
-margin_right = 288.0
-margin_bottom = 576.0
+offset_top = 288.0
+offset_right = 288.0
+offset_bottom = 576.0
 texture = ExtResource( 9 )
 flip_h = true
 
 [node name="2_1" type="TextureRect" parent="CornerC2x2_1"]
-margin_left = 288.0
-margin_top = 288.0
-margin_right = 576.0
-margin_bottom = 576.0
+offset_left = 288.0
+offset_top = 288.0
+offset_right = 576.0
+offset_bottom = 576.0
 texture = ExtResource( 14 )
 flip_h = true
 flip_v = true
 
 [node name="CornerC1x1_1" type="TextureRect" parent="."]
-margin_left = 1152.0
-margin_top = -864.0
-margin_right = 1440.0
-margin_bottom = -576.0
+offset_left = 1152.0
+offset_top = -864.0
+offset_right = 1440.0
+offset_bottom = -576.0
 texture = ExtResource( 15 )
 flip_v = true
 
 [node name="CornerC1x1_7" type="TextureRect" parent="."]
-margin_left = 1437.39
-margin_top = 1439.61
-margin_right = 1725.39
-margin_bottom = 1727.61
+offset_left = 1437.39
+offset_top = 1439.61
+offset_right = 1725.39
+offset_bottom = 1727.61
 texture = ExtResource( 15 )
 
 [node name="CornerC1x1_6" type="TextureRect" parent="."]
-margin_left = 3168.39
-margin_top = 1420.14
-margin_right = 3456.39
-margin_bottom = 1708.14
+offset_left = 3168.39
+offset_top = 1420.14
+offset_right = 3456.39
+offset_bottom = 1708.14
 texture = ExtResource( 15 )
 flip_v = true
 
 [node name="CornerC1x1_4" type="TextureRect" parent="."]
-margin_left = 1440.0
-margin_top = 3770.0
-margin_right = 1728.0
-margin_bottom = 4058.0
+offset_left = 1440.0
+offset_top = 3770.0
+offset_right = 1728.0
+offset_bottom = 4058.0
 texture = ExtResource( 15 )
 flip_v = true
 
 [node name="CornerC1x1_2" type="TextureRect" parent="."]
-margin_left = -1440.0
-margin_top = 2280.0
-margin_right = -1152.0
-margin_bottom = 2568.0
+offset_left = -1440.0
+offset_top = 2280.0
+offset_right = -1152.0
+offset_bottom = 2568.0
 texture = ExtResource( 15 )
 flip_h = true
 flip_v = true
 
 [node name="CornerC1x1_3" type="TextureRect" parent="."]
-margin_left = -1440.0
-margin_top = 3432.0
-margin_right = -1152.0
-margin_bottom = 3720.0
+offset_left = -1440.0
+offset_top = 3432.0
+offset_right = -1152.0
+offset_bottom = 3720.0
 texture = ExtResource( 15 )
 flip_h = true
 
 [node name="CornerC1x1_5" type="TextureRect" parent="."]
-margin_left = 2016.0
-margin_top = 1418.0
-margin_right = 2304.0
-margin_bottom = 1706.0
+offset_left = 2016.0
+offset_top = 1418.0
+offset_right = 2304.0
+offset_bottom = 1706.0
 texture = ExtResource( 15 )
 flip_h = true
 flip_v = true
 
 [node name="CornerCx1_6" type="TextureRect" parent="."]
-margin_left = 3744.0
-margin_top = 1996.0
-margin_right = 4032.0
-margin_bottom = 2284.0
+offset_left = 3744.0
+offset_top = 1996.0
+offset_right = 4032.0
+offset_bottom = 2284.0
 texture = ExtResource( 15 )
 flip_v = true
 
 [node name="Ground3x3_12" type="GridContainer" parent="."]
-margin_left = 1440.0
-margin_top = 3144.0
-margin_right = 2304.0
-margin_bottom = 4008.0
-custom_constants/vseparation = 0
-custom_constants/hseparation = 0
+offset_left = 1440.0
+offset_top = 3144.0
+offset_right = 2304.0
+offset_bottom = 4008.0
+custom_constants/v_separation = 0
+custom_constants/h_separation = 0
 columns = 3
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="1_1" type="TextureRect" parent="Ground3x3_12"]
-margin_right = 288.0
-margin_bottom = 288.0
+offset_right = 288.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="1_2" type="TextureRect" parent="Ground3x3_12"]
-margin_left = 288.0
-margin_right = 576.0
-margin_bottom = 288.0
+offset_left = 288.0
+offset_right = 576.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="1_3" type="TextureRect" parent="Ground3x3_12"]
-margin_left = 576.0
-margin_right = 864.0
-margin_bottom = 288.0
+offset_left = 576.0
+offset_right = 864.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="2_1" type="TextureRect" parent="Ground3x3_12"]
-margin_top = 288.0
-margin_right = 288.0
-margin_bottom = 576.0
+offset_top = 288.0
+offset_right = 288.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="2_2" type="TextureRect" parent="Ground3x3_12"]
-margin_left = 288.0
-margin_top = 288.0
-margin_right = 576.0
-margin_bottom = 576.0
+offset_left = 288.0
+offset_top = 288.0
+offset_right = 576.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="2_3" type="TextureRect" parent="Ground3x3_12"]
-margin_left = 576.0
-margin_top = 288.0
-margin_right = 864.0
-margin_bottom = 576.0
+offset_left = 576.0
+offset_top = 288.0
+offset_right = 864.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="3_1" type="TextureRect" parent="Ground3x3_12"]
-margin_top = 576.0
-margin_right = 288.0
-margin_bottom = 864.0
+offset_top = 576.0
+offset_right = 288.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="3_2" type="TextureRect" parent="Ground3x3_12"]
-margin_left = 288.0
-margin_top = 576.0
-margin_right = 576.0
-margin_bottom = 864.0
+offset_left = 288.0
+offset_top = 576.0
+offset_right = 576.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="3_3" type="TextureRect" parent="Ground3x3_12"]
-margin_left = 576.0
-margin_top = 576.0
-margin_right = 864.0
-margin_bottom = 864.0
+offset_left = 576.0
+offset_top = 576.0
+offset_right = 864.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="Ground3x3_13" type="GridContainer" parent="."]
-margin_left = 2304.0
-margin_top = 3141.0
-margin_right = 3168.0
-margin_bottom = 4005.0
-custom_constants/vseparation = 0
-custom_constants/hseparation = 0
+offset_left = 2304.0
+offset_top = 3141.0
+offset_right = 3168.0
+offset_bottom = 4005.0
+custom_constants/v_separation = 0
+custom_constants/h_separation = 0
 columns = 3
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="1_1" type="TextureRect" parent="Ground3x3_13"]
-margin_right = 288.0
-margin_bottom = 288.0
+offset_right = 288.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="1_2" type="TextureRect" parent="Ground3x3_13"]
-margin_left = 288.0
-margin_right = 576.0
-margin_bottom = 288.0
+offset_left = 288.0
+offset_right = 576.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="1_3" type="TextureRect" parent="Ground3x3_13"]
-margin_left = 576.0
-margin_right = 864.0
-margin_bottom = 288.0
+offset_left = 576.0
+offset_right = 864.0
+offset_bottom = 288.0
 texture = ExtResource( 3 )
 
 [node name="2_1" type="TextureRect" parent="Ground3x3_13"]
-margin_top = 288.0
-margin_right = 288.0
-margin_bottom = 576.0
+offset_top = 288.0
+offset_right = 288.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="2_2" type="TextureRect" parent="Ground3x3_13"]
-margin_left = 288.0
-margin_top = 288.0
-margin_right = 576.0
-margin_bottom = 576.0
+offset_left = 288.0
+offset_top = 288.0
+offset_right = 576.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="2_3" type="TextureRect" parent="Ground3x3_13"]
-margin_left = 576.0
-margin_top = 288.0
-margin_right = 864.0
-margin_bottom = 576.0
+offset_left = 576.0
+offset_top = 288.0
+offset_right = 864.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="3_1" type="TextureRect" parent="Ground3x3_13"]
-margin_top = 576.0
-margin_right = 288.0
-margin_bottom = 864.0
+offset_top = 576.0
+offset_right = 288.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="3_2" type="TextureRect" parent="Ground3x3_13"]
-margin_left = 288.0
-margin_top = 576.0
-margin_right = 576.0
-margin_bottom = 864.0
+offset_left = 288.0
+offset_top = 576.0
+offset_right = 576.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="3_3" type="TextureRect" parent="Ground3x3_13"]
-margin_left = 576.0
-margin_top = 576.0
-margin_right = 864.0
-margin_bottom = 864.0
+offset_left = 576.0
+offset_top = 576.0
+offset_right = 864.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="CornerCx1_7" type="TextureRect" parent="."]
-margin_left = 3744.0
-margin_top = 3148.0
-margin_right = 4032.0
-margin_bottom = 3436.0
+offset_left = 3744.0
+offset_top = 3148.0
+offset_right = 4032.0
+offset_bottom = 3436.0
 texture = ExtResource( 15 )
 
 [node name="Wall3x3_4" type="GridContainer" parent="."]
-margin_left = 1511.0
-margin_top = 4868.0
-margin_right = 2375.0
-margin_bottom = 5732.0
-rect_rotation = 270.0
-custom_constants/vseparation = 0
-custom_constants/hseparation = 0
+offset_left = 1511.0
+offset_top = 4868.0
+offset_right = 2375.0
+offset_bottom = 5732.0
+rotation = 270.0
+custom_constants/v_separation = 0
+custom_constants/h_separation = 0
 columns = 3
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="1_1" type="TextureRect" parent="Wall3x3_4"]
-margin_right = 288.0
-margin_bottom = 288.0
+offset_right = 288.0
+offset_bottom = 288.0
 texture = ExtResource( 5 )
 flip_h = true
 flip_v = true
 
 [node name="1_2" type="TextureRect" parent="Wall3x3_4"]
-margin_left = 288.0
-margin_right = 576.0
-margin_bottom = 288.0
+offset_left = 288.0
+offset_right = 576.0
+offset_bottom = 288.0
 texture = ExtResource( 5 )
 flip_h = true
 
 [node name="1_3" type="TextureRect" parent="Wall3x3_4"]
-margin_left = 576.0
-margin_right = 864.0
-margin_bottom = 288.0
+offset_left = 576.0
+offset_right = 864.0
+offset_bottom = 288.0
 texture = ExtResource( 4 )
 
 [node name="2_1" type="TextureRect" parent="Wall3x3_4"]
-margin_top = 288.0
-margin_right = 288.0
-margin_bottom = 576.0
+offset_top = 288.0
+offset_right = 288.0
+offset_bottom = 576.0
 texture = ExtResource( 5 )
 
 [node name="2_2" type="TextureRect" parent="Wall3x3_4"]
-margin_left = 288.0
-margin_top = 288.0
-margin_right = 576.0
-margin_bottom = 576.0
+offset_left = 288.0
+offset_top = 288.0
+offset_right = 576.0
+offset_bottom = 576.0
 texture = ExtResource( 5 )
 
 [node name="2_3" type="TextureRect" parent="Wall3x3_4"]
-margin_left = 576.0
-margin_top = 288.0
-margin_right = 864.0
-margin_bottom = 576.0
+offset_left = 576.0
+offset_top = 288.0
+offset_right = 864.0
+offset_bottom = 576.0
 texture = ExtResource( 4 )
 
 [node name="2_4" type="TextureRect" parent="Wall3x3_4"]
-margin_top = 576.0
-margin_right = 288.0
-margin_bottom = 864.0
+offset_top = 576.0
+offset_right = 288.0
+offset_bottom = 864.0
 texture = ExtResource( 5 )
 
 [node name="3_2" type="TextureRect" parent="Wall3x3_4"]
-margin_left = 288.0
-margin_top = 576.0
-margin_right = 576.0
-margin_bottom = 864.0
+offset_left = 288.0
+offset_top = 576.0
+offset_right = 576.0
+offset_bottom = 864.0
 texture = ExtResource( 5 )
 
 [node name="3_3" type="TextureRect" parent="Wall3x3_4"]
-margin_left = 576.0
-margin_top = 576.0
-margin_right = 864.0
-margin_bottom = 864.0
+offset_left = 576.0
+offset_top = 576.0
+offset_right = 864.0
+offset_bottom = 864.0
 texture = ExtResource( 4 )
 
 [node name="CornerA1x1_1" type="TextureRect" parent="."]
-margin_left = 3456.0
-margin_top = 3147.0
-margin_right = 3744.0
-margin_bottom = 3435.0
+offset_left = 3456.0
+offset_top = 3147.0
+offset_right = 3744.0
+offset_bottom = 3435.0
 texture = ExtResource( 14 )
 
 [node name="CornerA1x1_2" type="TextureRect" parent="."]
-margin_left = 1437.31
-margin_top = 1151.61
-margin_right = 1725.31
-margin_bottom = 1439.61
+offset_left = 1437.31
+offset_top = 1151.61
+offset_right = 1725.31
+offset_bottom = 1439.61
 texture = ExtResource( 14 )
 
 [node name="CornerA1x1_3" type="TextureRect" parent="."]
-margin_left = 1152.39
-margin_top = 1439.69
-margin_right = 1440.39
-margin_bottom = 1727.69
+offset_left = 1152.39
+offset_top = 1439.69
+offset_right = 1440.39
+offset_bottom = 1727.69
 texture = ExtResource( 14 )
 
 [node name="WallNoTiltHoriz1x1_1" type="TextureRect" parent="."]
-margin_left = 2304.0
-margin_top = 4004.0
-margin_right = 2592.0
-margin_bottom = 4292.0
+offset_left = 2304.0
+offset_top = 4004.0
+offset_right = 2592.0
+offset_bottom = 4292.0
 texture = ExtResource( 6 )
 flip_v = true
 
 [node name="WallNoTiltHoriz1x1_2" type="TextureRect" parent="."]
-margin_left = 3242.0
-margin_top = 3426.0
-margin_right = 3530.0
-margin_bottom = 3714.0
+offset_left = 3242.0
+offset_top = 3426.0
+offset_right = 3530.0
+offset_bottom = 3714.0
 texture = ExtResource( 6 )
 flip_v = true
 
 [node name="Ground1x1_1" type="TextureRect" parent="."]
-margin_left = -288.0
-margin_top = 2280.0
-margin_bottom = 2568.0
+offset_left = -288.0
+offset_top = 2280.0
+offset_bottom = 2568.0
 texture = ExtResource( 3 )
 
 [node name="Ground1x1_3" type="TextureRect" parent="."]
-margin_left = 1149.31
-margin_top = 1152.69
-margin_right = 1437.31
-margin_bottom = 1440.69
+offset_left = 1149.31
+offset_top = 1152.69
+offset_right = 1437.31
+offset_bottom = 1440.69
 texture = ExtResource( 3 )
 
 [node name="Ground1x1_2" type="TextureRect" parent="."]
-margin_left = 3168.0
-margin_top = 3142.0
-margin_right = 3456.0
-margin_bottom = 3430.0
+offset_left = 3168.0
+offset_top = 3142.0
+offset_right = 3456.0
+offset_bottom = 3430.0
 texture = ExtResource( 3 )
 
 [node name="Blank1x1_1" type="TextureRect" parent="."]
-margin_left = 1729.0
-margin_top = 1422.0
-margin_right = 2017.0
-margin_bottom = 1710.0
+offset_left = 1729.0
+offset_top = 1422.0
+offset_right = 2017.0
+offset_bottom = 1710.0
 texture = ExtResource( 5 )
 
 [node name="Blank1x1_2" type="TextureRect" parent="."]
-margin_left = 3456.0
-margin_top = 3502.0
-margin_right = 3744.0
-margin_bottom = 3790.0
+offset_left = 3456.0
+offset_top = 3502.0
+offset_right = 3744.0
+offset_bottom = 3790.0
 texture = ExtResource( 5 )
 
 [node name="Blank1x1_3" type="TextureRect" parent="."]
-margin_left = 3531.0
-margin_top = 3431.0
-margin_right = 3819.0
-margin_bottom = 3719.0
+offset_left = 3531.0
+offset_top = 3431.0
+offset_right = 3819.0
+offset_bottom = 3719.0
 texture = ExtResource( 5 )
 
 [node name="wallTiltHoriz1x1_1" type="TextureRect" parent="."]
-margin_left = 213.844
-margin_top = -575.058
-margin_right = 501.844
-margin_bottom = -287.058
+offset_left = 213.844
+offset_top = -575.058
+offset_right = 501.844
+offset_bottom = -287.058
 texture = ExtResource( 9 )
 
 [node name="WallTiltVert1x1_1" type="TextureRect" parent="."]
-margin_left = -574.942
-margin_top = 213.157
-margin_right = -286.942
-margin_bottom = 501.157
+offset_left = -574.942
+offset_top = 213.157
+offset_right = -286.942
+offset_bottom = 501.157
 texture = ExtResource( 11 )
 flip_v = true
 
 [node name="CornerB3x3" type="GridContainer" parent="."]
-margin_left = -575.156
-margin_top = -574.843
-margin_right = 288.844
-margin_bottom = 289.157
-custom_constants/vseparation = 0
-custom_constants/hseparation = 0
+offset_left = -575.156
+offset_top = -574.843
+offset_right = 288.844
+offset_bottom = 289.157
+custom_constants/v_separation = 0
+custom_constants/h_separation = 0
 columns = 3
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="1_1" type="TextureRect" parent="CornerB3x3"]
-margin_right = 288.0
-margin_bottom = 288.0
+offset_right = 288.0
+offset_bottom = 288.0
 texture = ExtResource( 15 )
 flip_h = true
 flip_v = true
 
 [node name="1_2" type="TextureRect" parent="CornerB3x3"]
-margin_left = 288.0
-margin_right = 576.0
-margin_bottom = 288.0
+offset_left = 288.0
+offset_right = 576.0
+offset_bottom = 288.0
 texture = ExtResource( 8 )
 flip_h = true
 
 [node name="1_3" type="TextureRect" parent="CornerB3x3"]
-margin_left = 576.0
-margin_right = 864.0
-margin_bottom = 288.0
+offset_left = 576.0
+offset_right = 864.0
+offset_bottom = 288.0
 texture = ExtResource( 8 )
 flip_h = true
 
 [node name="2_1" type="TextureRect" parent="CornerB3x3"]
-margin_top = 288.0
-margin_right = 288.0
-margin_bottom = 576.0
+offset_top = 288.0
+offset_right = 288.0
+offset_bottom = 576.0
 texture = ExtResource( 11 )
 
 [node name="2_2" type="TextureRect" parent="CornerB3x3"]
-margin_left = 288.0
-margin_top = 288.0
-margin_right = 576.0
-margin_bottom = 576.0
+offset_left = 288.0
+offset_top = 288.0
+offset_right = 576.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="2_3" type="TextureRect" parent="CornerB3x3"]
-margin_left = 576.0
-margin_top = 288.0
-margin_right = 864.0
-margin_bottom = 576.0
+offset_left = 576.0
+offset_top = 288.0
+offset_right = 864.0
+offset_bottom = 576.0
 texture = ExtResource( 3 )
 
 [node name="2_4" type="TextureRect" parent="CornerB3x3"]
-margin_top = 576.0
-margin_right = 288.0
-margin_bottom = 864.0
+offset_top = 576.0
+offset_right = 288.0
+offset_bottom = 864.0
 texture = ExtResource( 11 )
 
 [node name="3_2" type="TextureRect" parent="CornerB3x3"]
-margin_left = 288.0
-margin_top = 576.0
-margin_right = 576.0
-margin_bottom = 864.0
+offset_left = 288.0
+offset_top = 576.0
+offset_right = 576.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="3_3" type="TextureRect" parent="CornerB3x3"]
-margin_left = 576.0
-margin_top = 576.0
-margin_right = 864.0
-margin_bottom = 864.0
+offset_left = 576.0
+offset_top = 576.0
+offset_right = 864.0
+offset_bottom = 864.0
 texture = ExtResource( 3 )
 
 [node name="colliders" type="StaticBody2D" parent="."]
 collision_layer = 2
 
 [node name="topWallSpace" type="CollisionPolygon2D" parent="colliders"]
-polygon = PoolVector2Array( 871.824, -648.237, 1231.82, -648.336, 1231.98, -80.3355, 2383.98, -80.6493, 2384.34, 1231.35, 1520.33, 1223.59, 1520.41, 1519.59, 1224.41, 1519.67, 1224.6, 2207.67, 2224.6, 2199.39, 2224.44, 1623.39, 3248.44, 1631.12, 3248.6, 2207.12, 3824.6, 2206.96, 3824.88, 3222.96, 3536.88, 3223.04, 3536.95, 3503.04, 3248.95, 3503.12, 3247.07, 3916.12, 3206.07, 3922.13, 3169.07, 3944.14, 3168.93, 3431.14, 3456.93, 3431.06, 3456.86, 3143.06, 3744.86, 3142.98, 3744.62, 2286.98, 3168.62, 2287.14, 3168.46, 1703.14, 2304.46, 1703.37, 2304.62, 2279.37, 1152.62, 2279.69, 1152.39, 1439.69, 1432.39, 1439.61, 1432.39, 1431.61, 1432.32, 1159.61, 2296.31, 1151.37, 2304, -0.627493, 1152, -0.313746, 1151.84, -576.314, 871.843, -576.237 )
+polygon = PackedVector2Array( 871.824, -648.237, 1231.82, -648.336, 1231.98, -80.3355, 2383.98, -80.6493, 2384.34, 1231.35, 1520.33, 1223.59, 1520.41, 1519.59, 1224.41, 1519.67, 1224.6, 2207.67, 2224.6, 2199.39, 2224.44, 1623.39, 3248.44, 1631.12, 3248.6, 2207.12, 3824.6, 2206.96, 3824.88, 3222.96, 3536.88, 3223.04, 3536.95, 3503.04, 3248.95, 3503.12, 3247.07, 3916.12, 3206.07, 3922.13, 3169.07, 3944.14, 3168.93, 3431.14, 3456.93, 3431.06, 3456.86, 3143.06, 3744.86, 3142.98, 3744.62, 2286.98, 3168.62, 2287.14, 3168.46, 1703.14, 2304.46, 1703.37, 2304.62, 2279.37, 1152.62, 2279.69, 1152.39, 1439.69, 1432.39, 1439.61, 1432.39, 1431.61, 1432.32, 1159.61, 2296.31, 1151.37, 2304, -0.627493, 1152, -0.313746, 1151.84, -576.314, 871.843, -576.237 )
 
 [node name="bottomWallSpace" type="CollisionPolygon2D" parent="colliders"]
-polygon = PoolVector2Array( 871.824, -648.237, 871.843, -576.237, 575.843, -576.157, 575.922, -288.157, -280.078, -287.924, -279.843, 576.076, -575.843, 576.157, -575.301, 2568.16, -1156.3, 2570.32, -1151.07, 3426.31, 288.935, 3431.92, 289.246, 4575.92, 769.246, 4575.79, 1441.24, 4567.61, 1441.09, 4007.61, 2017.09, 4005.45, 2017.12, 4111.45, 1513.11, 4079.59, 1513.27, 4655.59, 769.268, 4655.79, 217.268, 4655.94, -1226.73, 4645.33, -1242.1, -379.662, 879.813, -688.24 )
+polygon = PackedVector2Array( 871.824, -648.237, 871.843, -576.237, 575.843, -576.157, 575.922, -288.157, -280.078, -287.924, -279.843, 576.076, -575.843, 576.157, -575.301, 2568.16, -1156.3, 2570.32, -1151.07, 3426.31, 288.935, 3431.92, 289.246, 4575.92, 769.246, 4575.79, 1441.24, 4567.61, 1441.09, 4007.61, 2017.09, 4005.45, 2017.12, 4111.45, 1513.11, 4079.59, 1513.27, 4655.59, 769.268, 4655.79, 217.268, 4655.94, -1226.73, 4645.33, -1242.1, -379.662, 879.813, -688.24 )

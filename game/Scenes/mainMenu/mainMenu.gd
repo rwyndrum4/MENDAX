@@ -17,8 +17,8 @@
 extends Control
 
 # Member Variables
-onready var startButton = $menuButtons/Start
-onready var code_line_edit = $joinLobby/enterLobbyCode
+@onready var startButton = $menuButtons/Start
+@onready var code_line_edit = $joinLobby/enterLobbyCode
 
 #### Variables for showing players on rocks ###
 #array for holding player objects that are created
@@ -56,13 +56,13 @@ var _match_code: String = ""
 func _ready():
 	initialize_menu()
 	# warning-ignore:return_value_discarded
-	ServerConnection.connect("character_spawned",self,"spawn_character")
+	ServerConnection.connect("character_spawned",Callable(self,"spawn_character"))
 	# warning-ignore:return_value_discarded
-	ServerConnection.connect("character_despawned",self,"despawn_character")
+	ServerConnection.connect("character_despawned",Callable(self,"despawn_character"))
 	for button in get_tree().get_nodes_in_group("my_buttons"):
-		button.connect("mouse_entered", self, "_mouse_button_entered")
-		button.connect("focus_entered", self, "_mouse_button_entered")
-		button.connect("button_down", self, "_button_down")
+		button.connect("mouse_entered",Callable(self,"_mouse_button_entered"))
+		button.connect("focus_entered",Callable(self,"_mouse_button_entered"))
+		button.connect("button_down",Callable(self,"_button_down"))
 
 """
 /*
@@ -97,15 +97,15 @@ func _on_Start_pressed():
 				"Disconnecting from match, single player mode started",
 				"white"
 			)
-			yield(ServerConnection.leave_match(ServerConnection._match_id), "completed")
-			yield(ServerConnection.leave_match_group(), "completed")
-			yield(ServerConnection.leave_match_group_chat(), "completed")
+			await ServerConnection.leave_match(ServerConnection._match_id).completed
+			await ServerConnection.leave_match_group().completed
+			await ServerConnection.leave_match_group_chat().completed
 			ServerConnection.switch_chat_methods() #switch back to using global chat
-			yield(ServerConnection.join_chat_async_general(), "completed") #rejoin global chat
+			await ServerConnection.join_chat_async_general().completed #rejoin global chat
 		else:
-			yield(ServerConnection.leave_general_chat(), "completed")
+			await ServerConnection.leave_general_chat().completed
 	#change scene to start area
-	SceneTrans.change_scene(Global.scenes.START_AREA)
+	SceneTrans.change_scene_to_file(Global.scenes.START_AREA)
 
 """
 /*
@@ -238,9 +238,9 @@ func initialize_menu():
 func reset_multiplayer():
 	#Reset multiplayer match
 	if ServerConnection.match_exists():
-		yield(ServerConnection.leave_match(ServerConnection._match_id), "completed")
-		yield(ServerConnection.leave_match_group(), "completed")
-		yield(ServerConnection.leave_match_group_chat(), "completed")
+		await ServerConnection.leave_match(ServerConnection._match_id).completed
+		await ServerConnection.leave_match_group().completed
+		await ServerConnection.leave_match_group_chat().completed
 	_match_code = ""
 	#Delete any leftover objects
 	for player in player_objects:
@@ -322,9 +322,9 @@ func no_game_created():
 	if not ServerConnection.get_server_status():
 		get_parent().chat_box.chat_event_message("Server not available", "red")
 	else:
-		yield(ServerConnection.create_match_group(code), "completed") #create new group
-		yield(ServerConnection.join_chat_async_group(), "completed") #join group chat
-		yield(ServerConnection.create_match(code), "completed")
+		await ServerConnection.create_match_group(code).completed #create new group
+		await ServerConnection.join_chat_async_group().completed #join group chat
+		await ServerConnection.create_match(code).completed
 		ServerConnection.switch_chat_methods() #switch from using glabal to match chat
 		get_parent().chat_box.chat_event_message("New game created!", "white")
 		get_parent().chat_box.chat_event_message("Switched from global chat to match chat", "pink")
@@ -379,9 +379,9 @@ func _on_enterLobbyCode_text_entered(new_text):
 	else:
 		if ServerConnection.get_server_status():
 			if Global.match_exists(code) and not ServerConnection.match_exists():
-				#yield(ServerConnection.leave_match(ServerConnection._match_id), "completed")
+				#await ServerConnection.leave_match(ServerConnection._match_id).completed
 				var long_code = Global.get_match(code) #code of match in server
-				var users_in_menu = yield(ServerConnection.join_match(long_code), "completed")
+				var users_in_menu = await ServerConnection.join_match(long_code).completed
 				ServerConnection._group_id = Global.get_match_group_id(code)
 				#Spawn users that are currently in game and you
 				for user in users_in_menu:
@@ -389,8 +389,8 @@ func _on_enterLobbyCode_text_entered(new_text):
 				$showLobbyCode/code.text = code
 				$createGameButton.text = "Leave match"
 				_match_code = code
-				yield(ServerConnection.join_match_group(), "completed") #join group
-				yield(ServerConnection.join_chat_async_group(), "completed") #join general group chat
+				await ServerConnection.join_match_group().completed #join group
+				await ServerConnection.join_chat_async_group().completed #join general group chat
 				ServerConnection.switch_chat_methods() #switch chat id to new general id
 				get_parent().chat_box.chat_event_message("Joined match and swapped to match chat", "pink")
 			else:
@@ -408,7 +408,7 @@ func _on_enterLobbyCode_text_entered(new_text):
 * @return None
 */
 """
-func delete_player_obj(player:AnimatedSprite, text:Label):
+func delete_player_obj(player:AnimatedSprite2D, text:Label):
 	if player != null:
 		player.queue_free()
 	if text != null:
@@ -451,11 +451,11 @@ func create_get_user_window(window_text, dialog_text):
 	get_user_input.window_title = window_text
 	get_user_input.dialog_text = dialog_text
 	get_user_input.dialog_autowrap = true
-	get_user_input.rect_min_size = Vector2(250,220)
+	get_user_input.custom_minimum_size = Vector2(250,220)
 	# warning-ignore:return_value_discarded
-	get_user_input.connect("confirmed",self,"_delete_get_user_input_obj")
+	get_user_input.connect("confirmed",Callable(self,"_delete_get_user_input_obj"))
 	var input_field = LineEdit.new()
-	input_field.rect_min_size = Vector2(30,20)
+	input_field.custom_minimum_size = Vector2(30,20)
 	get_user_input.add_child(input_field)
 	add_child(get_user_input)
 	get_user_input.popup()
@@ -473,7 +473,7 @@ func create_game_init_window(window_text,dialog_text):
 	game_init_popup.window_title = window_text
 	game_init_popup.dialog_text = dialog_text
 	# warning-ignore:return_value_discarded
-	game_init_popup.connect("confirmed",self,"_delete_game_init_obj")
+	game_init_popup.connect("confirmed",Callable(self,"_delete_game_init_obj"))
 	add_child(game_init_popup)
 	game_init_popup.popup_centered()
 
@@ -486,7 +486,7 @@ func create_game_init_window(window_text,dialog_text):
 */
 """
 func create_spawn_player(char_pos:Vector2, player_name:String) -> Array:
-	var spawned_player:AnimatedSprite = load(idle_player).instance()
+	var spawned_player:AnimatedSprite2D = load(idle_player).instantiate()
 	#Change size and pos of sprite
 	spawned_player.offset = char_pos
 	spawned_player.scale = Vector2(SCALE_VAL,SCALE_VAL)
@@ -494,11 +494,11 @@ func create_spawn_player(char_pos:Vector2, player_name:String) -> Array:
 	#Create text and add it as a child of the new player obj
 	var player_title: Label = Label.new()
 	player_title.text = player_name
-	player_title.rect_position = Vector2(
+	player_title.position = Vector2(
 		(char_pos.x*SCALE_VAL)-(5*SCALE_VAL), 
 		(char_pos.y*SCALE_VAL)-(20*SCALE_VAL)
 	)
-	player_title.add_font_override("font",load("res://Assets/ARIALBD.TTF"))
+	player_title.add_theme_font_override("font",load("res://Assets/ARIALBD.TTF"))
 	add_child(player_title)
 	#Add child to the scene
 	add_child(spawned_player)

@@ -5,11 +5,11 @@
 * Citations - based on https://www.youtube.com/watch?v=TQKXU7iSWUU
 * Date Revisions:
 """
-extends KinematicBody2D
+extends CharacterBody2D
 
 # Member Variables
-onready var character = $position/animated_sprite
-onready var char_pos = $position
+@onready var character = $position/animated_sprite
+@onready var char_pos = $position
 var player_color: String = ""
 var is_stopped = false
 var player_id: int = 0

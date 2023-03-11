@@ -4,13 +4,13 @@
 * Date Created - 11/20/2022
 * Date Revisions: - 11/28/2022 - add death signal
 """
-extends KinematicBody2D
-onready var BodAnim = $AnimationPlayer
-onready var healthbar = $ProgressBar
-onready var BodBox = $MyHurtBox/hitbox
-onready var BodAtkBox = $MyHitBox/CollisionShape2D
-onready var pos2d = $Position2D
-onready var player_detector_box = $detector/box
+extends CharacterBody2D
+@onready var BodAnim = $AnimationPlayer
+@onready var healthbar = $ProgressBar
+@onready var BodBox = $MyHurtBox/hitbox
+@onready var BodAtkBox = $MyHitBox/CollisionShape2D
+@onready var pos2d = $Marker2D
+@onready var player_detector_box = $detector/box
 
 var isIn: bool = false
 var isDead:bool = false
@@ -29,14 +29,14 @@ func _ready():
 	BodAnim.play("idle")
 	healthbar.value = 200;
 	# warning-ignore:return_value_discarded
-	#ServerConnection.connect("arena_enemy_hit",self, "took_damage_from_server")
+	#ServerConnection.connect("arena_enemy_hit",Callable(self,"took_damage_from_server"))
 	# warning-ignore:return_value_discarded
-	GlobalSignals.connect("textbox_empty",self,"turn_on_physics")
+	GlobalSignals.connect("textbox_empty",Callable(self,"turn_on_physics"))
 
 """
 /*
 * @pre Called every frame
-* @post x an y velocity of the Skeleton is updated to move towards the player (if the player is within it's Search range)
+* @post x an y velocity of the Skeleton3D is updated to move towards the player (if the player is within it's Search range)
 * @param delta : elapsed time (in seconds) since previous frame. Should be constant across sequential calls
 * @return None
 */
@@ -119,7 +119,7 @@ func _on_AnimationPlayer_animation_finished(_anim_name):
 			BodAnim.play("attack1")
 	else:
 		$death.play()
-		yield($death, "finished")
+		await $death.finished
 		GlobalSignals.emit_signal("enemyDefeated", 0) #replace 0 with indication of enemy ID later
 		queue_free()
 
@@ -166,7 +166,7 @@ func level_up():
 	teleport_timer.one_shot = false
 	teleport_timer.start()
 	# warning-ignore:return_value_discarded
-	teleport_timer.connect("timeout",self, "_tp_timer_expired")
+	teleport_timer.connect("timeout",Callable(self,"_tp_timer_expired"))
 
 """
 /*

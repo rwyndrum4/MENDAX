@@ -1,9 +1,9 @@
 [gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://Assets/enemy.png" type="Texture" id=1]
+[ext_resource path="res://Assets/enemy.png" type="Texture2D" id=1]
 
 [sub_resource type="GDScript" id=3]
-script/source = "extends KinematicBody2D
+script/source = "extends CharacterBody2D
 
 #motion vector for enemy
 var motion=Vector2()
@@ -40,7 +40,7 @@ func _physics_process(delta):
 var bullete =preload(\"res://Scenes/bullet/bulletenemy.tscn\")
 func fire():
 	var Player=get_parent().get_node(\"Player\")
-	var bulenemy = bullete.instance()
+	var bulenemy = bullete.instantiate()
 	#get_tree().get_root().add_child(bulenemy)
 	get_parent().add_child(bulenemy)
 	bulenemy.global_position = global_position
@@ -60,15 +60,15 @@ func _on_Area2D_body_entered(body):
 "
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 63, 57 )
+size = Vector2( 63, 57 )
 
 [sub_resource type="RectangleShape2D" id=2]
-extents = Vector2( 59, 56 )
+size = Vector2( 59, 56 )
 
-[node name="Enemy2" type="KinematicBody2D"]
+[node name="Enemy2" type="CharacterBody2D"]
 script = SubResource( 3 )
 
-[node name="Sprite" type="Sprite" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2( 0.5, 0.5 )
 texture = ExtResource( 1 )
 

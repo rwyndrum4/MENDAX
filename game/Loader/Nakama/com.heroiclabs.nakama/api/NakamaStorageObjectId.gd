@@ -1,4 +1,4 @@
-extends Reference
+extends RefCounted
 class_name NakamaStorageObjectId
 # warnings-disable
 # The collection which stores the object.
@@ -13,7 +13,7 @@ var user_id : String
 # The version hash of the object.
 var version : String
 
-func _init(p_collection, p_key, p_user_id = "", p_version = ""):
+func _init(p_collection,p_key,p_user_id = "",p_version = ""):
 	collection = p_collection
 	key = p_key
 	user_id = p_user_id

@@ -9,7 +9,7 @@ extends Node
 
 func _ready():
 	# warning-ignore:return_value_discarded
-	ServerConnection.connect("minigame_rhythm_score", self, "_handle_new_score")
+	ServerConnection.connect("minigame_rhythm_score",Callable(self,"_handle_new_score"))
 
 func _handle_new_score(player_id:int, new_score:int):
 	get_parent().change_score_from_server(Global.get_player_name(player_id), new_score)

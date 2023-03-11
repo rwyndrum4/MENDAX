@@ -1,4 +1,4 @@
-extends Reference
+extends RefCounted
 class_name NakamaLogger
 # warnings-disable
 enum LOG_LEVEL {NONE, ERROR, WARNING, INFO, VERBOSE, DEBUG}
@@ -6,7 +6,7 @@ enum LOG_LEVEL {NONE, ERROR, WARNING, INFO, VERBOSE, DEBUG}
 var _level = LOG_LEVEL.ERROR
 var _module = "Nakama"
 
-func _init(p_module : String = "Nakama", p_level : int = LOG_LEVEL.ERROR):
+func _init(p_module : String = "Nakama",p_level : int = LOG_LEVEL.ERROR):
 	_level = p_level
 	_module = p_module
 

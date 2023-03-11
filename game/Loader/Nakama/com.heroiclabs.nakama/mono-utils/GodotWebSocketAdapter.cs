@@ -23,7 +23,7 @@ namespace Nakama
     /// <summary>
     /// An exception that is thrown when the WebSocket is unable to connect.
     /// </summary>
-    public class GodotWebSocketConnectionException : Exception {
+    public partial class GodotWebSocketConnectionException : Exception {
         public GodotWebSocketConnectionException(string message = "WebSocket unable to connect")
             : base(message) { }
     }
@@ -31,14 +31,14 @@ namespace Nakama
     /// <summary>
     /// An exception that is thrown when the WebSocket is unable to send.
     /// </summary>
-    public class GodotWebSocketSendException : Exception {
+    public partial class GodotWebSocketSendException : Exception {
         public GodotWebSocketSendException() : base("Unable to send over WebSocket") { }
     }
 
     /// <summary>
     /// A socket adapter which uses Godot's WebSocketClient.
     /// </summary>
-    public class GodotWebSocketAdapter : Node, ISocketAdapter
+    public partial class GodotWebSocketAdapter : Node, ISocketAdapter
     {
         /// <inheritdoc cref="ISocketAdapter.Connected"/>
         public event Action Connected;
@@ -73,10 +73,10 @@ namespace Nakama
             IsConnecting = false;
 
             ws = new WebSocketClient();
-            ws.Connect("data_received", this, "_socketReceived");
-            ws.Connect("connection_established", this, "_socketConnected");
-            ws.Connect("connection_error", this, "_socketError");
-            ws.Connect("connection_closed", this, "_socketClosed");
+            ws.Connect("data_received",new Callable(this,"_socketReceived"));
+            ws.Connect("connection_established",new Callable(this,"_socketConnected"));
+            ws.Connect("connection_error",new Callable(this,"_socketError"));
+            ws.Connect("connection_closed",new Callable(this,"_socketClosed"));
         }
 
         /// <inheritdoc cref="ISocketAdaptor.CloseAsync"/>
