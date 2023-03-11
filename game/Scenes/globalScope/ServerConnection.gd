@@ -40,7 +40,6 @@ signal arena_player_lost_health(id, health) #signal to tell if player has lost h
 signal arena_enemy_hit(enemy_id, damage_taken,player_id,enemy_type) #signal to tell if an enemy has been hit
 signal minigame_can_start() #signal that the minigame can be started
 signal minigame_player_spawned(id) #signal to tell if a player has arrived to a scene
-signal player_booped(id, posX, posY) #signal to tell where a player should be booped too
 signal minigame_rhythm_score(id, score) #send current score of rhythm game player
 
 #Other signals
@@ -554,20 +553,6 @@ func send_shield_notif(spawn_number:int = 0):
 
 """
 /*
-* @pre called when someone gets hit by a sword
-* @post tells server which player should be booped where
-* @param p_pos (Vector2 of where player should be booped)
-* @return None
-*/
-"""
-func send_player_booped(p_id: int, p_pos:Vector2):
-	if _socket:
-		#For this one, send player id of person who GOT HIT
-		var payload := {id = p_id, xPos = p_pos.x, yPos = p_pos.y}
-		_socket.send_match_state_async(_match_id, OpCodes.PLAYER_BOOOPED, JSON.print(payload))
-
-"""
-/*
 * @pre called when player spawns in an area
 * @post tells other players they are there, used for syncing players together
 * @param None
@@ -711,14 +696,6 @@ func _on_NakamaSocket_received_match_state(match_state: NakamaRTAPI.MatchData) -
 			emit_signal("minigame_rhythm_score", id, score)
 		OpCodes.UPDATE_CAN_START_GAME:
 			emit_signal("minigame_can_start")
-		OpCodes.PLAYER_BOOOPED:
-			var decoded: Dictionary = JSON.parse(raw).result
-			
-			var id: int = int(decoded.id)
-			var x: int = int(decoded.xPos)
-			var y: int = int(decoded.yPos)
-			
-			emit_signal("player_booped",id,x,y)
 		OpCodes.SHIELD_TAKEN:
 			var decoded: Dictionary = JSON.parse(raw).result
 			

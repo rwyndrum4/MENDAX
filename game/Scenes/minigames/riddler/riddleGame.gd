@@ -280,20 +280,19 @@ func _check_answer(answer_in:String, from_user: String):
 func handle_coins(who_won:String):
 	for p_name in Global.player_names.values():
 		var how_much: int = 0
+		var message:String = ""
 		if p_name == who_won:
-			get_parent().chat_box.chat_event_message("Correct answer! +20 gold for you", "blue")
+			message = "Correct answer! +20 gold for you"
 			how_much = 20
 		else:
-			get_parent().chat_box.chat_event_message(
-				"Someone else found the answer, +5 gold for you",
-				"blue"
-			)
+			message = "Someone else found the answer, +5 gold for you"
 			how_much = 5
 		var n = Global.get_player_num(p_name)
 		GameLoot.add_to_coin(n,how_much)
 		if p_name == Save.game_data.username:
 			var total_coin = GameLoot.get_coin_val(n)
 			get_parent().change_money(total_coin)
+			get_parent().chat_box.chat_event_message(message, "blue")
 			PlayerInventory.add_item("Coin", 20)
 
 """

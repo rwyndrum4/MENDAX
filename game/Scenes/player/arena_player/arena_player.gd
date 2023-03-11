@@ -191,11 +191,4 @@ func _on_sword_detector_area_entered(area):
 			x *= -1
 		var res_pos = position + Vector2(x,0)
 		position = position.move_toward(res_pos, 145)
-
-"""
-* @pre Called if server says someone hit you
-* @post moves you to appropriate space
-* @param res_pos (resulting postion you should move to)
-"""
-func was_booped(res_pos: Vector2):
-	position = position.move_toward(res_pos, 145)
+		ServerConnection.send_position_update(position)

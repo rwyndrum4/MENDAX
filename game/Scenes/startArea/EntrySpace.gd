@@ -33,7 +33,7 @@ onready var ladder = $worldMap/Node2D_1/Ladder1x1
 onready var pitfall = $worldMap/Node2D_1/Pitfall1x1_2
 onready var player = $Player
 
-
+var server_players: Array = []
 var other_player = "res://Scenes/player/other_players/other_players.tscn"
 var sword = null
 
@@ -290,6 +290,11 @@ func spawn_players():
 			new_player.position = Global.player_positions[str(num)]
 			#Add child to the scene
 			add_child(new_player)
+			server_players.append({
+				'num': num,
+				'player_obj': new_player,
+				'sword_dir': "right"
+			})
 		#Set initial input vectors to zero
 		Global.player_input_vectors[str(num)] = Vector2.ZERO
 
@@ -459,14 +464,6 @@ func load_boss(stage_num:int):
 	add_child_below_node($worldMap, boss)
 	# Zoom out camera so player can view Mendax in all his glory
 	$Player.get_node("Camera2D").set("zoom", Vector2(2, 2))
-	
-func give_shield(area):
-	if area.is_in_group("player") and _shield_available:
-		ServerConnection.send_shield_notif()
-		_shield_available = false
-		player.shield.giveShield()
-		get_node("shield_sprite").hide()
-		start_shield_timer()
 
 """
 /*
@@ -503,6 +500,22 @@ func spawn_shield():
 
 """
 /*
+* @pre Called when a player grabs a shield from spawn
+* @post give player shield and let server know its taken
+* @param area
+* @return None
+*/
+"""
+func give_shield(area):
+	if area.is_in_group("player") and _shield_available:
+		ServerConnection.send_shield_notif()
+		_shield_available = false
+		player.shield.giveShield()
+		get_node("shield_sprite").hide()
+		start_shield_timer()
+
+"""
+/*
 * @pre Shield was stepped on
 * @post start timer to respawn shield when done
 * @param None
@@ -527,14 +540,14 @@ func start_shield_timer():
 * @return None
 */
 """
-#func someone_took_shild(player_id,_shield_num):
-#	_shield_available = false
-#	get_node("shield_sprite").hide()
-#	start_shield_timer()
-#	for o_player in server_players:
-#		if player_id == o_player.get('num'):
-#			o_player.get('player_obj').shield.giveShield()
-#			break
+func someone_took_shild(player_id,_shield_num):
+	_shield_available = false
+	get_node("shield_sprite").hide()
+	start_shield_timer()
+	for o_player in server_players:
+		if player_id == o_player.get('num'):
+			o_player.get('player_obj').shield.giveShield()
+			break
 
 """
 /*
