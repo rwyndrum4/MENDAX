@@ -128,7 +128,6 @@ config/icon="res://Assets/MendaxLogo.png"
 
 [autoload]
 
-BushTrans="*res://Scenes/sceneTrans/BushTrans.tscn"
 SceneTrans="*res://Scenes/sceneTrans/SceneTrans.tscn"
 CaveInTrans="*res://Scenes/sceneTrans/CaveInTrans.tscn"
 GlobalSettings="*res://Loader/globalSettings.gd"
@@ -139,6 +138,7 @@ Nakama="*res://Loader/Nakama/com.heroiclabs.nakama/Nakama.gd"
 INV="*res://JSONdata.gd"
 PlayerInventory="*res://PlayerInventory.gd"
 ServerConnection="*res://Scenes/globalScope/ServerConnection.gd"
+BushTrans="*res://Scenes/sceneTrans/BushTrans.tscn"
 
 [debug]
 
