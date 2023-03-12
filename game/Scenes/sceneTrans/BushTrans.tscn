@@ -1,0 +1,509 @@
+[gd_scene load_steps=127 format=2]
+
+[ext_resource path="res://Assets/ben-character/greeen/rolling/3.png" type="Texture" id=1]
+[ext_resource path="res://Assets/ben-character/red/rolling/6.png" type="Texture" id=2]
+[ext_resource path="res://Assets/ben-character/orange/idle/3.png" type="Texture" id=3]
+[ext_resource path="res://Assets/ben-character/red/idle/3.png" type="Texture" id=4]
+[ext_resource path="res://Assets/ben-character/red/rolling/5.png" type="Texture" id=5]
+[ext_resource path="res://Assets/ben-character/orange/rolling/1.png" type="Texture" id=6]
+[ext_resource path="res://Assets/ben-character/orange/idle/1.png" type="Texture" id=7]
+[ext_resource path="res://Assets/ben-character/orange/rolling-updown/3.png" type="Texture" id=8]
+[ext_resource path="res://Assets/ben-character/greeen/idle/6.png" type="Texture" id=9]
+[ext_resource path="res://Assets/ben-character/red/rolling-updown/3.png" type="Texture" id=10]
+[ext_resource path="res://Assets/ben-character/red/rolling/1.png" type="Texture" id=11]
+[ext_resource path="res://Assets/ben-character/orange/rolling-updown/2.png" type="Texture" id=12]
+[ext_resource path="res://Assets/ben-character/red/rolling/3.png" type="Texture" id=13]
+[ext_resource path="res://Assets/ben-character/red/idle/2.png" type="Texture" id=14]
+[ext_resource path="res://Assets/ben-character/orange/idle/5.png" type="Texture" id=15]
+[ext_resource path="res://Assets/ben-character/greeen/rolling/5.png" type="Texture" id=16]
+[ext_resource path="res://Assets/ben-character/greeen/rolling-updown/4.png" type="Texture" id=17]
+[ext_resource path="res://Assets/ben-character/greeen/rolling-updown/1.png" type="Texture" id=18]
+[ext_resource path="res://Assets/ben-character/orange/rolling-updown/7.png" type="Texture" id=19]
+[ext_resource path="res://Assets/ben-character/greeen/rolling/1.png" type="Texture" id=20]
+[ext_resource path="res://Assets/ben-character/orange/rolling/3.png" type="Texture" id=21]
+[ext_resource path="res://Assets/ben-character/orange/rolling/6.png" type="Texture" id=22]
+[ext_resource path="res://Assets/ben-character/red/rolling/11.png" type="Texture" id=23]
+[ext_resource path="res://Assets/ben-character/orange/rolling/2.png" type="Texture" id=24]
+[ext_resource path="res://Assets/ben-character/red/idle/6.png" type="Texture" id=25]
+[ext_resource path="res://Assets/ben-character/red/idle/5.png" type="Texture" id=26]
+[ext_resource path="res://Assets/ben-character/greeen/rolling/10.png" type="Texture" id=27]
+[ext_resource path="res://Assets/ben-character/red/rolling/0.png" type="Texture" id=28]
+[ext_resource path="res://Assets/ben-character/orange/rolling/4.png" type="Texture" id=29]
+[ext_resource path="res://Assets/ben-character/greeen/rolling-updown/3.png" type="Texture" id=30]
+[ext_resource path="res://Assets/ben-character/greeen/rolling/4.png" type="Texture" id=31]
+[ext_resource path="res://Assets/ben-character/orange/rolling-updown/0.png" type="Texture" id=32]
+[ext_resource path="res://Assets/ben-character/orange/rolling-updown/1.png" type="Texture" id=33]
+[ext_resource path="res://Assets/ben-character/greeen/idle/4.png" type="Texture" id=34]
+[ext_resource path="res://Assets/ben-character/red/rolling/8.png" type="Texture" id=35]
+[ext_resource path="res://Assets/ben-character/orange/rolling-updown/11.png" type="Texture" id=36]
+[ext_resource path="res://Assets/ben-character/greeen/rolling/6.png" type="Texture" id=37]
+[ext_resource path="res://Assets/ben-character/orange/rolling/5.png" type="Texture" id=38]
+[ext_resource path="res://Assets/ben-character/orange/rolling/11.png" type="Texture" id=39]
+[ext_resource path="res://Assets/ben-character/red/rolling-updown/11.png" type="Texture" id=40]
+[ext_resource path="res://Assets/ben-character/red/rolling-updown/8.png" type="Texture" id=41]
+[ext_resource path="res://Assets/ben-character/red/idle/4.png" type="Texture" id=42]
+[ext_resource path="res://Assets/ben-character/greeen/rolling-updown/7.png" type="Texture" id=43]
+[ext_resource path="res://Assets/ben-character/red/rolling-updown/9.png" type="Texture" id=44]
+[ext_resource path="res://Assets/ben-character/greeen/rolling/0.png" type="Texture" id=45]
+[ext_resource path="res://Assets/ben-character/orange/rolling-updown/4.png" type="Texture" id=46]
+[ext_resource path="res://Assets/ben-character/orange/idle/0.png" type="Texture" id=47]
+[ext_resource path="res://Assets/ben-character/greeen/rolling/9.png" type="Texture" id=48]
+[ext_resource path="res://Assets/ben-character/orange/rolling/0.png" type="Texture" id=49]
+[ext_resource path="res://Assets/ben-character/orange/rolling/9.png" type="Texture" id=50]
+[ext_resource path="res://Assets/ben-character/orange/rolling/10.png" type="Texture" id=51]
+[ext_resource path="res://Assets/ben-character/orange/rolling/8.png" type="Texture" id=52]
+[ext_resource path="res://Assets/ben-character/red/rolling-updown/6.png" type="Texture" id=53]
+[ext_resource path="res://Assets/ben-character/red/rolling-updown/7.png" type="Texture" id=54]
+[ext_resource path="res://Assets/ben-character/greeen/rolling/7.png" type="Texture" id=55]
+[ext_resource path="res://Assets/ben-character/greeen/idle/3.png" type="Texture" id=56]
+[ext_resource path="res://Assets/ben-character/blue/rolling/1.png" type="Texture" id=57]
+[ext_resource path="res://Assets/ben-character/red/rolling-updown/4.png" type="Texture" id=58]
+[ext_resource path="res://Assets/ben-character/blue/rolling/7.png" type="Texture" id=59]
+[ext_resource path="res://Assets/ben-character/blue/rolling-updown/10.png" type="Texture" id=60]
+[ext_resource path="res://Assets/ben-character/greeen/idle/0.png" type="Texture" id=61]
+[ext_resource path="res://Assets/ben-character/red/rolling/7.png" type="Texture" id=62]
+[ext_resource path="res://Assets/ben-character/greeen/rolling-updown/9.png" type="Texture" id=63]
+[ext_resource path="res://Assets/ben-character/blue/rolling-updown/8.png" type="Texture" id=64]
+[ext_resource path="res://Assets/ben-character/blue/rolling-updown/0.png" type="Texture" id=65]
+[ext_resource path="res://Assets/ben-character/red/rolling-updown/0.png" type="Texture" id=66]
+[ext_resource path="res://Assets/ben-character/blue/rolling/9.png" type="Texture" id=67]
+[ext_resource path="res://Assets/ben-character/blue/rolling-updown/3.png" type="Texture" id=68]
+[ext_resource path="res://Assets/ben-character/blue/rolling-updown/2.png" type="Texture" id=69]
+[ext_resource path="res://Assets/ben-character/blue/rolling-updown/5.png" type="Texture" id=70]
+[ext_resource path="res://Assets/ben-character/orange/rolling-updown/6.png" type="Texture" id=71]
+[ext_resource path="res://Assets/ben-character/blue/rolling/10.png" type="Texture" id=72]
+[ext_resource path="res://Assets/ben-character/blue/rolling/8.png" type="Texture" id=73]
+[ext_resource path="res://Assets/ben-character/greeen/rolling-updown/2.png" type="Texture" id=74]
+[ext_resource path="res://Assets/ben-character/orange/rolling/7.png" type="Texture" id=75]
+[ext_resource path="res://Assets/ben-character/greeen/rolling/11.png" type="Texture" id=76]
+[ext_resource path="res://Assets/ben-character/orange/idle/4.png" type="Texture" id=77]
+[ext_resource path="res://Assets/ben-character/greeen/rolling-updown/11.png" type="Texture" id=78]
+[ext_resource path="res://Assets/ben-character/red/rolling-updown/10.png" type="Texture" id=79]
+[ext_resource path="res://Assets/ben-character/red/rolling-updown/5.png" type="Texture" id=80]
+[ext_resource path="res://Assets/ben-character/greeen/idle/5.png" type="Texture" id=81]
+[ext_resource path="res://Assets/ben-character/greeen/rolling/8.png" type="Texture" id=82]
+[ext_resource path="res://Assets/ben-character/red/idle/1.png" type="Texture" id=83]
+[ext_resource path="res://Assets/ben-character/red/rolling/10.png" type="Texture" id=84]
+[ext_resource path="res://Assets/ben-character/blue/rolling/2.png" type="Texture" id=85]
+[ext_resource path="res://Assets/ben-character/red/rolling/4.png" type="Texture" id=86]
+[ext_resource path="res://Assets/ben-character/blue/rolling/3.png" type="Texture" id=87]
+[ext_resource path="res://Assets/ben-character/red/rolling/9.png" type="Texture" id=88]
+[ext_resource path="res://Assets/ben-character/orange/idle/2.png" type="Texture" id=89]
+[ext_resource path="res://Assets/ben-character/red/rolling/2.png" type="Texture" id=90]
+[ext_resource path="res://Assets/ben-character/greeen/rolling-updown/5.png" type="Texture" id=91]
+[ext_resource path="res://Assets/ben-character/red/rolling-updown/1.png" type="Texture" id=92]
+[ext_resource path="res://Assets/ben-character/blue/rolling-updown/9.png" type="Texture" id=93]
+[ext_resource path="res://Assets/ben-character/blue/rolling-updown/6.png" type="Texture" id=94]
+[ext_resource path="res://Assets/ben-character/blue/rolling-updown/7.png" type="Texture" id=95]
+[ext_resource path="res://Assets/ben-character/greeen/rolling-updown/8.png" type="Texture" id=96]
+[ext_resource path="res://Assets/ben-character/orange/rolling-updown/5.png" type="Texture" id=97]
+[ext_resource path="res://Assets/ben-character/greeen/rolling-updown/6.png" type="Texture" id=98]
+[ext_resource path="res://Assets/ben-character/greeen/idle/2.png" type="Texture" id=99]
+[ext_resource path="res://Assets/ben-character/greeen/rolling-updown/0.png" type="Texture" id=100]
+[ext_resource path="res://Assets/ben-character/orange/idle/6.png" type="Texture" id=101]
+[ext_resource path="res://Assets/ben-character/red/idle/0.png" type="Texture" id=102]
+[ext_resource path="res://Assets/ben-character/greeen/rolling-updown/10.png" type="Texture" id=103]
+[ext_resource path="res://Assets/ben-character/red/rolling-updown/2.png" type="Texture" id=104]
+[ext_resource path="res://Assets/ben-character/orange/rolling-updown/10.png" type="Texture" id=105]
+[ext_resource path="res://Assets/ben-character/greeen/rolling/2.png" type="Texture" id=106]
+[ext_resource path="res://Assets/ben-character/blue/rolling/0.png" type="Texture" id=107]
+[ext_resource path="res://Assets/ben-character/blue/rolling-updown/1.png" type="Texture" id=108]
+[ext_resource path="res://Assets/ben-character/orange/rolling-updown/9.png" type="Texture" id=109]
+[ext_resource path="res://Assets/ben-character/orange/rolling-updown/8.png" type="Texture" id=110]
+[ext_resource path="res://Assets/ben-character/blue/rolling/6.png" type="Texture" id=111]
+[ext_resource path="res://Assets/ben-character/blue/rolling/4.png" type="Texture" id=112]
+[ext_resource path="res://Assets/ben-character/blue/rolling/11.png" type="Texture" id=113]
+[ext_resource path="res://Assets/ben-character/blue/rolling/5.png" type="Texture" id=114]
+[ext_resource path="res://Assets/ben-character/blue/rolling-updown/11.png" type="Texture" id=115]
+[ext_resource path="res://Assets/ben-character/greeen/idle/1.png" type="Texture" id=116]
+[ext_resource path="res://Assets/ben-character/blue/rolling-updown/4.png" type="Texture" id=117]
+[ext_resource path="res://Assets/BushDidATransition/bottomebush.png" type="Texture" id=118]
+[ext_resource path="res://Assets/BushDidATransition/wipebush.png" type="Texture" id=119]
+[ext_resource path="res://Assets/BushDidATransition/topbush.png" type="Texture" id=120]
+[ext_resource path="res://Scenes/sceneTrans/BushTrans.gd" type="Script" id=121]
+
+[sub_resource type="SpriteFrames" id=5]
+animations = [ {
+"frames": [ ExtResource( 61 ), ExtResource( 116 ), ExtResource( 99 ), ExtResource( 56 ), ExtResource( 34 ), ExtResource( 81 ), ExtResource( 9 ) ],
+"loop": true,
+"name": "idle_green",
+"speed": 6.0
+}, {
+"frames": [ ExtResource( 47 ), ExtResource( 7 ), ExtResource( 89 ), ExtResource( 3 ), ExtResource( 77 ), ExtResource( 15 ), ExtResource( 101 ) ],
+"loop": true,
+"name": "idle_orange",
+"speed": 6.0
+}, {
+"frames": [ ExtResource( 102 ), ExtResource( 83 ), ExtResource( 14 ), ExtResource( 4 ), ExtResource( 42 ), ExtResource( 26 ), ExtResource( 25 ) ],
+"loop": true,
+"name": "idle_red",
+"speed": 6.0
+}, {
+"frames": [ ExtResource( 65 ), ExtResource( 108 ), ExtResource( 69 ), ExtResource( 68 ), ExtResource( 117 ), ExtResource( 70 ), ExtResource( 94 ), ExtResource( 95 ), ExtResource( 64 ), ExtResource( 93 ), ExtResource( 60 ), ExtResource( 115 ) ],
+"loop": true,
+"name": "roll_north_blue",
+"speed": 10.0
+}, {
+"frames": [ ExtResource( 100 ), ExtResource( 18 ), ExtResource( 74 ), ExtResource( 30 ), ExtResource( 17 ), ExtResource( 91 ), ExtResource( 98 ), ExtResource( 43 ), ExtResource( 96 ), ExtResource( 63 ), ExtResource( 103 ), ExtResource( 78 ) ],
+"loop": true,
+"name": "roll_north_green",
+"speed": 10.0
+}, {
+"frames": [ ExtResource( 32 ), ExtResource( 33 ), ExtResource( 12 ), ExtResource( 8 ), ExtResource( 46 ), ExtResource( 97 ), ExtResource( 71 ), ExtResource( 19 ), ExtResource( 110 ), ExtResource( 109 ), ExtResource( 105 ), ExtResource( 36 ) ],
+"loop": true,
+"name": "roll_north_orange",
+"speed": 10.0
+}, {
+"frames": [ ExtResource( 66 ), ExtResource( 92 ), ExtResource( 104 ), ExtResource( 10 ), ExtResource( 58 ), ExtResource( 80 ), ExtResource( 53 ), ExtResource( 54 ), ExtResource( 41 ), ExtResource( 44 ), ExtResource( 79 ), ExtResource( 40 ) ],
+"loop": true,
+"name": "roll_north_red",
+"speed": 10.0
+}, {
+"frames": [ ExtResource( 113 ), ExtResource( 72 ), ExtResource( 67 ), ExtResource( 73 ), ExtResource( 59 ), ExtResource( 111 ), ExtResource( 114 ), ExtResource( 112 ), ExtResource( 87 ), ExtResource( 85 ), ExtResource( 57 ), ExtResource( 107 ) ],
+"loop": true,
+"name": "roll_northwest_blue",
+"speed": 10.0
+}, {
+"frames": [ ExtResource( 76 ), ExtResource( 27 ), ExtResource( 48 ), ExtResource( 82 ), ExtResource( 55 ), ExtResource( 37 ), ExtResource( 16 ), ExtResource( 31 ), ExtResource( 1 ), ExtResource( 106 ), ExtResource( 20 ), ExtResource( 45 ) ],
+"loop": true,
+"name": "roll_northwest_green",
+"speed": 10.0
+}, {
+"frames": [ ExtResource( 39 ), ExtResource( 51 ), ExtResource( 50 ), ExtResource( 52 ), ExtResource( 75 ), ExtResource( 22 ), ExtResource( 38 ), ExtResource( 29 ), ExtResource( 21 ), ExtResource( 24 ), ExtResource( 6 ), ExtResource( 49 ) ],
+"loop": true,
+"name": "roll_northwest_orange",
+"speed": 10.0
+}, {
+"frames": [ ExtResource( 23 ), ExtResource( 84 ), ExtResource( 88 ), ExtResource( 35 ), ExtResource( 62 ), ExtResource( 2 ), ExtResource( 5 ), ExtResource( 86 ), ExtResource( 13 ), ExtResource( 90 ), ExtResource( 11 ), ExtResource( 28 ) ],
+"loop": true,
+"name": "roll_northwest_red",
+"speed": 10.0
+}, {
+"frames": [ ExtResource( 115 ), ExtResource( 60 ), ExtResource( 93 ), ExtResource( 64 ), ExtResource( 95 ), ExtResource( 94 ), ExtResource( 70 ), ExtResource( 117 ), ExtResource( 68 ), ExtResource( 69 ), ExtResource( 108 ), ExtResource( 65 ) ],
+"loop": true,
+"name": "roll_south_blue",
+"speed": 10.0
+}, {
+"frames": [ ExtResource( 78 ), ExtResource( 103 ), ExtResource( 63 ), ExtResource( 96 ), ExtResource( 43 ), ExtResource( 98 ), ExtResource( 91 ), ExtResource( 17 ), ExtResource( 30 ), ExtResource( 74 ), ExtResource( 18 ), ExtResource( 100 ) ],
+"loop": true,
+"name": "roll_south_green",
+"speed": 10.0
+}, {
+"frames": [ ExtResource( 36 ), ExtResource( 105 ), ExtResource( 109 ), ExtResource( 110 ), ExtResource( 19 ), ExtResource( 71 ), ExtResource( 97 ), ExtResource( 46 ), ExtResource( 8 ), ExtResource( 12 ), ExtResource( 33 ), ExtResource( 32 ) ],
+"loop": true,
+"name": "roll_south_orange",
+"speed": 10.0
+}, {
+"frames": [ ExtResource( 40 ), ExtResource( 79 ), ExtResource( 44 ), ExtResource( 41 ), ExtResource( 54 ), ExtResource( 53 ), ExtResource( 80 ), ExtResource( 58 ), ExtResource( 10 ), ExtResource( 104 ), ExtResource( 92 ), ExtResource( 66 ) ],
+"loop": true,
+"name": "roll_south_red",
+"speed": 10.0
+}, {
+"frames": [ ExtResource( 107 ), ExtResource( 57 ), ExtResource( 85 ), ExtResource( 87 ), ExtResource( 112 ), ExtResource( 114 ), ExtResource( 111 ), ExtResource( 59 ), ExtResource( 73 ), ExtResource( 67 ), ExtResource( 72 ), ExtResource( 113 ) ],
+"loop": true,
+"name": "roll_southeast_blue",
+"speed": 10.0
+}, {
+"frames": [ ExtResource( 45 ), ExtResource( 20 ), ExtResource( 106 ), ExtResource( 1 ), ExtResource( 31 ), ExtResource( 16 ), ExtResource( 37 ), ExtResource( 55 ), ExtResource( 82 ), ExtResource( 48 ), ExtResource( 27 ), ExtResource( 76 ) ],
+"loop": true,
+"name": "roll_southeast_green",
+"speed": 10.0
+}, {
+"frames": [ ExtResource( 49 ), ExtResource( 6 ), ExtResource( 24 ), ExtResource( 21 ), ExtResource( 29 ), ExtResource( 38 ), ExtResource( 22 ), ExtResource( 75 ), ExtResource( 52 ), ExtResource( 50 ), ExtResource( 51 ), ExtResource( 39 ) ],
+"loop": true,
+"name": "roll_southeast_orange",
+"speed": 10.0
+}, {
+"frames": [ ExtResource( 28 ), ExtResource( 11 ), ExtResource( 90 ), ExtResource( 13 ), ExtResource( 86 ), ExtResource( 5 ), ExtResource( 2 ), ExtResource( 62 ), ExtResource( 35 ), ExtResource( 88 ), ExtResource( 84 ), ExtResource( 23 ) ],
+"loop": true,
+"name": "roll_southeast_red",
+"speed": 10.0
+} ]
+
+[sub_resource type="Animation" id=6]
+resource_name = "BUSH"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/path = NodePath("bushTop:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ ExtResource( 120 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("bushBottom:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ ExtResource( 118 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("bushBottom:rect_position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 150 ), Vector2( 0, 0 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("bushTop:rect_position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, -160 ), Vector2( 0, -1.52588e-05 ) ]
+}
+
+[sub_resource type="Animation" id=4]
+resource_name = "RESET"
+length = 0.01
+tracks/0/type = "value"
+tracks/0/path = NodePath("bushTop:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ ExtResource( 120 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("bushBottom:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ ExtResource( 118 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Node2D:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( -1400, 88 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("Wipe:texture")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ ExtResource( 119 ) ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("bushBottom:rect_position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 0, 150 ) ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("bushTop:rect_position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 0, -160 ) ]
+}
+tracks/6/type = "value"
+tracks/6/path = NodePath("Wipe:rect_position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( -1464, -48 ) ]
+}
+
+[sub_resource type="Animation" id=7]
+resource_name = "SLIMES_ROLLOUT_P1"
+length = 0.7
+tracks/0/type = "value"
+tracks/0/path = NodePath("Node2D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.7 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( -1400, 88 ), Vector2( 10, 88 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Wipe:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ ExtResource( 119 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Wipe:rect_position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.7 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( -1464, -48 ), Vector2( -80, -48 ) ]
+}
+
+[sub_resource type="Animation" id=8]
+resource_name = "SLIMES_ROLLOUT_P2"
+length = 0.7
+tracks/0/type = "value"
+tracks/0/path = NodePath("Node2D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.7 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 10, 88 ), Vector2( 1390, 88 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Wipe:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ ExtResource( 119 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Wipe:rect_position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.7 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( -80, -48 ), Vector2( 1300, -48 ) ]
+}
+
+[node name="CanvasLayer" type="CanvasLayer"]
+script = ExtResource( 121 )
+
+[node name="Wipe" type="TextureRect" parent="."]
+modulate = Color( 1, 0.631373, 1, 1 )
+margin_left = -1464.0
+margin_top = -48.0
+margin_right = 456.0
+margin_bottom = 1032.0
+rect_scale = Vector2( 0.753827, 0.753827 )
+mouse_filter = 2
+texture = ExtResource( 119 )
+
+[node name="Node2D" type="Node2D" parent="."]
+position = Vector2( -1400, 88 )
+
+[node name="animated_sprite" type="AnimatedSprite" parent="Node2D"]
+position = Vector2( 1344, 64 )
+scale = Vector2( 3.53642, 3.53642 )
+frames = SubResource( 5 )
+animation = "roll_southeast_blue"
+frame = 9
+playing = true
+
+[node name="animated_sprite2" type="AnimatedSprite" parent="Node2D"]
+position = Vector2( 1344, 192 )
+scale = Vector2( 3.53642, 3.53642 )
+frames = SubResource( 5 )
+animation = "roll_southeast_green"
+frame = 3
+playing = true
+
+[node name="animated_sprite3" type="AnimatedSprite" parent="Node2D"]
+position = Vector2( 1344, 320 )
+scale = Vector2( 3.53642, 3.53642 )
+frames = SubResource( 5 )
+animation = "roll_southeast_orange"
+frame = 2
+playing = true
+
+[node name="animated_sprite4" type="AnimatedSprite" parent="Node2D"]
+position = Vector2( 1344, 448 )
+scale = Vector2( 3.53642, 3.53642 )
+frames = SubResource( 5 )
+animation = "roll_southeast_red"
+frame = 4
+playing = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/BUSH = SubResource( 6 )
+anims/RESET = SubResource( 4 )
+anims/SLIMES_ROLLOUT_P1 = SubResource( 7 )
+anims/SLIMES_ROLLOUT_P2 = SubResource( 8 )
+
+[node name="bushTop" type="TextureRect" parent="."]
+margin_top = -160.0
+margin_right = 1920.0
+margin_bottom = 920.0
+rect_scale = Vector2( 0.667985, 0.667985 )
+texture = ExtResource( 120 )
+
+[node name="bushBottom" type="TextureRect" parent="."]
+margin_top = 150.0
+margin_right = 1920.0
+margin_bottom = 1230.0
+rect_scale = Vector2( 0.666977, 0.666977 )
+texture = ExtResource( 118 )
