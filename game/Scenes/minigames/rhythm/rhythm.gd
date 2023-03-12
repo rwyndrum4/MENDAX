@@ -76,6 +76,7 @@ onready var _map = beatmap_file.new()
 */
 """
 func _ready():
+	$ButtonHelper.add_constant_override("separation", 110)
 	randomize()
 	get_parent().toggle_hotbar(false)
 	get_parent().show_money(false)
@@ -166,7 +167,7 @@ func start_rhythm_game():
 	$Frame/wait_on_players.queue_free()
 	var instructions:Popup = load("res://Scenes/minigames/rhythm/instructions.tscn").instance()
 	$Frame.add_child(instructions)
-	instructions.popup_centered()
+	instructions.popup(Rect2(170,90,900,590))
 	instructions.connect("done_explaining",self, "_delete_instr_and_start_song", [instructions])
 
 """
@@ -187,6 +188,25 @@ func _delete_instr_and_start_song(instr_scn):
 	yield(wait_timer, "timeout")
 	wait_timer.queue_free()
 	conductor.play_with_beat_offset(0)
+	var fade_buttons_tmr = Timer.new()
+	fade_buttons_tmr.wait_time = 0.1
+	fade_buttons_tmr.one_shot = false
+	add_child(fade_buttons_tmr)
+	fade_buttons_tmr.start()
+	fade_buttons_tmr.connect("timeout",self, "_reduce_instr_mod", [fade_buttons_tmr])
+
+"""
+* @pre None
+* @post Will gradually decrease the modulation of the helper buttons
+* @param tmr (timer to stop after a a certain amount of time)
+"""
+func _reduce_instr_mod(tmr):
+	if _song_position_in_beats < 10:
+		$ButtonHelper.modulate.a8 -= 5
+	else:
+		tmr.disconnect("timeout", self, "_reduce_instr_mod")
+		tmr.queue_free()
+		$ButtonHelper.queue_free()
 
 """
 /*

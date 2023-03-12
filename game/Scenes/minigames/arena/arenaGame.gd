@@ -227,9 +227,13 @@ func convert_time(time_in:float) -> String:
 func _on_Timer_timeout():
 	#Make enemies harder ( ´ ｰ `)
 	for en in _enemies:
-		if is_instance_valid(en):
+		#If enemy has not died and was spawned in
+		if is_instance_valid(en) and en._has_spawned:
 			en.level_up()
 			en.set_physics_process(false)
+		#If enemy has not had the chance to spawn in
+		elif not en._has_spawned:
+			en._leveled_up = true
 	textBox.queue_text("OUT OF TIME. NOW PERISH.")
 	myTimer.queue_free()
 

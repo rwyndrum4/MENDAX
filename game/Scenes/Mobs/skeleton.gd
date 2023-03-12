@@ -19,6 +19,8 @@ onready var skeleAtkBox = $MyHitBox/CollisionShape2D
 onready var pos2d = $Position2D
 onready var player_detector_box = $detector/box
 
+var _has_spawned = false
+var _leveled_up = false
 var _name = "s"
 var _my_id: int = 0
 var isIn = false
@@ -39,6 +41,9 @@ var BASE_ACCELERATION = 500
 */
 """
 func _ready():
+	_has_spawned = true
+	if _leveled_up:
+		level_up()
 	var anim = get_node("skeletonAnimationPlayer").get_animation("idle")
 	anim.set_loop(true)
 	skeletonAnim.play("idle")
@@ -228,11 +233,11 @@ func _on_skeletonAnimationPlayer_animation_finished(_anim_name):
 */
 """
 func level_up():
-	if is_instance_valid(healthbar):
-		healthbar.value = healthbar.value + 40
-		BASE_SPEED = 1.6
-		BASE_ACCELERATION = 1000
-		$MyHitBox.damage = 30
+	_leveled_up = true
+	healthbar.value = healthbar.value + 40
+	BASE_SPEED = 1.6
+	BASE_ACCELERATION = 1000
+	$MyHitBox.damage = 30
 
 func set_id(id_num:int) -> void:
 	_my_id = id_num

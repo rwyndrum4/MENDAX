@@ -11,6 +11,7 @@ onready var healthbar = $ProgressBar
 onready var chandelierBox = $MyHurtBox/hitbox
 onready var chandelierAtkBox = $MyHitBox/CollisionShape2D
 
+var _has_spawned = false
 var _name = "c"
 var _my_id: int = 0
 var _isIn = false
@@ -32,6 +33,7 @@ var _fire_wait_time: int = 3
 */
 """
 func _ready():
+	_has_spawned = true
 	var anim = get_node("AnimationPlayer").get_animation("idle")
 	anim.set_loop(true)
 	chandelierAnim.play("idle")
@@ -65,7 +67,6 @@ func _physics_process(delta):
 			fire(Vector2(-200, -200))
 			fire(Vector2(-100, -100))
 			fire(Vector2(100, 100))
-			fire(Vector2(200, 200))
 		chandelierAnim.play("idle")
 
 """

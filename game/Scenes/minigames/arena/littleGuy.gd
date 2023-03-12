@@ -9,12 +9,13 @@
 extends KinematicBody2D
 
 # critter physics constants
-const ACCELERATION = 25000
+var ACCELERATION = 25000
 const MAX_SPEED = 500
 const FRICTION = 500
 
 # Global velocity
 var velocity = Vector2.ZERO
+var MAX_DIRECTION = 250
 
 var framesTraveled = 0
 var direction = true
@@ -33,9 +34,9 @@ func _physics_process(delta):
 		framesTraveled = 0
 		direction = not(direction)
 	if direction: 
-		velocity = velocity.move_toward(Vector2(250,0), FRICTION*delta)
+		velocity = velocity.move_toward(Vector2(MAX_DIRECTION,0), FRICTION*delta)
 	else:
-		velocity = velocity.move_toward(Vector2(-250,0), FRICTION*delta)
+		velocity = velocity.move_toward(Vector2(-MAX_DIRECTION,0), FRICTION*delta)
 	
 	velocity = move_and_slide(velocity)
 
@@ -57,3 +58,12 @@ func _on_hit_detector_area_entered(area):
 		yield(slow_tmr,"timeout")
 		slow_tmr.queue_free()
 		$slowed.hide()
+
+"""
+* @pre None
+* @post sets MAX_DIRECTION variable
+* @param dir -> int (direction entered)
+* @return None
+"""
+func set_max_dir(dir:int):
+	MAX_DIRECTION = dir

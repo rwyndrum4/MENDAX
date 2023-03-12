@@ -32,6 +32,7 @@ collision_mask = 0
 script = ExtResource( 2 )
 
 [node name="hit_detector" type="Area2D" parent="."]
+collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="hit_detector"]
 scale = Vector2( 3.40034, 3.40034 )

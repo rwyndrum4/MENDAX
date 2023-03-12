@@ -43,7 +43,7 @@ func load_data():
 			"fullscreen_on": false,
 			"vsync_on": false,
 			"display_fps": false,
-			"max_fps": 0,
+			"max_fps": 60,
 			"bloom_on": false,
 			"brightness": 1,
 			"master_vol": -10,

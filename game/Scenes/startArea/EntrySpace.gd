@@ -451,6 +451,8 @@ func load_boss(stage_num:int):
 		sword.get_node("pivot").position = $Player.position + Vector2(60,20)
 		add_child_below_node($Player, sword)
 		Global.progress = 8
+		#spawn enemies from arena
+		spawn_stage_three_enemies()
 		#imposter spawns
 		var wait_for_start: Timer = Timer.new()
 		add_child(wait_for_start)
@@ -575,3 +577,27 @@ func _imposter_spawn():
 	new_imposter.position = Vector2(0, 3000)
 	add_child(new_imposter)
 
+"""
+/*
+* @pre Stage 3 of final boss has started
+* @post spawns extra enemies to make the stage harder
+* @param None
+* @return None
+*/
+"""
+func spawn_stage_three_enemies():
+	var slow_enemy = load("res://Scenes/minigames/arena/littleGuy.tscn")
+	var slow_en_proerties = [
+		[Vector2(-6000,3000), 600, 3500],
+		[Vector2(-500, 1000), 300, 6000],
+		[Vector2(0, 3000), 500, 4500],
+		[Vector2(-10000, 5000), 500, 4000],
+		[Vector2(-8500, 3000), 400, 3800],
+		[Vector2(-10000, 6200), 250, 3900],
+	]
+	for prop_arr in slow_en_proerties:
+		var slow_en = slow_enemy.instance()
+		slow_en.position = prop_arr[0]
+		slow_en.set_max_dir(prop_arr[1])
+		slow_en.ACCELERATION = prop_arr[2]
+		add_child(slow_en)

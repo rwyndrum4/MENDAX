@@ -12,6 +12,8 @@ onready var BodAtkBox = $MyHitBox/CollisionShape2D
 onready var pos2d = $Position2D
 onready var player_detector_box = $detector/box
 
+var _has_spawned = false
+var _leveled_up = false
 var _name = "b"
 var _my_id: int = 0
 var _can_atk = true
@@ -28,6 +30,9 @@ var teleport_timer:Timer = null
 */
 """
 func _ready():
+	_has_spawned = true
+	if _leveled_up:
+		level_up()
 	var anim = get_node("AnimationPlayer").get_animation("idle")
 	anim.set_loop(true)
 	BodAnim.play("idle")
@@ -162,7 +167,9 @@ func _on_detector_body_exited(_body):
 */
 """
 func level_up():
+	_leveled_up = true
 	healthbar.value = healthbar.value + 40
+	teleport_timer.wait_time = 4
 
 """
 /*
