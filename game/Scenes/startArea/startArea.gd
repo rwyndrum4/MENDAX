@@ -49,9 +49,6 @@ func _process(_delta): #change to delta if using it
 			# warning-ignore:return_value_discarded
 			$Enter.play()
 			#change scene to cave area
-			
-			#I DID THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-			#BushTrans.change_scene(Global.scenes.CAVE)
 			CaveInTrans.change_scene(Global.scenes.CAVE)
 
 """
