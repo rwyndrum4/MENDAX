@@ -1,23 +1,15 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://Scenes/minigames/arena/arenaGame.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/minigames/arena/arenaMap.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Assets/Teko-Light.ttf" type="DynamicFontData" id=3]
 [ext_resource path="res://Scenes/textBox/textBox.tscn" type="PackedScene" id=4]
-[ext_resource path="res://Scenes/Mobs/skeleton.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Scenes/player/player.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Assets/Silver.ttf" type="DynamicFontData" id=7]
 [ext_resource path="res://Scenes/player/Sword/Sword.tscn" type="PackedScene" id=8]
-[ext_resource path="res://Scenes/minigames/arena/littleGuy.png" type="Texture" id=9]
-[ext_resource path="res://Scenes/minigames/arena/littleGuy.gd" type="Script" id=10]
-[ext_resource path="res://Scenes/Mobs/BoD.tscn" type="PackedScene" id=11]
-[ext_resource path="res://Scenes/Mobs/chandelier.tscn" type="PackedScene" id=12]
 
 [sub_resource type="OccluderPolygon2D" id=1]
 polygon = PoolVector2Array( -48.9833, -45.9201, -50.0482, 47.9166, -50.0482, 47.9166, 50.0482, 46.9184, 50.0482, 46.9184, 48.9833, -48.9149, 47.9185, -50.9114 )
-
-[sub_resource type="RectangleShape2D" id=5]
-extents = Vector2( 3.66668, 17.6191 )
 
 [sub_resource type="DynamicFont" id=4]
 size = 40
@@ -27,18 +19,11 @@ font_data = ExtResource( 3 )
 size = 75
 font_data = ExtResource( 7 )
 
-[sub_resource type="SpriteFrames" id=6]
-animations = [ {
-"frames": [ ExtResource( 9 ), null ],
-"loop": true,
-"name": "crawl",
-"speed": 5.0
-}, {
-"frames": [  ],
-"loop": true,
-"name": "default",
-"speed": 5.0
-} ]
+[sub_resource type="DynamicFont" id=8]
+size = 65
+outline_size = 2
+outline_color = Color( 0.443137, 0.705882, 0.694118, 0.537255 )
+font_data = ExtResource( 7 )
 
 [node name="arenaGame" type="Control"]
 script = ExtResource( 1 )
@@ -55,21 +40,6 @@ occluder = SubResource( 1 )
 current = true
 
 [node name="Sword" parent="Player" instance=ExtResource( 8 )]
-
-[node name="Skeleton" parent="." instance=ExtResource( 5 )]
-position = Vector2( 929, 838 )
-scale = Vector2( 3, 3 )
-collision_layer = 262148
-collision_mask = 262144
-
-[node name="StaticBody2D" type="StaticBody2D" parent="Skeleton"]
-position = Vector2( 0.333328, 0 )
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Skeleton/StaticBody2D"]
-position = Vector2( 1.33334, 27.3333 )
-rotation = 1.5708
-scale = Vector2( 0.5, 0.7 )
-shape = SubResource( 5 )
 
 [node name="GUI" type="CanvasLayer" parent="."]
 
@@ -92,29 +62,21 @@ margin_bottom = 534.0
 custom_fonts/font = SubResource( 7 )
 text = "Waiting on other players..."
 
+[node name="YouDied" type="Label" parent="GUI"]
+visible = false
+modulate = Color( 0.384314, 0.0117647, 0.0117647, 0.466667 )
+margin_left = 151.0
+margin_top = 301.0
+margin_right = 1147.0
+margin_bottom = 472.0
+input_pass_on_modal_close_click = false
+custom_fonts/font = SubResource( 8 )
+text = "You Died!
+Watch while the other 
+players take the glory"
+align = 1
+
 [node name="textBox" parent="." instance=ExtResource( 4 )]
 visible = false
-
-[node name="littleGuy" type="KinematicBody2D" parent="."]
-position = Vector2( 1440, 866 )
-collision_layer = 8
-script = ExtResource( 10 )
-__meta__ = {
-"_edit_group_": true
-}
-
-[node name="guyHitbox" type="CollisionShape2D" parent="littleGuy"]
-shape = SubResource( 5 )
-
-[node name="AnimatedSprite" type="AnimatedSprite" parent="littleGuy"]
-frames = SubResource( 6 )
-animation = "crawl"
-
-[node name="BoD" parent="." instance=ExtResource( 11 )]
-position = Vector2( 1594, 825 )
-scale = Vector2( 3, 3 )
-
-[node name="chandelier" parent="." instance=ExtResource( 12 )]
-scale = Vector2( 3, 3 )
 
 [connection signal="timeout" from="GUI/Timer" to="." method="_on_Timer_timeout"]

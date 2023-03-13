@@ -105,7 +105,11 @@ func _on_Start_pressed():
 			yield(ServerConnection.join_chat_async_general(), "completed") #rejoin global chat
 		else:
 			yield(ServerConnection.leave_general_chat(), "completed")
+	else:
+		Global.player_names["1"] = Save.game_data.username
 	#change scene to start area
+	get_parent().show_money(true)
+	GameLoot.init_players(len(Global.player_names))
 	SceneTrans.change_scene(Global.scenes.START_AREA)
 
 """

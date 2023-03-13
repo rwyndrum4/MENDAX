@@ -1,4 +1,4 @@
-[gd_scene load_steps=128 format=2]
+[gd_scene load_steps=130 format=2]
 
 [ext_resource path="res://Scenes/player/other_players/other_players.gd" type="Script" id=1]
 [ext_resource path="res://Assets/ben-character/blue/idle/2.png" type="Texture" id=2]
@@ -125,6 +125,8 @@
 [ext_resource path="res://Assets/ben-character/orange/rolling/1.png" type="Texture" id=123]
 [ext_resource path="res://Assets/ben-character/red/rolling/6.png" type="Texture" id=124]
 [ext_resource path="res://Assets/ben-character/red/rolling/1.png" type="Texture" id=125]
+[ext_resource path="res://Assets/shieldFull.png" type="Texture" id=126]
+[ext_resource path="res://Scenes/player/Shield.gd" type="Script" id=127]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 9, 9 )
@@ -246,3 +248,13 @@ shape = SubResource( 1 )
 scale = Vector2( 3.53642, 3.53642 )
 frames = SubResource( 2 )
 animation = "roll_southeast_green"
+
+[node name="Shield" type="Sprite" parent="."]
+light_mask = 0
+position = Vector2( -0.500003, -1.49999 )
+scale = Vector2( 1.13, 1.11 )
+texture = ExtResource( 126 )
+script = ExtResource( 127 )
+
+[node name="ShieldDelay" type="Timer" parent="Shield"]
+one_shot = true

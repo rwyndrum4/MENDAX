@@ -19,6 +19,10 @@ onready var skeleAtkBox = $MyHitBox/CollisionShape2D
 onready var pos2d = $Position2D
 onready var player_detector_box = $detector/box
 
+var _has_spawned = false
+var _leveled_up = false
+var _name = "s"
+var _my_id: int = 0
 var isIn = false
 var isDead = false
 var _player_target: int = 1
@@ -37,6 +41,9 @@ var BASE_ACCELERATION = 500
 */
 """
 func _ready():
+	_has_spawned = true
+	if _leveled_up:
+		level_up()
 	var anim = get_node("skeletonAnimationPlayer").get_animation("idle")
 	anim.set_loop(true)
 	skeletonAnim.play("idle")
@@ -51,7 +58,7 @@ func _ready():
 * @param delta : elapsed time (in seconds) since previous frame. Should be constant across sequential calls
 * @return None
 */
-"""		
+"""
 func _physics_process(delta):
 	var player_pos = null
 	#Get player position 
@@ -63,7 +70,7 @@ func _physics_process(delta):
 		else:
 			velocity = move_and_slide(velocity.move_toward(BASE_SPEED*Vector2.ZERO, BASE_ACCELERATION*delta))
 			return
-	velocity = move_and_slide(velocity.move_toward(BASE_SPEED*(player_pos - position), BASE_ACCELERATION*delta))
+	velocity = move_and_slide(velocity.move_toward(BASE_SPEED*((player_pos - get_player_offset(player_pos)) - position), BASE_ACCELERATION*delta))
 	#Handle making skeleton turn around
 	if player_pos.x < position.x:
 		pos2d.scale.x = -1
@@ -73,7 +80,23 @@ func _physics_process(delta):
 		pos2d.scale.x = 1
 		player_detector_box.position = Vector2(50,0)
 		skeleAtkBox.position = Vector2(60,0)
-		
+
+"""
+/*
+* @pre Called when skeleton wants to know where to go towards
+* @post skeleton will move left or right to get to player's side
+* @param None
+* @return Vector2 (offset to get to player)
+*/
+"""
+func get_player_offset(player_pos:Vector2) -> Vector2:
+	if player_pos.x > 3200:
+		return Vector2(120,-55)
+	elif player_pos.x < 700:
+		return Vector2(-120,-55)
+	else:
+		return Vector2(-120,-55)
+
 """
 /*
 * @pre Called before player 1 sends who to target data
@@ -107,13 +130,13 @@ func turn_on_physics():
 """
 func slow_speed():
 	BASE_SPEED = 0.2
-	var reset_accel_timer: Timer = Timer.new()
-	add_child(reset_accel_timer)
-	reset_accel_timer.wait_time = 2
-	reset_accel_timer.one_shot = true
-	reset_accel_timer.start()
+	var reset_tmr = Timer.new()
+	reset_tmr.wait_time = 2
+	reset_tmr.one_shot = true
+	add_child(reset_tmr)
+	reset_tmr.start()
 	# warning-ignore:return_value_discarded
-	reset_accel_timer.connect("timeout",self, "_accel_timer_expired", [reset_accel_timer])
+	reset_tmr.connect("timeout",self, "_accel_timer_expired", [reset_tmr])
 
 func _accel_timer_expired(timer:Timer):
 	timer.queue_free()
@@ -132,9 +155,8 @@ func _accel_timer_expired(timer:Timer):
 """
 func take_damage(amount: int) -> void:
 	$AudioStreamPlayer2D.play()
-	ServerConnection.send_arena_enemy_hit(amount,1) #1 is the type of enemy, reference EnemyTypes in arenaGame.gd
+	ServerConnection.send_arena_enemy_hit(amount,_my_id, _name) #1 is the type of enemy, reference EnemyTypes in arenaGame.gd
 	healthbar.value = healthbar.value - amount
-
 	Global.skeleton_damage[str(1)]+=amount
 	if healthbar.value == 0:
 		isDead = true
@@ -142,8 +164,6 @@ func take_damage(amount: int) -> void:
 		#have to defer disabling the skeleton, got an error otherwise
 		#put the line of code in function below since call_deferred only takes functions as input
 		call_deferred("defer_disabling_skeleton")
-	else:
-		skeletonAnim.play("hit")
 
 #Same function as above but doesn't send data to the server
 func take_damage_server(amount: int):
@@ -154,8 +174,6 @@ func take_damage_server(amount: int):
 		#have to defer disabling the skeleton, got an error otherwise
 		#put the line of code in function below since call_deferred only takes functions as input
 		call_deferred("defer_disabling_skeleton")
-	else:
-		skeletonAnim.play("hit")
 
 #function for disabling skeleton, needs to be deferred for reasons above
 func defer_disabling_skeleton():
@@ -203,8 +221,7 @@ func _on_skeletonAnimationPlayer_animation_finished(_anim_name):
 		set_physics_process(false)
 		$death.play()
 		yield($death, "finished")
-		GlobalSignals.emit_signal("enemyDefeated", 0) #replace 0 with indication of enemy ID later
-		
+		GlobalSignals.emit_signal("enemyDefeated", _my_id)
 		queue_free()
 
 """
@@ -216,7 +233,14 @@ func _on_skeletonAnimationPlayer_animation_finished(_anim_name):
 */
 """
 func level_up():
+	_leveled_up = true
 	healthbar.value = healthbar.value + 40
 	BASE_SPEED = 1.6
 	BASE_ACCELERATION = 1000
 	$MyHitBox.damage = 30
+
+func set_id(id_num:int) -> void:
+	_my_id = id_num
+
+func get_id() -> int:
+	return _my_id

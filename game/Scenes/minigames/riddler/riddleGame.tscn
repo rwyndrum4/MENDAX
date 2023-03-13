@@ -132,6 +132,7 @@ custom_colors/title_color = Color( 0.0431373, 0.0431373, 0.0431373, 1 )
 custom_fonts/title_font = SubResource( 9 )
 
 [node name="item1area" type="Area2D" parent="."]
+visible = false
 position = Vector2( 2359.45, 2303.06 )
 collision_mask = 2
 
@@ -141,6 +142,7 @@ scale = Vector2( 1.5, 1.5 )
 shape = SubResource( 4 )
 
 [node name="item1" type="Area2D" parent="." groups=["hints"]]
+visible = false
 position = Vector2( 2359.45, 2303.06 )
 
 [node name="Sprite" type="Sprite" parent="item1"]
@@ -153,6 +155,7 @@ position = Vector2( -2, -2 )
 shape = SubResource( 3 )
 
 [node name="item2area" type="Area2D" parent="."]
+visible = false
 position = Vector2( 200, 2402 )
 collision_layer = 4
 collision_mask = 2
@@ -163,6 +166,7 @@ scale = Vector2( 1.5, 1.5 )
 shape = SubResource( 4 )
 
 [node name="item2" type="Area2D" parent="." groups=["hints"]]
+visible = false
 position = Vector2( 200, 2402 )
 
 [node name="Sprite" type="Sprite" parent="item2"]
@@ -175,6 +179,7 @@ position = Vector2( -2.58008, 0.0300293 )
 shape = SubResource( 3 )
 
 [node name="item3area" type="Area2D" parent="."]
+visible = false
 position = Vector2( 1500, 1000 )
 collision_layer = 4
 collision_mask = 2
@@ -185,6 +190,7 @@ scale = Vector2( 1.5, 1.5 )
 shape = SubResource( 4 )
 
 [node name="item3" type="Area2D" parent="." groups=["hints"]]
+visible = false
 position = Vector2( 1500, 1000 )
 
 [node name="Sprite" type="Sprite" parent="item3"]
@@ -197,6 +203,7 @@ position = Vector2( -3, 2 )
 shape = SubResource( 3 )
 
 [node name="item4area" type="Area2D" parent="."]
+visible = false
 position = Vector2( 2000, 1500 )
 collision_layer = 4
 collision_mask = 2
@@ -207,6 +214,7 @@ scale = Vector2( 1.5, 1.5 )
 shape = SubResource( 4 )
 
 [node name="item4" type="Area2D" parent="." groups=["hints"]]
+visible = false
 position = Vector2( 2000, 1500 )
 
 [node name="Sprite" type="Sprite" parent="item4"]
@@ -219,6 +227,7 @@ position = Vector2( -3, -2 )
 shape = SubResource( 3 )
 
 [node name="item5area" type="Area2D" parent="."]
+visible = false
 position = Vector2( 500, 500 )
 collision_layer = 4
 collision_mask = 2
@@ -229,6 +238,7 @@ scale = Vector2( 1.5, 1.5 )
 shape = SubResource( 4 )
 
 [node name="item5" type="Area2D" parent="." groups=["hints"]]
+visible = false
 position = Vector2( 500, 500 )
 
 [node name="Sprite" type="Sprite" parent="item5"]
@@ -241,6 +251,7 @@ position = Vector2( 1, 4 )
 shape = SubResource( 3 )
 
 [node name="item6area" type="Area2D" parent="."]
+visible = false
 position = Vector2( 1200, 1200 )
 collision_layer = 4
 collision_mask = 2
@@ -251,6 +262,7 @@ scale = Vector2( 1.5, 1.5 )
 shape = SubResource( 4 )
 
 [node name="item6" type="Area2D" parent="." groups=["hints"]]
+visible = false
 position = Vector2( 1200, 1200 )
 
 [node name="Sprite" type="Sprite" parent="item6"]

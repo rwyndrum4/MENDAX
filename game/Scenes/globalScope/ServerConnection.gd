@@ -20,7 +20,9 @@ enum OpCodes {
 	UPDATE_ARENA_ENEMY_MOVE = 7,
 	UPDATE_CAN_START_GAME = 8,
 	UPDATE_RHYTHM_SCORE = 9,
-	SPAWNED = 10
+	PLAYER_BOOOPED = 10,
+	SHIELD_TAKEN = 11,
+	SPAWNED = 12
 }
 
 #Variable that checks if connected to server
@@ -30,20 +32,21 @@ var server_status: bool = false
 signal state_updated(id, position) #state of game has been updated
 signal input_updated(id, vec) #input of player has changed and received
 signal character_spawned(char_name) #singal to tell if someone has spawned
+signal character_took_shield(p_id, spawn_num) #someone whent over a shield spawn
 signal character_despawned(char_name) #signal to tell if someone has despawned
 signal riddle_received(riddle) #signal to tell game it has received a riddle from server
 signal arena_player_swung_sword(id, direction) #signal to tell arena minigame someone swung sword
 signal arena_player_lost_health(id, health) #signal to tell if player has lost health
-signal arena_enemy_hit(enemmy_hit, damage_taken,id) #signal to tell if an enemy has been hit
+signal arena_enemy_hit(enemy_id, damage_taken,player_id,enemy_type) #signal to tell if an enemy has been hit
 signal minigame_can_start() #signal that the minigame can be started
 signal minigame_player_spawned(id) #signal to tell if a player has arrived to a scene
-signal minigame_rhythm_score(id, score)
+signal minigame_rhythm_score(id, score) #send current score of rhythm game player
 
 #Other signals
 signal chat_message_received(msg,type,user_sent,from_user) #signal to tell game a chat message has come in
 
 const KEY := "nakama_mendax" #key that is stored in the server
-var IP_ADDRESS: String = "3.143.211.132" #ip address of server
+var IP_ADDRESS: String = "18.117.150.192" #ip address of server
 
 var _session: NakamaSession #user session
 
@@ -508,13 +511,13 @@ func send_arena_player_health(health_in: int):
 /*
 * @pre called when enemy gets hit in a minigame
 * @post tells server which enemy got hit and how much damage it took
-* @param damage -> int (how much damage enemy took), enemy_hit -> int (enum value)
+* @param damage -> int (how much damage enemy took), enemy_id -> int (id of enemy)
 * @return None
 */
 """
-func send_arena_enemy_hit(damage: int, enemy_hit: int):
+func send_arena_enemy_hit(damage: int, enemy_id_in: int, enemy_type_in:String):
 	if _socket:
-		var payload := {id = _player_num,enemy = enemy_hit, dmg = damage}
+		var payload := {id = _player_num,enemy_id = enemy_id_in, dmg = damage, enemy_type = enemy_type_in}
 		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_ARENA_ENEMY_HIT, JSON.print(payload))
 
 func send_minigame_can_start():
@@ -534,6 +537,19 @@ func send_rhythm_score(new_score:int):
 	if _socket:
 		var payload := {id = _player_num, score = new_score}
 		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_RHYTHM_SCORE, JSON.print(payload))
+
+"""
+/*
+* @pre called when someone picks up a shield object
+* @post tells server which player picked up which shield
+* @param spawn_number (number corresponding to shield spot)
+* @return None
+*/
+"""
+func send_shield_notif(spawn_number:int = 0):
+	if _socket:
+		var payload := {id = _player_num, s_num = spawn_number}
+		_socket.send_match_state_async(_match_id, OpCodes.SHIELD_TAKEN, JSON.print(payload))
 
 """
 /*
@@ -665,11 +681,12 @@ func _on_NakamaSocket_received_match_state(match_state: NakamaRTAPI.MatchData) -
 		OpCodes.UPDATE_ARENA_ENEMY_HIT:
 			var decoded: Dictionary = JSON.parse(raw).result
 			
-			var enemy: int = int(decoded.enemy)
+			var player_id: int = int(decoded.id)
+			var enemy_id: int = int(decoded.enemy_id)
 			var dmg_taken: int = int(decoded.dmg)
-			var id: int = int(decoded.id)
+			var enemy_type: String = decoded.enemy_type
 			
-			emit_signal("arena_enemy_hit", enemy, dmg_taken,id)
+			emit_signal("arena_enemy_hit", enemy_id, dmg_taken,player_id, enemy_type)
 		OpCodes.UPDATE_RHYTHM_SCORE:
 			var decoded: Dictionary = JSON.parse(raw).result
 			
@@ -679,6 +696,13 @@ func _on_NakamaSocket_received_match_state(match_state: NakamaRTAPI.MatchData) -
 			emit_signal("minigame_rhythm_score", id, score)
 		OpCodes.UPDATE_CAN_START_GAME:
 			emit_signal("minigame_can_start")
+		OpCodes.SHIELD_TAKEN:
+			var decoded: Dictionary = JSON.parse(raw).result
+			
+			var id:int = int(decoded.id)
+			var spawn_num: int = int(decoded.s_num)
+			
+			emit_signal("character_took_shield",id,spawn_num)
 		OpCodes.SPAWNED:
 			var decoded: Dictionary = JSON.parse(raw).result
 			

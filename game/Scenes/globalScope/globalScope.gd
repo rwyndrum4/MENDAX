@@ -230,7 +230,7 @@ func connect_to_server() -> int:
 func _on_ServerConnection_chat_message_received(msg,type,user_sent,from_user):
 	#add message from server to chatbox
 	chat_box.add_message(msg,type,user_sent,from_user)
-	GlobalSignals.emit_signal("answer_received",msg)
+	GlobalSignals.emit_signal("answer_received",msg,from_user)
 
 """
 /*
@@ -327,3 +327,27 @@ func set_popup_locks():
 		can_open_settings = true
 	elif in_chatbox and can_open_settings:
 		can_open_settings = false
+
+"""
+/*
+* @pre None
+* @post show the total coin of player
+* @param None
+* @return None
+*/
+"""
+func show_money(should_show:bool) -> void:
+	if should_show:
+		$GUI/money.show()
+	else:
+		$GUI/money.hide()
+
+"""
+/*
+* @post change coin value of money label
+* @param value (value of money to show)
+* @return None
+*/
+"""
+func change_money(value:int) -> void:
+	$GUI/money.change_total(value)

@@ -57,7 +57,7 @@ signal inputText(inText)
 * Parameter - answer -> string (text of a message)
 """
 # warning-ignore:unused_signal
-signal answer_received(answer)
+signal answer_received(answer, who_guessed)
 
 """
 * Purpose - Send a signal when a player's hit points are reduced to 0

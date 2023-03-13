@@ -19,7 +19,8 @@ var stop_steam_control = false #variable to tell whether process function needs 
 var steam_modulate:float = 0 #modualte value that is gradually added to modulate of steam
 var at_lever = false
 var at_ladder = false
-var shield_spawn: Area2D
+var shield_spawn: Area2D = null
+var _shield_available: bool = true
 var imposter =preload("res://Scenes/Mobs/imposter.tscn")
 var dummyBoss
 onready var confuzzed = $Player/confuzzle
@@ -35,7 +36,7 @@ onready var pitfall = $worldMap/Node2D_1/Pitfall1x1_2
 onready var player = $Player
 onready var wellLabeled = $well/Label
 
-
+var server_players: Array = []
 var other_player = "res://Scenes/player/other_players/other_players.tscn"
 var sword = null
 
@@ -48,19 +49,19 @@ var sword = null
 */
 """
 func _ready():
-	#Spawn the players if a match is ongoing
-	if ServerConnection.match_exists():
-		spawn_players()
 	#hide cave instructions at start
 	instructions.hide()
 	myTimer.start(90)
 	$fogSprite.modulate.a8 = 0
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("openChatbox", self, "chatbox_use")
+	#Spawn the players if a match is ongoing
+	if ServerConnection.match_exists() and ServerConnection.get_server_status():
+		spawn_players()
+		# warning-ignore:return_value_discarded
+		ServerConnection.connect("character_took_shield",self,"someone_took_shild")
 	get_parent().toggle_hotbar(true)
 	wellLabeled.visible = false
-	
-
 
 """
 /*
@@ -308,6 +309,11 @@ func spawn_players():
 			new_player.position = Global.player_positions[str(num)]
 			#Add child to the scene
 			add_child(new_player)
+			server_players.append({
+				'num': num,
+				'player_obj': new_player,
+				'sword_dir': "right"
+			})
 		#Set initial input vectors to zero
 		Global.player_input_vectors[str(num)] = Vector2.ZERO
 
@@ -409,22 +415,7 @@ func load_boss(stage_num:int):
 	myTimer.stop()
 	var boss = preload("res://Scenes/FinalBoss/Boss.tscn").instance()
 	if stage_num == 1:
-		# Generate shild spawn
-		shield_spawn = Area2D.new()
-		var col_2d = CollisionShape2D.new()
-		var shape = CircleShape2D.new()
-		shape.set_radius(80)
-		col_2d.set_shape(shape)
-		shield_spawn.position = Vector2(-4000,3000)
-		var shield_sprite = Sprite.new()
-		shield_sprite.texture = load("res://Assets/shieldFull.png")
-		shield_sprite.scale = Vector2(2,2)
-		shield_sprite.position = Vector2(-4000,3000)
-		add_child(shield_spawn)
-		shield_spawn.add_child(col_2d)
-		#add_child_below_node(shield_spawn,col_2d)
-		add_child_below_node(shield_spawn,shield_sprite)
-		shield_spawn.connect("area_entered",self,"give_shield")
+		spawn_shield()
 		# Generate beziers
 		var bez1 = preload("res://Scenes/FinalBoss/Bezier.tscn").instance()
 		var bez2 = preload("res://Scenes/FinalBoss/Bezier.tscn").instance()
@@ -480,6 +471,8 @@ func load_boss(stage_num:int):
 		sword.get_node("pivot").position = $Player.position + Vector2(60,20)
 		add_child_below_node($Player, sword)
 		Global.progress = 8
+		#spawn enemies from arena
+		spawn_stage_three_enemies()
 		#imposter spawns
 		var wait_for_start: Timer = Timer.new()
 		add_child(wait_for_start)
@@ -495,9 +488,105 @@ func load_boss(stage_num:int):
 	add_child_below_node($worldMap, boss)
 	# Zoom out camera so player can view Mendax in all his glory
 	$Player.get_node("Camera2D").set("zoom", Vector2(2, 2))
-	
-func give_shield(_area):
-	player.shield.giveShield()
+
+"""
+/*
+* @pre None
+* @post Shield is spawned inside of game
+* @param None
+* @return None
+*/
+"""
+func spawn_shield():
+	# Generate shild spawn
+	shield_spawn = Area2D.new()
+	var col_2d = CollisionShape2D.new()
+	var shape = CircleShape2D.new()
+	shape.set_radius(80)
+	col_2d.set_shape(shape)
+	shield_spawn.position = Vector2(-4000,3000)
+	var shield_sprite = Sprite.new()
+	var spawn_sprite = Sprite.new()
+	shield_sprite.texture = load("res://Assets/shieldFull.png")
+	shield_sprite.scale = Vector2(1.5,1.5)
+	shield_sprite.position = Vector2(-4000,3000)
+	shield_sprite.set_name("shield_sprite")
+	spawn_sprite.texture = load("res://Assets/shield_spawn.png")
+	spawn_sprite.scale = Vector2(4,4)
+	spawn_sprite.position = Vector2(-4000,3000)
+	spawn_sprite.set_name("shield_spawn")
+	add_child(shield_spawn)
+	shield_spawn.add_child(col_2d)
+	#add_child_below_node(shield_spawn,col_2d)
+	add_child_below_node(shield_spawn,shield_sprite)
+	add_child_below_node(shield_spawn,spawn_sprite)
+	shield_spawn.connect("area_entered",self,"give_shield")
+
+"""
+/*
+* @pre Called when a player grabs a shield from spawn
+* @post give player shield and let server know its taken
+* @param area
+* @return None
+*/
+"""
+func give_shield(area):
+	if area.is_in_group("player") and _shield_available:
+		ServerConnection.send_shield_notif()
+		_shield_available = false
+		player.shield.giveShield()
+		get_node("shield_sprite").hide()
+		start_shield_timer()
+
+"""
+/*
+* @pre Shield was stepped on
+* @post start timer to respawn shield when done
+* @param None
+* @return None
+*/
+"""
+func start_shield_timer():
+	var s_tmr: Timer = Timer.new()
+	add_child(s_tmr)
+	s_tmr.wait_time = 15
+	s_tmr.one_shot = true
+	s_tmr.start()
+	# warning-ignore:return_value_discarded
+	s_tmr.connect("timeout",self, "_respawn_shield", [s_tmr])
+
+"""
+/*
+* @pre Called when server says someone stepped on shield
+* @post Shield becomes unavailable for a time period
+* @param p_id -> int (player who stepped on it)
+*		 shield_num -> int (which spawn it was)
+* @return None
+*/
+"""
+func someone_took_shild(player_id,_shield_num):
+	_shield_available = false
+	get_node("shield_sprite").hide()
+	start_shield_timer()
+	##FIX THIS :: OTHER_PLAYER NEEDS TO BE LIKE ARENA PLAYER##
+#	for o_player in server_players:
+#		if player_id == o_player.get('num'):
+#			o_player.get('player_obj').shield.giveShield()
+#			break
+
+"""
+/*
+* @pre Timer went off
+* @post respawn the shield
+* @param tmr (timer to get rid of)
+* @return None
+*/
+"""
+func _respawn_shield(tmr:Timer):
+	tmr.queue_free()
+	_shield_available = true
+	get_node("shield_sprite").show()
+
 """
 /*
 * @pre Called once start time expires (happens once)
@@ -512,6 +601,30 @@ func _imposter_spawn():
 	new_imposter.setup_pos(player.position)
 	add_child(new_imposter)
 
+"""
+/*
+* @pre Stage 3 of final boss has started
+* @post spawns extra enemies to make the stage harder
+* @param None
+* @return None
+*/
+"""
+func spawn_stage_three_enemies():
+	var slow_enemy = load("res://Scenes/minigames/arena/littleGuy.tscn")
+	var slow_en_proerties = [
+		[Vector2(-6000,3000), 600, 3500],
+		[Vector2(-500, 1000), 300, 6000],
+		[Vector2(0, 3000), 500, 4500],
+		[Vector2(-10000, 5000), 500, 4000],
+		[Vector2(-8500, 3000), 400, 3800],
+		[Vector2(-10000, 6200), 250, 3900],
+	]
+	for prop_arr in slow_en_proerties:
+		var slow_en = slow_enemy.instance()
+		slow_en.position = prop_arr[0]
+		slow_en.set_max_dir(prop_arr[1])
+		slow_en.ACCELERATION = prop_arr[2]
+		add_child(slow_en)
 
 func _on_well_body_entered(body):
 	if Global.progress == 8:

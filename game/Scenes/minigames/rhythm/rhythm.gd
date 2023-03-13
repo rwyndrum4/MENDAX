@@ -76,8 +76,10 @@ onready var _map = beatmap_file.new()
 */
 """
 func _ready():
+	$ButtonHelper.add_constant_override("separation", 110)
 	randomize()
 	get_parent().toggle_hotbar(false)
+	get_parent().show_money(false)
 	# warning-ignore:return_value_discarded
 	conductor.connect("finished",self,"end_rhythm_game")
 	# warning-ignore:return_value_discarded
@@ -165,7 +167,7 @@ func start_rhythm_game():
 	$Frame/wait_on_players.queue_free()
 	var instructions:Popup = load("res://Scenes/minigames/rhythm/instructions.tscn").instance()
 	$Frame.add_child(instructions)
-	instructions.popup_centered()
+	instructions.popup(Rect2(170,90,900,590))
 	instructions.connect("done_explaining",self, "_delete_instr_and_start_song", [instructions])
 
 """
@@ -186,6 +188,25 @@ func _delete_instr_and_start_song(instr_scn):
 	yield(wait_timer, "timeout")
 	wait_timer.queue_free()
 	conductor.play_with_beat_offset(0)
+	var fade_buttons_tmr = Timer.new()
+	fade_buttons_tmr.wait_time = 0.1
+	fade_buttons_tmr.one_shot = false
+	add_child(fade_buttons_tmr)
+	fade_buttons_tmr.start()
+	fade_buttons_tmr.connect("timeout",self, "_reduce_instr_mod", [fade_buttons_tmr])
+
+"""
+* @pre None
+* @post Will gradually decrease the modulation of the helper buttons
+* @param tmr (timer to stop after a a certain amount of time)
+"""
+func _reduce_instr_mod(tmr):
+	if _song_position_in_beats < 10:
+		$ButtonHelper.modulate.a8 -= 5
+	else:
+		tmr.disconnect("timeout", self, "_reduce_instr_mod")
+		tmr.queue_free()
+		$ButtonHelper.queue_free()
 
 """
 /*
@@ -365,7 +386,20 @@ func _on_Conductor_beat(beat_position):
 */
 """
 func end_rhythm_game():
+	#Final results sorted
 	var results = get_sorted_results()
+	#Giving players money based on results
+	var ctr = 1
+	for arr in results:
+		var n = Global.get_player_num(arr[0])
+		var score = (5 - ctr) * 5
+		GameLoot.add_to_coin(n,score)
+		var total_coin = GameLoot.get_coin_val(n)
+		get_parent().change_money(total_coin)
+		if arr[0] == Save.game_data.username:
+			PlayerInventory.add_item("Coin", score)
+		ctr += 1
+	#Load ending scene
 	var end_screen:Popup = load("res://Scenes/minigames/rhythm/endScreen.tscn").instance()
 	$Frame.add_child(end_screen)
 	end_screen.add_results(results)
@@ -379,6 +413,8 @@ func end_rhythm_game():
 	yield(wait_timer_look_leaderboard, "timeout")
 	wait_timer_look_leaderboard.queue_free()
 	get_parent().toggle_hotbar(true)
+	get_parent().show_money(true)
+	#Reset minigame players and go to cave scene
 	Global.reset_minigame_players()
 	Global.state = Global.scenes.CAVE
 

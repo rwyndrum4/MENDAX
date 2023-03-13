@@ -31,4 +31,4 @@ func _process(_delta):
 		set("texture_scale", tex_scale - 0.0025)
 	else:
 		set("energy", 0)
-		$light.hide()
+		get_parent().hide()

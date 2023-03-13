@@ -111,12 +111,25 @@ func add_match(lobby_name:String,match_id:String,private_chat_id:String):
 * @pre None
 * @post returns player name dependent on what number they are
 * @param player_num -> int (number player was assigned)
-* @return None
+* @return String
 */
 """
 func get_player_name(player_num: int) -> String:
 	return player_names[str(player_num)]
 
+"""
+/*
+* @pre None
+* @post returns player number dependent on what name they have
+* @param p_num -> String (name of player)
+* @return int
+*/
+"""
+func get_player_num(p_name: String) -> int:
+	for p in player_names.keys():
+		if player_names[p] == p_name:
+			return int(p)
+	return ERR_BUG
 """
 /*
 * @pre None

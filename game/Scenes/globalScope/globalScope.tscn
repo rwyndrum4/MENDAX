@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://Scenes/chatBox/chatBox.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Scenes/SettingsMenu/settingsMenu.tscn" type="PackedScene" id=2]
@@ -16,9 +16,15 @@
 [ext_resource path="res://Assets/SFX/bgm/Lost Time.mp3" type="AudioStream" id=14]
 [ext_resource path="res://Inventory/Hotbar.tscn" type="PackedScene" id=16]
 [ext_resource path="res://Scenes/mainMenu/creditsWindow.tscn" type="PackedScene" id=17]
+[ext_resource path="res://Assets/Silver.ttf" type="DynamicFontData" id=18]
+[ext_resource path="res://Scenes/globalScope/money.gd" type="Script" id=19]
 
 [sub_resource type="DynamicFont" id=1]
 font_data = ExtResource( 7 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 45
+font_data = ExtResource( 18 )
 
 [node name="globalScope" type="Node"]
 script = ExtResource( 3 )
@@ -47,6 +53,14 @@ custom_fonts/font = SubResource( 1 )
 visible = true
 
 [node name="credits" parent="GUI" instance=ExtResource( 17 )]
+
+[node name="money" type="Label" parent="GUI"]
+visible = false
+margin_left = 1184.0
+margin_right = 1224.0
+margin_bottom = 51.0
+custom_fonts/font = SubResource( 2 )
+script = ExtResource( 19 )
 
 [node name="BGM" type="AudioStreamPlayer" parent="."]
 

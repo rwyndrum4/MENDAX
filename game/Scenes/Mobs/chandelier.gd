@@ -11,14 +11,18 @@ onready var healthbar = $ProgressBar
 onready var chandelierBox = $MyHurtBox/hitbox
 onready var chandelierAtkBox = $MyHitBox/CollisionShape2D
 
+var _has_spawned = false
+var _name = "c"
+var _my_id: int = 0
 var _isIn = false
+var _isFiring = false
 var _isDead = false
 var _leveled_up: bool = false
 
 #motion vector for enemy
 var _motion=Vector2()
 var _timer=0;
-var _fire_wait_time: int = 4
+var _fire_wait_time: int = 3
 
 """
 /*
@@ -29,13 +33,18 @@ var _fire_wait_time: int = 4
 */
 """
 func _ready():
+	_has_spawned = true
 	var anim = get_node("AnimationPlayer").get_animation("idle")
 	anim.set_loop(true)
 	chandelierAnim.play("idle")
-	healthbar.value = 200;
+	if not (ServerConnection.match_exists() and ServerConnection.get_server_status()):
+		healthbar.value = 100
+		healthbar.max_value = 100
+	else:
+		healthbar.value = 200
+		healthbar.max_value = 200
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("textbox_empty",self,"turn_on_physics")
-	position=Vector2(500,500)
 
 """
 /*
@@ -50,13 +59,14 @@ func _physics_process(delta):
 	if _timer > _fire_wait_time:
 		_timer=0;
 		chandelierAnim.play("attack1")
+		_isFiring = true
 		yield(chandelierAnim, "animation_finished")
+		_isFiring = false
 		fire();
 		if _leveled_up:
 			fire(Vector2(-200, -200))
 			fire(Vector2(-100, -100))
 			fire(Vector2(100, 100))
-			fire(Vector2(200, 200))
 		chandelierAnim.play("idle")
 
 """
@@ -79,10 +89,10 @@ func turn_on_physics():
 */
 """	
 func fire(extra_angle = Vector2(0,0)):
-	if get_parent()._player_dead:
+	if get_parent()._player_dead or _isDead:
 		return
-	var Player=get_parent().get_node("Player")
-	var bullete =preload("res://Scenes/bullet/bulletenemy.tscn")
+	var Player = get_parent().get_node("Player")
+	var bullete = preload("res://Scenes/bullet/bulletenemy.tscn")
 	var bulenemy = bullete.instance()
 	get_parent().add_child(bulenemy)
 	bulenemy.global_position = global_position + Vector2(0, -90)
@@ -99,30 +109,32 @@ func fire(extra_angle = Vector2(0,0)):
 */
 """
 func take_damage(amount: int) -> void:
-	ServerConnection.send_arena_enemy_hit(amount,2)
+	ServerConnection.send_arena_enemy_hit(amount,_my_id, _name)
 	$AudioStreamPlayer2D.play()
 	healthbar.value = healthbar.value - amount
-	
 	Global.chandelier_damage[str(1)]+=amount
-	#print(Global.chandelier_damage[str(1)])
-	if healthbar.value == 0:
+	if healthbar.value <= 0 and not _isDead:
 		_isDead = true
+		set_physics_process(false)
 		chandelierAnim.play("death")
 		#have to defer disabling the skeleton, got an error otherwise
 		#put the line of code in function below since call_deferred only takes functions as input
 		call_deferred("defer_disabling_chandelier")
 	else:
-		chandelierAnim.play("hit")
+		if not _isDead and not _isFiring:
+			chandelierAnim.play("hit")
 	
 #Same as above function except it doesn't send data to server
 func take_damage_server(amount: int):
 	healthbar.value = healthbar.value - amount
 	if healthbar.value == 0:
 		_isDead = true
+		set_physics_process(false)
 		chandelierAnim.play("death")
 		call_deferred("defer_disabling_chandelier")
 	else:
-		chandelierAnim.play("hit")
+		if not _isDead and not _isFiring:
+			chandelierAnim.play("hit")
 
 func defer_disabling_chandelier():
 	chandelierBox.disabled = true
@@ -139,7 +151,7 @@ func _on_AnimationPlayer_animation_finished(_anim_name):
 	if _isDead:
 		$death.play()
 		yield($death, "finished")
-		GlobalSignals.emit_signal("enemyDefeated", 0) #replace 0 with indication of enemy ID later
+		GlobalSignals.emit_signal("enemyDefeated", _my_id)
 		queue_free()
 
 """
@@ -152,7 +164,6 @@ func _on_AnimationPlayer_animation_finished(_anim_name):
 """
 func _on_detector_body_entered(_body):
 	_isIn = true
-
 
 """
 /*
@@ -167,12 +178,12 @@ func _on_detector_body_exited(_body):
 
 func level_up():
 	_leveled_up = true
-	_fire_wait_time = 1
+	_fire_wait_time = 2
 	healthbar.value = healthbar.value + 40
 	#New timer that makes it so that BoD teleports ever 4 sec
 	var teleport_timer: Timer = Timer.new()
 	add_child(teleport_timer)
-	teleport_timer.wait_time = 10
+	teleport_timer.wait_time = 16
 	teleport_timer.one_shot = false
 	teleport_timer.start()
 	# warning-ignore:return_value_discarded
@@ -187,6 +198,13 @@ func level_up():
 */
 """
 func _tp_timer_expired():
-	var x = randi() % 3500 + 500
-	var y = randi() % 3250 + 500
+	randomize()
+	var x = rand_range(500,3250)
+	var y = rand_range(500,3250)
 	position = Vector2(x,y)
+
+func set_id(id_num:int) -> void:
+	_my_id = id_num
+
+func get_id() -> int:
+	return _my_id

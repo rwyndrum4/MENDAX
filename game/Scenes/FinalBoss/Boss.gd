@@ -6,9 +6,15 @@
 	2/26/2022 - Added health bar
 	3/10/2023 - Added invulnerability
 """
-
 extends StaticBody2D
-var _timer:float = 0
+
+var _tp_positions = [
+	Vector2(-4250, 2160), #initial position in middle
+	Vector2(-8500, 5500), #bottom left position
+	Vector2(2500, 3000), #bottom right position
+	Vector2(1500, 500) #top right position
+]
+var _atk_timer:float = 0
 var _prev_timer:float = 0
 var _invulnerable
 
@@ -156,11 +162,11 @@ func _delete_aoe_atk(atk:Area2D) -> void:
 */
 """
 func _process(delta):
-	_timer += delta
-	if _timer - _prev_timer > 2:
+	_atk_timer += delta
+	if _atk_timer - _prev_timer > 2:
 		move_boss()
 		spawn_aoe_attack()
-		_prev_timer = _timer
+		_prev_timer = _atk_timer
 	if _invulnerable == true:
 		auraShield.visible = true
 	else:
@@ -174,7 +180,7 @@ func _process(delta):
 */
 """
 func take_damage(amount: int) -> void:
-	ServerConnection.send_arena_enemy_hit(amount,1) #1 is the type of enemy, reference EnemyTypes in arenaGame.gd
+	#ServerConnection.send_arena_enemy_hit(amount,1) #1 is the type of enemy, reference EnemyTypes in arenaGame.gd
 	if _invulnerable == false:
 		healthbar.value = healthbar.value - amount
 		if healthbar.value == 200 and Global.progress == 6:
@@ -190,6 +196,3 @@ func take_damage_server(amount: int):
 			Global.state = Global.scenes.QUIZ
 		if healthbar.value == 0:
 			Global.state = Global.scenes.END_SCREEN
-		Global.state = Global.scenes.QUIZ
-	if healthbar.value == 0:
-		Global.state = Global.scenes.END_SCREEN

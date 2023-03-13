@@ -12,8 +12,14 @@ onready var BodAtkBox = $MyHitBox/CollisionShape2D
 onready var pos2d = $Position2D
 onready var player_detector_box = $detector/box
 
+var _has_spawned = false
+var _leveled_up = false
+var _name = "b"
+var _my_id: int = 0
+var _can_atk = true
 var isIn: bool = false
 var isDead:bool = false
+var teleport_timer:Timer = null
 
 """
 /*
@@ -24,12 +30,13 @@ var isDead:bool = false
 */
 """
 func _ready():
+	_has_spawned = true
+	if _leveled_up:
+		level_up()
 	var anim = get_node("AnimationPlayer").get_animation("idle")
 	anim.set_loop(true)
 	BodAnim.play("idle")
 	healthbar.value = 200;
-	# warning-ignore:return_value_discarded
-	#ServerConnection.connect("arena_enemy_hit",self, "took_damage_from_server")
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("textbox_empty",self,"turn_on_physics")
 
@@ -67,6 +74,14 @@ func _physics_process(_delta):
 """		
 func turn_on_physics():
 	set_physics_process(true)
+	#Now that BoD can move, allow them to teleport
+	teleport_timer= Timer.new()
+	add_child(teleport_timer)
+	teleport_timer.wait_time = 6
+	teleport_timer.one_shot = false
+	teleport_timer.start()
+	# warning-ignore:return_value_discarded
+	teleport_timer.connect("timeout",self, "_tp_timer_expired")
 
 """
 /*
@@ -78,7 +93,7 @@ func turn_on_physics():
 """
 func take_damage(amount: int) -> void:
 	$AudioStreamPlayer2D.play()
-	ServerConnection.send_arena_enemy_hit(amount,3) #3 is the type of enemy, reference EnemyTypes in arenaGame.gd
+	ServerConnection.send_arena_enemy_hit(amount,_my_id, _name)
 	healthbar.value = healthbar.value - amount
 	
 	Global.bod_damage[str(1)]+=amount
@@ -86,8 +101,6 @@ func take_damage(amount: int) -> void:
 		isDead = true
 		BodAnim.play("death")
 		call_deferred("defer_disabling_BoD")
-	else:
-		BodAnim.play("hit")
 
 #Same as above function except it doesn't send data to server
 func take_damage_server(amount: int):
@@ -96,8 +109,6 @@ func take_damage_server(amount: int):
 		isDead = true
 		BodAnim.play("death")
 		call_deferred("defer_disabling_BoD")
-	else:
-		BodAnim.play("hit")
 
 #function for disabling skeleton, needs to be deferred for reasons above
 func defer_disabling_BoD():
@@ -120,7 +131,7 @@ func _on_AnimationPlayer_animation_finished(_anim_name):
 	else:
 		$death.play()
 		yield($death, "finished")
-		GlobalSignals.emit_signal("enemyDefeated", 0) #replace 0 with indication of enemy ID later
+		GlobalSignals.emit_signal("enemyDefeated", _my_id)
 		queue_free()
 
 """
@@ -133,10 +144,8 @@ func _on_AnimationPlayer_animation_finished(_anim_name):
 """
 func _on_detector_body_entered(_body):
 	isIn = true
-	if not isDead:
+	if not isDead and _can_atk:
 		BodAnim.play("attack1")
-	
-
 
 """
 /*
@@ -158,15 +167,9 @@ func _on_detector_body_exited(_body):
 */
 """
 func level_up():
+	_leveled_up = true
 	healthbar.value = healthbar.value + 40
-	#New timer that makes it so that BoD teleports ever 4 sec
-	var teleport_timer: Timer = Timer.new()
-	add_child(teleport_timer)
 	teleport_timer.wait_time = 4
-	teleport_timer.one_shot = false
-	teleport_timer.start()
-	# warning-ignore:return_value_discarded
-	teleport_timer.connect("timeout",self, "_tp_timer_expired")
 
 """
 /*
@@ -177,11 +180,55 @@ func level_up():
 */
 """
 func _tp_timer_expired():
+	if isDead:
+		return
 	BodAnim.stop() #stop previous animation if it had one
 	if not get_parent()._player_dead:
-		var x = randi() % 75
-		var y = randi() % 75
+		randomize()
+		var x = rand_range(25,80)
+		var y = rand_range(25,80)
 		if randf() > 0.5:
 			x *= -1
 			y *= -1
-		position = get_parent().get_node("Player").position + Vector2(x,y)
+		if ServerConnection.match_exists() and ServerConnection.get_server_status():
+			var server_players:Array = get_parent().server_players
+			var total = Vector2.ZERO
+			var ctr = 0
+			for p in server_players:
+				var obj = p.get('player_obj') 
+				if obj != null:
+					ctr += 1
+					total += obj.position
+			var your_pos = get_parent().get_node("Player").position
+			total += your_pos
+			position = check_pos(total / (ctr + 1))
+		else:
+			x *= 5
+			y *= 5
+			var final_pos = check_pos(get_parent().get_node("Player").position + Vector2(x,y))
+			position = final_pos
+		#Play animation to give player time to react
+		_can_atk = false
+		BodAnim.play("spellatk")
+		yield(BodAnim,"animation_finished")
+		_can_atk = true
+
+func check_pos(pos2check:Vector2) -> Vector2:
+	var HIGH = 3250
+	var LOW = 500
+	var result:Vector2 = pos2check
+	if pos2check.x < LOW:
+		result.x = 600
+	elif pos2check.x > HIGH:
+		result.x = 3000
+	if pos2check.y < LOW:
+		result.y = 600
+	elif pos2check.y > HIGH:
+		result.y = 3000
+	return result
+
+func set_id(id_num:int) -> void:
+	_my_id = id_num
+
+func get_id() -> int:
+	return _my_id

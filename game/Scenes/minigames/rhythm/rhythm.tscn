@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://Scenes/minigames/rhythm/rhythm.gd" type="Script" id=1]
 [ext_resource path="res://Assets/Silver.ttf" type="DynamicFontData" id=2]
@@ -31,6 +31,10 @@ font_data = ExtResource( 2 )
 
 [sub_resource type="DynamicFont" id=6]
 size = 32
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=9]
+size = 70
 font_data = ExtResource( 2 )
 
 [sub_resource type="DynamicFont" id=7]
@@ -105,6 +109,39 @@ margin_right = 40.0
 margin_bottom = 220.0
 custom_colors/font_color = Color( 0.878431, 0.203922, 0.258824, 1 )
 custom_fonts/font = SubResource( 6 )
+
+[node name="ButtonHelper" type="HBoxContainer" parent="."]
+margin_left = 408.0
+margin_top = 488.0
+margin_right = 448.0
+margin_bottom = 528.0
+
+[node name="D" type="Label" parent="ButtonHelper"]
+margin_right = 22.0
+margin_bottom = 79.0
+custom_fonts/font = SubResource( 9 )
+text = "D"
+
+[node name="F" type="Label" parent="ButtonHelper"]
+margin_left = 26.0
+margin_right = 48.0
+margin_bottom = 79.0
+custom_fonts/font = SubResource( 9 )
+text = "F"
+
+[node name="J" type="Label" parent="ButtonHelper"]
+margin_left = 52.0
+margin_right = 74.0
+margin_bottom = 79.0
+custom_fonts/font = SubResource( 9 )
+text = "J"
+
+[node name="K" type="Label" parent="ButtonHelper"]
+margin_left = 78.0
+margin_right = 100.0
+margin_bottom = 79.0
+custom_fonts/font = SubResource( 9 )
+text = "K"
 
 [node name="blue" parent="." instance=ExtResource( 4 )]
 position = Vector2( 420, 600 )
