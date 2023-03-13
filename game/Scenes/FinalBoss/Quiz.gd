@@ -1,13 +1,13 @@
 extends Control
 
 
-@onready var DisplayText=$VBoxContainer/DisplayText
-@onready var ListItem=$VBoxContainer/ItemList
-@onready var RestartButton=$VBoxContainer/Button
-@onready var maxdamage=0
-@onready var minhealth=0
-@onready var currentmin=0
-@onready var currentmax=0
+onready var DisplayText=$VBoxContainer/DisplayText
+onready var ListItem=$VBoxContainer/ItemList
+onready var RestartButton=$VBoxContainer/Button
+onready var maxdamage=0
+onready var minhealth=0
+onready var currentmin=0
+onready var currentmax=0
 var data=[
 	{
 		"number": 1,
@@ -112,9 +112,7 @@ func read_json_file(filename):
 	var file=File.new()
 	file.open(filename,file.READ)
 	var text=file.get_as_text()
-	var test_json_conv = JSON.new()
-	test_json_conv.parse(text)
-	var json_data=test_json_conv.get_data()
+	var json_data=parse_json(text)
 	file.close()
 	print(json_data)
 

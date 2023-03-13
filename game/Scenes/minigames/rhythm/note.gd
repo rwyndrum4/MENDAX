@@ -3,7 +3,7 @@
 extends Area2D
 
 # Member Variables
-@onready var text_label = $label_holder/hit_type
+onready var text_label = $label_holder/hit_type
 
 const MODULATE_VALUE = 8
 const SPAWN_Y = -20
@@ -113,7 +113,7 @@ func destroy(score: int):
 		0:
 			text_label.text = "MISSED"
 			text_label.modulate = Color("#e03442")
-	$Sprite2D.queue_free()
+	$Sprite.queue_free()
 	$CollisionShape2D.queue_free()
 	#Destroy the note when hit based on a timer
 	var destroy_timer: Timer = Timer.new()
@@ -122,7 +122,7 @@ func destroy(score: int):
 	add_child(destroy_timer)
 	destroy_timer.start()
 	# warning-ignore: return_value_discarded
-	destroy_timer.connect("timeout",Callable(self,"_delete_node").bind(destroy_timer))
+	destroy_timer.connect("timeout", self, "_delete_node", [destroy_timer])
 
 """
 /*

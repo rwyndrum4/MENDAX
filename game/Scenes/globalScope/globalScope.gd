@@ -12,14 +12,14 @@
 extends Node
 
 #Member Variables
-@onready var chat_box = $GUI/chatbox
-@onready var settings_menu = $GUI/SettingsMenu
-@onready var credits = $GUI/credits
-@onready var world_env = $WorldEnvironment
-@onready var fps_label = $GUI/fpsLabel
-@onready var menu_button = $GUI/SettingsMenu/SettingsTabs/Exit/exitSettings/GridContainer/mainMenuButton
-@onready var current_song = $BGM/mainmenu
-@onready var hotbar = $GUI/Hotbar
+onready var chat_box = $GUI/chatbox
+onready var settings_menu = $GUI/SettingsMenu
+onready var credits = $GUI/credits
+onready var world_env = $WorldEnvironment
+onready var fps_label = $GUI/fpsLabel
+onready var menu_button = $GUI/SettingsMenu/SettingsTabs/Exit/exitSettings/GridContainer/mainMenuButton
+onready var current_song = $BGM/mainmenu
+onready var hotbar = $GUI/Hotbar
 
 #Scene Paths
 var main_menu = "res://Scenes/mainMenu/mainMenu.tscn"
@@ -54,21 +54,21 @@ var can_open_settings: bool = false
 """
 func _ready():
 	# warning-ignore:return_value_discarded
-	ServerConnection.connect("chat_message_received",Callable(self,"_on_ServerConnection_chat_message_received"))
+	ServerConnection.connect("chat_message_received",self,"_on_ServerConnection_chat_message_received")
 	# warning-ignore:return_value_discarded
-	GlobalSignals.connect("openChatbox",Callable(self,"_chatbox_use"))
+	GlobalSignals.connect("openChatbox",self,"_chatbox_use")
 	#Initialize the options menu and world environment
 	initialize_settings()
 	initialize_world_env()
 	initialize_fps_label()
 	#Load initial scene (main menu)
-	current_scene = load(main_menu).instantiate()
+	current_scene = load(main_menu).instance()
 	add_child(current_scene)
 	Global.state = Global.scenes.MAIN_MENU
 	local_state = Global.scenes.MAIN_MENU
 	$BGM/mainmenu.play()
 	#Connect to Server and join world
-	await server_checks().completed
+	yield(server_checks(), "completed")
 
 """
 /*
@@ -108,45 +108,45 @@ func _process(_delta): #if you want to use _delta, remove _
 func _change_scene_to(state):
 	#Load the correct scene
 	if state == Global.scenes.MAIN_MENU:
-		current_scene = load(main_menu).instantiate()
+		current_scene = load(main_menu).instance()
 	elif state == Global.scenes.OPTIONS_FROM_MAIN:
 		menu_button.hide()
 		settings_menu.popup_centered_ratio()
 		Global.state = Global.scenes.MAIN_MENU
 		return
 	elif state == Global.scenes.MARKET:
-		current_scene = load(market).instantiate()
+		current_scene = load(market).instance()
 	elif state == Global.scenes.CREDITS:
 		credits.popup_centered()
 		Global.state = Global.scenes.MAIN_MENU
 		return
 	elif state == Global.scenes.START_AREA:
-		current_scene = load(start_area).instantiate()
+		current_scene = load(start_area).instance()
 	elif state == Global.scenes.CAVE:
 		stopall()
 		$BGM/cave.play()
-		current_scene = load(cave).instantiate()
+		current_scene = load(cave).instance()
 	elif state == Global.scenes.RIDDLER_MINIGAME:
 		stopall()
 		$BGM/riddler.play()
-		current_scene = load(riddler_minigame).instantiate()
+		current_scene = load(riddler_minigame).instance()
 	elif state == Global.scenes.ARENA_MINIGAME:
 		stopall()
 		$BGM/arena.play()
-		current_scene = load(arena_minigame).instantiate()
+		current_scene = load(arena_minigame).instance()
 	elif state == Global.scenes.RHYTHM_MINIGAME:
 		stopall()
-		current_scene = load(rhythm_minigame).instantiate()
+		current_scene = load(rhythm_minigame).instance()
 	elif state == Global.scenes.GAMEOVER:
 		stopall()
 		$BGM/gameover.play()
 		current_song = "$BGM/gameover"
-		current_scene = load(gameover).instantiate()
+		current_scene = load(gameover).instance()
 	elif state==Global.scenes.QUIZ:
-		current_scene=load(quiz).instantiate()
+		current_scene=load(quiz).instance()
 	elif state == Global.scenes.DILEMMA:
 		stopall()
-		current_scene = load(dilemma).instantiate()
+		current_scene = load(dilemma).instance()
 	#add scene to tree and revise local state
 	add_child(current_scene)
 	local_state = Global.state
@@ -168,11 +168,11 @@ func stopall():
 """
 func server_checks():
 	ServerConnection.set_server_status(false)
-	var result = await request_authentication().completed
+	var result = yield(request_authentication(), "completed")
 	if result == OK:
-		result = await connect_to_server().completed
+		result = yield(connect_to_server(), "completed")
 		if result == OK:
-			result = await ServerConnection.join_chat_async_general().completed
+			result = yield(ServerConnection.join_chat_async_general(), "completed")
 			if result == OK:
 				ServerConnection.set_server_status(true)
 
@@ -187,7 +187,7 @@ func server_checks():
 func request_authentication() -> int:
 	var user: String = Save.game_data.username
 	
-	var result: int = await ServerConnection.authenticate_async().completed
+	var result: int = yield(ServerConnection.authenticate_async(), "completed")
 	if result == OK:
 		print("Authenticated user %s successfully" % user)
 	else:
@@ -203,7 +203,7 @@ func request_authentication() -> int:
 */
 """
 func connect_to_server() -> int:
-	var result: int = await ServerConnection.connect_to_server_async().completed
+	var result: int = yield(ServerConnection.connect_to_server_async(), "completed")
 	if result == OK:
 		print("Connected to the server")
 	elif ERR_CANT_CONNECT:
@@ -240,17 +240,17 @@ func _on_chatbox_message_sent(msg,is_whisper,username_to_send_to):
 		return
 	#Else send message corresponding to whisper or general
 	if is_whisper:
-		await ServerConnection.join_chat_async_whisper(username_to_send_to,false).completed
+		yield(ServerConnection.join_chat_async_whisper(username_to_send_to,false), "completed")
 		#Set a timer to give time for connection to form between players
 		var t = Timer.new()
 		t.set_wait_time(0.5)
 		t.set_one_shot(true)
 		self.add_child(t)
 		t.start()
-		await t.timeout
+		yield(t, "timeout")
 		t.queue_free()
 		#end of timer, send whisper
-		await ServerConnection.send_text_async_whisper(msg,username_to_send_to).completed
+		yield(ServerConnection.send_text_async_whisper(msg,username_to_send_to), "completed")
 	else:
 		#send message to general
 		ServerConnection.send_chat_message(msg)

@@ -28,7 +28,7 @@ namespace Nakama {
     /// <remarks>
     /// Note Content-Type header is always set as 'application/json'.
     /// </remarks>
-    public partial class GodotHttpAdapter : Node, IHttpAdapter {
+    public class GodotHttpAdapter : Node, IHttpAdapter {
 
         /// <inheritdoc cref="IHttpAdapter.Logger"/>
         public ILogger Logger { get; set; }

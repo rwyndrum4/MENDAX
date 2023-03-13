@@ -1,28 +1,28 @@
 [gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://Scenes/mainMenu/mainMenu.gd" type="Script" id=1]
-[ext_resource path="res://Assets/mainMenuAssets/BAUHS93.TTF" type="FontFile" id=3]
-[ext_resource path="res://Assets/mainMenuBG.png" type="Texture2D" id=4]
+[ext_resource path="res://Assets/mainMenuAssets/BAUHS93.TTF" type="DynamicFontData" id=3]
+[ext_resource path="res://Assets/mainMenuBG.png" type="Texture" id=4]
 [ext_resource path="res://Assets/SFX/myTongue.wav" type="AudioStream" id=5]
-[ext_resource path="res://Assets/fire5.png" type="Texture2D" id=6]
+[ext_resource path="res://Assets/fire5.png" type="Texture" id=6]
 [ext_resource path="res://Assets/SFX/bgm/Magic Forest.mp3" type="AudioStream" id=7]
-[ext_resource path="res://Assets/ARIALBD.TTF" type="FontFile" id=8]
-[ext_resource path="res://Assets/Teko-Light3D.ttf" type="FontFile" id=10]
+[ext_resource path="res://Assets/ARIALBD.TTF" type="DynamicFontData" id=8]
+[ext_resource path="res://Assets/Teko-Light.ttf" type="DynamicFontData" id=10]
 [ext_resource path="res://Assets/SFX/click.wav" type="AudioStream" id=11]
 
-[sub_resource type="FontFile" id=8]
+[sub_resource type="DynamicFont" id=8]
 size = 32
 font_data = ExtResource( 10 )
 
-[sub_resource type="FontFile" id=9]
+[sub_resource type="DynamicFont" id=9]
 size = 32
 font_data = ExtResource( 10 )
 
-[sub_resource type="FontFile" id=1]
+[sub_resource type="DynamicFont" id=1]
 size = 38
 font_data = ExtResource( 3 )
 
-[sub_resource type="FontFile" id=10]
+[sub_resource type="DynamicFont" id=10]
 size = 60
 font_data = ExtResource( 8 )
 
@@ -71,123 +71,123 @@ shader_param/noise = SubResource( 3 )
 [node name="MainMenu" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = 50.0
-offset_bottom = 50.0
+margin_right = 50.0
+margin_bottom = 50.0
 script = ExtResource( 1 )
 
 [node name="TextureRect" type="TextureRect" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -46.0
-offset_bottom = -47.0
-scale = Vector2( 0.997, 0.996 )
+margin_right = -46.0
+margin_bottom = -47.0
+rect_scale = Vector2( 0.997, 0.996 )
 texture = ExtResource( 4 )
 stretch_mode = 1
 
 [node name="menuButtons" type="VBoxContainer" parent="."]
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 16.0
-offset_top = -314.0
-offset_right = 134.0
-offset_bottom = -174.0
-scale = Vector2( 1.77124, 1.77124 )
+margin_left = 16.0
+margin_top = -314.0
+margin_right = 134.0
+margin_bottom = -174.0
+rect_scale = Vector2( 1.77124, 1.77124 )
 
 [node name="Start" type="Button" parent="menuButtons" groups=["my_buttons"]]
-offset_right = 118.0
-offset_bottom = 20.0
-pivot_offset = Vector2( -644, -266 )
-focus_neighbor_top = NodePath("../Quit")
+margin_right = 118.0
+margin_bottom = 20.0
+rect_pivot_offset = Vector2( -644, -266 )
+focus_neighbour_top = NodePath("../Quit")
 text = "Start"
 
 [node name="Options" type="Button" parent="menuButtons" groups=["my_buttons"]]
-offset_top = 24.0
-offset_right = 118.0
-offset_bottom = 44.0
+margin_top = 24.0
+margin_right = 118.0
+margin_bottom = 44.0
 text = "Options"
 
 [node name="Market" type="Button" parent="menuButtons" groups=["my_buttons"]]
-offset_top = 48.0
-offset_right = 118.0
-offset_bottom = 68.0
-pivot_offset = Vector2( -644, -266 )
+margin_top = 48.0
+margin_right = 118.0
+margin_bottom = 68.0
+rect_pivot_offset = Vector2( -644, -266 )
 text = "Market"
 
 [node name="Tests" type="Button" parent="menuButtons" groups=["my_buttons"]]
-offset_top = 72.0
-offset_right = 118.0
-offset_bottom = 92.0
+margin_top = 72.0
+margin_right = 118.0
+margin_bottom = 92.0
 text = "Tests"
 
 [node name="Credits" type="Button" parent="menuButtons" groups=["my_buttons"]]
-offset_top = 96.0
-offset_right = 118.0
-offset_bottom = 116.0
+margin_top = 96.0
+margin_right = 118.0
+margin_bottom = 116.0
 text = "Credits"
 
 [node name="Quit" type="Button" parent="menuButtons" groups=["my_buttons"]]
-offset_top = 120.0
-offset_right = 118.0
-offset_bottom = 140.0
-focus_neighbor_bottom = NodePath("../Start")
+margin_top = 120.0
+margin_right = 118.0
+margin_bottom = 140.0
+focus_neighbour_bottom = NodePath("../Start")
 text = "Quit"
 
 [node name="createGameButton" type="Button" parent="." groups=["my_buttons"]]
-offset_left = 1095.0
-offset_top = 11.0
-offset_right = 1269.0
-offset_bottom = 64.0
+margin_left = 1095.0
+margin_top = 11.0
+margin_right = 1269.0
+margin_bottom = 64.0
 custom_fonts/font = SubResource( 8 )
 text = "Create match"
 
 [node name="joinLobby" type="VBoxContainer" parent="."]
-offset_left = 1095.0
-offset_top = 77.0
-offset_right = 1269.0
-offset_bottom = 130.0
+margin_left = 1095.0
+margin_top = 77.0
+margin_right = 1269.0
+margin_bottom = 130.0
 
 [node name="joinGame" type="Button" parent="joinLobby" groups=["my_buttons"]]
-offset_right = 174.0
-offset_bottom = 53.0
+margin_right = 174.0
+margin_bottom = 53.0
 custom_fonts/font = SubResource( 9 )
 text = "Join Existing Game"
 
 [node name="enterLobbyCode" type="LineEdit" parent="joinLobby"]
 visible = false
-offset_left = 178.0
-offset_right = 236.0
-offset_bottom = 53.0
+margin_left = 178.0
+margin_right = 236.0
+margin_bottom = 53.0
 
 [node name="showLobbyCode" type="VBoxContainer" parent="."]
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -1077.0
-offset_top = 613.0
-offset_right = -864.0
-offset_bottom = 779.0
-scale = Vector2( 0.889601, 0.796081 )
+margin_left = -1077.0
+margin_top = 613.0
+margin_right = -864.0
+margin_bottom = 779.0
+rect_scale = Vector2( 0.889601, 0.796081 )
 
 [node name="lobbyCode" type="Button" parent="showLobbyCode" groups=["my_buttons"]]
-offset_right = 213.0
-offset_bottom = 50.0
-pivot_offset = Vector2( -644, -266 )
+margin_right = 213.0
+margin_bottom = 50.0
+rect_pivot_offset = Vector2( -644, -266 )
 custom_fonts/font = SubResource( 1 )
 text = "Lobby Code"
 
 [node name="code" type="Label" parent="showLobbyCode"]
-offset_top = 54.0
-offset_right = 213.0
-offset_bottom = 122.0
+margin_top = 54.0
+margin_right = 213.0
+margin_bottom = 122.0
 custom_fonts/font = SubResource( 10 )
 text = "XXXX"
 align = 1
 valign = 1
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
-offset_right = 40.0
-offset_bottom = 40.0
+margin_right = 40.0
+margin_bottom = 40.0
 
-[node name="Fire5" type="Sprite2D" parent="CenterContainer"]
+[node name="Fire5" type="Sprite" parent="CenterContainer"]
 material = SubResource( 6 )
 position = Vector2( 899, 404 )
 scale = Vector2( 0.40332, 0.37793 )
@@ -216,4 +216,4 @@ bus = "Music"
 [connection signal="pressed" from="createGameButton" to="." method="_on_createGameButton_pressed"]
 [connection signal="pressed" from="joinLobby/joinGame" to="." method="_on_joinGame_pressed"]
 [connection signal="focus_entered" from="joinLobby/enterLobbyCode" to="." method="_on_enterLobbyCode_focus_entered"]
-[connection signal="text_submitted" from="joinLobby/enterLobbyCode" to="." method="_on_enterLobbyCode_text_entered"]
+[connection signal="text_entered" from="joinLobby/enterLobbyCode" to="." method="_on_enterLobbyCode_text_entered"]

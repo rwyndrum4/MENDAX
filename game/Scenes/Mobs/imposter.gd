@@ -1,11 +1,11 @@
-extends CharacterBody2D
+extends KinematicBody2D
 
-@onready var character = $position/animated_sprite
-@onready var char_pos = $position
-@onready var hitbox_imposter = $Area2D/playerHitbox
-@onready var area2d = $Area2D
-@onready var collisionbox = $CollisionShape2D
-@onready var timer = $Timer
+onready var character = $position/animated_sprite
+onready var char_pos = $position
+onready var hitbox_imposter = $Area2D/playerHitbox
+onready var area2d = $Area2D
+onready var collisionbox = $CollisionShape2D
+onready var timer = $Timer
 var player_color = "imposter"
 var imposter_color
 var rng
@@ -33,9 +33,7 @@ func _physics_process(_delta):
 	#if not get_parent()._player_dead:
 	player_pos = get_parent().get_node("Player").position
 	velocity = position.direction_to(player_pos)* BASE_SPEED
-	set_velocity(velocity)
-	move_and_slide()
-	velocity = velocity
+	velocity = move_and_slide(velocity)
 	control_animations(velocity)
 	#else:
 	
@@ -93,7 +91,7 @@ func _on_Area2D_body_entered(body):
 		#enter health bar stuff here
 		Player.take_damage(10)
 		print("player got exploded 10 dmg")
-		await character.animation_finished
+		yield(character, "animation_finished")
 		print("invert the controls")
 		
 		Player.isInverted = true
@@ -108,5 +106,5 @@ func _on_Timer_timeout():
 	area2d.queue_free()
 	collisionbox.queue_free()
 	character.play("explosion")
-	await character.animation_finished
+	yield(character, "animation_finished")
 	queue_free() # Replace with function body.

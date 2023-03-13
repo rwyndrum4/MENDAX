@@ -6,7 +6,7 @@
 [ext_resource path="res://Scenes/globalScope/GUI.gd" type="Script" id=4]
 [ext_resource path="res://Inventory/Inventory.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Scenes/worldEnvironment/worldEnv.tscn" type="PackedScene" id=6]
-[ext_resource path="res://Assets/ARIALBD.TTF" type="FontFile" id=7]
+[ext_resource path="res://Assets/ARIALBD.TTF" type="DynamicFontData" id=7]
 [ext_resource path="res://Scenes/fpsDisplay/fpsLabel.tscn" type="PackedScene" id=8]
 [ext_resource path="res://Assets/SFX/bgm/Magic Forest.mp3" type="AudioStream" id=9]
 [ext_resource path="res://Assets/SFX/bgm/Wholesome.mp3" type="AudioStream" id=10]
@@ -17,7 +17,7 @@
 [ext_resource path="res://Inventory/Hotbar.tscn" type="PackedScene" id=16]
 [ext_resource path="res://Scenes/mainMenu/creditsWindow.tscn" type="PackedScene" id=17]
 
-[sub_resource type="FontFile" id=1]
+[sub_resource type="DynamicFont" id=1]
 font_data = ExtResource( 7 )
 
 [node name="globalScope" type="Node"]
@@ -29,8 +29,8 @@ script = ExtResource( 3 )
 script = ExtResource( 4 )
 
 [node name="chatbox" parent="GUI" instance=ExtResource( 1 )]
-offset_top = 35.0
-offset_bottom = -442.0
+margin_top = 35.0
+margin_bottom = -442.0
 
 [node name="Inventory" parent="GUI" instance=ExtResource( 5 )]
 position = Vector2( 460, 250 )
@@ -39,8 +39,8 @@ position = Vector2( 460, 250 )
 
 [node name="fpsLabel" parent="GUI" instance=ExtResource( 8 )]
 visible = false
-offset_right = 59.0
-offset_bottom = 24.0
+margin_right = 59.0
+margin_bottom = 24.0
 custom_fonts/font = SubResource( 1 )
 
 [node name="Hotbar" parent="GUI" instance=ExtResource( 16 )]

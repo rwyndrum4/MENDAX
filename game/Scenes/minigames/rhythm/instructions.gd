@@ -17,7 +17,7 @@ var _s3: String = """[center][color=#141414][b]Best of Luck[/b][/color][/center]
 
 func _ready():
 	$hit_bar_ex.show()
-	$text_instr.text = _s1
+	$text_instr.bbcode_text = _s1
 
 func _process(delta):
 	_timer += delta
@@ -27,9 +27,9 @@ func _process(delta):
 		$reg_note_fd.hide()
 		$hold_note.hide()
 		var extra: String = "[i][b][center]" + str(4 - (int(_timer) % 4)) + "[/center][/b][/i]"
-		$text_instr.text = _s3 + extra
+		$text_instr.bbcode_text = _s3 + extra
 	elif _timer > 6:
 		$hit_bar_ex.hide()
-		$text_instr.text = _s2
+		$text_instr.bbcode_text = _s2
 		$reg_note_fd.show()
 		$hold_note.show()

@@ -1,6 +1,6 @@
 extends Area2D
 
-@onready var drawing = $anim_drawing
+onready var drawing = $anim_drawing
 var _speed = Vector2(0.01,0.01)
 var _got_too_big:bool = false
 signal aoe_attack_hit()

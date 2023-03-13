@@ -1,41 +1,41 @@
 [gd_scene load_steps=19 format=2]
 
-[ext_resource path="res://Assets/Teko-Light3D.ttf" type="FontFile" id=1]
+[ext_resource path="res://Assets/Teko-Light.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://Scenes/minigames/riddler/riddleGame.gd" type="Script" id=2]
 [ext_resource path="res://Scenes/player/player.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Scenes/minigames/riddler/riddlerMap.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Scenes/textBox/textBox.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Scenes/Jester/jester.tscn" type="PackedScene" id=7]
-[ext_resource path="res://Assets/35189.png" type="Texture2D" id=8]
-[ext_resource path="res://Assets/ARIALBD.TTF" type="FontFile" id=9]
+[ext_resource path="res://Assets/35189.png" type="Texture" id=8]
+[ext_resource path="res://Assets/ARIALBD.TTF" type="DynamicFontData" id=9]
 
 [sub_resource type="OccluderPolygon2D" id=1]
-polygon = PackedVector2Array( -48.9833, -45.9201, -50.0482, 47.9166, -50.0482, 47.9166, 50.0482, 46.9184, 50.0482, 46.9184, 48.9833, -48.9149, 47.9185, -50.9114 )
+polygon = PoolVector2Array( -48.9833, -45.9201, -50.0482, 47.9166, -50.0482, 47.9166, 50.0482, 46.9184, 50.0482, 46.9184, 48.9833, -48.9149, 47.9185, -50.9114 )
 
-[sub_resource type="FontFile" id=5]
+[sub_resource type="DynamicFont" id=5]
 size = 24
 font_data = ExtResource( 9 )
 
-[sub_resource type="FontFile" id=7]
+[sub_resource type="DynamicFont" id=7]
 size = 24
 font_data = ExtResource( 9 )
 
-[sub_resource type="FontFile" id=2]
+[sub_resource type="DynamicFont" id=2]
 size = 40
 font_data = ExtResource( 1 )
 
-[sub_resource type="FontFile" id=9]
+[sub_resource type="DynamicFont" id=9]
 font_data = ExtResource( 9 )
 
 [sub_resource type="RectangleShape2D" id=4]
-size = Vector2( 90, 92.5 )
+extents = Vector2( 90, 92.5 )
 
 [sub_resource type="RectangleShape2D" id=3]
-size = Vector2( 48.5, 48.5 )
+extents = Vector2( 48.5, 48.5 )
 
 [sub_resource type="Curve2D" id=10]
 _data = {
-"points": PackedVector2Array( 0, 0, 0, 0, 832, 1344, 0, 0, 0, 0, -293, 180 )
+"points": PoolVector2Array( 0, 0, 0, 0, 832, 1344, 0, 0, 0, 0, -293, 180 )
 }
 
 [sub_resource type="Animation" id=11]
@@ -48,8 +48,8 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PackedFloat32Array( 0, 3 ),
-"transitions": PackedFloat32Array( 1, 1 ),
+"times": PoolRealArray( 0, 3 ),
+"transitions": PoolRealArray( 1, 1 ),
 "update": 0,
 "values": [ 0.0, 1598.22 ]
 }
@@ -63,8 +63,8 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PackedFloat32Array( 0 ),
-"transitions": PackedFloat32Array( 1 ),
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
 "update": 0,
 "values": [ 0.0 ]
 }
@@ -73,10 +73,10 @@ tracks/0/keys = {
 script = ExtResource( 2 )
 
 [node name="riddleMap" parent="." instance=ExtResource( 5 )]
-offset_left = -408.0
-offset_top = -464.0
-offset_right = -408.0
-offset_bottom = -464.0
+margin_left = -408.0
+margin_top = -464.0
+margin_right = -408.0
+margin_bottom = -464.0
 
 [node name="Player" parent="." instance=ExtResource( 3 )]
 position = Vector2( 832, 1344 )
@@ -89,19 +89,19 @@ current = true
 
 [node name="Labelarea" type="Label" parent="Player"]
 visible = false
-offset_left = -85.0
-offset_top = -86.0
-offset_right = 82.0
-offset_bottom = -58.0
+margin_left = -85.0
+margin_top = -86.0
+margin_right = 82.0
+margin_bottom = -58.0
 custom_fonts/font = SubResource( 5 )
 text = "Hint is nearby!"
 align = 1
 
 [node name="Hints" type="Button" parent="Player"]
-offset_left = -156.0
-offset_top = -110.0
-offset_right = -57.0
-offset_bottom = -76.0
+margin_left = -156.0
+margin_top = -110.0
+margin_right = -57.0
+margin_bottom = -76.0
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_fonts/font = SubResource( 7 )
 text = "Letters:"
@@ -111,10 +111,10 @@ text = "Letters:"
 [node name="Timer" type="Timer" parent="GUI"]
 
 [node name="timerText" type="Label" parent="GUI/Timer"]
-offset_left = 612.0
-offset_top = 10.0
-offset_right = 656.0
-offset_bottom = 68.0
+margin_left = 612.0
+margin_top = 10.0
+margin_right = 656.0
+margin_bottom = 68.0
 custom_colors/font_color = Color( 0, 1, 0.203922, 1 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 2 )
@@ -122,12 +122,12 @@ custom_fonts/font = SubResource( 2 )
 [node name="textBox" parent="GUI" instance=ExtResource( 6 )]
 visible = false
 
-[node name="show_letter" type="Window" parent="GUI"]
-offset_left = 436.0
-offset_top = 1174.0
-offset_right = 484.0
-offset_bottom = 1214.0
-scale = Vector2( 2.06932, 1.03635 )
+[node name="show_letter" type="WindowDialog" parent="GUI"]
+margin_left = 436.0
+margin_top = 1174.0
+margin_right = 484.0
+margin_bottom = 1214.0
+rect_scale = Vector2( 2.06932, 1.03635 )
 custom_colors/title_color = Color( 0.0431373, 0.0431373, 0.0431373, 1 )
 custom_fonts/title_font = SubResource( 9 )
 
@@ -143,7 +143,7 @@ shape = SubResource( 4 )
 [node name="item1" type="Area2D" parent="." groups=["hints"]]
 position = Vector2( 2359.45, 2303.06 )
 
-[node name="Sprite2D" type="Sprite2D" parent="item1"]
+[node name="Sprite" type="Sprite" parent="item1"]
 position = Vector2( -0.999878, -1.99994 )
 scale = Vector2( 0.2, 0.2 )
 texture = ExtResource( 8 )
@@ -165,7 +165,7 @@ shape = SubResource( 4 )
 [node name="item2" type="Area2D" parent="." groups=["hints"]]
 position = Vector2( 200, 2402 )
 
-[node name="Sprite2D" type="Sprite2D" parent="item2"]
+[node name="Sprite" type="Sprite" parent="item2"]
 position = Vector2( -1.99988, -6 )
 scale = Vector2( 0.2, 0.2 )
 texture = ExtResource( 8 )
@@ -187,7 +187,7 @@ shape = SubResource( 4 )
 [node name="item3" type="Area2D" parent="." groups=["hints"]]
 position = Vector2( 1500, 1000 )
 
-[node name="Sprite2D" type="Sprite2D" parent="item3"]
+[node name="Sprite" type="Sprite" parent="item3"]
 position = Vector2( -1.99988, -6 )
 scale = Vector2( 0.2, 0.2 )
 texture = ExtResource( 8 )
@@ -209,7 +209,7 @@ shape = SubResource( 4 )
 [node name="item4" type="Area2D" parent="." groups=["hints"]]
 position = Vector2( 2000, 1500 )
 
-[node name="Sprite2D" type="Sprite2D" parent="item4"]
+[node name="Sprite" type="Sprite" parent="item4"]
 position = Vector2( -1.99988, -6 )
 scale = Vector2( 0.2, 0.2 )
 texture = ExtResource( 8 )
@@ -231,7 +231,7 @@ shape = SubResource( 4 )
 [node name="item5" type="Area2D" parent="." groups=["hints"]]
 position = Vector2( 500, 500 )
 
-[node name="Sprite2D" type="Sprite2D" parent="item5"]
+[node name="Sprite" type="Sprite" parent="item5"]
 position = Vector2( -1.99988, -6 )
 scale = Vector2( 0.2, 0.2 )
 texture = ExtResource( 8 )
@@ -253,7 +253,7 @@ shape = SubResource( 4 )
 [node name="item6" type="Area2D" parent="." groups=["hints"]]
 position = Vector2( 1200, 1200 )
 
-[node name="Sprite2D" type="Sprite2D" parent="item6"]
+[node name="Sprite" type="Sprite" parent="item6"]
 position = Vector2( -1.99988, -6 )
 scale = Vector2( 0.2, 0.2 )
 texture = ExtResource( 8 )

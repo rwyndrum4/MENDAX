@@ -16,16 +16,14 @@ func _ready():
 func get_data(filepath):
 	var file := File.new()
 	var result: int = file.open(filepath, file.READ)
-	assert(result == OK) #,str("Invalid filepath: ", filepath))
+	assert(result == OK, str("Invalid filepath: ", filepath))
 	
 	var text := file.get_as_text()
 	var jsonErr: String = validate_json(text)
-	assert(jsonErr.is_empty()) #,str("Invalid JSON: ", jsonErr))
+	assert(jsonErr.empty(), str("Invalid JSON: ", jsonErr))
 	
-	var test_json_conv = JSON.new()
-	test_json_conv.parse(text)
-	var jsonRes = test_json_conv.get_data()
-	assert(typeof(jsonRes) == TYPE_DICTIONARY) #,str("Not a Dictionary: ", jsonRes))
+	var jsonRes = parse_json(text)
+	assert(typeof(jsonRes) == TYPE_DICTIONARY, str("Not a Dictionary: ", jsonRes))
 	
 	var dict: Dictionary = jsonRes
 	return dict

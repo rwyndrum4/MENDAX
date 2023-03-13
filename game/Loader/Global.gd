@@ -10,7 +10,7 @@ extends Node
 
 # Player's balance
 var money: int = 0
-var player_inventory = preload("res://Inventory/Inventory.tscn").instantiate()
+var player_inventory = preload("res://Inventory/Inventory.tscn").instance()
 
 #Entry First Time
 var in_anim: int = 0
@@ -86,11 +86,11 @@ var player_colors: Dictionary = {1:"blue",2:"red",3:"green",4:"orange"}
 """
 func _ready():
 	# warning-ignore:return_value_discarded
-	ServerConnection.connect("state_updated",Callable(self,"_player_positions_updated"))
+	ServerConnection.connect("state_updated",self,"_player_positions_updated")
 	# warning-ignore:return_value_discarded
-	ServerConnection.connect("input_updated",Callable(self,"_player_input_updated"))
+	ServerConnection.connect("input_updated",self,"_player_input_updated")
 	# warning-ignore:return_value_discarded
-	ServerConnection.connect("minigame_player_spawned",Callable(self,"_minigame_player_spawn"))
+	ServerConnection.connect("minigame_player_spawned",self, "_minigame_player_spawn")
 
 """
 /*

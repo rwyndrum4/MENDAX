@@ -1,4 +1,4 @@
-extends RefCounted
+extends Reference
 class_name NakamaSerializer
 # warnings-disable
 static func serialize(p_obj : Object) -> Dictionary:
@@ -26,7 +26,7 @@ static func serialize(p_obj : Object) -> Dictionary:
 						continue
 					arr.append(serialize(e))
 				out[k] = arr
-			TYPE_PACKED_INT32_ARRAY, TYPE_PACKED_STRING_ARRAY: # Array of ints, bools, or strings
+			TYPE_INT_ARRAY, TYPE_STRING_ARRAY: # Array of ints, bools, or strings
 				var arr = []
 				for e in val:
 					if content == TYPE_BOOL:
@@ -45,7 +45,7 @@ static func serialize(p_obj : Object) -> Dictionary:
 				else: # Map of simple types
 					for l in val:
 						var e = val[l]
-						if content == TYPE_FLOAT:
+						if content == TYPE_REAL:
 							e = float(e)
 						elif content == TYPE_INT:
 							e = int(e)
@@ -74,7 +74,7 @@ static func deserialize(p_ns : GDScript, p_cls_name : String, p_dict : Dictionar
 		var type_cmp = type
 		if typeof(type) == TYPE_STRING: # A class
 			type_cmp = TYPE_DICTIONARY
-		if type_cmp == TYPE_PACKED_STRING_ARRAY or type_cmp == TYPE_PACKED_INT32_ARRAY: # A specialized array
+		if type_cmp == TYPE_STRING_ARRAY or type_cmp == TYPE_INT_ARRAY: # A specialized array
 			type_cmp = TYPE_ARRAY
 
 		var content_cmp = content
@@ -85,7 +85,7 @@ static func deserialize(p_ns : GDScript, p_cls_name : String, p_dict : Dictionar
 
 		# Ints might and up being recognized as floats. Change that if needed
 		if type_cmp == TYPE_INT:
-			if typeof(val) == TYPE_FLOAT or (typeof(val) == TYPE_STRING and val.is_valid_int()):
+			if typeof(val) == TYPE_REAL or (typeof(val) == TYPE_STRING and val.is_valid_integer()):
 				val = int(val)
 
 		if typeof(val) == type_cmp:
@@ -96,7 +96,7 @@ static func deserialize(p_ns : GDScript, p_cls_name : String, p_dict : Dictionar
 				for l in val:
 					if typeof(content) == TYPE_STRING:
 						v[l] = deserialize(p_ns, content, val[l])
-					elif content == TYPE_FLOAT:
+					elif content == TYPE_REAL:
 						v[l] = float(val[l])
 					elif content == TYPE_INT:
 						v[l] = int(val[l])
@@ -108,13 +108,13 @@ static func deserialize(p_ns : GDScript, p_cls_name : String, p_dict : Dictionar
 			elif type_cmp == TYPE_ARRAY:
 				var v
 				match content:
-					TYPE_INT, TYPE_BOOL: v = PackedInt32Array()
-					TYPE_STRING: v = PackedStringArray()
+					TYPE_INT, TYPE_BOOL: v = PoolIntArray()
+					TYPE_STRING: v = PoolStringArray()
 					_: v = Array()
 				for e in val:
 					if typeof(content) == TYPE_STRING:
 						v.append(deserialize(p_ns, content, e))
-					elif content == TYPE_FLOAT:
+					elif content == TYPE_REAL:
 						v.append(float(e))
 					elif content == TYPE_INT:
 						v.append(int(e))
@@ -132,7 +132,7 @@ static func deserialize(p_ns : GDScript, p_cls_name : String, p_dict : Dictionar
 
 
 ###
-# Compatibility with Godot 3.1 which does not expose String.uri_encode
+# Compatibility with Godot 3.1 which does not expose String.http_escape
 ###
 const HEX = ["0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"]
 
@@ -145,7 +145,7 @@ static func escape_http(p_str : String) -> String:
 			(o >= '0' and o <= '9')):
 			out += o
 		else:
-			for b in o.to_utf8_buffer():
+			for b in o.to_utf8():
 				out += "%%%s" % to_hex(b)
 	return out
 

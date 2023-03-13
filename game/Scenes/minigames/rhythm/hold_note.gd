@@ -3,11 +3,11 @@
 extends Area2D
 
 # Member Variables
-@onready var hold_zone = $hold_pivot_node/hold_zone
-@onready var first_label_text = $first_label/hit_type
-@onready var second_label_text = $second_label/hit_type
-@onready var second_sprite = $second_sprite
-@onready var second_collider = $second_collider
+onready var hold_zone = $hold_pivot_node/hold_zone
+onready var first_label_text = $first_label/hit_type
+onready var second_label_text = $second_label/hit_type
+onready var second_sprite = $second_sprite
+onready var second_collider = $second_collider
 var _current_label = null
 
 const MODULATE_VALUE = 8
@@ -38,7 +38,7 @@ var _in_hold_phase = false #track if in the holding phase
 */
 """
 func _ready():
-	assert(_hold_height != 0) #,"ERROR: Hold note height not set")
+	assert(_hold_height != 0, "ERROR: Hold note height not set")
 	$slide_sound.volume_db = 8
 	$final_hit_sound.volume_db = -6
 	randomize()
@@ -154,7 +154,7 @@ func initialize(lane: int, new_speed: int):
 */
 """
 func finish_object(zone_height: int):
-	hold_zone.size.y = zone_height
+	hold_zone.rect_size.y = zone_height
 	var zone_degree = $hold_pivot_node.rotation_degrees + get_angle()
 	$hold_pivot_node.rotation_degrees = zone_degree
 	var x_result = calc_change(zone_degree, zone_height)
@@ -227,7 +227,7 @@ func destroy(score: int, note_fully_missed = false):
 """
 func _delete_node():
 	if _second_hit:
-		await $final_hit_sound.finished
+		yield($final_hit_sound, "finished")
 	queue_free()
 
 """

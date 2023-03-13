@@ -7,11 +7,11 @@
 	10/2/2022 - Improved movement to feel more natural
 	10/14/2022 - Added signals to stop player when in options or textbox scene
 """
-extends CharacterBody2D
+extends KinematicBody2D
 
 # Member Variables
-@onready var character = $position/animated_sprite
-@onready var char_pos = $position
+onready var character = $position/animated_sprite
+onready var char_pos = $position
 var is_stopped = false
 
 # Player physics constants
@@ -33,9 +33,9 @@ var velocity = Vector2.ZERO
 func _ready():
 	#Connects singal to GlobalSignals, will stop/unstop player when called from "textbBox.gd"
 	# warning-ignore:return_value_discarded
-	GlobalSignals.connect("textbox_shift",Callable(self,"stop_go_player"))
+	GlobalSignals.connect("textbox_shift",self,"stop_go_player")
 	# warning-ignore:return_value_discarded
-	GlobalSignals.connect("openMenu",Callable(self,"stop_go_player"))
+	GlobalSignals.connect("openMenu",self,"stop_go_player")
 
 """
 /*

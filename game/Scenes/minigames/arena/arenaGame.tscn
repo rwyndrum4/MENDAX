@@ -2,28 +2,28 @@
 
 [ext_resource path="res://Scenes/minigames/arena/arenaGame.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/minigames/arena/arenaMap.tscn" type="PackedScene" id=2]
-[ext_resource path="res://Assets/Teko-Light3D.ttf" type="FontFile" id=3]
+[ext_resource path="res://Assets/Teko-Light.ttf" type="DynamicFontData" id=3]
 [ext_resource path="res://Scenes/textBox/textBox.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Scenes/Mobs/skeleton.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Scenes/player/player.tscn" type="PackedScene" id=6]
-[ext_resource path="res://Assets/Silver.ttf" type="FontFile" id=7]
+[ext_resource path="res://Assets/Silver.ttf" type="DynamicFontData" id=7]
 [ext_resource path="res://Scenes/player/Sword/Sword.tscn" type="PackedScene" id=8]
-[ext_resource path="res://Scenes/minigames/arena/littleGuy.png" type="Texture2D" id=9]
+[ext_resource path="res://Scenes/minigames/arena/littleGuy.png" type="Texture" id=9]
 [ext_resource path="res://Scenes/minigames/arena/littleGuy.gd" type="Script" id=10]
 [ext_resource path="res://Scenes/Mobs/BoD.tscn" type="PackedScene" id=11]
 [ext_resource path="res://Scenes/Mobs/chandelier.tscn" type="PackedScene" id=12]
 
 [sub_resource type="OccluderPolygon2D" id=1]
-polygon = PackedVector2Array( -48.9833, -45.9201, -50.0482, 47.9166, -50.0482, 47.9166, 50.0482, 46.9184, 50.0482, 46.9184, 48.9833, -48.9149, 47.9185, -50.9114 )
+polygon = PoolVector2Array( -48.9833, -45.9201, -50.0482, 47.9166, -50.0482, 47.9166, 50.0482, 46.9184, 50.0482, 46.9184, 48.9833, -48.9149, 47.9185, -50.9114 )
 
 [sub_resource type="RectangleShape2D" id=5]
-size = Vector2( 3.66668, 17.6191 )
+extents = Vector2( 3.66668, 17.6191 )
 
-[sub_resource type="FontFile" id=4]
+[sub_resource type="DynamicFont" id=4]
 size = 40
 font_data = ExtResource( 3 )
 
-[sub_resource type="FontFile" id=7]
+[sub_resource type="DynamicFont" id=7]
 size = 75
 font_data = ExtResource( 7 )
 
@@ -56,16 +56,16 @@ current = true
 
 [node name="Sword" parent="Player" instance=ExtResource( 8 )]
 
-[node name="Skeleton3D" parent="." instance=ExtResource( 5 )]
+[node name="Skeleton" parent="." instance=ExtResource( 5 )]
 position = Vector2( 929, 838 )
 scale = Vector2( 3, 3 )
 collision_layer = 262148
 collision_mask = 262144
 
-[node name="StaticBody2D" type="StaticBody2D" parent="Skeleton3D"]
+[node name="StaticBody2D" type="StaticBody2D" parent="Skeleton"]
 position = Vector2( 0.333328, 0 )
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Skeleton3D/StaticBody2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Skeleton/StaticBody2D"]
 position = Vector2( 1.33334, 27.3333 )
 rotation = 1.5708
 scale = Vector2( 0.5, 0.7 )
@@ -76,26 +76,26 @@ shape = SubResource( 5 )
 [node name="Timer" type="Timer" parent="GUI"]
 
 [node name="timerText" type="Label" parent="GUI/Timer"]
-offset_left = 612.0
-offset_top = 10.0
-offset_right = 656.0
-offset_bottom = 68.0
+margin_left = 612.0
+margin_top = 10.0
+margin_right = 656.0
+margin_bottom = 68.0
 custom_colors/font_color = Color( 0, 1, 0.203922, 1 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 4 )
 
 [node name="wait_on_players" type="Label" parent="GUI"]
-offset_left = 350.0
-offset_top = 450.0
-offset_right = 950.0
-offset_bottom = 534.0
+margin_left = 350.0
+margin_top = 450.0
+margin_right = 950.0
+margin_bottom = 534.0
 custom_fonts/font = SubResource( 7 )
 text = "Waiting on other players..."
 
 [node name="textBox" parent="." instance=ExtResource( 4 )]
 visible = false
 
-[node name="littleGuy" type="CharacterBody2D" parent="."]
+[node name="littleGuy" type="KinematicBody2D" parent="."]
 position = Vector2( 1440, 866 )
 collision_layer = 8
 script = ExtResource( 10 )
@@ -106,7 +106,7 @@ __meta__ = {
 [node name="guyHitbox" type="CollisionShape2D" parent="littleGuy"]
 shape = SubResource( 5 )
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="littleGuy"]
+[node name="AnimatedSprite" type="AnimatedSprite" parent="littleGuy"]
 frames = SubResource( 6 )
 animation = "crawl"
 

@@ -26,7 +26,7 @@ enum OpCodes {
 #Variable that checks if connected to server
 var server_status: bool = false
 
-#Signals for recieving game state data from server (from  the super.lua files)
+#Signals for recieving game state data from server (from  the .lua files)
 signal state_updated(id, position) #state of game has been updated
 signal input_updated(id, vec) #input of player has changed and received
 signal character_spawned(char_name) #singal to tell if someone has spawned
@@ -121,7 +121,7 @@ func authenticate_async() -> int:
 	var result := OK
 	_device_id = OS.get_unique_id()
 	
-	var new_session: NakamaSession = await _client.authenticate_device_async(_device_id).completed
+	var new_session: NakamaSession = yield(_client.authenticate_device_async(_device_id), "completed")
 	
 	if not new_session.is_exception():
 		_session = new_session
@@ -140,26 +140,26 @@ func authenticate_async() -> int:
 """
 func connect_to_server_async() -> int:
 	_socket = Nakama.create_socket_from(_client)
-	var result: NakamaAsyncResult = await _socket.connect_async(_session).completed
+	var result: NakamaAsyncResult = yield(_socket.connect_async(_session), "completed")
 	var new_username = Save.game_data.username
-	await _client.update_account_async(_session, new_username).completed
+	yield(_client.update_account_async(_session, new_username), "completed")
 	if not result.is_exception():
 		#connect to closed signal, called when connection is closed to free memory
 		# warning-ignore:return_value_discarded
-		_socket.connect("closed",Callable(self,"_on_NakamaSocket_closed"))
+		_socket.connect("closed", self, "_on_NakamaSocket_closed")
 		#connect
 		# warning-ignore:return_value_discarded
-		_socket.connect("received_channel_message",Callable(self,"_on_Nakama_Socket_received_channel_message"))
+		_socket.connect("received_channel_message", self, "_on_Nakama_Socket_received_channel_message")
 		#get user who joins
 		# warning-ignore:return_value_discarded
-		_socket.connect("received_channel_presence",Callable(self,"_on_channel_presence_general"))
+		_socket.connect("received_channel_presence", self, "_on_channel_presence_general")
 		#get a notification
 		# warning-ignore:return_value_discarded
-		_socket.connect("received_notification",Callable(self,"_on_notification"))
+		_socket.connect("received_notification", self, "_on_notification")
 		#warning-ignore: return_value_discarded
-		_socket.connect("received_match_state",Callable(self,"_on_NakamaSocket_received_match_state"))
+		_socket.connect("received_match_state", self, "_on_NakamaSocket_received_match_state")
 		#warning-ignore: return_value_discarded
-		_socket.connect("received_match_presence",Callable(self,"_on_NakamaSocket_received_match_precence"))
+		_socket.connect("received_match_presence", self, "_on_NakamaSocket_received_match_precence")
 		return OK
 	return ERR_CANT_CONNECT
 
@@ -203,7 +203,7 @@ func join_chat_async_general() -> int:
 */
 """
 func leave_general_chat():
-	var result: NakamaAsyncResult = await _socket.leave_chat_async(_general_chat_id).completed
+	var result: NakamaAsyncResult = yield(_socket.leave_chat_async(_general_chat_id), "completed")
 	_general_chat_id = ""
 	if result.is_exception():
 		printerr("An error occurred: %s" % result)
@@ -230,7 +230,7 @@ func join_chat_async_whisper(input:String, has_id_already:bool) -> int:
 	var type = NakamaSocket.ChannelType.DirectMessage
 	var persistence = true
 	var hidden = false
-	var channel : NakamaRTAPI.Channel = await _socket.join_chat_async(user_id, type, persistence, hidden).completed
+	var channel : NakamaRTAPI.Channel = yield(_socket.join_chat_async(user_id, type, persistence, hidden), "completed")
 	_current_whisper_id = channel.id
 	if channel.is_exception():
 		return ERR_CONNECTION_ERROR
@@ -250,7 +250,7 @@ func join_chat_async_group() -> int:
 	var persistence = true
 	var hidden = false
 	var type = NakamaSocket.ChannelType.Group
-	var channel : NakamaRTAPI.Channel = await _socket.join_chat_async(loc_group_id, type, persistence, hidden).completed
+	var channel : NakamaRTAPI.Channel = yield(_socket.join_chat_async(loc_group_id, type, persistence, hidden), "completed")
 	_group_chat_id = channel.id 
 	print("Connected to group channel: '%s'" % [channel.id])
 	return OK
@@ -264,7 +264,7 @@ func join_chat_async_group() -> int:
 */
 """
 func create_match_group(group_name: String):
-	var group: NakamaAPI.ApiGroup = await _client.create_group_async(_session, group_name).completed
+	var group: NakamaAPI.ApiGroup = yield(_client.create_group_async(_session, group_name), "completed")
 	_group_id = group.id
 	if group.is_exception():
 		print("Group was not formed: %s" % group)
@@ -278,7 +278,7 @@ func create_match_group(group_name: String):
 */
 """
 func join_match_group():
-	var join: NakamaAsyncResult = await _client.join_group_async(_session, _group_id).completed
+	var join: NakamaAsyncResult = yield(_client.join_group_async(_session, _group_id), "completed")
 	if join.is_exception():
 		printerr("An error occurred: %s" % join)
 
@@ -291,7 +291,7 @@ func join_match_group():
 */
 """
 func leave_match_group():
-	var leave : NakamaAsyncResult = await _client.leave_group_async(_session, _group_id).completed
+	var leave : NakamaAsyncResult = yield(_client.leave_group_async(_session, _group_id), "completed")
 	if leave.is_exception():
 		printerr("An error occurred: %s" % leave)
 
@@ -304,7 +304,7 @@ func leave_match_group():
 */
 """
 func leave_match_group_chat():
-	var result: NakamaAsyncResult = await _socket.leave_chat_async(_group_chat_id).completed
+	var result: NakamaAsyncResult = yield(_socket.leave_chat_async(_group_chat_id), "completed")
 	
 	if result.is_exception():
 		printerr("An error occurred: %s" % result)
@@ -320,9 +320,9 @@ func leave_match_group_chat():
 """
 func send_chat_message(text: String):
 	if _is_global_chat:
-		await send_text_async_general(text).completed
+		yield(send_text_async_general(text), "completed")
 	else:
-		await send_text_async_group(text).completed
+		yield(send_text_async_group(text), "completed")
 
 """
 /*
@@ -389,10 +389,10 @@ func send_text_async_whisper(text: String,user_sent_to:String) -> int:
 """
 func create_match(lobby_name:String) -> Array:
 	_lobby_id = lobby_name
-	game_match = await _socket.create_match_async(lobby_name).completed
+	game_match = yield(_socket.create_match_async(lobby_name), "completed")
 	Global.add_match(lobby_name,game_match.match_id, _group_id)
 	_match_id = game_match.match_id
-	send_text_async_general("MATCH_RECEIVED " + JSON.stringify(Global.current_matches))
+	send_text_async_general("MATCH_RECEIVED " + JSON.print(Global.current_matches))
 	return game_match.presences
 
 """
@@ -404,7 +404,7 @@ func create_match(lobby_name:String) -> Array:
 */
 """
 func join_match(id:String) -> Dictionary:
-	game_match = await _socket.join_match_async(id).completed
+	game_match = yield(_socket.join_match_async(id), "completed")
 	_match_id = game_match.match_id
 	for p in game_match.presences:
 		connected_opponents[p.user_id] = p.username
@@ -420,7 +420,7 @@ func join_match(id:String) -> Dictionary:
 """
 func leave_match(id:String) -> int:
 	_match_id = ""
-	var leave: NakamaAsyncResult = await _socket.leave_match_async(id).completed
+	var leave: NakamaAsyncResult = yield(_socket.leave_match_async(id), "completed")
 	if leave.is_exception():
 		return ERR_CANT_RESOLVE
 	else:
@@ -449,7 +449,7 @@ func send_position_update(position: Vector2) -> void:
 	#if socket is in place and player is moving
 	if _socket and position != Global.get_player_pos(_player_num):
 		var payload = {id = _player_num, pos = {x=position.x, y = position.y}}
-		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_POSITION,JSON.stringify(payload))
+		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_POSITION,JSON.print(payload))
 
 """
 /*
@@ -463,7 +463,7 @@ func send_input_update(in_vec:Vector2) -> void:
 	#if socket is in place and player is moving
 	if _socket and in_vec != Global.get_player_input_vec(_player_num):
 		var payload := {id = _player_num, x_in = in_vec.x, y_in = in_vec.y}
-		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_INPUT,JSON.stringify(payload))
+		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_INPUT,JSON.print(payload))
 
 """
 /*
@@ -476,7 +476,7 @@ func send_input_update(in_vec:Vector2) -> void:
 func send_riddle(riddle_in: String, answer_in:String) -> void:
 	if _socket:
 		var payload := {riddle = riddle_in, answer = answer_in}
-		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_RIDDLER_RIDDLE, JSON.stringify(payload))
+		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_RIDDLER_RIDDLE, JSON.print(payload))
 
 """
 /*
@@ -489,7 +489,7 @@ func send_riddle(riddle_in: String, answer_in:String) -> void:
 func send_arena_sword(direction: String):
 	if _socket:
 		var payload := {id = _player_num, dir = direction}
-		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_ARENA_SWORD, JSON.stringify(payload))
+		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_ARENA_SWORD, JSON.print(payload))
 
 """
 /*
@@ -502,7 +502,7 @@ func send_arena_sword(direction: String):
 func send_arena_player_health(health_in: int):
 	if _socket:
 		var payload := {id = _player_num, health = health_in}
-		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_ARENA_PLAYER_HEALTH, JSON.stringify(payload))
+		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_ARENA_PLAYER_HEALTH, JSON.print(payload))
 
 """
 /*
@@ -515,12 +515,12 @@ func send_arena_player_health(health_in: int):
 func send_arena_enemy_hit(damage: int, enemy_hit: int):
 	if _socket:
 		var payload := {id = _player_num,enemy = enemy_hit, dmg = damage}
-		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_ARENA_ENEMY_HIT, JSON.stringify(payload))
+		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_ARENA_ENEMY_HIT, JSON.print(payload))
 
 func send_minigame_can_start():
 	if _socket:
 		var payload := {}
-		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_CAN_START_GAME, JSON.stringify(payload))
+		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_CAN_START_GAME, JSON.print(payload))
 
 """
 /*
@@ -533,7 +533,7 @@ func send_minigame_can_start():
 func send_rhythm_score(new_score:int):
 	if _socket:
 		var payload := {id = _player_num, score = new_score}
-		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_RHYTHM_SCORE, JSON.stringify(payload))
+		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_RHYTHM_SCORE, JSON.print(payload))
 
 """
 /*
@@ -546,7 +546,7 @@ func send_rhythm_score(new_score:int):
 func send_spawn_notif():
 	if _socket:
 		var payload := {id = _player_num}
-		_socket.send_match_state_async(_match_id, OpCodes.SPAWNED, JSON.stringify(payload))
+		_socket.send_match_state_async(_match_id, OpCodes.SPAWNED, JSON.print(payload))
 
 """
 /*
@@ -560,9 +560,7 @@ func _on_Nakama_Socket_received_channel_message(message: NakamaAPI.ApiChannelMes
 	if message.code != 0:
 		return
 	
-	var test_json_conv = JSON.new()
-	test_json_conv.parse(message.content).result
-	var content: Dictionary = test_json_conv.get_data()
+	var content: Dictionary = JSON.parse(message.content).result
 	
 	
 	emit_signal("chat_message_received",content.msg,content.type,content.user_sent,content.from_user)
@@ -576,7 +574,7 @@ func _on_Nakama_Socket_received_channel_message(message: NakamaAPI.ApiChannelMes
 */
 """
 func _on_channel_presence_general(p_presence : NakamaRTAPI.ChannelPresenceEvent):
-	send_text_async_general("MATCH_RECEIVED " + JSON.stringify(Global.current_matches))
+	send_text_async_general("MATCH_RECEIVED " + JSON.print(Global.current_matches))
 	for p in p_presence.joins:
 		chatroom_users[p.username] = p.user_id
 		
@@ -627,9 +625,7 @@ func _on_NakamaSocket_received_match_state(match_state: NakamaRTAPI.MatchData) -
 	
 	match code:
 		OpCodes.UPDATE_POSITION: #Received position of a player
-			var test_json_conv = JSON.new()
-			test_json_conv.parse(raw).result
-			var decoded: Dictionary = test_json_conv.get_data()
+			var decoded: Dictionary = JSON.parse(raw).result
 			
 			var id: int = int(decoded.id)
 			var position_decoded: Dictionary = decoded.pos
@@ -637,9 +633,7 @@ func _on_NakamaSocket_received_match_state(match_state: NakamaRTAPI.MatchData) -
 			
 			emit_signal("state_updated", id, position)
 		OpCodes.UPDATE_INPUT: #Received that a player has changed directions
-			var test_json_conv = JSON.new()
-			test_json_conv.parse(raw).result
-			var decoded: Dictionary = test_json_conv.get_data()
+			var decoded: Dictionary = JSON.parse(raw).result
 			
 			var id: int = int(decoded.id)
 			var x = decoded.x_in
@@ -648,36 +642,28 @@ func _on_NakamaSocket_received_match_state(match_state: NakamaRTAPI.MatchData) -
 			
 			emit_signal("input_updated", id, out_vec)
 		OpCodes.UPDATE_RIDDLER_RIDDLE: #Received riddle from player one
-			var test_json_conv = JSON.new()
-			test_json_conv.parse(raw).result
-			var decoded: Dictionary = test_json_conv.get_data()
+			var decoded: Dictionary = JSON.parse(raw).result
 			
 			var riddle: String = decoded.riddle
 			var answer: String = decoded.answer
 			
 			emit_signal("riddle_received", riddle, answer)
 		OpCodes.UPDATE_ARENA_SWORD:
-			var test_json_conv = JSON.new()
-			test_json_conv.parse(raw).result
-			var decoded: Dictionary = test_json_conv.get_data()
+			var decoded: Dictionary = JSON.parse(raw).result
 			
 			var id: int = int(decoded.id)
 			var direction: String = decoded.dir
 			
 			emit_signal("arena_player_swung_sword", id, direction)
 		OpCodes.UPDATE_ARENA_PLAYER_HEALTH:
-			var test_json_conv = JSON.new()
-			test_json_conv.parse(raw).result
-			var decoded: Dictionary = test_json_conv.get_data()
+			var decoded: Dictionary = JSON.parse(raw).result
 			
 			var id: int = int(decoded.id)
 			var health: int = int(decoded.health)
 			
 			emit_signal("arena_player_lost_health", id, health)
 		OpCodes.UPDATE_ARENA_ENEMY_HIT:
-			var test_json_conv = JSON.new()
-			test_json_conv.parse(raw).result
-			var decoded: Dictionary = test_json_conv.get_data()
+			var decoded: Dictionary = JSON.parse(raw).result
 			
 			var enemy: int = int(decoded.enemy)
 			var dmg_taken: int = int(decoded.dmg)
@@ -685,9 +671,7 @@ func _on_NakamaSocket_received_match_state(match_state: NakamaRTAPI.MatchData) -
 			
 			emit_signal("arena_enemy_hit", enemy, dmg_taken,id)
 		OpCodes.UPDATE_RHYTHM_SCORE:
-			var test_json_conv = JSON.new()
-			test_json_conv.parse(raw).result
-			var decoded: Dictionary = test_json_conv.get_data()
+			var decoded: Dictionary = JSON.parse(raw).result
 			
 			var id: int = int(decoded.id)
 			var score: int = int(decoded.score)
@@ -696,9 +680,7 @@ func _on_NakamaSocket_received_match_state(match_state: NakamaRTAPI.MatchData) -
 		OpCodes.UPDATE_CAN_START_GAME:
 			emit_signal("minigame_can_start")
 		OpCodes.SPAWNED:
-			var test_json_conv = JSON.new()
-			test_json_conv.parse(raw).result
-			var decoded: Dictionary = test_json_conv.get_data()
+			var decoded: Dictionary = JSON.parse(raw).result
 			
 			var id: int = int(decoded.id)
 			

@@ -1,8 +1,8 @@
 #Inspired by https://github.com/LegionGames/Conductor-Example/blob/master/Scripts/ArrowButton.gd
 
-extends AnimatedSprite2D
+extends AnimatedSprite
 
-@export var _color_animation: String = ""
+export var _color_animation: String = ""
 
 var _perfect = false #tracks if a perfect is possible
 var _good = false #tracks if a good is possible

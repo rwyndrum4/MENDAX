@@ -1,4 +1,4 @@
-@tool
+tool
 extends Node
 # warnings-disable
 # The default host address of the server.
@@ -23,7 +23,7 @@ var _http_adapter = null
 var logger = NakamaLogger.new()
 
 func _ready() -> void:
-	process_mode = Node.PROCESS_MODE_ALWAYS
+	pause_mode = Node.PAUSE_MODE_PROCESS
 
 func get_client_adapter() -> NakamaHTTPAdapter:
 	if _http_adapter == null:

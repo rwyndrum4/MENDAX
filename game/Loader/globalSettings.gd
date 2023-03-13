@@ -32,7 +32,7 @@ var MIN_VOLUME = -20
 */
 """
 func toggle_fullscreen(value):
-	get_window().mode = Window.MODE_EXCLUSIVE_FULLSCREEN if (value) else Window.MODE_WINDOWED
+	OS.window_fullscreen = value
 	Save.game_data.fullscreen_on = value
 	Save.save_data()
 
@@ -47,7 +47,7 @@ func toggle_fullscreen(value):
 */
 """
 func toggle_vsync(value):
-	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ENABLED if (value) else DisplayServer.VSYNC_DISABLED)
+	OS.vsync_enabled = value
 	Save.game_data.vsync_on = value
 	Save.save_data()
 

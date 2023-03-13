@@ -15,12 +15,12 @@ extends CanvasLayer
 # Member Variables
 const CHAR_READ_RATE = 0.05
 
-@onready var textbox_container = $Container
-@onready var start_symbol = $Container/MarginContainer/HBoxContainer/Start
-@onready var end_symbol = $Container/MarginContainer/HBoxContainer/End
-@onready var text_box = $Container/MarginContainer/HBoxContainer/Text
-@onready var text_displayer = $Tween
-@onready var dialogue = $dialogue
+onready var textbox_container = $Container
+onready var start_symbol = $Container/MarginContainer/HBoxContainer/Start
+onready var end_symbol = $Container/MarginContainer/HBoxContainer/End
+onready var text_box = $Container/MarginContainer/HBoxContainer/Text
+onready var text_displayer = $Tween
+onready var dialogue = $dialogue
 
 enum State {
 	READY,
@@ -55,7 +55,7 @@ func _process(_delta): #change to delta if used
 	match current_state:
 		State.READY:
 			#if in ready state and the queue is not empty, display the text
-			if !text_queue.is_empty():
+			if !text_queue.empty():
 				display_text()
 				GlobalSignals.emit_signal("textbox_shift",true)
 				# Play dialogue sounds if in scenes that require them
@@ -99,7 +99,7 @@ func _process(_delta): #change to delta if used
 				$accept.play()
 				hide_textbox()
 				GlobalSignals.emit_signal("textbox_shift",false)
-				if text_queue.is_empty():
+				if text_queue.empty():
 					GlobalSignals.emit_signal("textbox_empty")
 """
 /*

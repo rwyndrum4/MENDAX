@@ -5,15 +5,15 @@
 * Citations - based on https://www.youtube.com/watch?v=TQKXU7iSWUU
 * Date Revisions:
 """
-extends CharacterBody2D
+extends KinematicBody2D
 
 # Member Variables
-@onready var character = $position/animated_sprite
-@onready var char_pos = $position
-@onready var healthbar = $ProgressBar
-@onready var p_sword = $Sword
-@onready var _pivot = $Sword/pivot
-@onready var _anim_player = $Sword/AnimationPlayer
+onready var character = $position/animated_sprite
+onready var char_pos = $position
+onready var healthbar = $ProgressBar
+onready var p_sword = $Sword
+onready var _pivot = $Sword/pivot
+onready var _anim_player = $Sword/AnimationPlayer
 var _global_sword_dir = "right"
 var player_color: String = ""
 var is_stopped = false
@@ -130,18 +130,18 @@ func swing_sword(sword_direction: String):
 		if _global_sword_dir != "right":
 			_pivot.scale.x = 1
 			_anim_player.play("RESET")
-			await _anim_player.animation_finished
+			yield(_anim_player, 'animation_finished')
 		_anim_player.play("slash")
-		await _anim_player.animation_finished
+		yield(_anim_player, 'animation_finished')
 		_anim_player.play("slash_rev")
-		await _anim_player.animation_finished
+		yield(_anim_player, 'animation_finished')
 	elif sword_direction == "left":
 		if _global_sword_dir != "left":
 			_pivot.scale.x = -1
 			_anim_player.play("RESET2")
-			await _anim_player.animation_finished
+			yield(_anim_player, 'animation_finished')
 		_anim_player.play("slashLeft")
-		await _anim_player.animation_finished
+		yield(_anim_player, 'animation_finished')
 
 """	
 /*

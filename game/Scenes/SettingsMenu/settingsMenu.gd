@@ -19,23 +19,23 @@ var just_in_menu = false
 var changing_username = false
 
 # Video Settings
-@onready var displayOptions = $SettingsTabs/Video/MarginContainer/videoSettings/DisplayOptionsButton
-@onready var vsyncButton = $SettingsTabs/Video/MarginContainer/videoSettings/VsyncButton
-@onready var displayFpsButton = $SettingsTabs/Video/MarginContainer/videoSettings/DisplayFpsButton
-@onready var maxFpsVal = $SettingsTabs/Video/MarginContainer/videoSettings/FpsSlider/MaxFpsVal
-@onready var maxFpsSlider = $SettingsTabs/Video/MarginContainer/videoSettings/FpsSlider/MaxFpsSlider
-@onready var bloomButton = $SettingsTabs/Video/MarginContainer/videoSettings/BloomButton
-@onready var brightnessSlider = $SettingsTabs/Video/MarginContainer/videoSettings/Brightness/BrightnessSlider
+onready var displayOptions = $SettingsTabs/Video/MarginContainer/videoSettings/DisplayOptionsButton
+onready var vsyncButton = $SettingsTabs/Video/MarginContainer/videoSettings/VsyncButton
+onready var displayFpsButton = $SettingsTabs/Video/MarginContainer/videoSettings/DisplayFpsButton
+onready var maxFpsVal = $SettingsTabs/Video/MarginContainer/videoSettings/FpsSlider/MaxFpsVal
+onready var maxFpsSlider = $SettingsTabs/Video/MarginContainer/videoSettings/FpsSlider/MaxFpsSlider
+onready var bloomButton = $SettingsTabs/Video/MarginContainer/videoSettings/BloomButton
+onready var brightnessSlider = $SettingsTabs/Video/MarginContainer/videoSettings/Brightness/BrightnessSlider
 
 # Audio Settings
-@onready var masterVolSlider = $SettingsTabs/Audio/MarginContainer/audioSettings/MasterVol/MasterVolSlider
-@onready var musicVolSlider = $SettingsTabs/Audio/MarginContainer/audioSettings/MusicVal/MusicVolSlider
-@onready var sfxVolSlider = $SettingsTabs/Audio/MarginContainer/audioSettings/SfxVol/SfxVolSlider
+onready var masterVolSlider = $SettingsTabs/Audio/MarginContainer/audioSettings/MasterVol/MasterVolSlider
+onready var musicVolSlider = $SettingsTabs/Audio/MarginContainer/audioSettings/MusicVal/MusicVolSlider
+onready var sfxVolSlider = $SettingsTabs/Audio/MarginContainer/audioSettings/SfxVol/SfxVolSlider
 
 # Gameplay Settings
-@onready var mouseVal = $SettingsTabs/Gameplay/GameplaySettings/audioSettings/MouseSense/MouseVal
-@onready var mouseSlider = $SettingsTabs/Gameplay/GameplaySettings/audioSettings/MouseSense/MouseSensSlider
-@onready var usernameInput = $SettingsTabs/Gameplay/GameplaySettings/audioSettings/HBoxContainer/usernameInput
+onready var mouseVal = $SettingsTabs/Gameplay/GameplaySettings/audioSettings/MouseSense/MouseVal
+onready var mouseSlider = $SettingsTabs/Gameplay/GameplaySettings/audioSettings/MouseSense/MouseSensSlider
+onready var usernameInput = $SettingsTabs/Gameplay/GameplaySettings/audioSettings/HBoxContainer/usernameInput
 
 """
 /*
@@ -50,13 +50,13 @@ func _ready():
 	displayOptions.select(1 if Save.game_data.fullscreen_on else 0)
 	GlobalSettings.toggle_fullscreen(Save.game_data.fullscreen_on)
 	#instancing Vsync options
-	vsyncButton.button_pressed = Save.game_data.vsync_on
+	vsyncButton.pressed = Save.game_data.vsync_on
 	#instancing Fps settings
-	displayFpsButton.button_pressed = Save.game_data.display_fps
+	displayFpsButton.pressed = Save.game_data.display_fps
 	#instancing Fps slider 
 	maxFpsSlider.value = Save.game_data.max_fps
 	#instancing bloom
-	bloomButton.button_pressed = Save.game_data.bloom_on
+	bloomButton.pressed = Save.game_data.bloom_on
 	#instancing brightness
 	brightnessSlider.value = Save.game_data.brightness
 	#instancing Volume sliders
@@ -195,7 +195,7 @@ func _on_usernameInput_text_entered(new_text):
 		var dialog = AcceptDialog.new()
 		dialog.dialog_text = "No spaces in username please, change again in settings"
 		dialog.window_title = "Invalid Username"
-		dialog.connect('modal_closed',Callable(dialog,'queue_free'))
+		dialog.connect('modal_closed', dialog, 'queue_free')
 		add_child(dialog)
 		dialog.popup_centered()
 	else:

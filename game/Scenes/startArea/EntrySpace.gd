@@ -20,17 +20,17 @@ var at_lever = false
 var at_ladder = false
 var shield_spawn: Area2D
 var imposter =preload("res://Scenes/Mobs/imposter.tscn")
-@onready var confuzzed = $Player/confuzzle
-@onready var instructions: Label = $exitCaveArea/exitDirections
-@onready var myTimer: Timer = $GUI/Timer
-@onready var timerText: Label = $GUI/Timer/timerText
-@onready var textBox = $GUI/textBox
-@onready var steamAnimations = $steamControl/steamAnimations
-@onready var secretPanel = $worldMap/Node2D_1/Wall3x3_6
-@onready var secretPanelCollider = $worldMap/Node2D_1/colliders/secretDoor
-@onready var ladder = $worldMap/Node2D_1/Ladder1x1
-@onready var pitfall = $worldMap/Node2D_1/Pitfall1x1_2
-@onready var player = $Player
+onready var confuzzed = $Player/confuzzle
+onready var instructions: Label = $exitCaveArea/exitDirections
+onready var myTimer: Timer = $GUI/Timer
+onready var timerText: Label = $GUI/Timer/timerText
+onready var textBox = $GUI/textBox
+onready var steamAnimations = $steamControl/steamAnimations
+onready var secretPanel = $worldMap/Node2D_1/Wall3x3_6
+onready var secretPanelCollider = $worldMap/Node2D_1/colliders/secretDoor
+onready var ladder = $worldMap/Node2D_1/Ladder1x1
+onready var pitfall = $worldMap/Node2D_1/Pitfall1x1_2
+onready var player = $Player
 
 
 var other_player = "res://Scenes/player/other_players/other_players.tscn"
@@ -53,7 +53,7 @@ func _ready():
 	myTimer.start(90)
 	$fogSprite.modulate.a8 = 0
 	# warning-ignore:return_value_discarded
-	GlobalSignals.connect("openChatbox",Callable(self,"chatbox_use"))
+	GlobalSignals.connect("openChatbox", self, "chatbox_use")
 	
 
 
@@ -124,9 +124,7 @@ func _input(_ev):
 		myTimer.start(30000)
 """
 /*
-set_velocity(velocity)
-move_and_slide()
-* @pre Ca	velocity = velocitylled when player enters the Area2D zone
+* @pre Ca	velocity = move_and_slide(velocity)lled when player enters the Area2D zone
 * @post shows instructions on screen and sets in_cave to true
 * @param _body -> body of the player
 * @return None
@@ -284,7 +282,7 @@ func spawn_players():
 			player.set_color(num)
 		#if the player is another online player
 		else:
-			var new_player:CharacterBody2D = load(other_player).instantiate()
+			var new_player:KinematicBody2D = load(other_player).instance()
 			new_player.set_player_id(num)
 			new_player.set_color(num)
 			#Change size and pos of sprite
@@ -390,7 +388,7 @@ func set_init_player_pos():
 """			
 func load_boss(stage_num:int):
 	myTimer.stop()
-	var boss = preload("res://Scenes/FinalBoss/Boss.tscn").instantiate()
+	var boss = preload("res://Scenes/FinalBoss/Boss.tscn").instance()
 	if stage_num == 1:
 		# Generate shild spawn
 		shield_spawn = Area2D.new()
@@ -399,20 +397,20 @@ func load_boss(stage_num:int):
 		shape.set_radius(80)
 		col_2d.set_shape(shape)
 		shield_spawn.position = Vector2(-4000,3000)
-		var shield_sprite = Sprite2D.new()
+		var shield_sprite = Sprite.new()
 		shield_sprite.texture = load("res://Assets/shieldFull.png")
 		shield_sprite.scale = Vector2(2,2)
 		shield_sprite.position = Vector2(-4000,3000)
 		add_child(shield_spawn)
 		shield_spawn.add_child(col_2d)
-		#add_sibling(shield_spawn,col_2d)
-		add_sibling(shield_spawn,shield_sprite)
-		shield_spawn.connect("area_entered",Callable(self,"give_shield"))
+		#add_child_below_node(shield_spawn,col_2d)
+		add_child_below_node(shield_spawn,shield_sprite)
+		shield_spawn.connect("area_entered",self,"give_shield")
 		# Generate beziers
-		var bez1 = preload("res://Scenes/FinalBoss/Bezier.tscn").instantiate()
-		var bez2 = preload("res://Scenes/FinalBoss/Bezier.tscn").instantiate()
-		var bez3 = preload("res://Scenes/FinalBoss/Bezier.tscn").instantiate()
-		var bez4 = preload("res://Scenes/FinalBoss/Bezier.tscn").instantiate()
+		var bez1 = preload("res://Scenes/FinalBoss/Bezier.tscn").instance()
+		var bez2 = preload("res://Scenes/FinalBoss/Bezier.tscn").instance()
+		var bez3 = preload("res://Scenes/FinalBoss/Bezier.tscn").instance()
+		var bez4 = preload("res://Scenes/FinalBoss/Bezier.tscn").instance()
 		# Assign ids (for the purpose of differentiating signals)
 		bez1._id = 1
 		bez2._id = 2
@@ -424,22 +422,22 @@ func load_boss(stage_num:int):
 		bez3.set("position", Vector2(-10000, 4000))
 		bez4.set("position", Vector2(-7750, 3250))
 		# Add beziers to scene
-		add_sibling($Darkness, bez1)
-		add_sibling($Darkness, bez2)
-		add_sibling($Darkness, bez3)
-		add_sibling($Darkness, bez4)
+		add_child_below_node($Darkness, bez1)
+		add_child_below_node($Darkness, bez2)
+		add_child_below_node($Darkness, bez3)
+		add_child_below_node($Darkness, bez4)
 	if stage_num == 2:
-		# Light3D up the cave
+		# Light up the cave
 		$Darkness.hide()
 		# Hide light from cave entrance
-		$PointLight2D.hide()
+		$Light2D.hide()
 		# Hide player torch light
 		$Player.get_node("Torch1").hide()
 		# Give player a sword
-		sword = preload("res://Scenes/player/Sword/Sword.tscn").instantiate()
+		sword = preload("res://Scenes/player/Sword/Sword.tscn").instance()
 		sword.direction = "right"
 		sword.get_node("pivot").position = $Player.position + Vector2(60,20)
-		add_sibling($Player, sword)
+		add_child_below_node($Player, sword)
 		Global.progress = 6
 		#imposter spawns
 		var wait_for_start: Timer = Timer.new()
@@ -448,19 +446,19 @@ func load_boss(stage_num:int):
 		wait_for_start.one_shot = false
 		wait_for_start.start()
 		# warning-ignore:return_value_discarded
-		wait_for_start.connect("timeout",Callable(self,"_imposter_spawn"))
+		wait_for_start.connect("timeout",self, "_imposter_spawn")
 	if stage_num == 3:
-		# Light3D up the cave
+		# Light up the cave
 		$Darkness.hide()
 		# Hide light from cave entrance
-		$PointLight2D.hide()
+		$Light2D.hide()
 		# Hide player torch light
 		$Player.get_node("Torch1").hide()
 		# Give player a sword
-		sword = preload("res://Scenes/player/Sword/Sword.tscn").instantiate()
+		sword = preload("res://Scenes/player/Sword/Sword.tscn").instance()
 		sword.direction = "right"
 		sword.get_node("pivot").position = $Player.position + Vector2(60,20)
-		add_sibling($Player, sword)
+		add_child_below_node($Player, sword)
 		Global.progress = 8
 		#imposter spawns
 		var wait_for_start: Timer = Timer.new()
@@ -469,10 +467,10 @@ func load_boss(stage_num:int):
 		wait_for_start.one_shot = false
 		wait_for_start.start()
 		# warning-ignore:return_value_discarded
-		wait_for_start.connect("timeout",Callable(self,"_imposter_spawn"))
+		wait_for_start.connect("timeout",self, "_imposter_spawn")
 	# Initialize, place, and spawn boss
 	boss.set("position", Vector2(-4250, 2160))
-	add_sibling($worldMap, boss)
+	add_child_below_node($worldMap, boss)
 	# Zoom out camera so player can view Mendax in all his glory
 	$Player.get_node("Camera2D").set("zoom", Vector2(2, 2))
 	
@@ -487,6 +485,6 @@ func give_shield(_area):
 */
 """
 func _imposter_spawn():
-	var new_imposter = imposter.instantiate()
+	var new_imposter = imposter.instance()
 	new_imposter.position = Vector2(0, 3000)
 	add_child(new_imposter)

@@ -22,4 +22,4 @@ func add_results(results:Array):
 			res_str += arr[0] + "         " + str(arr[1])
 			res_str += "[/color][/center]\n"
 	$results.bbcode_enabled = true
-	$results.text = res_str
+	$results.bbcode_text = res_str

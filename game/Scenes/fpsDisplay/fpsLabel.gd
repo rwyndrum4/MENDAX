@@ -20,7 +20,7 @@ extends Label
 """
 func _ready():
 	# warning-ignore:return_value_discarded
-	GlobalSettings.connect("fpsDisplayed",Callable(self,"_on_fps_displayed"))
+	GlobalSettings.connect("fpsDisplayed", self, "_on_fps_displayed")
 
 """
 /*

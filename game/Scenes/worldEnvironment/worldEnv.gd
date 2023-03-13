@@ -19,9 +19,9 @@ extends WorldEnvironment
 """
 func _ready():
 	# warning-ignore:return_value_discarded
-	GlobalSettings.connect("bloomToggled",Callable(self,"_on_bloom_toggled"))
+	GlobalSettings.connect("bloomToggled", self, "_on_bloom_toggled")
 	# warning-ignore:return_value_discarded
-	GlobalSettings.connect("brightnessUpdated",Callable(self,"_on_brightness_toggled"))
+	GlobalSettings.connect("brightnessUpdated", self, "_on_brightness_toggled")
 
 """
 /*

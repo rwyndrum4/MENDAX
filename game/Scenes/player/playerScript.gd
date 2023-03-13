@@ -10,14 +10,14 @@
 	11/28/2022 - Added death handling
 	2/14/2023  - Added inverted controls option
 """
-extends CharacterBody2D
+extends KinematicBody2D
 
 # Member Variables
-@onready var character = $position/animated_sprite
-@onready var char_pos = $position
-@onready var healthbar = $ProgressBar
-@onready var isInverted = false
-@onready var shield = $Shield
+onready var character = $position/animated_sprite
+onready var char_pos = $position
+onready var healthbar = $ProgressBar
+onready var isInverted = false
+onready var shield = $Shield
 var is_stopped = false
 var player_color:String = ""
 
@@ -41,9 +41,9 @@ var velocity = Vector2.ZERO
 func _ready():
 	#Connects singal to GlobalSignals, will stop/unstop player when called from "textbBox.gd"
 	# warning-ignore:return_value_discarded
-	GlobalSignals.connect("textbox_shift",Callable(self,"stop_go_player"))
+	GlobalSignals.connect("textbox_shift",self,"stop_go_player")
 	# warning-ignore:return_value_discarded
-	GlobalSignals.connect("openMenu",Callable(self,"stop_go_player"))
+	GlobalSignals.connect("openMenu",self,"stop_go_player")
 	# if server wasnt' connected
 	if player_color == "":
 		player_color = "blue"
@@ -101,9 +101,7 @@ func _physics_process(delta):
 		Global._player_positions_updated(ServerConnection._player_num, self.position)
 		Global._player_input_updated(ServerConnection._player_num, velocity.normalized())
 	# Factor in collisions
-	set_velocity(velocity)
-	move_and_slide()
-	velocity = velocity
+	velocity = move_and_slide(velocity)
 	#Animate character
 	control_animations(velocity)
 

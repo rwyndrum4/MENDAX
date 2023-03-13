@@ -1,4 +1,4 @@
-extends AnimatedSprite2D
+extends AnimatedSprite
 
 func _ready():
 	play("default")

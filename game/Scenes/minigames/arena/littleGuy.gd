@@ -6,7 +6,7 @@
 * Date Revisions: 11/12/2022
 
 """
-extends CharacterBody2D
+extends KinematicBody2D
 
 # critter physics constants
 const ACCELERATION = 25000
@@ -37,6 +37,4 @@ func _physics_process(delta):
 	else:
 		velocity = velocity.move_toward(Vector2(-250,0), FRICTION*delta)
 	
-	set_velocity(velocity)
-	move_and_slide()
-	velocity = velocity
+	velocity = move_and_slide(velocity)

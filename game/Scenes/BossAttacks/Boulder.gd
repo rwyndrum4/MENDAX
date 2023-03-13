@@ -1,4 +1,4 @@
-extends Sprite2D
+extends Sprite
 
 var _final_pos:Vector2
 signal boulder_done()

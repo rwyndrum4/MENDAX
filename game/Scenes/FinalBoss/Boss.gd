@@ -17,8 +17,8 @@ var aoe_attack = preload("res://Scenes/BossAttacks/AoeSlam.tscn")
 var boulder = preload("res://Scenes/BossAttacks/Boulder.tscn")
 var atkWarningAnimation = preload("res://Scenes/BossAttacks/atkWarning.tscn")
 
-@onready var healthbar = $ProgressBar
-@onready var bossBox = $MyHurtBox/hitbox
+onready var healthbar = $ProgressBar
+onready var bossBox = $MyHurtBox/hitbox
 
 """
 /*
@@ -45,7 +45,7 @@ func move_boss() -> void:
 	back_timer.one_shot = true
 	back_timer.wait_time = 0.5
 	add_child(back_timer)
-	back_timer.connect("timeout",Callable(self,"_del_timer").bind(back_timer))
+	back_timer.connect("timeout",self,"_del_timer",[back_timer])
 	back_timer.start()
 
 """
@@ -84,10 +84,10 @@ func spawn_aoe_attack() -> void:
 		randomX = rng.randi_range(-6500, -2500)
 		randomY = rng.randi_range(2600, 3400)
 	var ran_pos = Vector2(randomX,randomY)
-	var atk = aoe_attack.instantiate()
-	var bdr = boulder.instantiate()
-	var warAni = atkWarningAnimation.instantiate()
-	var x_sprite = Sprite2D.new()
+	var atk = aoe_attack.instance()
+	var bdr = boulder.instance()
+	var warAni = atkWarningAnimation.instance()
+	var x_sprite = Sprite.new()
 	x_sprite.texture = load("res://Assets/final_boss_attack/character_atk/x.png")
 	x_sprite.scale = Vector2(2,2)
 	x_sprite.position = ran_pos
@@ -98,10 +98,10 @@ func spawn_aoe_attack() -> void:
 	bdr.set_final_pos(ran_pos)
 	atk.position = ran_pos
 	get_parent().add_child(warAni)
-	warAni.connect("animation_finished",Callable(self,"_del_animation").bind(warAni))
+	warAni.connect("animation_finished",self,"_del_animation",[warAni])
 	get_parent().add_child(x_sprite)
 	get_parent().add_child(bdr)
-	bdr.connect("boulder_done",Callable(self,"_atk_can_go").bind(atk,x_sprite))
+	bdr.connect("boulder_done",self,"_atk_can_go", [atk,x_sprite])
 	
 
 """
@@ -126,7 +126,7 @@ func _del_animation(warAni):
 func _atk_can_go(atk,x_sprite):
 	x_sprite.queue_free()
 	get_parent().add_child(atk)
-	atk.connect("aoe_attack_hit",Callable(self,"_delete_aoe_atk").bind(atk))
+	atk.connect("aoe_attack_hit",self,"_delete_aoe_atk", [atk])
 
 """
 /*

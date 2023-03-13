@@ -11,7 +11,7 @@ extends StaticBody2D
 var _in_radius
 var _id
 var _lit
-@onready var myTimer: Timer = $Timer
+onready var myTimer: Timer = $Timer
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -42,7 +42,7 @@ func _input(_ev):
 """
 func _on_Timer_timeout():
 	if _lit == 1:
-		$PointLight2D.show()
+		$Light2D.show()
 		$TileTexture.set("texture", preload("res://Assets/tiles/TilesCorrected/BezierLit.png"))
 		$FireHitbox.set("disabled", false)
 		Global.progress+=1

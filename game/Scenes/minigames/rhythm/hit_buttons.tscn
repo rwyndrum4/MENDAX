@@ -1,18 +1,18 @@
 [gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://Scenes/minigames/rhythm/hit_buttons.gd" type="Script" id=1]
-[ext_resource path="res://Assets/rhythm/orange/normal_orange.png" type="Texture2D" id=2]
-[ext_resource path="res://Assets/rhythm/orange/1.png" type="Texture2D" id=3]
-[ext_resource path="res://Assets/rhythm/blue/2.png" type="Texture2D" id=4]
-[ext_resource path="res://Assets/rhythm/red/normal_red.png" type="Texture2D" id=5]
-[ext_resource path="res://Assets/rhythm/red/1.png" type="Texture2D" id=6]
-[ext_resource path="res://Assets/rhythm/red/2.png" type="Texture2D" id=7]
-[ext_resource path="res://Assets/rhythm/orange/2.png" type="Texture2D" id=8]
-[ext_resource path="res://Assets/rhythm/blue/normal_blue.png" type="Texture2D" id=9]
-[ext_resource path="res://Assets/rhythm/blue/1.png" type="Texture2D" id=10]
-[ext_resource path="res://Assets/rhythm/green/normal_green.png" type="Texture2D" id=11]
-[ext_resource path="res://Assets/rhythm/green/1.png" type="Texture2D" id=12]
-[ext_resource path="res://Assets/rhythm/green/2.png" type="Texture2D" id=13]
+[ext_resource path="res://Assets/rhythm/orange/normal_orange.png" type="Texture" id=2]
+[ext_resource path="res://Assets/rhythm/orange/1.png" type="Texture" id=3]
+[ext_resource path="res://Assets/rhythm/blue/2.png" type="Texture" id=4]
+[ext_resource path="res://Assets/rhythm/red/normal_red.png" type="Texture" id=5]
+[ext_resource path="res://Assets/rhythm/red/1.png" type="Texture" id=6]
+[ext_resource path="res://Assets/rhythm/red/2.png" type="Texture" id=7]
+[ext_resource path="res://Assets/rhythm/orange/2.png" type="Texture" id=8]
+[ext_resource path="res://Assets/rhythm/blue/normal_blue.png" type="Texture" id=9]
+[ext_resource path="res://Assets/rhythm/blue/1.png" type="Texture" id=10]
+[ext_resource path="res://Assets/rhythm/green/normal_green.png" type="Texture" id=11]
+[ext_resource path="res://Assets/rhythm/green/1.png" type="Texture" id=12]
+[ext_resource path="res://Assets/rhythm/green/2.png" type="Texture" id=13]
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
@@ -46,7 +46,7 @@ radius = 24.0
 [sub_resource type="CircleShape2D" id=4]
 radius = 58.0
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D"]
+[node name="AnimatedSprite" type="AnimatedSprite"]
 frames = SubResource( 1 )
 animation = "red"
 frame = 4

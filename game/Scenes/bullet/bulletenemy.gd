@@ -1,4 +1,4 @@
-extends CharacterBody2D
+extends KinematicBody2D
 var velocity=Vector2(1,1);
 var speed=300;
 var collision_info;

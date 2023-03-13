@@ -6,13 +6,13 @@
 [node name="Node2D" type="Control"]
 
 [node name="Node2D_2" parent="." instance=ExtResource( 2 )]
-offset_left = -11142.0
-offset_top = 4930.0
-offset_right = -11142.0
-offset_bottom = 4930.0
+margin_left = -11142.0
+margin_top = 4930.0
+margin_right = -11142.0
+margin_bottom = 4930.0
 
 [node name="Node2D_1" parent="." instance=ExtResource( 1 )]
-offset_left = -801.0
-offset_top = -1090.0
-offset_right = -801.0
-offset_bottom = -1090.0
+margin_left = -801.0
+margin_top = -1090.0
+margin_right = -801.0
+margin_bottom = -1090.0

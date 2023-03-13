@@ -5,19 +5,19 @@
 * Revision date: 11/12/2022 - Freeman added physics process
 			   11/13/2022 - Moved all of physics process except member variables to arenaGame
 			   11/15/2022 - Improved targeting system with addition of a second Area2D radius.
-							Moved Skeleton3D physics process back into this file
+							Moved Skeleton physics process back into this file
 			   11/19/2022 - Changed signal names to not cause errors anymore
 			   12/3/2022 - removed player search feature in favor of constant targetting
 			   11/28/2022 - Added death signal
 			
 """
-extends CharacterBody2D
-@onready var skeletonAnim = $skeletonAnimationPlayer
-@onready var healthbar = $ProgressBar
-@onready var skeleBox = $MyHurtBox/hitbox
-@onready var skeleAtkBox = $MyHitBox/CollisionShape2D
-@onready var pos2d = $Marker2D
-@onready var player_detector_box = $detector/box
+extends KinematicBody2D
+onready var skeletonAnim = $skeletonAnimationPlayer
+onready var healthbar = $ProgressBar
+onready var skeleBox = $MyHurtBox/hitbox
+onready var skeleAtkBox = $MyHitBox/CollisionShape2D
+onready var pos2d = $Position2D
+onready var player_detector_box = $detector/box
 
 var isIn = false
 var isDead = false
@@ -42,12 +42,12 @@ func _ready():
 	skeletonAnim.play("idle")
 	healthbar.value = 100;
 	# warning-ignore:return_value_discarded
-	GlobalSignals.connect("textbox_empty",Callable(self,"turn_on_physics"))
+	GlobalSignals.connect("textbox_empty",self,"turn_on_physics")
 	
 """
 /*
 * @pre Called every frame
-* @post x an y velocity of the Skeleton3D is updated to move towards the player (if the player is within it's Search range)
+* @post x an y velocity of the Skeleton is updated to move towards the player (if the player is within it's Search range)
 * @param delta : elapsed time (in seconds) since previous frame. Should be constant across sequential calls
 * @return None
 */
@@ -61,13 +61,9 @@ func _physics_process(delta):
 		if not get_parent()._player_dead:
 			player_pos = get_parent().get_node("Player").position
 		else:
-			set_velocity(velocity.move_toward(BASE_SPEED*Vector2.ZERO, BASE_ACCELERATION*delta))
-			move_and_slide()
-			velocity = velocity
+			velocity = move_and_slide(velocity.move_toward(BASE_SPEED*Vector2.ZERO, BASE_ACCELERATION*delta))
 			return
-	set_velocity(velocity.move_toward(BASE_SPEED*(player_pos - position), BASE_ACCELERATION*delta))
-	move_and_slide()
-	velocity = velocity
+	velocity = move_and_slide(velocity.move_toward(BASE_SPEED*(player_pos - position), BASE_ACCELERATION*delta))
 	#Handle making skeleton turn around
 	if player_pos.x < position.x:
 		pos2d.scale.x = -1
@@ -117,7 +113,7 @@ func slow_speed():
 	reset_accel_timer.one_shot = true
 	reset_accel_timer.start()
 	# warning-ignore:return_value_discarded
-	reset_accel_timer.connect("timeout",Callable(self,"_accel_timer_expired").bind(reset_accel_timer))
+	reset_accel_timer.connect("timeout",self, "_accel_timer_expired", [reset_accel_timer])
 
 func _accel_timer_expired(timer:Timer):
 	timer.queue_free()
@@ -206,7 +202,7 @@ func _on_skeletonAnimationPlayer_animation_finished(_anim_name):
 	else:
 		set_physics_process(false)
 		$death.play()
-		await $death.finished
+		yield($death, "finished")
 		GlobalSignals.emit_signal("enemyDefeated", 0) #replace 0 with indication of enemy ID later
 		
 		queue_free()
@@ -214,7 +210,7 @@ func _on_skeletonAnimationPlayer_animation_finished(_anim_name):
 """
 /*
 * @pre timer in arenaGame has expired
-* @post make Skeleton3D tougher
+* @post make Skeleton tougher
 * @param None
 * @return None
 */

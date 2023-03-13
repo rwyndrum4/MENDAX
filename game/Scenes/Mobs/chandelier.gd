@@ -5,11 +5,11 @@
 * Date Revisions:
 	12/3/2022 - Chandelier can shoot fireballs
 """
-extends CharacterBody2D
-@onready var chandelierAnim = $AnimationPlayer
-@onready var healthbar = $ProgressBar
-@onready var chandelierBox = $MyHurtBox/hitbox
-@onready var chandelierAtkBox = $MyHitBox/CollisionShape2D
+extends KinematicBody2D
+onready var chandelierAnim = $AnimationPlayer
+onready var healthbar = $ProgressBar
+onready var chandelierBox = $MyHurtBox/hitbox
+onready var chandelierAtkBox = $MyHitBox/CollisionShape2D
 
 var _isIn = false
 var _isDead = false
@@ -34,13 +34,13 @@ func _ready():
 	chandelierAnim.play("idle")
 	healthbar.value = 200;
 	# warning-ignore:return_value_discarded
-	GlobalSignals.connect("textbox_empty",Callable(self,"turn_on_physics"))
+	GlobalSignals.connect("textbox_empty",self,"turn_on_physics")
 	position=Vector2(500,500)
 
 """
 /*
 * @pre Called every frame
-* @post x an y velocity of the Skeleton3D is updated to move towards the player (if the player is within it's Search range)
+* @post x an y velocity of the Skeleton is updated to move towards the player (if the player is within it's Search range)
 * @param delta : elapsed time (in seconds) since previous frame. Should be constant across sequential calls
 * @return None
 */
@@ -50,7 +50,7 @@ func _physics_process(delta):
 	if _timer > _fire_wait_time:
 		_timer=0;
 		chandelierAnim.play("attack1")
-		await chandelierAnim.animation_finished
+		yield(chandelierAnim, "animation_finished")
 		fire();
 		if _leveled_up:
 			fire(Vector2(-200, -200))
@@ -83,7 +83,7 @@ func fire(extra_angle = Vector2(0,0)):
 		return
 	var Player=get_parent().get_node("Player")
 	var bullete =preload("res://Scenes/bullet/bulletenemy.tscn")
-	var bulenemy = bullete.instantiate()
+	var bulenemy = bullete.instance()
 	get_parent().add_child(bulenemy)
 	bulenemy.global_position = global_position + Vector2(0, -90)
 	bulenemy.velocity = bulenemy.global_position.direction_to(
@@ -138,7 +138,7 @@ func defer_disabling_chandelier():
 func _on_AnimationPlayer_animation_finished(_anim_name):
 	if _isDead:
 		$death.play()
-		await $death.finished
+		yield($death, "finished")
 		GlobalSignals.emit_signal("enemyDefeated", 0) #replace 0 with indication of enemy ID later
 		queue_free()
 
@@ -176,7 +176,7 @@ func level_up():
 	teleport_timer.one_shot = false
 	teleport_timer.start()
 	# warning-ignore:return_value_discarded
-	teleport_timer.connect("timeout",Callable(self,"_tp_timer_expired"))
+	teleport_timer.connect("timeout",self, "_tp_timer_expired")
 
 """
 /*

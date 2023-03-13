@@ -14,97 +14,97 @@ anchor_bottom = 1.0
 [node name="SettingsTabs" type="TabContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-tab_alignment = 0
+tab_align = 0
 
-[node name="Video" type="TabBar" parent="SettingsTabs"]
+[node name="Video" type="Tabs" parent="SettingsTabs"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 4.0
-offset_top = 32.0
-offset_right = -4.0
-offset_bottom = -4.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
 
 [node name="MarginContainer" type="MarginContainer" parent="SettingsTabs/Video"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_constants/offset_right = 25
-custom_constants/offset_top = 25
-custom_constants/offset_left = 25
-custom_constants/offset_bottom = 25
+custom_constants/margin_right = 25
+custom_constants/margin_top = 25
+custom_constants/margin_left = 25
+custom_constants/margin_bottom = 25
 
 [node name="videoSettings" type="GridContainer" parent="SettingsTabs/Video/MarginContainer"]
-offset_left = 25.0
-offset_top = 25.0
-offset_right = 1247.0
-offset_bottom = 659.0
-custom_constants/v_separation = 15
+margin_left = 25.0
+margin_top = 25.0
+margin_right = 1247.0
+margin_bottom = 659.0
+custom_constants/vseparation = 15
 columns = 2
 
 [node name="DisplayModeLabel" type="Label" parent="SettingsTabs/Video/MarginContainer/videoSettings"]
-offset_top = 3.0
-offset_right = 87.0
-offset_bottom = 17.0
+margin_top = 3.0
+margin_right = 87.0
+margin_bottom = 17.0
 text = "Display Mode"
 
 [node name="DisplayOptionsButton" type="OptionButton" parent="SettingsTabs/Video/MarginContainer/videoSettings"]
-offset_left = 1126.0
-offset_right = 1222.0
-offset_bottom = 20.0
+margin_left = 1126.0
+margin_right = 1222.0
+margin_bottom = 20.0
 size_flags_horizontal = 10
 text = "Windowed"
 items = [ "Windowed", null, false, 0, null, "Fullscreen", null, false, 1, null ]
 selected = 0
 
 [node name="VsyncLabel" type="Label" parent="SettingsTabs/Video/MarginContainer/videoSettings"]
-offset_top = 48.0
-offset_right = 87.0
-offset_bottom = 62.0
+margin_top = 48.0
+margin_right = 87.0
+margin_bottom = 62.0
 text = "Vsync"
 
 [node name="VsyncButton" type="CheckButton" parent="SettingsTabs/Video/MarginContainer/videoSettings"]
-offset_left = 1146.0
-offset_top = 35.0
-offset_right = 1222.0
-offset_bottom = 75.0
+margin_left = 1146.0
+margin_top = 35.0
+margin_right = 1222.0
+margin_bottom = 75.0
 size_flags_horizontal = 10
 
 [node name="DisplayFpsLabel" type="Label" parent="SettingsTabs/Video/MarginContainer/videoSettings"]
-offset_top = 103.0
-offset_right = 87.0
-offset_bottom = 117.0
+margin_top = 103.0
+margin_right = 87.0
+margin_bottom = 117.0
 text = "Display FPS"
 
 [node name="DisplayFpsButton" type="CheckButton" parent="SettingsTabs/Video/MarginContainer/videoSettings"]
-offset_left = 1146.0
-offset_top = 90.0
-offset_right = 1222.0
-offset_bottom = 130.0
+margin_left = 1146.0
+margin_top = 90.0
+margin_right = 1222.0
+margin_bottom = 130.0
 size_flags_horizontal = 10
 
 [node name="MaxFpsLabel" type="Label" parent="SettingsTabs/Video/MarginContainer/videoSettings"]
-offset_top = 146.0
-offset_right = 87.0
-offset_bottom = 160.0
+margin_top = 146.0
+margin_right = 87.0
+margin_bottom = 160.0
 text = "Max FPS"
 
 [node name="FpsSlider" type="HBoxContainer" parent="SettingsTabs/Video/MarginContainer/videoSettings"]
-offset_left = 792.0
-offset_top = 145.0
-offset_right = 1222.0
-offset_bottom = 161.0
+margin_left = 792.0
+margin_top = 145.0
+margin_right = 1222.0
+margin_bottom = 161.0
 size_flags_horizontal = 10
 
 [node name="MaxFpsVal" type="Label" parent="SettingsTabs/Video/MarginContainer/videoSettings/FpsSlider"]
-offset_top = 1.0
-offset_right = 26.0
-offset_bottom = 15.0
+margin_top = 1.0
+margin_right = 26.0
+margin_bottom = 15.0
 text = "Max"
 
 [node name="MaxFpsSlider" type="HSlider" parent="SettingsTabs/Video/MarginContainer/videoSettings/FpsSlider"]
-offset_left = 30.0
-offset_right = 430.0
-offset_bottom = 16.0
-custom_minimum_size = Vector2( 400, 0 )
+margin_left = 30.0
+margin_right = 430.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 400, 0 )
 size_flags_horizontal = 10
 size_flags_vertical = 1
 min_value = 30.0
@@ -112,36 +112,36 @@ max_value = 500.0
 value = 500.0
 
 [node name="BloomLabel" type="Label" parent="SettingsTabs/Video/MarginContainer/videoSettings"]
-offset_top = 189.0
-offset_right = 87.0
-offset_bottom = 203.0
+margin_top = 189.0
+margin_right = 87.0
+margin_bottom = 203.0
 text = "Bloom"
 
 [node name="BloomButton" type="CheckButton" parent="SettingsTabs/Video/MarginContainer/videoSettings"]
-offset_left = 1146.0
-offset_top = 176.0
-offset_right = 1222.0
-offset_bottom = 216.0
+margin_left = 1146.0
+margin_top = 176.0
+margin_right = 1222.0
+margin_bottom = 216.0
 size_flags_horizontal = 10
 
 [node name="BrightnessLabel" type="Label" parent="SettingsTabs/Video/MarginContainer/videoSettings"]
-offset_top = 231.0
-offset_right = 87.0
-offset_bottom = 262.0
+margin_top = 231.0
+margin_right = 87.0
+margin_bottom = 262.0
 text = "Brightness
 "
 
 [node name="Brightness" type="HBoxContainer" parent="SettingsTabs/Video/MarginContainer/videoSettings"]
-offset_left = 822.0
-offset_top = 231.0
-offset_right = 1222.0
-offset_bottom = 262.0
+margin_left = 822.0
+margin_top = 231.0
+margin_right = 1222.0
+margin_bottom = 262.0
 size_flags_horizontal = 10
 
 [node name="BrightnessSlider" type="HSlider" parent="SettingsTabs/Video/MarginContainer/videoSettings/Brightness"]
-offset_right = 400.0
-offset_bottom = 31.0
-custom_minimum_size = Vector2( 400, 0 )
+margin_right = 400.0
+margin_bottom = 31.0
+rect_min_size = Vector2( 400, 0 )
 size_flags_horizontal = 10
 size_flags_vertical = 1
 min_value = 0.2
@@ -149,47 +149,47 @@ max_value = 2.0
 step = 0.1
 value = 1.0
 
-[node name="Audio" type="TabBar" parent="SettingsTabs"]
+[node name="Audio" type="Tabs" parent="SettingsTabs"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 4.0
-offset_top = 32.0
-offset_right = -4.0
-offset_bottom = -4.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
 
 [node name="MarginContainer" type="MarginContainer" parent="SettingsTabs/Audio"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_constants/offset_right = 25
-custom_constants/offset_top = 25
-custom_constants/offset_left = 25
-custom_constants/offset_bottom = 25
+custom_constants/margin_right = 25
+custom_constants/margin_top = 25
+custom_constants/margin_left = 25
+custom_constants/margin_bottom = 25
 
 [node name="audioSettings" type="GridContainer" parent="SettingsTabs/Audio/MarginContainer"]
-offset_left = 25.0
-offset_top = 25.0
-offset_right = 1247.0
-offset_bottom = 659.0
-custom_constants/v_separation = 15
+margin_left = 25.0
+margin_top = 25.0
+margin_right = 1247.0
+margin_bottom = 659.0
+custom_constants/vseparation = 15
 columns = 2
 
 [node name="MasterVolLabel" type="Label" parent="SettingsTabs/Audio/MarginContainer/audioSettings"]
-offset_right = 97.0
-offset_bottom = 31.0
+margin_right = 97.0
+margin_bottom = 31.0
 text = "Master Volume
 "
 
 [node name="MasterVol" type="HBoxContainer" parent="SettingsTabs/Audio/MarginContainer/audioSettings"]
-offset_left = 822.0
-offset_right = 1222.0
-offset_bottom = 31.0
+margin_left = 822.0
+margin_right = 1222.0
+margin_bottom = 31.0
 size_flags_horizontal = 10
 
 [node name="MasterVolSlider" type="HSlider" parent="SettingsTabs/Audio/MarginContainer/audioSettings/MasterVol"]
-offset_right = 400.0
-offset_bottom = 31.0
-custom_minimum_size = Vector2( 400, 0 )
+margin_right = 400.0
+margin_bottom = 31.0
+rect_min_size = Vector2( 400, 0 )
 size_flags_horizontal = 10
 size_flags_vertical = 1
 min_value = -20.0
@@ -197,22 +197,22 @@ max_value = 0.0
 value = -10.0
 
 [node name="MusicValLabel" type="Label" parent="SettingsTabs/Audio/MarginContainer/audioSettings"]
-offset_top = 47.0
-offset_right = 97.0
-offset_bottom = 61.0
+margin_top = 47.0
+margin_right = 97.0
+margin_bottom = 61.0
 text = "Music Volume"
 
 [node name="MusicVal" type="HBoxContainer" parent="SettingsTabs/Audio/MarginContainer/audioSettings"]
-offset_left = 822.0
-offset_top = 46.0
-offset_right = 1222.0
-offset_bottom = 62.0
+margin_left = 822.0
+margin_top = 46.0
+margin_right = 1222.0
+margin_bottom = 62.0
 size_flags_horizontal = 10
 
 [node name="MusicVolSlider" type="HSlider" parent="SettingsTabs/Audio/MarginContainer/audioSettings/MusicVal"]
-offset_right = 400.0
-offset_bottom = 16.0
-custom_minimum_size = Vector2( 400, 0 )
+margin_right = 400.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 400, 0 )
 size_flags_horizontal = 10
 size_flags_vertical = 1
 min_value = -20.0
@@ -220,77 +220,77 @@ max_value = 0.0
 value = -10.0
 
 [node name="SfxVolLabel" type="Label" parent="SettingsTabs/Audio/MarginContainer/audioSettings"]
-offset_top = 77.0
-offset_right = 97.0
-offset_bottom = 108.0
+margin_top = 77.0
+margin_right = 97.0
+margin_bottom = 108.0
 text = "SFX Volume
 "
 
 [node name="SfxVol" type="HBoxContainer" parent="SettingsTabs/Audio/MarginContainer/audioSettings"]
-offset_left = 822.0
-offset_top = 77.0
-offset_right = 1222.0
-offset_bottom = 108.0
+margin_left = 822.0
+margin_top = 77.0
+margin_right = 1222.0
+margin_bottom = 108.0
 size_flags_horizontal = 10
 
 [node name="SfxVolSlider" type="HSlider" parent="SettingsTabs/Audio/MarginContainer/audioSettings/SfxVol"]
-offset_right = 400.0
-offset_bottom = 31.0
-custom_minimum_size = Vector2( 400, 0 )
+margin_right = 400.0
+margin_bottom = 31.0
+rect_min_size = Vector2( 400, 0 )
 size_flags_horizontal = 10
 size_flags_vertical = 1
 min_value = -20.0
 max_value = 0.0
 value = -10.0
 
-[node name="Gameplay" type="TabBar" parent="SettingsTabs"]
+[node name="Gameplay" type="Tabs" parent="SettingsTabs"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 4.0
-offset_top = 32.0
-offset_right = -4.0
-offset_bottom = -4.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
 
 [node name="GameplaySettings" type="MarginContainer" parent="SettingsTabs/Gameplay"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_constants/offset_right = 25
-custom_constants/offset_top = 25
-custom_constants/offset_left = 25
-custom_constants/offset_bottom = 25
+custom_constants/margin_right = 25
+custom_constants/margin_top = 25
+custom_constants/margin_left = 25
+custom_constants/margin_bottom = 25
 
 [node name="audioSettings" type="GridContainer" parent="SettingsTabs/Gameplay/GameplaySettings"]
-offset_left = 25.0
-offset_top = 25.0
-offset_right = 1247.0
-offset_bottom = 659.0
-custom_constants/v_separation = 15
+margin_left = 25.0
+margin_top = 25.0
+margin_right = 1247.0
+margin_bottom = 659.0
+custom_constants/vseparation = 15
 columns = 2
 
 [node name="MouseSenseLabel" type="Label" parent="SettingsTabs/Gameplay/GameplaySettings/audioSettings"]
-offset_top = 1.0
-offset_right = 116.0
-offset_bottom = 15.0
+margin_top = 1.0
+margin_right = 116.0
+margin_bottom = 15.0
 text = "Mouse Sensitivity"
 
 [node name="MouseSense" type="HBoxContainer" parent="SettingsTabs/Gameplay/GameplaySettings/audioSettings"]
-offset_left = 798.0
-offset_right = 1222.0
-offset_bottom = 16.0
+margin_left = 798.0
+margin_right = 1222.0
+margin_bottom = 16.0
 size_flags_horizontal = 10
 
 [node name="MouseVal" type="Label" parent="SettingsTabs/Gameplay/GameplaySettings/audioSettings/MouseSense"]
-offset_top = 1.0
-offset_right = 20.0
-offset_bottom = 15.0
+margin_top = 1.0
+margin_right = 20.0
+margin_bottom = 15.0
 text = "0.1"
 
 [node name="MouseSensSlider" type="HSlider" parent="SettingsTabs/Gameplay/GameplaySettings/audioSettings/MouseSense"]
-offset_left = 24.0
-offset_right = 424.0
-offset_bottom = 16.0
-custom_minimum_size = Vector2( 400, 0 )
+margin_left = 24.0
+margin_right = 424.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 400, 0 )
 size_flags_horizontal = 10
 size_flags_vertical = 1
 min_value = 0.05
@@ -299,48 +299,48 @@ step = 0.01
 value = 0.1
 
 [node name="changeUsername" type="Label" parent="SettingsTabs/Gameplay/GameplaySettings/audioSettings"]
-offset_top = 36.0
-offset_right = 116.0
-offset_bottom = 50.0
+margin_top = 36.0
+margin_right = 116.0
+margin_bottom = 50.0
 text = "Change Username"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="SettingsTabs/Gameplay/GameplaySettings/audioSettings"]
-offset_left = 120.0
-offset_top = 31.0
-offset_right = 1222.0
-offset_bottom = 55.0
+margin_left = 120.0
+margin_top = 31.0
+margin_right = 1222.0
+margin_bottom = 55.0
 
 [node name="usernameInput" type="LineEdit" parent="SettingsTabs/Gameplay/GameplaySettings/audioSettings/HBoxContainer"]
-offset_right = 250.0
-offset_bottom = 24.0
-custom_minimum_size = Vector2( 250, 0 )
+margin_right = 250.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 250, 0 )
 
-[node name="Exit" type="TabBar" parent="SettingsTabs"]
+[node name="Exit" type="Tabs" parent="SettingsTabs"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 4.0
-offset_top = 32.0
-offset_right = -4.0
-offset_bottom = -4.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
 
 [node name="exitSettings" type="MarginContainer" parent="SettingsTabs/Exit"]
-offset_right = 40.0
-offset_bottom = 40.0
+margin_right = 40.0
+margin_bottom = 40.0
 
 [node name="GridContainer" type="GridContainer" parent="SettingsTabs/Exit/exitSettings"]
-offset_right = 83.0
-offset_bottom = 44.0
+margin_right = 83.0
+margin_bottom = 44.0
 
 [node name="mainMenuButton" type="Button" parent="SettingsTabs/Exit/exitSettings/GridContainer"]
-offset_top = 24.0
-offset_right = 83.0
-offset_bottom = 44.0
+margin_top = 24.0
+margin_right = 83.0
+margin_bottom = 44.0
 text = "Main Menu"
 
 [node name="quitButton" type="Button" parent="SettingsTabs/Exit/exitSettings/GridContainer"]
-offset_right = 83.0
-offset_bottom = 20.0
+margin_right = 83.0
+margin_bottom = 20.0
 text = "Quit Game"
 
 [connection signal="item_selected" from="SettingsTabs/Video/MarginContainer/videoSettings/DisplayOptionsButton" to="." method="_on_DisplayOptionsButton_item_selected"]
@@ -355,6 +355,6 @@ text = "Quit Game"
 [connection signal="value_changed" from="SettingsTabs/Gameplay/GameplaySettings/audioSettings/MouseSense/MouseSensSlider" to="." method="_on_MouseSensSlider_value_changed"]
 [connection signal="focus_entered" from="SettingsTabs/Gameplay/GameplaySettings/audioSettings/HBoxContainer/usernameInput" to="." method="_on_usernameInput_focus_entered"]
 [connection signal="focus_exited" from="SettingsTabs/Gameplay/GameplaySettings/audioSettings/HBoxContainer/usernameInput" to="." method="_on_usernameInput_focus_exited"]
-[connection signal="text_submitted" from="SettingsTabs/Gameplay/GameplaySettings/audioSettings/HBoxContainer/usernameInput" to="." method="_on_usernameInput_text_entered"]
+[connection signal="text_entered" from="SettingsTabs/Gameplay/GameplaySettings/audioSettings/HBoxContainer/usernameInput" to="." method="_on_usernameInput_text_entered"]
 [connection signal="pressed" from="SettingsTabs/Exit/exitSettings/GridContainer/mainMenuButton" to="." method="_on_mainMenuButton_pressed"]
 [connection signal="pressed" from="SettingsTabs/Exit/exitSettings/GridContainer/quitButton" to="." method="_on_quitButton_pressed"]
