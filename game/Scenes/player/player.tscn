@@ -1,4 +1,4 @@
-[gd_scene load_steps=144 format=2]
+[gd_scene load_steps=146 format=2]
 
 [ext_resource path="res://Assets/ben-character/blue/rolling/5.png" type="Texture" id=1]
 [ext_resource path="res://Scenes/player/playerScript.gd" type="Script" id=2]
@@ -292,6 +292,26 @@ animations = [ {
 "speed": 5.0
 } ]
 
+[sub_resource type="Shader" id=13]
+code = "shader_type canvas_item;
+render_mode unshaded;
+
+uniform sampler2D gradient : hint_black;
+uniform float mix_amount = 1.0;
+
+void fragment(){
+	vec4 input_color = texture(TEXTURE, UV);
+	float grayscale_value = dot(input_color.rgb, vec3(0.299, 0.587, 0.114));
+	vec3 sampled_color = texture(gradient, vec2(grayscale_value, 0.0)).rgb;
+	
+	COLOR.rgb = mix(input_color.rgb, sampled_color.rgb, mix_amount);
+	COLOR.a = input_color.a;
+}"
+
+[sub_resource type="ShaderMaterial" id=14]
+shader = SubResource( 13 )
+shader_param/mix_amount = 4.0
+
 [node name="Player" type="KinematicBody2D"]
 collision_layer = 3
 script = ExtResource( 2 )
@@ -333,21 +353,22 @@ current = true
 [node name="LightOccluder2D" type="LightOccluder2D" parent="."]
 occluder = SubResource( 5 )
 
-[node name="Torch1" type="Light2D" parent="."]
-position = Vector2( -60, -37 )
-scale = Vector2( 0.166168, 0.159722 )
+[node name="light" type="AnimatedSprite" parent="."]
+light_mask = 0
+position = Vector2( -57, -37 )
+scale = Vector2( 3.75, 3.45918 )
+frames = SubResource( 12 )
+frame = 5
+playing = true
+
+[node name="Torch1" type="Light2D" parent="light"]
+material = SubResource( 14 )
+position = Vector2( -0.8, 0 )
+scale = Vector2( 0.0443115, 0.0461734 )
 texture = ExtResource( 127 )
 texture_scale = 20.0
 color = Color( 0.839216, 0.454902, 0.0980392, 1 )
 script = ExtResource( 129 )
-
-[node name="light" type="AnimatedSprite" parent="Torch1"]
-light_mask = 0
-position = Vector2( 18.054, 0 )
-scale = Vector2( 22.5675, 21.6575 )
-frames = SubResource( 12 )
-frame = 5
-playing = true
 
 [node name="Shield" type="Sprite" parent="."]
 light_mask = 0
