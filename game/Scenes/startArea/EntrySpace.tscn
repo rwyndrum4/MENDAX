@@ -1,4 +1,4 @@
-[gd_scene load_steps=48 format=2]
+[gd_scene load_steps=52 format=2]
 
 [ext_resource path="res://Scenes/startArea/worldMap.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Scenes/player/player.tscn" type="PackedScene" id=2]
@@ -16,6 +16,7 @@
 [ext_resource path="res://Assets/Confuzzle/confuzzle0008.png" type="Texture" id=14]
 [ext_resource path="res://Assets/Confuzzle/confuzzle0002.png" type="Texture" id=15]
 [ext_resource path="res://Assets/Confuzzle/confuzzle0005.png" type="Texture" id=16]
+[ext_resource path="res://Assets/ARIALBD.TTF" type="DynamicFontData" id=17]
 [ext_resource path="res://Assets/mist/frame0004.png" type="Texture" id=18]
 [ext_resource path="res://Assets/mist/frame0018.png" type="Texture" id=19]
 [ext_resource path="res://Assets/mist/frame0019.png" type="Texture" id=21]
@@ -89,6 +90,15 @@ extents = Vector2( 42, 532 )
 [sub_resource type="RectangleShape2D" id=10]
 extents = Vector2( 23, 19 )
 
+[sub_resource type="CircleShape2D" id=19]
+radius = 425.0
+
+[sub_resource type="Theme" id=17]
+
+[sub_resource type="DynamicFont" id=18]
+size = 24
+font_data = ExtResource( 17 )
+
 [node name="EntrySpace" type="Control"]
 script = ExtResource( 4 )
 
@@ -146,7 +156,7 @@ current = true
 visible = false
 position = Vector2( 0, -45 )
 frames = SubResource( 15 )
-frame = 4
+frame = 3
 playing = true
 
 [node name="GUI" type="CanvasLayer" parent="."]
@@ -337,6 +347,25 @@ __meta__ = {
 scale = Vector2( 2.12582, 2.45751 )
 shape = SubResource( 10 )
 
+[node name="well" type="Area2D" parent="."]
+position = Vector2( 725, 4150 )
+collision_layer = 4
+
+[node name="circle" type="CollisionShape2D" parent="well"]
+shape = SubResource( 19 )
+
+[node name="Label" type="Label" parent="well"]
+margin_left = -205.288
+margin_top = -44.5889
+margin_right = 213.712
+margin_bottom = 63.4111
+theme = SubResource( 17 )
+custom_fonts/font = SubResource( 18 )
+text = "Press E to Get Rid of Invulnerability!
+"
+align = 1
+valign = 1
+
 [connection signal="timeout" from="GUI/Timer" to="." method="_on_Timer_timeout"]
 [connection signal="body_entered" from="exitCaveArea" to="." method="_on_exitCaveArea_body_entered"]
 [connection signal="body_exited" from="exitCaveArea" to="." method="_on_exitCaveArea_body_exited"]
@@ -347,3 +376,5 @@ shape = SubResource( 10 )
 [connection signal="body_entered" from="ladderArea" to="." method="_on_ladderArea_body_entered"]
 [connection signal="body_exited" from="ladderArea" to="." method="_on_ladderArea_body_exited"]
 [connection signal="body_entered" from="pitfallArea" to="." method="_on_pitfallArea_body_entered"]
+[connection signal="body_entered" from="well" to="." method="_on_well_body_entered"]
+[connection signal="body_exited" from="well" to="." method="_on_well_body_exited"]

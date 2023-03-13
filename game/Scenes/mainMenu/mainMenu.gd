@@ -55,6 +55,7 @@ var _match_code: String = ""
 """
 func _ready():
 	initialize_menu()
+	get_parent().toggle_hotbar(false)
 	# warning-ignore:return_value_discarded
 	ServerConnection.connect("character_spawned",self,"spawn_character")
 	# warning-ignore:return_value_discarded

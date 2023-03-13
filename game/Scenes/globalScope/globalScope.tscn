@@ -44,6 +44,7 @@ margin_bottom = 24.0
 custom_fonts/font = SubResource( 1 )
 
 [node name="Hotbar" parent="GUI" instance=ExtResource( 16 )]
+visible = true
 
 [node name="credits" parent="GUI" instance=ExtResource( 17 )]
 

@@ -1,9 +1,19 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://Assets/Mendax1stForm_pixelated.png" type="Texture" id=1]
 [ext_resource path="res://Assets/TorchLight3.png" type="Texture" id=2]
 [ext_resource path="res://Scenes/FinalBoss/Boss.gd" type="Script" id=3]
 [ext_resource path="res://Scenes/player/Sword/MyHurtBox.gd" type="Script" id=4]
+[ext_resource path="res://Assets/SuperSaiyan/superSaiyan0008.png" type="Texture" id=5]
+[ext_resource path="res://Assets/SuperSaiyan/superSaiyan0005.png" type="Texture" id=6]
+[ext_resource path="res://Assets/SuperSaiyan/superSaiyan0002.png" type="Texture" id=7]
+[ext_resource path="res://Assets/SuperSaiyan/superSaiyan0003.png" type="Texture" id=8]
+[ext_resource path="res://Assets/SuperSaiyan/superSaiyan0007.png" type="Texture" id=9]
+[ext_resource path="res://Assets/SuperSaiyan/superSaiyan0001.png" type="Texture" id=10]
+[ext_resource path="res://Assets/SuperSaiyan/superSaiyan0004.png" type="Texture" id=11]
+[ext_resource path="res://Assets/SuperSaiyan/superSaiyan0000.png" type="Texture" id=12]
+[ext_resource path="res://Assets/SuperSaiyan/superSaiyan0006.png" type="Texture" id=13]
+[ext_resource path="res://Assets/SuperSaiyan/superSaiyan0009.png" type="Texture" id=14]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 622, 397.5 )
@@ -20,6 +30,14 @@ anti_aliasing_size = 0.235
 
 [sub_resource type="RectangleShape2D" id=4]
 extents = Vector2( 17, 20.85 )
+
+[sub_resource type="SpriteFrames" id=5]
+animations = [ {
+"frames": [ ExtResource( 12 ), ExtResource( 10 ), ExtResource( 7 ), ExtResource( 8 ), ExtResource( 11 ), ExtResource( 6 ), ExtResource( 13 ), ExtResource( 9 ), ExtResource( 5 ), ExtResource( 14 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
 
 [node name="Boss" type="StaticBody2D"]
 script = ExtResource( 3 )
@@ -56,3 +74,10 @@ script = ExtResource( 4 )
 [node name="hitbox" type="CollisionShape2D" parent="MyHurtBox"]
 position = Vector2( -0.1, -5.15 )
 shape = SubResource( 4 )
+
+[node name="aura_shield" type="AnimatedSprite" parent="."]
+position = Vector2( 0, -300 )
+scale = Vector2( 8, 8 )
+frames = SubResource( 5 )
+frame = 3
+playing = true

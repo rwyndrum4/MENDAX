@@ -4,12 +4,13 @@
 * Date Created - 2/19/2023
 * Date Revisions:
 	2/26/2022 - Added health bar
+	3/10/2023 - Added invulnerability
 """
 
 extends StaticBody2D
 var _timer:float = 0
 var _prev_timer:float = 0
-
+var _invulnerable
 
 
 var aoe_attack = preload("res://Scenes/BossAttacks/AoeSlam.tscn")
@@ -18,7 +19,7 @@ var atkWarningAnimation = preload("res://Scenes/BossAttacks/atkWarning.tscn")
 
 onready var healthbar = $ProgressBar
 onready var bossBox = $MyHurtBox/hitbox
-
+onready var auraShield = $aura_shield
 """
 /*
 * @pre Called once when boss is initialized
@@ -31,8 +32,13 @@ func _ready():
 	print("progress: " + str(Global.progress))
 	if Global.progress == 8:
 		healthbar.value = 200
+		_invulnerable = true;
+		auraShield.visible = true
 	else:
 		healthbar.value = 400
+		_invulnerable = false;
+		auraShield.visible = false
+
 """
 /*
 * @pre Called in the process function whenever an attack occurs
@@ -155,7 +161,10 @@ func _process(delta):
 		move_boss()
 		spawn_aoe_attack()
 		_prev_timer = _timer
-		
+	if _invulnerable == true:
+		auraShield.visible = true
+	else:
+		auraShield.visible = false
 """
 /*
 * @pre Called by when it detects a "hit" from a hitbox
@@ -166,16 +175,21 @@ func _process(delta):
 """
 func take_damage(amount: int) -> void:
 	ServerConnection.send_arena_enemy_hit(amount,1) #1 is the type of enemy, reference EnemyTypes in arenaGame.gd
-	healthbar.value = healthbar.value - amount
-	if healthbar.value == 200 and Global.progress == 6:
-		Global.state = Global.scenes.QUIZ
-	if healthbar.value == 0:
-		Global.state = Global.scenes.END_SCREEN
+	if _invulnerable == false:
+		healthbar.value = healthbar.value - amount
+		if healthbar.value == 200 and Global.progress == 6:
+			Global.state = Global.scenes.QUIZ
+		if healthbar.value == 0:
+			Global.state = Global.scenes.END_SCREEN
 
 #Same function as above but doesn't send data to the server
 func take_damage_server(amount: int):
-	healthbar.value = healthbar.value - amount
-	if healthbar.value == 200 and Global.progress == 6:
+	if _invulnerable == false:
+		healthbar.value = healthbar.value - amount
+		if healthbar.value == 200 and Global.progress == 6:
+			Global.state = Global.scenes.QUIZ
+		if healthbar.value == 0:
+			Global.state = Global.scenes.END_SCREEN
 		Global.state = Global.scenes.QUIZ
 	if healthbar.value == 0:
 		Global.state = Global.scenes.END_SCREEN

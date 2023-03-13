@@ -11,6 +11,7 @@ extends Node
 # Player's balance
 var money: int = 0
 var player_inventory = preload("res://Inventory/Inventory.tscn").instance()
+var hotbar = preload("res://Inventory/Hotbar.tscn").instance()
 
 #Entry First Time
 var in_anim: int = 0
