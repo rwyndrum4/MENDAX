@@ -34,7 +34,7 @@ func _ready():
 			break
 	_num_players = len(_players)
 	# Turn off player's torch
-	$Player.get_node("Torch1").hide()
+	$Player.get_node("light").hide()
 	# Play dialogue
 	textBox.queue_text("It seems I was wrong to underestimate you, hero.")
 	textBox.queue_text("You have proven yourself time and again, besting my trials of cunning, strength, and skill.")
