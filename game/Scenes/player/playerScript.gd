@@ -115,7 +115,6 @@ func _physics_process(delta):
 	#Animate character
 	control_animations(velocity)
 
-
 """
 /*
 * @pre Called when signal is received from GlobalSignals

@@ -57,6 +57,7 @@ func _ready():
 	$fogSprite.modulate.a8 = 0
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("openChatbox", self, "chatbox_use")
+	get_parent().toggle_hotbar(true)
 	wellLabeled.visible = false
 	
 
