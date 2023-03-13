@@ -2,42 +2,44 @@ extends Control
 
 
 onready var DisplayText=$VBoxContainer/DisplayText
-onready var ListItem=$VBoxContainer/ItemList
+#onready var ListItem=$VBoxContainer/ItemList
+
 onready var RestartButton=$VBoxContainer/Button
 onready var maxdamage=0
 onready var minhealth=0
 onready var currentmin=0
 onready var currentmax=0
+onready var textBox = $textBox
 var data=[
 	{
 		"number": 1,
 		"question": "Which player inflicted the most damage?",
 		"options": ["1", "2", "3","4"],
-		"correctOptionIndex": 1
+		"correctOptionIndex": 4
 	},	
 	{
 		"number": 2,
 		"question": "Which player had the lowest health after the second minigame?",
 		"options": ["1", "2", "3","4"],
-		"correctOptionIndex": 2
+		"correctOptionIndex": 4
 	},
 	{
 		"number": 3,
 		"question": "Which player inflicted the most damage on the chandelier?",
 		"options": ["1", "2", "3","4"],
-		"correctOptionIndex": 1
+		"correctOptionIndex": 2
 	},	
 	{
 		"number": 4,
 		"question": "Placeholder 4",
 		"options": ["1", "2", "3","4"],
-		"correctOptionIndex": 1
+		"correctOptionIndex": 2
 	},
 	{
 		"number": 5,
 		"question": "Placeholder 5",
 		"options": ["1", "2", "3","4"],
-		"correctOptionIndex": 1
+		"correctOptionIndex": 2
 	}
 ]
 	
@@ -57,20 +59,25 @@ var correct : float=0
 """
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	refresh_scene() # Replace with function body.
+ # Replace with function body.
 	maxdmgdict()
 	minhealthdict()
+	
+	#print(ListItem.rect_size)
 	for d in data:
 		if d.get("number")==1:
-			d["correctOptionIndex"]=maxdamage
+			d["correctOptionIndex"]=maxdamage-1
 		if d.get("number")==2:
-			d["correctOptionIndex"]=minhealth
+			d["correctOptionIndex"]=minhealth-1
+	#index_item=0
+	refresh_scene()
+	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
 func maxdmgdict():
-	currentmax=0
+	currentmax=-1
 	#maxdamage=2
 	for i in 4:
 		if (Global.bod_damage[str(i+1)]+Global.skeleton_damage[str(i+1)]+Global.chandelier_damage[str(i+1)]>currentmax):
@@ -93,21 +100,19 @@ func refresh_scene():
 	else:
 		show_question()
 func show_result():
-	ListItem.hide()
-	RestartButton.show()
-	var score=round(correct/items.size()*100)
-	DisplayText.text="Your score is "+str(score)
+	#ListItem.hide()
+	#RestartButton.show()
+	#var score=round(correct/items.size()*100)
+	#DisplayText.text="Your score is "+str(score)
 	Global.progress = 7
 	Global.state = Global.scenes.CAVE
 func show_question():
-	ListItem.show()
-	RestartButton.hide()
-	ListItem.clear()
 	item=items[index_item]
-	DisplayText.text=item.question
-	var options=item.options
-	for option in options:
-		ListItem.add_item(option)
+	print(item.question)
+	print(item.correctOptionIndex)
+	textBox.queue_text(str(item.question))
+	textBox.display_text()
+
 func read_json_file(filename):
 	var file=File.new()
 	file.open(filename,file.READ)
@@ -116,18 +121,35 @@ func read_json_file(filename):
 	file.close()
 	print(json_data)
 
-
-
-
-func _on_ItemList_item_selected(index):
-	print(item.question)
-	print(item.correctOptionIndex)
-	if index==item.correctOptionIndex:
+func _on_Button1_pressed():
+	index_item+=1
+	if item.correctOptionIndex==0:
 		correct+=1
-	index_item +=1
-	refresh_scene() # Replace with function body.
+		#print(str(index))
+		print("correct")
+	refresh_scene()
 
-func _on_Button_pressed():
-	correct=0
-	index_item=0
-	refresh_scene() # Replace with function body.pass # Replace with function body.
+
+
+func _on_Button2_pressed():
+	index_item+=1
+	if item.correctOptionIndex==1:
+		correct+=1
+		print("correct")
+	refresh_scene()
+
+
+func _on_Button3_pressed():
+	index_item+=1
+	if item.correctOptionIndex==2:
+		correct+=1
+		print("correct")
+	refresh_scene()
+
+
+func _on_Button4_pressed():
+	index_item+=1
+	if item.correctOptionIndex==3:
+		correct+=1
+		print("correct")
+	refresh_scene()

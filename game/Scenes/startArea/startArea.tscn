@@ -1,63 +1,46 @@
 [gd_scene load_steps=13 format=2]
 
-[ext_resource path="res://Assets/mainMenuBG.png" type="Texture" id=1]
+[ext_resource path="res://Assets/Intro/IntroScreen.png" type="Texture" id=1]
 [ext_resource path="res://Scenes/startArea/startArea.gd" type="Script" id=2]
 [ext_resource path="res://Scenes/player/player.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Assets/SFX/bonfire.mp3" type="AudioStream" id=4]
 [ext_resource path="res://Assets/SFX/cave_in.mp3" type="AudioStream" id=5]
 [ext_resource path="res://Scenes/textBox/textBox.tscn" type="PackedScene" id=6]
-[ext_resource path="res://Assets/fire5.png" type="Texture" id=7]
+[ext_resource path="res://Assets/Intro/fire_anim/fire.tres" type="Texture" id=7]
+[ext_resource path="res://Assets/Intro/BrightnessGradient.png" type="Texture" id=8]
 
-[sub_resource type="CircleShape2D" id=2]
+[sub_resource type="ShaderMaterial" id=4]
 
-[sub_resource type="Shader" id=4]
-resource_local_to_scene = true
-code = "/*Code created: 9/18/2022
-By:Mohit Garg
-Date Revised:Mohit Garg
+[sub_resource type="Shader" id=7]
+code = "shader_type canvas_item;
+render_mode unshaded;
 
-//Description:Creates Fire Shader
+uniform sampler2D gradient : hint_black;
+uniform float mix_amount = 1.0;
 
-*/
-shader_type canvas_item;
-
-uniform sampler2D noise;//noise gives fire dynamical structure
-
-
-/*
-@pre None
-@post Ansimated Fire appears on the main menu
-@param none
-@return none
-*/
-//known bugs: currently fire is not anchored correctly in full screen
 void fragment(){
-	vec4 base=texture(TEXTURE,UV);//creates base
-	vec4 n= texture(noise,vec2(UV.x,UV.y+TIME));//creates noise vector y+Time helps fire move vertically
-	base.r += 0.4f - distance(vec2(0.5,UV.y),UV);//want to make center brighter so add small amount and subtract from center
-	base.r = (base.r*0.3) +(n.r *0.4); //adding noise can experiment with ratios to get appropriate base.r
-	COLOR=vec4(float(base.r>0.4),float(base.r>0.5),float(base.r>0.6),float(base.r>0.4));//color will change based on result of boolean expressiong give fire it's color
+	vec4 input_color = texture(TEXTURE, UV);
+	float grayscale_value = dot(input_color.rgb, vec3(0.299, 0.587, 0.114));
+	vec3 sampled_color = texture(gradient, vec2(grayscale_value, 0.0)).rgb;
 	
-	//base.r is red channel
-}
-"
-
-[sub_resource type="OpenSimplexNoise" id=5]
-
-[sub_resource type="NoiseTexture" id=3]
-seamless = true
-noise = SubResource( 5 )
+	COLOR.rgb = mix(input_color.rgb, sampled_color.rgb, mix_amount);
+	COLOR.a = input_color.a;
+}"
 
 [sub_resource type="ShaderMaterial" id=6]
-shader = SubResource( 4 )
-shader_param/noise = SubResource( 3 )
+shader = SubResource( 7 )
+shader_param/mix_amount = 0.01
+
+[sub_resource type="CircleShape2D" id=2]
+radius = 3.5332
 
 [node name="startArea" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 2 )
 
-[node name="TextureRect" type="TextureRect" parent="."]
+[node name="Backdrop" type="TextureRect" parent="."]
+material = SubResource( 4 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = 4.0
@@ -66,55 +49,38 @@ rect_scale = Vector2( 0.997, 0.996 )
 texture = ExtResource( 1 )
 stretch_mode = 1
 
+[node name="BrightnessGradient" type="Sprite" parent="Backdrop"]
+modulate = Color( 0.0941176, 0.0588235, 0, 0.752941 )
+material = SubResource( 6 )
+position = Vector2( 642.929, 367.47 )
+texture = ExtResource( 8 )
+
 [node name="Player" parent="." instance=ExtResource( 3 )]
-position = Vector2( 1083, 596 )
+position = Vector2( 776, 462 )
+scale = Vector2( 0.797615, 0.81306 )
 
 [node name="Colliders" type="StaticBody2D" parent="."]
 collision_layer = 2
 
-[node name="leftScreen" type="CollisionPolygon2D" parent="Colliders"]
-scale = Vector2( 1.22813, 1.11475 )
-polygon = PoolVector2Array( -52.1118, 0, -6.51397, 0, 0, 0, 0, 667.413, -52.1118, 667.413 )
+[node name="Horizon" type="CollisionPolygon2D" parent="Colliders"]
+position = Vector2( 662, 371 )
+scale = Vector2( 66.9187, 1.62779 )
+polygon = PoolVector2Array( -9.95238, -5.52898, 9.80294, 3.07164, 9.788, -14.7439, -9.96732, -18.4299 )
 
-[node name="topScreen" type="CollisionPolygon2D" parent="Colliders"]
-polygon = PoolVector2Array( 0, 0, 0, -64, 1280, -64, 1280, 0 )
+[node name="TreesLeft" type="CollisionPolygon2D" parent="Colliders"]
+polygon = PoolVector2Array( 277, 365, 333, 526, 407, 561, 418, 630, 353, 673, 355, 751, 184, 754, 194, 357, 289, 354 )
 
-[node name="rightScreen" type="CollisionPolygon2D" parent="Colliders"]
-position = Vector2( 1344, -24 )
-scale = Vector2( 1.22813, 1.11475 )
-polygon = PoolVector2Array( -52.1118, 0, -6.51397, 0, 0, 0, 0, 667.413, -52.1118, 667.413 )
+[node name="TreesRight" type="CollisionPolygon2D" parent="Colliders"]
+polygon = PoolVector2Array( 1042, 364, 1038, 440, 1100, 453, 1062, 495, 1054, 541, 1081, 562, 1117, 556, 1087, 599, 1094, 667, 1160, 721, 1157, 782, 1267, 764, 1273, 358 )
 
-[node name="bottomScreen" type="CollisionPolygon2D" parent="Colliders"]
-position = Vector2( 0, 784 )
-polygon = PoolVector2Array( 0, 0, 0, -64, 1280, -64, 1280, -64, 1280, 0 )
+[node name="CaveEntrance" type="CollisionPolygon2D" parent="Colliders"]
+polygon = PoolVector2Array( 289, 413, 353, 415, 369, 353, 466, 359, 489, 430, 528, 421, 540, 354, 607, 365, 643, 412, 721, 362, 727, 310, 271, 321, 260, 437 )
 
-[node name="leftOfCave" type="CollisionPolygon2D" parent="Colliders"]
-position = Vector2( -54, 496 )
-rotation = -0.354108
-scale = Vector2( 0.168949, 1 )
-polygon = PoolVector2Array( 352, -4, 476.302, -61.9396, 1280, -64, 1280, -64, 1273.83, -31.3175, 1231.34, -14.781, 1249.67, -2.97418 )
+[node name="BottomBar" type="CollisionPolygon2D" parent="Colliders"]
+polygon = PoolVector2Array( 343, 722, 1188, 725, 1180, 753, 337, 741 )
 
-[node name="rightOfCave" type="CollisionPolygon2D" parent="Colliders"]
-position = Vector2( 405, 373 )
-rotation = -0.637088
-scale = Vector2( 0.209934, 1 )
-polygon = PoolVector2Array( 340.783, -9.25909, 476.302, -61.9396, 1388.1, -92.8708, 1334.72, -62.5983, 1297.5, -33.5476 )
-
-[node name="aboveCaveEntrance" type="CollisionPolygon2D" parent="Colliders"]
-position = Vector2( 78, 439 )
-rotation = -0.637088
-scale = Vector2( 0.209934, 1 )
-polygon = PoolVector2Array( 353.418, -1.07584, 476.302, -61.9396, 1152.92, -26.1527, 1962.59, 63.5591, 1866.71, 105.889, 1661.63, 66.5643, 1398.74, 36.9176, 812.594, -1.89404, 574.276, -6.57327 )
-
-[node name="mountains" type="CollisionPolygon2D" parent="Colliders"]
-position = Vector2( 528, 56 )
-scale = Vector2( 0.531372, 1 )
-polygon = PoolVector2Array( 60.2215, 32, -60.2214, -56, 1415.2, -56, 1415.2, 32 )
-
-[node name="fire" type="CollisionPolygon2D" parent="Colliders"]
-position = Vector2( 828, 495 )
-scale = Vector2( 0.114746, 1 )
-polygon = PoolVector2Array( -8.71484, 44, -43.5742, 6, -200.442, -16, -43.5742, -37, -8.71484, -81, 191.728, -132, 610.042, -178, 1028.36, -134, 1220.08, -87, 1202.66, -35, 1394.38, -11, 1237.51, 8, 1263.66, 45, 888.919, 33, 575.183, 5, 296.307, 34 )
+[node name="campfire" type="CollisionPolygon2D" parent="Colliders"]
+polygon = PoolVector2Array( 846, 450, 849, 474, 895, 474, 899, 454, 884, 447, 861, 447 )
 
 [node name="enterCaveArea" type="Area2D" parent="."]
 position = Vector2( 1082, 590 )
@@ -123,8 +89,8 @@ collision_layer = 4
 
 [node name="caveEntranceOval" type="CollisionShape2D" parent="enterCaveArea"]
 light_mask = 2
-position = Vector2( -833.764, -232.865 )
-rotation = -0.293881
+position = Vector2( -720.248, -188.378 )
+rotation = -1.75617
 scale = Vector2( 18.0683, 5.04571 )
 shape = SubResource( 2 )
 
@@ -138,16 +104,6 @@ rect_scale = Vector2( 1.63154, 1.63154 )
 text = "Press Enter to 
 go in cave"
 align = 1
-
-[node name="CenterContainer" type="CenterContainer" parent="."]
-margin_right = 40.0
-margin_bottom = 40.0
-
-[node name="Fire5" type="Sprite" parent="CenterContainer"]
-material = SubResource( 6 )
-position = Vector2( 899, 404 )
-scale = Vector2( 0.40332, 0.37793 )
-texture = ExtResource( 7 )
 
 [node name="GUI" type="CanvasLayer" parent="."]
 
@@ -166,6 +122,16 @@ autoplay = true
 max_distance = 1000.0
 attenuation = 2.2974
 bus = "SFX"
+
+[node name="Fire" type="TextureRect" parent="."]
+modulate = Color( 0.694118, 0.694118, 0.694118, 1 )
+light_mask = 0
+margin_left = 825.0
+margin_top = 385.0
+margin_right = 885.0
+margin_bottom = 445.0
+rect_scale = Vector2( 1.6, 1.8 )
+texture = ExtResource( 7 )
 
 [connection signal="body_entered" from="enterCaveArea" to="." method="_on_Area2D_body_entered"]
 [connection signal="body_exited" from="enterCaveArea" to="." method="_on_Area2D_body_exited"]

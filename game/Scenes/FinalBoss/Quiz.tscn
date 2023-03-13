@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://Assets/DarknessLighter.png" type="Texture" id=1]
+[ext_resource path="res://Assets/MendaxEyes_Pixelated.png" type="Texture" id=1]
 [ext_resource path="res://Assets/ARIALBD.TTF" type="DynamicFontData" id=2]
 [ext_resource path="res://Scenes/FinalBoss/Quiz.gd" type="Script" id=3]
+[ext_resource path="res://Scenes/textBox/textBox.tscn" type="PackedScene" id=4]
 
 [sub_resource type="DynamicFont" id=1]
 size = 40
@@ -17,24 +18,25 @@ script = ExtResource( 3 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 2.0
-margin_top = -2.0
+margin_top = -1.0
 margin_right = 42.0
-margin_bottom = 38.0
+margin_bottom = 39.0
 texture = ExtResource( 1 )
 expand = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
-anchor_left = 0.1125
-anchor_top = 0.453167
-anchor_right = 0.971875
-anchor_bottom = 0.665278
+anchor_left = 0.06875
+anchor_top = 0.230944
+anchor_right = 0.948438
+anchor_bottom = 0.336111
 margin_top = -0.280006
 __meta__ = {
 "_edit_use_anchors_": true
 }
 
 [node name="DisplayText" type="Label" parent="VBoxContainer"]
-margin_right = 1100.0
+visible = false
+margin_right = 1096.0
 margin_bottom = 46.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 1 )
@@ -43,18 +45,32 @@ align = 3
 valign = 3
 autowrap = true
 
-[node name="ItemList" type="ItemList" parent="VBoxContainer"]
-margin_top = 50.0
-margin_right = 1100.0
-margin_bottom = 128.0
-size_flags_vertical = 3
-items = [ "Item 0", null, false, "Item 1", null, false, "Item 2", null, false, "Item 3", null, false ]
+[node name="Button1" type="Button" parent="VBoxContainer"]
+margin_right = 1126.0
+margin_bottom = 20.0
+text = "Player 1"
 
-[node name="Button" type="Button" parent="VBoxContainer"]
-margin_top = 132.0
-margin_right = 1100.0
-margin_bottom = 152.0
-text = "Restart"
+[node name="Button2" type="Button" parent="VBoxContainer"]
+margin_top = 24.0
+margin_right = 1126.0
+margin_bottom = 44.0
+text = "Player 2"
 
-[connection signal="item_selected" from="VBoxContainer/ItemList" to="." method="_on_ItemList_item_selected"]
-[connection signal="pressed" from="VBoxContainer/Button" to="." method="_on_Button_pressed"]
+[node name="Button3" type="Button" parent="VBoxContainer"]
+margin_top = 48.0
+margin_right = 1126.0
+margin_bottom = 68.0
+text = "Player 3"
+
+[node name="Button4" type="Button" parent="VBoxContainer"]
+margin_top = 72.0
+margin_right = 1126.0
+margin_bottom = 92.0
+text = "Player 4"
+
+[node name="textBox" parent="." instance=ExtResource( 4 )]
+
+[connection signal="pressed" from="VBoxContainer/Button1" to="." method="_on_Button1_pressed"]
+[connection signal="pressed" from="VBoxContainer/Button2" to="." method="_on_Button2_pressed"]
+[connection signal="pressed" from="VBoxContainer/Button3" to="." method="_on_Button3_pressed"]
+[connection signal="pressed" from="VBoxContainer/Button4" to="." method="_on_Button4_pressed"]

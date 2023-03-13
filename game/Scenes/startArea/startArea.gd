@@ -5,6 +5,7 @@
 * Date Revisions:
 	10/4/2022 - Added ability to move into cave and exit scene
 	10/8/2022 - Added boundaries to cave, sky, and fire
+	3/12/2023 - New transition scene
 """
 extends Control
 
@@ -32,7 +33,6 @@ func _ready():
 		spawn_players()
 	#This is how you queue text to the textbox queue
 	textBox.queue_text("If you're ready to begin your challenge, press enter")
-	get_parent().toggle_hotbar(true)
 
 """
 /*
@@ -49,7 +49,10 @@ func _process(_delta): #change to delta if using it
 			# warning-ignore:return_value_discarded
 			$Enter.play()
 			#change scene to cave area
-			CaveInTrans.change_scene(Global.scenes.CAVE)
+			
+			#I DID THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			BushTrans.change_scene(Global.scenes.CAVE)
+			#CaveInTrans.change_scene(Global.scenes.CAVE)
 
 """
 /*

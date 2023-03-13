@@ -55,6 +55,7 @@ var _match_code: String = ""
 """
 func _ready():
 	initialize_menu()
+	get_parent().toggle_hotbar(false)
 	# warning-ignore:return_value_discarded
 	ServerConnection.connect("character_spawned",self,"spawn_character")
 	# warning-ignore:return_value_discarded
@@ -149,7 +150,7 @@ func _on_Market_pressed():
 """
 func _on_Tests_pressed():
 	#Global.state = Global.scenes.CAVE
-	Global.state=Global.scenes.ARENA_MINIGAME
+	Global.state=Global.scenes.END_SCREEN
 
 """
 /*

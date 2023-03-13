@@ -17,6 +17,7 @@ extends CanvasLayer
 """
 #Fade to black transition
 func change_scene(target) -> void:
+	Global.hotbar.toggle_visible(false)
 	$AnimationPlayer.play("DISSOLVE")
 	yield($AnimationPlayer, 'animation_finished')
 	$AnimationPlayer.play("ENTERCAVE")
@@ -25,4 +26,5 @@ func change_scene(target) -> void:
 	# warning-ignore:return_value_discarded
 	Global.state = target
 	$AnimationPlayer.play("EXITCAVE")
+	Global.hotbar.toggle_visible(true)
 	

@@ -32,6 +32,7 @@ var rhythm_minigame = "res://Scenes/minigames/rhythm/rhythm.tscn"
 var gameover = "res://Scenes/mainMenu/gameOver.tscn"
 var quiz="res://Scenes/FinalBoss/Quiz.tscn"
 var dilemma = "res://Scenes/FinalBoss/Dilemma.tscn"
+var endscreen = "res://Scenes/EndScene/EndScene.tscn"
 
 #Current scene running
 var current_scene = null
@@ -69,6 +70,9 @@ func _ready():
 	$BGM/mainmenu.play()
 	#Connect to Server and join world
 	yield(server_checks(), "completed")
+
+func toggle_hotbar(en: bool):
+	hotbar.visible = en
 
 """
 /*
@@ -147,6 +151,9 @@ func _change_scene_to(state):
 	elif state == Global.scenes.DILEMMA:
 		stopall()
 		current_scene = load(dilemma).instance()
+	elif state == Global.scenes.END_SCREEN:
+		stopall()
+		current_scene = load(endscreen).instance()
 	#add scene to tree and revise local state
 	add_child(current_scene)
 	local_state = Global.state
@@ -268,9 +275,6 @@ func initialize_settings():
 	settings_menu._on_MasterVolSlider_value_changed(Save.game_data.master_vol)
 	settings_menu._on_MusicVolSlider_value_changed(Save.game_data.music_vol)
 	settings_menu._on_SfxVolSlider_value_changed(Save.game_data.sfx_vol)
-
-func toggle_hotbar(en: bool):
-	hotbar.visible = en
 
 func initialize_world_env():
 	#Call functions to use user saved brightness and bloom values
