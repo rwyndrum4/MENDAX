@@ -1,4 +1,4 @@
-[gd_scene load_steps=127 format=2]
+[gd_scene load_steps=128 format=2]
 
 [ext_resource path="res://Assets/ben-character/greeen/rolling/3.png" type="Texture" id=1]
 [ext_resource path="res://Assets/ben-character/red/rolling/6.png" type="Texture" id=2]
@@ -440,6 +440,8 @@ tracks/2/keys = {
 "values": [ Vector2( -80, -48 ), Vector2( 1300, -48 ) ]
 }
 
+[sub_resource type="Theme" id=9]
+
 [node name="CanvasLayer" type="CanvasLayer"]
 script = ExtResource( 121 )
 
@@ -453,38 +455,43 @@ rect_scale = Vector2( 0.753827, 0.753827 )
 mouse_filter = 2
 texture = ExtResource( 119 )
 
-[node name="Node2D" type="Node" parent="."]
+[node name="Node2D" type="Position2D" parent="."]
+position = Vector2( -1400, 88 )
 
 [node name="animated_sprite" type="AnimatedSprite" parent="Node2D"]
+modulate = Color( 0.254902, 0.254902, 0.254902, 1 )
 position = Vector2( 1344, 64 )
 scale = Vector2( 3.53642, 3.53642 )
 frames = SubResource( 5 )
 animation = "roll_southeast_blue"
-frame = 3
+frame = 9
 playing = true
 
 [node name="animated_sprite2" type="AnimatedSprite" parent="Node2D"]
+modulate = Color( 0.254902, 0.254902, 0.254902, 1 )
 position = Vector2( 1344, 192 )
 scale = Vector2( 3.53642, 3.53642 )
 frames = SubResource( 5 )
 animation = "roll_southeast_green"
-frame = 9
+frame = 3
 playing = true
 
 [node name="animated_sprite3" type="AnimatedSprite" parent="Node2D"]
+modulate = Color( 0.254902, 0.254902, 0.254902, 1 )
 position = Vector2( 1344, 320 )
 scale = Vector2( 3.53642, 3.53642 )
 frames = SubResource( 5 )
 animation = "roll_southeast_orange"
-frame = 8
+frame = 2
 playing = true
 
 [node name="animated_sprite4" type="AnimatedSprite" parent="Node2D"]
+modulate = Color( 0.254902, 0.254902, 0.254902, 1 )
 position = Vector2( 1344, 448 )
 scale = Vector2( 3.53642, 3.53642 )
 frames = SubResource( 5 )
 animation = "roll_southeast_red"
-frame = 10
+frame = 4
 playing = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
@@ -494,14 +501,17 @@ anims/SLIMES_ROLLOUT_P1 = SubResource( 7 )
 anims/SLIMES_ROLLOUT_P2 = SubResource( 8 )
 
 [node name="bushTop" type="TextureRect" parent="."]
+modulate = Color( 0.254902, 0.254902, 0.254902, 1 )
 margin_top = -160.0
 margin_right = 1920.0
 margin_bottom = 920.0
 rect_scale = Vector2( 0.667985, 0.667985 )
 mouse_filter = 2
+theme = SubResource( 9 )
 texture = ExtResource( 120 )
 
 [node name="bushBottom" type="TextureRect" parent="."]
+modulate = Color( 0.254902, 0.254902, 0.254902, 1 )
 margin_top = 150.0
 margin_right = 1920.0
 margin_bottom = 1230.0

@@ -5,6 +5,7 @@
 * Date Revisions:
 	10/4/2022 - Added ability to move into cave and exit scene
 	10/8/2022 - Added boundaries to cave, sky, and fire
+	3/12/2023 - New transition scene
 """
 extends Control
 
@@ -51,8 +52,8 @@ func _process(_delta): #change to delta if using it
 			#change scene to cave area
 			
 			#I DID THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-			#BushTrans.change_scene(Global.scenes.CAVE)
-			CaveInTrans.change_scene(Global.scenes.CAVE)
+			BushTrans.change_scene(Global.scenes.CAVE)
+			#CaveInTrans.change_scene(Global.scenes.CAVE)
 
 """
 /*
