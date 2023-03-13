@@ -10,7 +10,6 @@
 extends StaticBody2D
 var _timer:float = 0
 var _prev_timer:float = 0
-var _dmgCap
 var _invulnerable
 
 
@@ -30,15 +29,15 @@ onready var auraShield = $aura_shield
 */
 """
 func _ready():
-	healthbar.value = 100;
+	print("progress: " + str(Global.progress))
 	if Global.progress == 8:
+		healthbar.value = 200
 		_invulnerable = true;
 		auraShield.visible = true
 	else:
+		healthbar.value = 400
 		_invulnerable = false;
 		auraShield.visible = false
-	
-	
 
 """
 /*
@@ -178,13 +177,19 @@ func take_damage(amount: int) -> void:
 	ServerConnection.send_arena_enemy_hit(amount,1) #1 is the type of enemy, reference EnemyTypes in arenaGame.gd
 	if _invulnerable == false:
 		healthbar.value = healthbar.value - amount
-
-	if healthbar.value == 50:
-		Global.state = Global.scenes.QUIZ
+		if healthbar.value == 200 and Global.progress == 6:
+			Global.state = Global.scenes.QUIZ
+		if healthbar.value == 0:
+			Global.state = Global.scenes.END_SCREEN
 
 #Same function as above but doesn't send data to the server
 func take_damage_server(amount: int):
 	if _invulnerable == false:
 		healthbar.value = healthbar.value - amount
-	if healthbar.value == 50:
+		if healthbar.value == 200 and Global.progress == 6:
+			Global.state = Global.scenes.QUIZ
+		if healthbar.value == 0:
+			Global.state = Global.scenes.END_SCREEN
 		Global.state = Global.scenes.QUIZ
+	if healthbar.value == 0:
+		Global.state = Global.scenes.END_SCREEN

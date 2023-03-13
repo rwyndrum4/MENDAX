@@ -52,7 +52,8 @@ enum scenes {
 	RHYTHM_MINIGAME,
 	GAMEOVER,
 	QUIZ,
-	DILEMMA
+	DILEMMA,
+	END_SCREEN
 }
 
 # Hold dictionary mapping player num to name
