@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://Assets/Intro/IntroScreen.png" type="Texture" id=1]
 [ext_resource path="res://Scenes/startArea/startArea.gd" type="Script" id=2]
@@ -8,6 +8,8 @@
 [ext_resource path="res://Scenes/textBox/textBox.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Assets/Intro/fire_anim/fire.tres" type="Texture" id=7]
 [ext_resource path="res://Assets/Intro/BrightnessGradient.png" type="Texture" id=8]
+[ext_resource path="res://Assets/Intro/SparkTransitionPixelated.png" type="Texture" id=9]
+[ext_resource path="res://Assets/Intro/darkness.png" type="Texture" id=10]
 
 [sub_resource type="ShaderMaterial" id=4]
 
@@ -132,6 +134,16 @@ margin_right = 885.0
 margin_bottom = 445.0
 rect_scale = Vector2( 1.6, 1.8 )
 texture = ExtResource( 7 )
+
+[node name="Spark" type="TextureRect" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+texture = ExtResource( 9 )
+
+[node name="Darkness" type="TextureRect" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+texture = ExtResource( 10 )
 
 [connection signal="body_entered" from="enterCaveArea" to="." method="_on_Area2D_body_entered"]
 [connection signal="body_exited" from="enterCaveArea" to="." method="_on_Area2D_body_exited"]

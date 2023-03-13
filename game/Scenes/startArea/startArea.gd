@@ -28,6 +28,14 @@ var other_player = "res://Scenes/player/other_players/other_players.tscn"
 */
 """
 func _ready():
+	$Darkness.hide()
+	var timer = Timer.new()
+	timer.wait_time = 0.12
+	timer.one_shot = true
+	add_child(timer)
+	timer.start()
+	yield(timer, "timeout")
+	$Spark.hide()
 	#If there is a server connection, spawn all players
 	if ServerConnection.match_exists():
 		spawn_players()
