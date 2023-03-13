@@ -451,7 +451,8 @@ func load_boss(stage_num:int):
 		# Hide light from cave entrance
 		$Light2D.hide()
 		# Hide player torch light
-		$Player.get_node("Torch1").hide()
+		
+		$Player.get_node("light/Torch1").hide()
 		# Give player a sword
 		sword = preload("res://Scenes/player/Sword/Sword.tscn").instance()
 		sword.direction = "right"
@@ -472,7 +473,7 @@ func load_boss(stage_num:int):
 		# Hide light from cave entrance
 		$Light2D.hide()
 		# Hide player torch light
-		$Player.get_node("Torch1").hide()
+		$Player.get_node("light/Torch1").hide()
 		# Give player a sword
 		sword = preload("res://Scenes/player/Sword/Sword.tscn").instance()
 		sword.direction = "right"
