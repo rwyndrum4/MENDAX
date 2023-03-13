@@ -44,7 +44,8 @@ margin_top = -36.0
 margin_right = 25.0
 margin_bottom = -26.0
 custom_styles/fg = SubResource( 3 )
-value = 40.0
+max_value = 400.0
+value = 400.0
 percent_visible = false
 
 [node name="MyHurtBox" type="Area2D" parent="."]
@@ -54,5 +55,4 @@ script = ExtResource( 4 )
 
 [node name="hitbox" type="CollisionShape2D" parent="MyHurtBox"]
 position = Vector2( -0.1, -5.15 )
-scale = Vector2( 1, 1 )
 shape = SubResource( 4 )
