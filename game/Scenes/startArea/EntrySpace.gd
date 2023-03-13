@@ -13,6 +13,7 @@ extends Control
 # Member Variables
 var in_exit = false
 var in_menu = false
+var in_well = false
 var steam_active = false #variable to tell if steam in passage is active
 var stop_steam_control = false #variable to tell whether process function needs to check steam
 var steam_modulate:float = 0 #modualte value that is gradually added to modulate of steam
@@ -20,6 +21,7 @@ var at_lever = false
 var at_ladder = false
 var shield_spawn: Area2D
 var imposter =preload("res://Scenes/Mobs/imposter.tscn")
+var dummyBoss
 onready var confuzzed = $Player/confuzzle
 onready var instructions: Label = $exitCaveArea/exitDirections
 onready var myTimer: Timer = $GUI/Timer
@@ -31,6 +33,7 @@ onready var secretPanelCollider = $worldMap/Node2D_1/colliders/secretDoor
 onready var ladder = $worldMap/Node2D_1/Ladder1x1
 onready var pitfall = $worldMap/Node2D_1/Pitfall1x1_2
 onready var player = $Player
+onready var wellLabeled = $well/Label
 
 
 var other_player = "res://Scenes/player/other_players/other_players.tscn"
@@ -54,6 +57,8 @@ func _ready():
 	$fogSprite.modulate.a8 = 0
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("openChatbox", self, "chatbox_use")
+	get_parent().toggle_hotbar(true)
+	wellLabeled.visible = false
 	
 
 
@@ -75,17 +80,21 @@ func _process(_delta): #change to delta if used
 		Global.state = Global.scenes.DILEMMA
 	if Global.progress == 5:
 		load_boss(2)
+
 	if Global.progress == 6 or Global.progress == 8:
 		if sword.direction == "right":
 			sword.get_node("pivot").position = $Player.position + Vector2(60,0)
 		elif sword.direction == "left":
 			sword.get_node("pivot").position = $Player.position + Vector2(-60,0)
+	if Global.progress == 7:
+		print("hello we in 3")
+		load_boss(3)
 	if player.isInverted == true:
 		confuzzed.visible = true
 	else:
 		confuzzed.visible = false
-	if Global.progress == 7:
-		load_boss(3)
+	
+
 
 """
 /*
@@ -96,6 +105,16 @@ func _process(_delta): #change to delta if used
 */
 """
 func _input(_ev):
+	if in_well:
+		if Input.is_action_just_pressed("ui_press_e",false):
+			dummyBoss._invulnerable = false
+			var wait_for_start: Timer = Timer.new()
+			add_child(wait_for_start)
+			wait_for_start.wait_time = 20
+			wait_for_start.one_shot = true
+			wait_for_start.start()
+			# warning-ignore:return_value_discarded
+			wait_for_start.connect("timeout",self, "_shield_up_boss",[wait_for_start])
 	if in_exit:
 		if Input.is_action_just_pressed("ui_accept",false) and not Input.is_action_just_pressed("ui_enter_chat"):
 			# warning-ignore:return_value_discarded
@@ -432,7 +451,8 @@ func load_boss(stage_num:int):
 		# Hide light from cave entrance
 		$Light2D.hide()
 		# Hide player torch light
-		$Player.get_node("Torch1").hide()
+		
+		$Player.get_node("light/Torch1").hide()
 		# Give player a sword
 		sword = preload("res://Scenes/player/Sword/Sword.tscn").instance()
 		sword.direction = "right"
@@ -453,7 +473,7 @@ func load_boss(stage_num:int):
 		# Hide light from cave entrance
 		$Light2D.hide()
 		# Hide player torch light
-		$Player.get_node("Torch1").hide()
+		$Player.get_node("light/Torch1").hide()
 		# Give player a sword
 		sword = preload("res://Scenes/player/Sword/Sword.tscn").instance()
 		sword.direction = "right"
@@ -468,6 +488,8 @@ func load_boss(stage_num:int):
 		wait_for_start.start()
 		# warning-ignore:return_value_discarded
 		wait_for_start.connect("timeout",self, "_imposter_spawn")
+		boss._invulnerable = true
+		dummyBoss = boss
 	# Initialize, place, and spawn boss
 	boss.set("position", Vector2(-4250, 2160))
 	add_child_below_node($worldMap, boss)
@@ -486,5 +508,27 @@ func give_shield(_area):
 """
 func _imposter_spawn():
 	var new_imposter = imposter.instance()
-	new_imposter.position = Vector2(0, 3000)
+	
+	new_imposter.setup_pos(player.position)
 	add_child(new_imposter)
+
+
+func _on_well_body_entered(body):
+	if Global.progress == 8:
+		if "Player" in body.name:
+			wellLabeled.visible = true
+			in_well = true
+			
+
+
+func _on_well_body_exited(body):
+	if Global.progress == 8:
+		if "Player" in body.name:
+			wellLabeled.visible = false
+			in_well = false
+	
+
+func _shield_up_boss(timer):
+	timer.queue_free()
+	dummyBoss._invulnerable = true
+	

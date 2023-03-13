@@ -20,7 +20,7 @@ onready var isInverted = false
 onready var shield = $Shield
 var is_stopped = false
 var player_color:String = ""
-
+var once
 
 # Player physics constants
 const ACCELERATION = 25000
@@ -50,6 +50,7 @@ func _ready():
 		
 	#Initially have character idle
 	character.play("idle_" + player_color)
+	once = true
 	
 
 """
@@ -72,6 +73,15 @@ func _physics_process(delta):
 	if isInverted == true:
 		input_velocity.x = Input.get_axis("ui_right", "ui_left")
 		input_velocity.y = Input.get_axis("ui_down", "ui_up") 
+		if once:
+			once = false
+			var wait_for_start: Timer = Timer.new()
+			add_child(wait_for_start)
+			wait_for_start.wait_time = 5
+			wait_for_start.one_shot = true
+			wait_for_start.start()
+			# warning-ignore:return_value_discarded
+			wait_for_start.connect("timeout",self, "_invert_off",[wait_for_start])
 	else:
 		input_velocity.x = Input.get_axis("ui_left", "ui_right")
 		input_velocity.y = Input.get_axis("ui_up", "ui_down") 
@@ -104,7 +114,6 @@ func _physics_process(delta):
 	velocity = move_and_slide(velocity)
 	#Animate character
 	control_animations(velocity)
-
 
 """
 /*
@@ -197,3 +206,8 @@ func set_color(player_num:int):
 """	
 func _game_over():
 		Global.state = Global.scenes.GAMEOVER
+
+func _invert_off(timer):
+	timer.queue_free()
+	isInverted = false
+	once = true
