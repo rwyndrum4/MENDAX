@@ -568,10 +568,11 @@ func someone_took_shild(player_id,_shield_num):
 	_shield_available = false
 	get_node("shield_sprite").hide()
 	start_shield_timer()
-	for o_player in server_players:
-		if player_id == o_player.get('num'):
-			o_player.get('player_obj').shield.giveShield()
-			break
+	##FIX THIS :: OTHER_PLAYER NEEDS TO BE LIKE ARENA PLAYER##
+#	for o_player in server_players:
+#		if player_id == o_player.get('num'):
+#			o_player.get('player_obj').shield.giveShield()
+#			break
 
 """
 /*

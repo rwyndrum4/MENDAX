@@ -227,8 +227,11 @@ func convert_time(time_in:float) -> String:
 func _on_Timer_timeout():
 	#Make enemies harder ( ´ ｰ `)
 	for en in _enemies:
+		#If enemy has died do skip it
+		if not is_instance_valid(en):
+			continue
 		#If enemy has not died and was spawned in
-		if is_instance_valid(en) and en._has_spawned:
+		elif en._has_spawned:
 			en.level_up()
 			en.set_physics_process(false)
 		#If enemy has not had the chance to spawn in
@@ -315,6 +318,7 @@ func _end_game(won_game:bool):
 func gen_results(server_on:bool) -> Dictionary:
 	if server_on:
 		var res: Dictionary = {}
+		#Adding money for all players in server
 		for p in server_players:
 			var p_num = p.get('num')
 			var p_name = Global.get_player_name(p_num)
@@ -325,8 +329,12 @@ func gen_results(server_on:bool) -> Dictionary:
 				if Save.game_data.username == p_name:
 					PlayerInventory.add_item("Coin", 20)
 				res[p_name] = "Lived"
+		#Adding money for you 
 		res[Save.game_data.username] = "Died" if _player_dead else "Lived"
-		get_parent().change_money(GameLoot.get_coin_val(ServerConnection._player_num))
+		var your_num = ServerConnection._player_num
+		if not _player_dead:
+			GameLoot.add_to_coin(your_num,20)
+		get_parent().change_money(GameLoot.get_coin_val(your_num))
 		return res
 	else:
 		if not _player_dead:
@@ -535,6 +543,7 @@ func _enemy_defeated(enemyID:int):
 	#Same logic as above, but spawn extra BoD
 	if enemyID == 3:
 		add_child(_enemies[4])
+		_enemies[4].turn_on_physics()
 	#If no more enemies remaining you win!!!
 	if enemies_remaining == 0:
 		_end_game(true)
