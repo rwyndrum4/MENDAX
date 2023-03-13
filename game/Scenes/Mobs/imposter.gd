@@ -9,20 +9,28 @@ onready var timer = $Timer
 var player_color = "imposter"
 var imposter_color
 var rng
-
+var is_hit
+var pos_arr:Array = [Vector2(0,3000), 
+					Vector2(3000,3000), 
+					Vector2(1000,1000), 
+					Vector2(-3500,3000),
+					Vector2(-7500,3000),
+					Vector2(-10000, 5500)
+]
 # Global velocity
 var velocity = Vector2.ZERO
 var BASE_SPEED = 250
 var BASE_ACCELERATION = 500
 
 func _ready():
+	is_hit = false
 	randomize()
 	rng = randi() % 4
 	if rng == 0:
 		imposter_color = "green"
-	if rng == 1:
+	elif rng == 1:
 		imposter_color = "blue"
-	if rng == 2:
+	elif rng == 2:
 		imposter_color = "orange"
 	else:
 		imposter_color = "red"
@@ -38,8 +46,27 @@ func _physics_process(_delta):
 	#else:
 	
 	#control_animations(velocity)
-	
-	
+
+
+"""
+/*
+* @pre None
+* @post Changes imposter position to one of the already defined positions in array
+* @param player_pos -> Vector2
+* @return None
+*/
+"""	
+func setup_pos(player_pos):
+	randomize()
+	var num = 0
+	var new_arr:Array = []
+	for i in range(6):
+		position = pos_arr[i]
+		if sqrt(pow(player_pos.x - position.x, 2) +  pow(player_pos.y - position.y, 2) )> 800:
+			new_arr.append(position)
+			num+=1
+	rng = randi() % num
+	position = new_arr[rng]
 	
 
 """
@@ -82,19 +109,20 @@ func control_animations(vel:Vector2):
 
 func _on_Area2D_body_entered(body):
 	if "Player" in body.name:
-		timer.queue_free()
+		is_hit = true
+		var Player = get_parent().get_node("Player")
+		Player.isInverted = true
 		set_physics_process(false)
 		area2d.queue_free()
 		collisionbox.queue_free()
 		character.play("explosion")
-		var Player = get_parent().get_node("Player")
 		#enter health bar stuff here
 		Player.take_damage(10)
 		print("player got exploded 10 dmg")
 		yield(character, "animation_finished")
 		print("invert the controls")
 		
-		Player.isInverted = true
+		
 		
 		
 		queue_free()
@@ -102,9 +130,11 @@ func _on_Area2D_body_entered(body):
 
 
 func _on_Timer_timeout():
-	set_physics_process(false)
-	area2d.queue_free()
-	collisionbox.queue_free()
-	character.play("explosion")
-	yield(character, "animation_finished")
-	queue_free() # Replace with function body.
+	if !is_hit:
+		set_physics_process(false)
+		area2d.queue_free()
+		collisionbox.queue_free()
+		character.play("explosion")
+		yield(character, "animation_finished")
+		queue_free() # Replace with function body.
+	return

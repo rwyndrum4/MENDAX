@@ -138,6 +138,7 @@ Nakama="*res://Loader/Nakama/com.heroiclabs.nakama/Nakama.gd"
 INV="*res://JSONdata.gd"
 PlayerInventory="*res://PlayerInventory.gd"
 ServerConnection="*res://Scenes/globalScope/ServerConnection.gd"
+BushTrans="*res://Scenes/sceneTrans/BushTrans.tscn"
 
 [debug]
 
@@ -304,6 +305,11 @@ red_rhythm={
 invert_controls={
 "deadzone": 0.5,
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":0,"physical_scancode":47,"unicode":0,"echo":false,"script":null)
+ ]
+}
+ui_press_e={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":0,"physical_scancode":69,"unicode":0,"echo":false,"script":null)
  ]
 }
 
