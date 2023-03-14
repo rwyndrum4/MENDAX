@@ -1,0 +1,85 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://Assets/Silver.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://Scenes/minigames/arena/arenaMap.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Scenes/minigames/rhythm/hit_buttons.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Scenes/minigames/rhythm/introScene.gd" type="Script" id=4]
+[ext_resource path="res://Scenes/textBox/textBox.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Scenes/player/player.tscn" type="PackedScene" id=6]
+
+[sub_resource type="DynamicFont" id=1]
+size = 75
+font_data = ExtResource( 1 )
+
+[node name="introWait" type="Node2D"]
+script = ExtResource( 4 )
+
+[node name="Node2D" parent="." instance=ExtResource( 2 )]
+
+[node name="Player" parent="." instance=ExtResource( 6 )]
+position = Vector2( 1500, 500 )
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+offset = Vector2( 400, 100 )
+current = true
+
+[node name="Frame" type="Node" parent="."]
+
+[node name="top_of_buttons" type="Line2D" parent="Frame"]
+position = Vector2( 1310, 214 )
+points = PoolVector2Array( 360, 552, 872, 552 )
+default_color = Color( 0.4, 0.501961, 1, 1 )
+
+[node name="bottom_of_buttons" type="Line2D" parent="Frame"]
+position = Vector2( 1310, 214 )
+points = PoolVector2Array( 344, 648, 888, 648 )
+default_color = Color( 0.4, 0.501961, 1, 1 )
+
+[node name="middle_divider" type="Line2D" parent="Frame"]
+position = Vector2( 1310, 214 )
+points = PoolVector2Array( 616, -16, 616, 736 )
+default_color = Color( 0.4, 0.501961, 1, 1 )
+
+[node name="left_divider" type="Line2D" parent="Frame"]
+position = Vector2( 1310, 214 )
+points = PoolVector2Array( 456, -8, 328, 752 )
+default_color = Color( 0.968627, 0.4, 1, 1 )
+
+[node name="right_divider" type="Line2D" parent="Frame"]
+position = Vector2( 1262, 214 )
+points = PoolVector2Array( 824, -8, 952, 752 )
+default_color = Color( 0.968627, 0.4, 1, 1 )
+
+[node name="blue" parent="Frame" instance=ExtResource( 3 )]
+position = Vector2( 1725, 811 )
+animation = "blue"
+frame = 0
+_color_animation = "blue_rhythm"
+
+[node name="green" parent="Frame" instance=ExtResource( 3 )]
+position = Vector2( 1855, 811 )
+animation = "green"
+frame = 0
+_color_animation = "green_rhythm"
+
+[node name="orange" parent="Frame" instance=ExtResource( 3 )]
+position = Vector2( 1985, 811 )
+animation = "orange"
+frame = 0
+_color_animation = "orange_rhythm"
+
+[node name="red" parent="Frame" instance=ExtResource( 3 )]
+position = Vector2( 2115, 811 )
+_color_animation = "red_rhythm"
+
+[node name="GUI" type="CanvasLayer" parent="."]
+
+[node name="wait_on_players" type="Label" parent="GUI"]
+margin_left = 334.0
+margin_top = 179.0
+margin_right = 934.0
+margin_bottom = 263.0
+custom_fonts/font = SubResource( 1 )
+text = "Waiting on other players..."
+
+[node name="textBox" parent="." instance=ExtResource( 5 )]

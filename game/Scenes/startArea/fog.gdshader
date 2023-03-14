@@ -14,8 +14,8 @@ float noise(vec2 coord) {
 	vec2 f = fract(coord);
 	
 	float a = rand(i);
-	float b = rand(i + vec2(1.0,0.0));
-	float c = rand(i + vec2(0.0,1.0));
+	float b = rand(i + vec2(1.9 ,0.0));
+	float c = rand(i + vec2(0.5,1.7));
 	float d = rand(i + vec2(1.0,1.0));
 	
 	vec2 cubic = f * f * (3.0 - 2.0 * f);

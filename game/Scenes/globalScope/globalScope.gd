@@ -28,6 +28,7 @@ var start_area = "res://Scenes/startArea/startArea.tscn"
 var cave = "res://Scenes/startArea/EntrySpace.tscn"
 var riddler_minigame = "res://Scenes/minigames/riddler/riddleGame.tscn"
 var arena_minigame = "res://Scenes/minigames/arena/arenaGame.tscn"
+var rhythm_intro = "res://Scenes/minigames/rhythm/introScene.tscn"
 var rhythm_minigame = "res://Scenes/minigames/rhythm/rhythm.tscn"
 var gameover = "res://Scenes/mainMenu/gameOver.tscn"
 var quiz="res://Scenes/FinalBoss/Quiz.tscn"
@@ -138,6 +139,9 @@ func _change_scene_to(state):
 		stopall()
 		$BGM/arena.play()
 		current_scene = load(arena_minigame).instance()
+	elif state == Global.scenes.RHYTHM_INTRO:
+		stopall()
+		current_scene = load(rhythm_intro).instance()
 	elif state == Global.scenes.RHYTHM_MINIGAME:
 		stopall()
 		current_scene = load(rhythm_minigame).instance()

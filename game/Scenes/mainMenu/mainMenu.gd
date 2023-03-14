@@ -23,8 +23,6 @@ onready var code_line_edit = $joinLobby/enterLobbyCode
 #### Variables for showing players on rocks ###
 #array for holding player objects that are created
 var player_objects: Array = [] 
-#value to scale up animated sprites
-const SCALE_VAL: int = 5 
 #scene that holds the idle player animation
 var idle_player = "res://Scenes/player/idle_player/idle_player.tscn"
 #array that holds the animation names
@@ -33,6 +31,8 @@ var animation_names: Array = ["blue_idle","red_idle","green_idle","orange_idle"]
 var num_players: int = 0
 #max players allowed
 const MAX_PLAYERS: int = 4
+#value to scale up animated sprites
+const SCALE_VAL = Vector2(0.798,0.813)
 
 
 ### Member Variables ###
@@ -225,6 +225,12 @@ func initialize_menu():
 	startButton.grab_focus()
 	#reset any online stuff if they came from a previous game
 	reset_multiplayer()
+	#If chat has not been swapped back from previous game 
+	if not ServerConnection._is_global_chat:
+		ServerConnection.switch_chat_methods() #switch back to using global chat
+		ServerConnection.join_chat_async_general() #rejoin global chat
+		get_parent().chat_box.chat_event_message("Switched from match chat to global chat", "blue")
+		get_parent().chat_box.chat_event_message("Game fully reset, please create a new one if desired", "pink")
 	#check if there is a username
 	if Save.game_data.username == "":
 		var win_text = "Welcome to Mendax!"
@@ -430,17 +436,17 @@ func delete_player_obj(player:AnimatedSprite, text:Label):
 func get_char_pos(sizeof_arr: int) -> Vector2:
 	var result: Vector2 = Vector2.ZERO
 	if sizeof_arr == 0:
-		result.x = 150
-		result.y = 65
+		result.x = 825
+		result.y = 420
 	elif sizeof_arr == 1:
-		result.x = 215
-		result.y = 65
+		result.x = 960
+		result.y = 420
 	elif sizeof_arr == 2:
-		result.x = 150
-		result.y = 120
+		result.x = 770
+		result.y = 490
 	elif sizeof_arr == 3:
-		result.x = 215
-		result.y = 120
+		result.x = 940
+		result.y = 480
 	return result
 
 """
@@ -494,15 +500,12 @@ func create_spawn_player(char_pos:Vector2, player_name:String) -> Array:
 	var spawned_player:AnimatedSprite = load(idle_player).instance()
 	#Change size and pos of sprite
 	spawned_player.offset = char_pos
-	spawned_player.scale = Vector2(SCALE_VAL,SCALE_VAL)
+	spawned_player.scale = SCALE_VAL
 	spawned_player.play_animation(animation_names[num_players])
 	#Create text and add it as a child of the new player obj
 	var player_title: Label = Label.new()
 	player_title.text = player_name
-	player_title.rect_position = Vector2(
-		(char_pos.x*SCALE_VAL)-(5*SCALE_VAL), 
-		(char_pos.y*SCALE_VAL)-(20*SCALE_VAL)
-	)
+	player_title.rect_position = char_pos
 	player_title.add_font_override("font",load("res://Assets/ARIALBD.TTF"))
 	add_child(player_title)
 	#Add child to the scene

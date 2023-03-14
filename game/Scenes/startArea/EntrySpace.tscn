@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=2]
+[gd_scene load_steps=54 format=2]
 
 [ext_resource path="res://Scenes/startArea/worldMap.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Scenes/player/player.tscn" type="PackedScene" id=2]
@@ -19,6 +19,7 @@
 [ext_resource path="res://Assets/ARIALBD.TTF" type="DynamicFontData" id=17]
 [ext_resource path="res://Assets/mist/frame0004.png" type="Texture" id=18]
 [ext_resource path="res://Assets/mist/frame0018.png" type="Texture" id=19]
+[ext_resource path="res://Assets/Silver.ttf" type="DynamicFontData" id=20]
 [ext_resource path="res://Assets/mist/frame0019.png" type="Texture" id=21]
 [ext_resource path="res://Assets/mist/frame0006.png" type="Texture" id=24]
 [ext_resource path="res://Assets/mist/frame0020.png" type="Texture" id=25]
@@ -64,6 +65,10 @@ animations = [ {
 [sub_resource type="DynamicFont" id=2]
 size = 40
 font_data = ExtResource( 6 )
+
+[sub_resource type="DynamicFont" id=20]
+size = 75
+font_data = ExtResource( 20 )
 
 [sub_resource type="CircleShape2D" id=5]
 
@@ -119,8 +124,8 @@ margin_bottom = 1088.0
 [node name="fogSprite" type="Sprite" parent="."]
 visible = false
 material = SubResource( 11 )
-position = Vector2( -3566, 3001 )
-scale = Vector2( 4.84362, -4055.78 )
+position = Vector2( -2964, 3236 )
+scale = Vector2( 10.0529, -8417.72 )
 texture = SubResource( 13 )
 
 [node name="Light2D" type="Light2D" parent="."]
@@ -156,7 +161,7 @@ current = true
 visible = false
 position = Vector2( 0, -45 )
 frames = SubResource( 15 )
-frame = 4
+frame = 2
 playing = true
 
 [node name="GUI" type="CanvasLayer" parent="."]
@@ -173,6 +178,14 @@ custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 2 )
 
 [node name="textBox" parent="GUI" instance=ExtResource( 7 )]
+
+[node name="wait_on_players" type="Label" parent="GUI"]
+margin_left = 334.0
+margin_top = 179.0
+margin_right = 934.0
+margin_bottom = 263.0
+custom_fonts/font = SubResource( 20 )
+text = "Waiting on other players..."
 
 [node name="exitCaveArea" type="Area2D" parent="."]
 position = Vector2( 1153, 1583 )

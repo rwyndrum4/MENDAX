@@ -11,18 +11,25 @@
 extends Control
 
 # Member Variables
-var in_exit = false
-var in_menu = false
-var in_well = false
+const CAVE_TIME = 90 #how much time players spend in the cave
+var in_exit = false #variable to track if character is by the exit
+var in_menu = false #variable to track if character is in options menu
+var in_well = false #variable to track if character is by well
 var steam_active = false #variable to tell if steam in passage is active
 var stop_steam_control = false #variable to tell whether process function needs to check steam
 var steam_modulate:float = 0 #modualte value that is gradually added to modulate of steam
-var at_lever = false
-var at_ladder = false
-var shield_spawn: Area2D = null
-var _shield_available: bool = true
-var imposter =preload("res://Scenes/Mobs/imposter.tscn")
+var at_lever = false #variable to track if player is at the lever
+var at_ladder = false #variable to track if player is at the ladder
+var shield_spawn: Area2D = null #holds the area2d where shild is spawned at
+var _shield_available: bool = true #boolean to track if a shield is avaiblable or not
+var _game_started = false #variable to tell if all players are in scene
+var imposter = preload("res://Scenes/Mobs/imposter.tscn") #imposter enemies class
 var dummyBoss
+var server_players: Array = [] #array to hold all OTHER players in cave (not you)
+var other_player = "res://Scenes/player/other_players/other_players.tscn" #class for other player's body objects
+var sword = null #sword for the player
+
+# Scene Objects
 onready var confuzzed = $Player/confuzzle
 onready var instructions: Label = $exitCaveArea/exitDirections
 onready var myTimer: Timer = $GUI/Timer
@@ -36,10 +43,6 @@ onready var pitfall = $worldMap/Node2D_1/Pitfall1x1_2
 onready var player = $Player
 onready var wellLabeled = $well/Label
 
-var server_players: Array = []
-var other_player = "res://Scenes/player/other_players/other_players.tscn"
-var sword = null
-
 """
 /*
 * @pre Called when the node enters the scene tree for the first time.
@@ -51,17 +54,39 @@ var sword = null
 func _ready():
 	#hide cave instructions at start
 	instructions.hide()
-	myTimer.start(90)
 	$fogSprite.modulate.a8 = 0
+	get_parent().toggle_hotbar(true)
+	wellLabeled.visible = false
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("openChatbox", self, "chatbox_use")
+	# warning-ignore:return_value_discarded
+	Global.connect("all_players_arrived", self, "_can_start_game")
+	# warning-ignore:return_value_discarded
+	ServerConnection.connect("minigame_can_start", self, "_can_start_game_other")
 	#Spawn the players if a match is ongoing
 	if ServerConnection.match_exists() and ServerConnection.get_server_status():
 		spawn_players()
 		# warning-ignore:return_value_discarded
-		ServerConnection.connect("character_took_shield",self,"someone_took_shild")
-	get_parent().toggle_hotbar(true)
-	wellLabeled.visible = false
+		ServerConnection.connect("character_took_shield",self,"someone_took_shield")
+		if ServerConnection._player_num == 1:
+			#in case p1 is last player to get to minigame
+			if Global.get_minigame_players() == Global.get_num_players() - 1:
+				ServerConnection.send_minigame_can_start()
+				_game_started = true
+				start_cave()
+				#Sends the riddle to other players once all are present
+			else:
+				#Set a five second timer to wait for other players to spawn in
+				var wait_for_start: Timer = Timer.new()
+				add_child(wait_for_start)
+				wait_for_start.wait_time = 5
+				wait_for_start.one_shot = true
+				wait_for_start.start()
+				# warning-ignore:return_value_discarded
+				wait_for_start.connect("timeout",self, "_start_timer_expired", [wait_for_start])
+	#Start cave scene if single player
+	else:
+		start_cave()
 
 """
 /*
@@ -81,21 +106,17 @@ func _process(_delta): #change to delta if used
 		Global.state = Global.scenes.DILEMMA
 	if Global.progress == 5:
 		load_boss(2)
-
 	if Global.progress == 6 or Global.progress == 8:
 		if sword.direction == "right":
 			sword.get_node("pivot").position = $Player.position + Vector2(60,0)
 		elif sword.direction == "left":
 			sword.get_node("pivot").position = $Player.position + Vector2(-60,0)
 	if Global.progress == 7:
-		print("hello we in 3")
 		load_boss(3)
 	if player.isInverted == true:
 		confuzzed.visible = true
 	else:
 		confuzzed.visible = false
-	
-
 
 """
 /*
@@ -142,13 +163,67 @@ func _input(_ev):
 			Global.progress = 4
 			Global.state = Global.scenes.DILEMMA
 		myTimer.start(30000)
+
 """
 /*
-* @pre Ca	velocity = move_and_slide(velocity)lled when player enters the Area2D zone
+* @pre Called once start time expires (happens once)
+* @post deletes timer and starts game if necessary
+* @param timer -> Timer
+* @return None
+*/
+"""
+func _start_timer_expired(timer):
+	timer.queue_free()
+	if not _game_started:
+		_game_started = true
+		start_cave()
+
+"""
+/*
+* @pre Called once all players have spawned into the minigame
+* 	only run by PLAYER 1
+* @post sends signal to other players to start, and start game
+* @param None
+* @return None
+*/
+"""
+func _can_start_game():
+	_game_started = true
+	ServerConnection.send_minigame_can_start()
+	start_cave()
+
+"""
+/*
+* @pre Called when non-player 1 player receives signal to start game
+* @post starts the game if timer hasn't already done it for it
+* @param None
+* @return None
+*/
+"""
+func _can_start_game_other():
+	if not _game_started:
+		_game_started = true
+		start_cave()
+
+"""
+* @pre all conditions have been met to start cave section
+* @post starts time and sets other variables
+* @param None
+* @return None
+"""
+func start_cave():
+	#Reset player trackers for next game
+	Global.reset_minigame_players()
+	#Hide waiting for players text
+	print("hey")
+	$GUI/wait_on_players.hide()
+	#Start timer
+	myTimer.start(CAVE_TIME)
+
+"""
 * @post shows instructions on screen and sets in_cave to true
 * @param _body -> body of the player
 * @return None
-*/
 """
 func _on_exitCaveArea_body_entered(_body: PhysicsBody2D): #change to body if want to use
 	instructions.show()
@@ -202,7 +277,7 @@ func _on_Timer_timeout():
 	#change scene to rhythm minigame
 	elif Global.minigame == 2:
 		Global.minigame = 3
-		Global.state = Global.scenes.RHYTHM_MINIGAME
+		Global.state = Global.scenes.RHYTHM_INTRO
 	else: 
 		load_boss(1)
 
@@ -564,7 +639,7 @@ func start_shield_timer():
 * @return None
 */
 """
-func someone_took_shild(player_id,_shield_num):
+func someone_took_shield(player_id,_shield_num):
 	_shield_available = false
 	get_node("shield_sprite").hide()
 	start_shield_timer()
