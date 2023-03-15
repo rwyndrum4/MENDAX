@@ -19,8 +19,6 @@ onready var healthbar = $ProgressBar
 onready var shield = $Shield
 
 # Member Variables
-var _timer = 0
-var _stoppage_timer = 0
 var isInverted = false
 var is_stopped = false
 var player_color:String = ""
@@ -72,7 +70,6 @@ func _ready():
 */
 """
 func _physics_process(delta):
-	_timer += delta
 	#don't move player if textbox is playing or options are open
 	if is_stopped:
 		control_animations(Vector2.ZERO) #play idle animation
