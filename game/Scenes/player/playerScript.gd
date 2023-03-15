@@ -12,22 +12,23 @@
 """
 extends KinematicBody2D
 
-# Member Variables
+#Objects
 onready var character = $position/animated_sprite
 onready var char_pos = $position
 onready var healthbar = $ProgressBar
-onready var isInverted = false
 onready var shield = $Shield
+
+# Member Variables
+var _timer = 0
+var _stoppage_timer = 0
+var isInverted = false
 var is_stopped = false
 var player_color:String = ""
 var once
-
 # Player physics constants
+const FRICTION = 500
 var ACCELERATION = 25000
 var MAX_SPEED = 500
-const FRICTION = 500
-
-# Global velocity
 var velocity = Vector2.ZERO
 
 """
@@ -47,14 +48,20 @@ func _ready():
 	GlobalSignals.connect("textbox_shift",self,"stop_go_player")
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("openMenu",self,"stop_go_player")
-	# if server wasnt' connected
+	# if server wasn't connected
 	if player_color == "":
 		player_color = "blue"
-		
 	#Initially have character idle
 	character.play("idle_" + player_color)
 	once = true
-	
+	if ServerConnection.match_exists() and ServerConnection.get_server_status():
+		#timer that will go off roughly 15 times per second
+		var send_pos_tmr = Timer.new()
+		send_pos_tmr.one_shot = false
+		send_pos_tmr.wait_time = 0.065
+		add_child(send_pos_tmr)
+		send_pos_tmr.start()
+		send_pos_tmr.connect("timeout", self, "_send_server_update")
 
 """
 /*
@@ -65,6 +72,7 @@ func _ready():
 */
 """
 func _physics_process(delta):
+	_timer += delta
 	#don't move player if textbox is playing or options are open
 	if is_stopped:
 		control_animations(Vector2.ZERO) #play idle animation
@@ -104,19 +112,25 @@ func _physics_process(delta):
 	# This ensures diagonal speed is not faster, which is especially significant when sliding against a wall.
 	else:
 		velocity = input_velocity.move_toward(0.7*input_velocity*MAX_SPEED, ACCELERATION*delta)
-	
-	#Send current player position to server if server and match is up
-	if ServerConnection.get_server_status() and ServerConnection.match_exists():
-		#Send position and input to other players (if has changed!)
-		ServerConnection.send_position_update(position)
-		ServerConnection.send_input_update(velocity.normalized())
-		#Store new position and input in order to check if has changed next time (if has changed!)
-		Global._player_positions_updated(ServerConnection._player_num, self.position)
-		Global._player_input_updated(ServerConnection._player_num, velocity.normalized())
 	# Factor in collisions
 	velocity = move_and_slide(velocity)
 	#Animate character
 	control_animations(velocity)
+
+"""
+* @pre Called 15 times per second
+* @post Sends the current player position to the server (and input vector if changed)
+* @param None (uses global vars: velocity and inherit position)
+* @return None
+"""
+func _send_server_update():
+	#Send position change to server (only if changed, logic in function)
+	ServerConnection.send_position_update(position)
+	#Sends input vector to server (only if changed, logic in function)
+	ServerConnection.send_input_update(velocity.normalized())
+	#Store new position and input in order to check if has changed next time (if has changed!)
+	Global._player_positions_updated(ServerConnection._player_num, self.position)
+	Global._player_input_updated(ServerConnection._player_num, velocity.normalized())
 
 """
 /*

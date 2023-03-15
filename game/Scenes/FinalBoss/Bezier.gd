@@ -42,12 +42,30 @@ func _input(_ev):
 """
 func _on_Timer_timeout():
 	if _lit == 1:
+		ServerConnection.send_besier_notif(_id)
+		set_process_input(false) #no need for input now that lit
 		$Light2D.show()
 		$TileTexture.set("texture", preload("res://Assets/tiles/TilesCorrected/BezierLit.png"))
 		$FireHitbox.set("disabled", false)
 		Global.progress+=1
 		_lit = 2
-			
+
+"""
+/*
+* @pre Called when someone else in server game lights a besier
+* @post Sets the besier light textures
+* @param None
+* @return None
+*/
+"""
+func someone_lit_besier():
+	if _lit == 1:
+		set_process_input(false) #no need for input now that lit
+		$Light2D.show()
+		$TileTexture.set("texture", preload("res://Assets/tiles/TilesCorrected/BezierLit.png"))
+		$FireHitbox.set("disabled", false)
+		Global.progress+=1
+		_lit = 2
 
 """	
 * @pre Called when player enters the bezier's Area2D zone

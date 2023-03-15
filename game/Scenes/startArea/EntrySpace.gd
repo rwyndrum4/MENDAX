@@ -20,13 +20,14 @@ var stop_steam_control = false #variable to tell whether process function needs 
 var steam_modulate:float = 0 #modualte value that is gradually added to modulate of steam
 var at_lever = false #variable to track if player is at the lever
 var at_ladder = false #variable to track if player is at the ladder
-var shield_spawn: Area2D = null #holds the area2d where shild is spawned at
-var _shield_available: bool = true #boolean to track if a shield is avaiblable or not
+var _shield_spawns: Array = [] #array that holds all shield objects
+var _shields_available: Array = [] #array that holds if each shield is available or not
 var _game_started = false #variable to tell if all players are in scene
 var imposter = preload("res://Scenes/Mobs/imposter.tscn") #imposter enemies class
 var dummyBoss
+var _besier_arr: Array = [] #array to hold besiers for easy access
 var server_players: Array = [] #array to hold all OTHER players in cave (not you)
-var other_player = "res://Scenes/player/other_players/other_players.tscn" #class for other player's body objects
+var other_player = "res://Scenes/player/arena_player/arena_player.tscn" #class for other player's body objects
 var sword = null #sword for the player
 
 # Scene Objects
@@ -66,8 +67,6 @@ func _ready():
 	#Spawn the players if a match is ongoing
 	if ServerConnection.match_exists() and ServerConnection.get_server_status():
 		spawn_players()
-		# warning-ignore:return_value_discarded
-		ServerConnection.connect("character_took_shield",self,"someone_took_shield")
 		if ServerConnection._player_num == 1:
 			#in case p1 is last player to get to minigame
 			if Global.get_minigame_players() == Global.get_num_players() - 1:
@@ -103,6 +102,8 @@ func _process(_delta): #change to delta if used
 		control_steam()
 	# Check for completion of boss stage 1
 	if Global.progress == 4:
+		#besier tracker not needed anymore
+		ServerConnection.disconnect("final_boss_besier_lit", self, "_besier_was_lit")
 		Global.state = Global.scenes.DILEMMA
 	if Global.progress == 5:
 		load_boss(2)
@@ -215,7 +216,6 @@ func start_cave():
 	#Reset player trackers for next game
 	Global.reset_minigame_players()
 	#Hide waiting for players text
-	print("hey")
 	$GUI/wait_on_players.hide()
 	#Start timer
 	myTimer.start(CAVE_TIME)
@@ -302,11 +302,8 @@ func chatbox_use(value):
 */
 """
 func _on_right_side_area_entered(area):
-	if ServerConnection.match_exists() and ServerConnection.get_server_status():
-		if area.get_parent().player_color == "imposter":
-			return
-		if area.get_parent().player_color != Global.player_colors[ServerConnection._player_num]:
-			return
+	if not area.is_in_group("player"):
+		return
 	var pos = $Player.position
 	if pos.x > -1200.0:
 		steam_area_activated()
@@ -322,11 +319,8 @@ func _on_right_side_area_entered(area):
 */
 """
 func _on_left_side_area_entered(area):
-	if ServerConnection.match_exists() and ServerConnection.get_server_status():
-		if area.get_parent().player_color == "imposter":
-			return
-		if area.get_parent().player_color != Global.player_colors[ServerConnection._player_num]:
-			return
+	if not area.is_in_group("player"):
+		return
 	var pos = $Player.position
 	if pos.x < -5800:
 		steam_area_activated()
@@ -347,6 +341,7 @@ func steam_area_activated():
 	stop_steam_control = false
 	steam_modulate = 0.0
 	for object in steamAnimations.get_children():
+		object.frame = 0
 		object.show()
 		object.play("mist")
 
@@ -490,12 +485,13 @@ func load_boss(stage_num:int):
 	myTimer.stop()
 	var boss = preload("res://Scenes/FinalBoss/Boss.tscn").instance()
 	if stage_num == 1:
-		spawn_shield()
+		ServerConnection.connect("final_boss_besier_lit", self, "_besier_was_lit")
 		# Generate beziers
 		var bez1 = preload("res://Scenes/FinalBoss/Bezier.tscn").instance()
 		var bez2 = preload("res://Scenes/FinalBoss/Bezier.tscn").instance()
 		var bez3 = preload("res://Scenes/FinalBoss/Bezier.tscn").instance()
 		var bez4 = preload("res://Scenes/FinalBoss/Bezier.tscn").instance()
+		_besier_arr = [bez1, bez2, bez3, bez4]
 		# Assign ids (for the purpose of differentiating signals)
 		bez1._id = 1
 		bez2._id = 2
@@ -517,7 +513,6 @@ func load_boss(stage_num:int):
 		# Hide light from cave entrance
 		$Light2D.hide()
 		# Hide player torch light
-		
 		$Player.get_node("light/Torch1").hide()
 		# Give player a sword
 		sword = preload("res://Scenes/player/Sword/Sword.tscn").instance()
@@ -558,6 +553,8 @@ func load_boss(stage_num:int):
 		wait_for_start.connect("timeout",self, "_imposter_spawn")
 		boss._invulnerable = true
 		dummyBoss = boss
+	if stage_num > 1:
+		spawn_shields()
 	# Initialize, place, and spawn boss
 	boss.set("position", Vector2(-4250, 2160))
 	add_child_below_node($worldMap, boss)
@@ -572,30 +569,41 @@ func load_boss(stage_num:int):
 * @return None
 */
 """
-func spawn_shield():
+func spawn_shields():
+	# warning-ignore:return_value_discarded
+	ServerConnection.connect("character_took_shield",self,"someone_took_shield")
+	var shield_positions = [
+		Vector2(-4000,3000), #In middle by boss
+		Vector2(-7850, 5250), #In bottom left
+		Vector2(750, 3000) #On the right side
+	]
+	var inc = 0
+	for pos in shield_positions:
 	# Generate shild spawn
-	shield_spawn = Area2D.new()
-	var col_2d = CollisionShape2D.new()
-	var shape = CircleShape2D.new()
-	shape.set_radius(80)
-	col_2d.set_shape(shape)
-	shield_spawn.position = Vector2(-4000,3000)
-	var shield_sprite = Sprite.new()
-	var spawn_sprite = Sprite.new()
-	shield_sprite.texture = load("res://Assets/shieldFull.png")
-	shield_sprite.scale = Vector2(1.5,1.5)
-	shield_sprite.position = Vector2(-4000,3000)
-	shield_sprite.set_name("shield_sprite")
-	spawn_sprite.texture = load("res://Assets/shield_spawn.png")
-	spawn_sprite.scale = Vector2(4,4)
-	spawn_sprite.position = Vector2(-4000,3000)
-	spawn_sprite.set_name("shield_spawn")
-	add_child(shield_spawn)
-	shield_spawn.add_child(col_2d)
-	#add_child_below_node(shield_spawn,col_2d)
-	add_child_below_node(shield_spawn,shield_sprite)
-	add_child_below_node(shield_spawn,spawn_sprite)
-	shield_spawn.connect("area_entered",self,"give_shield")
+		var shield_spawn = Area2D.new()
+		var col_2d = CollisionShape2D.new()
+		var shape = CircleShape2D.new()
+		shape.set_radius(80)
+		col_2d.set_shape(shape)
+		shield_spawn.position = pos
+		var shield_sprite = Sprite.new()
+		var spawn_sprite = Sprite.new()
+		shield_sprite.texture = load("res://Assets/shieldFull.png")
+		shield_sprite.scale = Vector2(1.5,1.5)
+		shield_sprite.position = pos
+		shield_sprite.set_name("shield_sprite" + str(inc))
+		spawn_sprite.texture = load("res://Assets/shield_spawn.png")
+		spawn_sprite.scale = Vector2(4,4)
+		spawn_sprite.position = pos
+		add_child(shield_spawn)
+		shield_spawn.add_child(col_2d)
+		#add_child_below_node(shield_spawn,col_2d)
+		add_child_below_node(shield_spawn,shield_sprite)
+		add_child_below_node(shield_spawn,spawn_sprite)
+		shield_spawn.connect("area_entered",self,"give_shield", [inc])
+		_shield_spawns.append(shield_spawn)
+		_shields_available.append(true)
+		inc += 1
 
 """
 /*
@@ -605,13 +613,13 @@ func spawn_shield():
 * @return None
 */
 """
-func give_shield(area):
-	if area.is_in_group("player") and _shield_available:
+func give_shield(area, s_id):
+	if area.is_in_group("player") and _shields_available[s_id]:
 		ServerConnection.send_shield_notif()
-		_shield_available = false
+		_shields_available[s_id] = false
 		player.shield.giveShield()
-		get_node("shield_sprite").hide()
-		start_shield_timer()
+		get_node("shield_sprite" + str(s_id)).hide()
+		start_shield_timer(s_id)
 
 """
 /*
@@ -621,33 +629,30 @@ func give_shield(area):
 * @return None
 */
 """
-func start_shield_timer():
+func start_shield_timer(shield_id):
 	var s_tmr: Timer = Timer.new()
 	add_child(s_tmr)
 	s_tmr.wait_time = 15
 	s_tmr.one_shot = true
 	s_tmr.start()
 	# warning-ignore:return_value_discarded
-	s_tmr.connect("timeout",self, "_respawn_shield", [s_tmr])
+	s_tmr.connect("timeout",self, "_respawn_shield", [s_tmr, shield_id])
 
 """
-/*
 * @pre Called when server says someone stepped on shield
 * @post Shield becomes unavailable for a time period
 * @param p_id -> int (player who stepped on it)
 *		 shield_num -> int (which spawn it was)
 * @return None
-*/
 """
 func someone_took_shield(player_id,_shield_num):
-	_shield_available = false
-	get_node("shield_sprite").hide()
-	start_shield_timer()
-	##FIX THIS :: OTHER_PLAYER NEEDS TO BE LIKE ARENA PLAYER##
-#	for o_player in server_players:
-#		if player_id == o_player.get('num'):
-#			o_player.get('player_obj').shield.giveShield()
-#			break
+	_shields_available[_shield_num] = false
+	get_node("shield_sprite" + str(_shield_num)).hide()
+	start_shield_timer(_shield_num)
+	for o_player in server_players:
+		if player_id == o_player.get('num'):
+			o_player.get('player_obj').shield.giveShield()
+			break
 
 """
 /*
@@ -657,10 +662,10 @@ func someone_took_shield(player_id,_shield_num):
 * @return None
 */
 """
-func _respawn_shield(tmr:Timer):
+func _respawn_shield(tmr:Timer, shield_id:int):
 	tmr.queue_free()
-	_shield_available = true
-	get_node("shield_sprite").show()
+	_shields_available[shield_id] = true
+	get_node("shield_sprite" + str(shield_id)).show()
 
 """
 /*
@@ -672,17 +677,14 @@ func _respawn_shield(tmr:Timer):
 """
 func _imposter_spawn():
 	var new_imposter = imposter.instance()
-	
 	new_imposter.setup_pos(player.position)
 	add_child(new_imposter)
 
 """
-/*
 * @pre Stage 3 of final boss has started
 * @post spawns extra enemies to make the stage harder
 * @param None
 * @return None
-*/
 """
 func spawn_stage_three_enemies():
 	var slow_enemy = load("res://Scenes/minigames/arena/littleGuy.tscn")
@@ -706,17 +708,37 @@ func _on_well_body_entered(body):
 		if "Player" in body.name:
 			wellLabeled.visible = true
 			in_well = true
-			
-
 
 func _on_well_body_exited(body):
 	if Global.progress == 8:
 		if "Player" in body.name:
 			wellLabeled.visible = false
 			in_well = false
-	
 
 func _shield_up_boss(timer):
 	timer.queue_free()
 	dummyBoss._invulnerable = true
-	
+
+"""
+* @pre Someone else lit up a besier
+* @post light the besier and emit message
+* @param who -> int (player num of who lit it)
+* 		 besier_id -> int (id of besier lit)
+* @return None
+"""
+func _besier_was_lit(who: int, besier_id: int):
+	for bes in _besier_arr:
+		if bes._id == besier_id:
+			#if besier is already lit get out
+			if bes._lit == 2:
+				break
+			#else light up besier
+			bes._lit = 1
+			bes.someone_lit_besier() #function to light it
+			var who_did_it: String = Global.get_player_name(who)
+			#Add message to chat on who did it
+			get_parent().chat_box.chat_event_message(
+				who_did_it + " lit up besier " + str(besier_id),
+				"blue"
+			)
+			break

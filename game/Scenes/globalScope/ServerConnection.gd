@@ -11,18 +11,18 @@ extends Node
 
 #Opcodes used to send to server about what is happening in game
 enum OpCodes {
-	UPDATE_POSITION = 1,
-	UPDATE_INPUT = 2,
-	UPDATE_RIDDLER_RIDDLE = 3,
-	UPDATE_ARENA_SWORD = 4,
-	UPDATE_ARENA_PLAYER_HEALTH = 5,
-	UPDATE_ARENA_ENEMY_HIT = 6,
-	UPDATE_ARENA_ENEMY_MOVE = 7,
-	UPDATE_CAN_START_GAME = 8,
-	UPDATE_RHYTHM_SCORE = 9,
-	PLAYER_BOOOPED = 10,
-	SHIELD_TAKEN = 11,
-	SPAWNED = 12
+	UPDATE_POSITION,
+	UPDATE_INPUT,
+	UPDATE_RIDDLER_RIDDLE,
+	UPDATE_ARENA_SWORD,
+	UPDATE_ARENA_PLAYER_HEALTH,
+	UPDATE_ARENA_ENEMY_HIT,
+	UPDATE_ARENA_ENEMY_MOVE,
+	UPDATE_CAN_START_GAME,
+	UPDATE_RHYTHM_SCORE,
+	SHIELD_TAKEN,
+	BESIER_LIT,
+	SPAWNED
 }
 
 #Variable that checks if connected to server
@@ -41,6 +41,7 @@ signal arena_enemy_hit(enemy_id, damage_taken,player_id,enemy_type) #signal to t
 signal minigame_can_start() #signal that the minigame can be started
 signal minigame_player_spawned(id) #signal to tell if a player has arrived to a scene
 signal minigame_rhythm_score(id, score) #send current score of rhythm game player
+signal final_boss_besier_lit(id, besier) #send that someone has lit a besier
 
 #Other signals
 signal chat_message_received(msg,type,user_sent,from_user) #signal to tell game a chat message has come in
@@ -441,12 +442,10 @@ func match_exists():
 	return _match_id != ""
 
 """
-/*
 * @pre called when you want to send your position to the server
 * @post sends data to server, and to other players from server
 * @param position -> Vector2
 * @return None
-*/
 """
 func send_position_update(position: Vector2) -> void:
 	#if socket is in place and player is moving
@@ -455,12 +454,10 @@ func send_position_update(position: Vector2) -> void:
 		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_POSITION,JSON.print(payload))
 
 """
-/*
 * @pre called when you want to let server know you are changing directions
 * @post sends to server and other players
 * @param input -> float
 * @return None
-*/
 """
 func send_input_update(in_vec:Vector2) -> void:
 	#if socket is in place and player is moving
@@ -469,12 +466,10 @@ func send_input_update(in_vec:Vector2) -> void:
 		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_INPUT,JSON.print(payload))
 
 """
-/*
 * @pre called when Player 1 needs to communicate to other players what riddle is
 * @post tells server what riddle to send to others is
 * @param riddle -> String
 * @return None
-*/
 """
 func send_riddle(riddle_in: String, answer_in:String) -> void:
 	if _socket:
@@ -482,12 +477,10 @@ func send_riddle(riddle_in: String, answer_in:String) -> void:
 		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_RIDDLER_RIDDLE, JSON.print(payload))
 
 """
-/*
 * @pre called when player attempts to hit someone in arena minigame
 * @post tells server which player swung their sword
 * @param None
 * @return None
-*/
 """
 func send_arena_sword(direction: String):
 	if _socket:
@@ -495,12 +488,10 @@ func send_arena_sword(direction: String):
 		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_ARENA_SWORD, JSON.print(payload))
 
 """
-/*
 * @pre called when player gets hit in arena minigame
 * @post tells server which player got hit and sends their current health
 * @param health_in -> int
 * @return None
-*/
 """
 func send_arena_player_health(health_in: int):
 	if _socket:
@@ -508,12 +499,10 @@ func send_arena_player_health(health_in: int):
 		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_ARENA_PLAYER_HEALTH, JSON.print(payload))
 
 """
-/*
 * @pre called when enemy gets hit in a minigame
 * @post tells server which enemy got hit and how much damage it took
 * @param damage -> int (how much damage enemy took), enemy_id -> int (id of enemy)
 * @return None
-*/
 """
 func send_arena_enemy_hit(damage: int, enemy_id_in: int, enemy_type_in:String):
 	if _socket:
@@ -526,12 +515,10 @@ func send_minigame_can_start():
 		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_CAN_START_GAME, JSON.print(payload))
 
 """
-/*
 * @pre called when someone needs to send a score update for rhythm game
 * @post tells server which player is getting updated
 * @param new_score -> int (new score for the player)
 * @return None
-*/
 """
 func send_rhythm_score(new_score:int):
 	if _socket:
@@ -539,12 +526,10 @@ func send_rhythm_score(new_score:int):
 		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_RHYTHM_SCORE, JSON.print(payload))
 
 """
-/*
 * @pre called when someone picks up a shield object
 * @post tells server which player picked up which shield
 * @param spawn_number (number corresponding to shield spot)
 * @return None
-*/
 """
 func send_shield_notif(spawn_number:int = 0):
 	if _socket:
@@ -552,12 +537,21 @@ func send_shield_notif(spawn_number:int = 0):
 		_socket.send_match_state_async(_match_id, OpCodes.SHIELD_TAKEN, JSON.print(payload))
 
 """
-/*
+* @pre called when a player lights up a besier for stage 1 final boss
+* @post tells other players a besier was lit
+* @param besier_loc -> int (which besier was lit number coded)
+* @return None
+"""
+func send_besier_notif(besier_loc: int):
+	if _socket:
+		var payload := {id = _player_num, besier = besier_loc}
+		_socket.send_match_state_async(_match_id, OpCodes.BESIER_LIT, JSON.print(payload))
+
+"""
 * @pre called when player spawns in an area
 * @post tells other players they are there, used for syncing players together
 * @param None
 * @return None
-*/
 """
 func send_spawn_notif():
 	if _socket:
@@ -703,6 +697,13 @@ func _on_NakamaSocket_received_match_state(match_state: NakamaRTAPI.MatchData) -
 			var spawn_num: int = int(decoded.s_num)
 			
 			emit_signal("character_took_shield",id,spawn_num)
+		OpCodes.BESIER_LIT:
+			var decoded: Dictionary = JSON.parse(raw).result
+			
+			var id: int = int(decoded.id)
+			var bes: int = int(decoded.besier)
+			
+			emit_signal("final_boss_besier_lit", id, bes)
 		OpCodes.SPAWNED:
 			var decoded: Dictionary = JSON.parse(raw).result
 			

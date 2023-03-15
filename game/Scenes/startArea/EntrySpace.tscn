@@ -161,7 +161,7 @@ current = true
 visible = false
 position = Vector2( 0, -45 )
 frames = SubResource( 15 )
-frame = 2
+frame = 4
 playing = true
 
 [node name="GUI" type="CanvasLayer" parent="."]
