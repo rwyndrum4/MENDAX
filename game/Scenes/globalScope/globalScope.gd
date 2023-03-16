@@ -59,6 +59,10 @@ func _ready():
 	ServerConnection.connect("chat_message_received",self,"_on_ServerConnection_chat_message_received")
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("openChatbox",self,"_chatbox_use")
+	# warning-ignore:return_value_discarded
+	GlobalSignals.connect("exportEventMessage", self, "_event_chatbox_msg")
+	# warning-ignore:return_value_discarded
+	GlobalSignals.connect("toggleHotbar", self, "toggle_hotbar")
 	#Initialize the options menu and world environment
 	initialize_settings()
 	initialize_world_env()
@@ -355,3 +359,13 @@ func show_money(should_show:bool) -> void:
 """
 func change_money(value:int) -> void:
 	$GUI/money.change_total(value)
+
+"""
+/*
+* @post adds an event message to the chatbox
+* @param msg -> String, color -> String
+* @return None
+*/
+"""
+func _event_chatbox_msg(msg:String, color:String):
+	chat_box.chat_event_message(msg, color)

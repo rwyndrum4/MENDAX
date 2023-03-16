@@ -8,6 +8,7 @@
 * Citations: https://godotengine.org/qa/33196/how-are-you-supposed-to-handle-null-objects
 	for handling deleted tiles
 """
+
 extends Control
 
 # Member Variables
@@ -56,7 +57,7 @@ func _ready():
 	#hide cave instructions at start
 	instructions.hide()
 	$fogSprite.modulate.a8 = 0
-	get_parent().toggle_hotbar(true)
+	GlobalSignals.emit_signal("toggleHotbar", true)
 	wellLabeled.visible = false
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("openChatbox", self, "chatbox_use")
@@ -554,7 +555,10 @@ func load_boss(stage_num:int):
 		boss._invulnerable = true
 		dummyBoss = boss
 	if stage_num > 1:
-		spawn_shields()
+		#Unhide player health bar and set total health to 150
+		$Player/ProgressBar.show()
+		$Player/ProgressBar.value = 150
+		spawn_shields() #shield spawns now show up in 3 places
 	# Initialize, place, and spawn boss
 	boss.set("position", Vector2(-4250, 2160))
 	add_child_below_node($worldMap, boss)
@@ -737,8 +741,9 @@ func _besier_was_lit(who: int, besier_id: int):
 			bes.someone_lit_besier() #function to light it
 			var who_did_it: String = Global.get_player_name(who)
 			#Add message to chat on who did it
-			get_parent().chat_box.chat_event_message(
+			GlobalSignals.emit_signal(
+				"exportEventMessage",
 				who_did_it + " lit up besier " + str(besier_id),
 				"blue"
-			)
+				)
 			break

@@ -74,3 +74,19 @@ signal playerDeath(playerID)
 """
 # warning-ignore:unused_signal
 signal enemyDefeated(enemyID)
+
+"""
+* Purpose - Send message from child node to global parent so chat can happen
+* Used in - boss.gd
+* Parameter - msg -> String (message sent), color -> String (color of text)
+"""
+# warning-ignore:unused_signal
+signal exportEventMessage(msg, color)
+
+"""
+* Purpose - Send signal to global parent from a child to hide hotbar
+* Used in - entrySpace.gd
+* Parameter - setter -> bool (true or false, true = show, false = hide)
+"""
+# warning-ignore:unused_signal
+signal toggleHotbar(setter)

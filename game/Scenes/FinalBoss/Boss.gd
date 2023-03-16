@@ -8,16 +8,15 @@
 """
 extends StaticBody2D
 
-var _tp_positions = [
-	Vector2(-4250, 2160), #initial position in middle
-	Vector2(-8500, 5500), #bottom left position
-	Vector2(2500, 3000), #bottom right position
-	Vector2(1500, 500) #top right position
-]
-var _atk_timer:float = 0
-var _prev_timer:float = 0
-var _invulnerable
+const TP_TIMER = 32 #timer to use for boss teleport
+const ANI_TIMER = 2 #timer to use for boss animation and attack
 
+var _atk_timer:float = 0
+var _atk_prev_timer:float = 0
+var _tp_timer:float = 0
+var _tp_prev_timer:float = 0
+var _invulnerable
+var _can_teleport:bool = false
 
 var aoe_attack = preload("res://Scenes/BossAttacks/AoeSlam.tscn")
 var boulder = preload("res://Scenes/BossAttacks/Boulder.tscn")
@@ -26,32 +25,33 @@ var atkWarningAnimation = preload("res://Scenes/BossAttacks/atkWarning.tscn")
 onready var healthbar = $ProgressBar
 onready var bossBox = $MyHurtBox/hitbox
 onready var auraShield = $aura_shield
+
 """
-/*
 * @pre Called once when boss is initialized
 * @post Initializes boss health
 * @param None
 * @return None
-*/
 """
 func _ready():
+	position = Vector2(-4250, 2400)
 	print("progress: " + str(Global.progress))
 	if Global.progress == 8:
+		_can_teleport = false
 		healthbar.value = 200
 		_invulnerable = true;
 		auraShield.visible = true
 	else:
+		#In all other phases allow the boss to teleport
+		_can_teleport = true
 		healthbar.value = 400
 		_invulnerable = false;
 		auraShield.visible = false
 
 """
-/*
 * @pre Called in the process function whenever an attack occurs
 * @post Animates boss
 * @param None
 * @return None
-*/
 """
 func move_boss() -> void:
 	position.y -= 100
@@ -61,6 +61,28 @@ func move_boss() -> void:
 	add_child(back_timer)
 	back_timer.connect("timeout",self,"_del_timer",[back_timer])
 	back_timer.start()
+
+"""
+* @pre Called if in phases where boss can telport
+* @post changes position to predetermined location (random for len(pos_arr))
+* @param None
+* @return None
+"""
+func teleport_boss() -> void:
+	randomize()
+	var pos_arr = [
+		[Vector2(-4250, 2400), "the middle of the map"],
+		[Vector2(-8700, 5500), "the bottom left side of the map"],
+		[Vector2(2500, 3000), "the bottom right side of the map"],
+		[Vector2(1500, 500), "the top right side of the map"]
+	]
+	var r = randi() % 4
+	GlobalSignals.emit_signal(
+		"exportEventMessage",
+		"Boss teleported to " + str(pos_arr[r][1]),
+		"pink"
+	)
+	position = pos_arr[r][0]
 
 """
 /*
@@ -163,10 +185,17 @@ func _delete_aoe_atk(atk:Area2D) -> void:
 """
 func _process(delta):
 	_atk_timer += delta
-	if _atk_timer - _prev_timer > 2:
+	_tp_timer += delta
+	#Clause to make boss shift (not teleport) and spawn attack
+	if _atk_timer - _atk_prev_timer > ANI_TIMER:
 		move_boss()
 		spawn_aoe_attack()
-		_prev_timer = _atk_timer
+		_atk_prev_timer = _atk_timer
+	#If can teleport and timer premits, do it
+	if _can_teleport and _tp_timer - _tp_prev_timer > TP_TIMER:
+		teleport_boss()
+		_tp_prev_timer = _tp_timer
+	#Show aura shield if boss is invincible
 	if _invulnerable == true:
 		auraShield.visible = true
 	else:
