@@ -20,6 +20,7 @@ enum OpCodes {
 	UPDATE_ARENA_ENEMY_MOVE,
 	UPDATE_CAN_START_GAME,
 	UPDATE_RHYTHM_SCORE,
+	UPDATE_BOSS_INVULNERABILITY,
 	SHIELD_TAKEN,
 	BESIER_LIT,
 	SPAWNED
@@ -42,6 +43,7 @@ signal minigame_can_start() #signal that the minigame can be started
 signal minigame_player_spawned(id) #signal to tell if a player has arrived to a scene
 signal minigame_rhythm_score(id, score) #send current score of rhythm game player
 signal final_boss_besier_lit(id, besier) #send that someone has lit a besier
+signal boss_is_vulnerable(value) #send that boss can be hit now
 
 #Other signals
 signal chat_message_received(msg,type,user_sent,from_user) #signal to tell game a chat message has come in
@@ -526,6 +528,17 @@ func send_rhythm_score(new_score:int):
 		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_RHYTHM_SCORE, JSON.print(payload))
 
 """
+* @pre called when someone gets rid of boss invulnerability
+* @post tells server that boss is vulnerable
+* @param None
+* @return None
+"""
+func send_boss_vulnerability():
+	if _socket:
+		var payload := {id = _player_num}
+		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_BOSS_INVULNERABILITY, JSON.print(payload))
+
+"""
 * @pre called when someone picks up a shield object
 * @post tells server which player picked up which shield
 * @param spawn_number (number corresponding to shield spot)
@@ -690,6 +703,8 @@ func _on_NakamaSocket_received_match_state(match_state: NakamaRTAPI.MatchData) -
 			emit_signal("minigame_rhythm_score", id, score)
 		OpCodes.UPDATE_CAN_START_GAME:
 			emit_signal("minigame_can_start")
+		OpCodes.UPDATE_BOSS_INVULNERABILITY:
+			emit_signal("boss_is_vulnerable", false)
 		OpCodes.SHIELD_TAKEN:
 			var decoded: Dictionary = JSON.parse(raw).result
 			

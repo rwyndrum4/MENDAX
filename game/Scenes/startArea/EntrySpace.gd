@@ -24,11 +24,12 @@ var at_ladder = false #variable to track if player is at the ladder
 var _shield_spawns: Array = [] #array that holds all shield objects
 var _shields_available: Array = [] #array that holds if each shield is available or not
 var _game_started = false #variable to tell if all players are in scene
-var imposter = preload("res://Scenes/Mobs/imposter.tscn") #imposter enemies class
+var _enemies: Array = [] #Array of enemy objects
 var dummyBoss
 var _besier_arr: Array = [] #array to hold besiers for easy access
 var server_players: Array = [] #array to hold all OTHER players in cave (not you)
 var other_player = "res://Scenes/player/arena_player/arena_player.tscn" #class for other player's body objects
+var imposter = preload("res://Scenes/Mobs/imposter.tscn") #imposter enemies class
 var sword = null #sword for the player
 
 # Scene Objects
@@ -130,8 +131,9 @@ func _process(_delta): #change to delta if used
 """
 func _input(_ev):
 	if in_well:
-		if Input.is_action_just_pressed("ui_press_e",false):
-			dummyBoss._invulnerable = false
+		if Input.is_action_just_pressed("ui_press_e",false) and dummyBoss.get_vulnerable_status():
+			dummyBoss._set_invulnerability(false)
+			ServerConnection.send_boss_vulnerability()
 			var wait_for_start: Timer = Timer.new()
 			add_child(wait_for_start)
 			wait_for_start.wait_time = 20
@@ -485,6 +487,13 @@ func set_init_player_pos():
 func load_boss(stage_num:int):
 	myTimer.stop()
 	var boss = preload("res://Scenes/FinalBoss/Boss.tscn").instance()
+	_enemies.append(boss)
+	# warning-ignore:return_value_discarded
+	ServerConnection.connect("arena_enemy_hit",self,"_someone_hit_enemy")
+	# warning-ignore:return_value_discarded
+	ServerConnection.connect("arena_player_lost_health",self,"_other_player_hit")
+	# warning-ignore:return_value_discarded
+	ServerConnection.connect("arena_player_swung_sword",self,"_other_player_swung_sword")
 	if stage_num == 1:
 		ServerConnection.connect("final_boss_besier_lit", self, "_besier_was_lit")
 		# Generate beziers
@@ -552,7 +561,7 @@ func load_boss(stage_num:int):
 		wait_for_start.start()
 		# warning-ignore:return_value_discarded
 		wait_for_start.connect("timeout",self, "_imposter_spawn")
-		boss._invulnerable = true
+		boss._set_invulnerability(true)
 		dummyBoss = boss
 	if stage_num > 1:
 		#Unhide player health bar and set total health to 150
@@ -721,7 +730,7 @@ func _on_well_body_exited(body):
 
 func _shield_up_boss(timer):
 	timer.queue_free()
-	dummyBoss._invulnerable = true
+	dummyBoss._set_invulnerability(true)
 
 """
 * @pre Someone else lit up a besier
@@ -746,4 +755,48 @@ func _besier_was_lit(who: int, besier_id: int):
 				who_did_it + " lit up besier " + str(besier_id),
 				"blue"
 				)
+			break
+
+"""
+* @pre Someone else hit an enemy
+* @post lower the enemy's health
+* @param enemy_id (id of enemy aka where to index)
+*		 dmg_taken (amount of health to subtract)
+*		 player_id (who hit the enemy)
+*		 enemy_type (type of enemy represented as a String)
+* @return None
+"""
+func _someone_hit_enemy(enemy_id: int, dmg_taken: int, _player_id: int,enemy_type:String):
+	if enemy_type == "Boss":
+		_enemies[enemy_id].take_damage_server(dmg_taken)
+
+"""
+/*
+* @pre received update from server
+* @post updates the health of player that was hit
+* @param player_id -> int (id of player hit), player_health -> int (new health value)
+* @return None
+*/
+"""
+func _other_player_hit(player_id: int, player_health: int):
+	for o_player in server_players:
+		if player_id == o_player.get('num'):
+			var p_obj = o_player.get('player_obj')
+			p_obj.take_damage(player_health)
+			Global.player_health[str(player_id)]=player_health
+			break
+
+"""
+/*
+* @pre received update from server
+* @post game sets player who swung to swing their sword
+* @param player_id -> int (number of player to be updated)
+* @return None
+*/
+"""
+func _other_player_swung_sword(player_id: int, direction: String):
+	for o_player in server_players:
+		if player_id == o_player.get('num'):
+			o_player['sword_dir'] = direction
+			o_player.get('player_obj').swing_sword(direction)
 			break

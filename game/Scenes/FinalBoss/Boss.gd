@@ -11,12 +11,14 @@ extends StaticBody2D
 const TP_TIMER = 32 #timer to use for boss teleport
 const ANI_TIMER = 2 #timer to use for boss animation and attack
 
+var _tp_counter:int = 0 #counter for what part of array to index
+var _random_numbers:Array = [] #sort of "random" numbers for boss to tp to
 var _atk_timer:float = 0
 var _atk_prev_timer:float = 0
 var _tp_timer:float = 0
 var _tp_prev_timer:float = 0
 var _invulnerable
-var _can_teleport:bool = false
+var _can_teleport:bool = false #lets boss know if they can tp or not
 
 var aoe_attack = preload("res://Scenes/BossAttacks/AoeSlam.tscn")
 var boulder = preload("res://Scenes/BossAttacks/Boulder.tscn")
@@ -34,6 +36,18 @@ onready var auraShield = $aura_shield
 """
 func _ready():
 	position = Vector2(-4250, 2400)
+	# warning-ignore:return_value_discarded
+	ServerConnection.connect("boss_is_vulnerable", self, "_set_invulnerability")
+	if ServerConnection.match_exists() and ServerConnection.get_server_status():
+		var num_players = len(Global.player_names)
+		for i in range(8):
+			i *= 17
+			var new_rand = (i * num_players) % 4
+			if new_rand == _random_numbers[i-1]:
+				new_rand = new_rand + 1 if (new_rand + 1) < 4 else new_rand - 1
+			_random_numbers.append(new_rand)
+	else:
+		_random_numbers = [3,1,0,2]
 	print("progress: " + str(Global.progress))
 	if Global.progress == 8:
 		_can_teleport = false
@@ -69,20 +83,21 @@ func move_boss() -> void:
 * @return None
 """
 func teleport_boss() -> void:
-	randomize()
 	var pos_arr = [
 		[Vector2(-4250, 2400), "the middle of the map"],
 		[Vector2(-8700, 5500), "the bottom left side of the map"],
 		[Vector2(2500, 3000), "the bottom right side of the map"],
 		[Vector2(1500, 500), "the top right side of the map"]
 	]
-	var r = randi() % 4
 	GlobalSignals.emit_signal(
 		"exportEventMessage",
-		"Boss teleported to " + str(pos_arr[r][1]),
+		"Boss teleported to " + str(pos_arr[_tp_counter][1]),
 		"pink"
 	)
-	position = pos_arr[r][0]
+	position = pos_arr[_tp_counter][0]
+	_tp_counter += 1
+	if _tp_counter >= len(_random_numbers):
+		_tp_counter = 0
 
 """
 /*
@@ -187,12 +202,12 @@ func _process(delta):
 	_atk_timer += delta
 	_tp_timer += delta
 	#Clause to make boss shift (not teleport) and spawn attack
-	if _atk_timer - _atk_prev_timer > ANI_TIMER:
+	if (_atk_timer - _atk_prev_timer > ANI_TIMER):
 		move_boss()
 		spawn_aoe_attack()
 		_atk_prev_timer = _atk_timer
 	#If can teleport and timer premits, do it
-	if _can_teleport and _tp_timer - _tp_prev_timer > TP_TIMER:
+	if _can_teleport and (_tp_timer - _tp_prev_timer > TP_TIMER):
 		teleport_boss()
 		_tp_prev_timer = _tp_timer
 	#Show aura shield if boss is invincible
@@ -209,7 +224,7 @@ func _process(delta):
 */
 """
 func take_damage(amount: int) -> void:
-	#ServerConnection.send_arena_enemy_hit(amount,1) #1 is the type of enemy, reference EnemyTypes in arenaGame.gd
+	ServerConnection.send_arena_enemy_hit(amount,0, "Boss")
 	if _invulnerable == false:
 		healthbar.value = healthbar.value - amount
 		if healthbar.value == 200 and Global.progress == 6:
@@ -218,10 +233,27 @@ func take_damage(amount: int) -> void:
 			Global.state = Global.scenes.END_SCREEN
 
 #Same function as above but doesn't send data to the server
-func take_damage_server(amount: int):
-	if _invulnerable == false:
-		healthbar.value = healthbar.value - amount
-		if healthbar.value == 200 and Global.progress == 6:
-			Global.state = Global.scenes.QUIZ
-		if healthbar.value == 0:
-			Global.state = Global.scenes.END_SCREEN
+func take_damage_server(amount: int) -> void:
+	healthbar.value = healthbar.value - amount
+	if healthbar.value == 200 and Global.progress == 6:
+		Global.state = Global.scenes.QUIZ
+	if healthbar.value == 0:
+		Global.state = Global.scenes.END_SCREEN
+
+"""
+* @pre Called when a player meets conditions to start/stop invulnerability
+* @post boss invulnerability is changed
+* @param val (true = can't hit, false = can hit)
+* @return None
+"""
+func _set_invulnerability(val:bool) -> void:
+	_invulnerable = val
+
+"""
+* @pre None
+* @post returns vulnerable status
+* @param None
+* @return bool
+"""
+func get_vulnerable_status() -> bool:
+	return _invulnerable
