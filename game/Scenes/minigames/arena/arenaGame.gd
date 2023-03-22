@@ -46,6 +46,7 @@ onready var onlinePlayer = preload("res://Scenes/player/arena_player/arena_playe
 """
 func _ready():
 	randomize()
+	main_player.set_physics_process(false)
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("enemyDefeated",self,"_enemy_defeated")
 	# warning-ignore:return_value_discarded
@@ -172,6 +173,7 @@ func _can_start_game_other():
 */
 """
 func start_arena_game():
+	main_player.set_physics_process(true)
 	$GUI/wait_on_players.queue_free()
 	var var_time: String = "a minute" if TOTAL_TIME == 120 else "two minutes"
 	textBox.queue_text("You have " + var_time + " to defeat all enemies.")

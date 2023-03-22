@@ -55,6 +55,7 @@ onready var wellLabeled = $well/Label
 */
 """
 func _ready():
+	player.set_physics_process(false)
 	#hide cave instructions at start
 	instructions.hide()
 	$fogSprite.modulate.a8 = 0
@@ -216,6 +217,7 @@ func _can_start_game_other():
 * @return None
 """
 func start_cave():
+	player.set_physics_process(true)
 	#Reset player trackers for next game
 	Global.reset_minigame_players()
 	#Hide waiting for players text
@@ -754,7 +756,7 @@ func _besier_was_lit(who: int, besier_id: int):
 				"exportEventMessage",
 				who_did_it + " lit up besier " + str(besier_id),
 				"blue"
-				)
+			)
 			break
 
 """

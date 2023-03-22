@@ -51,6 +51,7 @@ signal textWait()
 */
 """
 func _ready():
+	player_one.set_physics_process(false)
 	init_playerpos=$Player.position
 	# warning-ignore:return_value_discarded
 	ServerConnection.connect("riddle_received", self, "set_riddle_from_server")
@@ -163,6 +164,7 @@ func _finish_anim():
 */
 """
 func start_riddle_game():
+	player_one.set_physics_process(true)
 	#play riddle animations
 	var t = Timer.new()
 	t.set_wait_time(1)

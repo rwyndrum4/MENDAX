@@ -43,6 +43,11 @@ func _input(_ev):
 func _on_Timer_timeout():
 	if _lit == 1:
 		ServerConnection.send_besier_notif(_id)
+		GlobalSignals.emit_signal(
+				"exportEventMessage",
+				Save.game_data.username + " lit up besier " + str(_id),
+				"blue"
+		)
 		set_process_input(false) #no need for input now that lit
 		$Light2D.show()
 		$TileTexture.set("texture", preload("res://Assets/tiles/TilesCorrected/BezierLit.png"))
