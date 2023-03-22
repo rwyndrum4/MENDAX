@@ -8,17 +8,43 @@
 """
 extends StaticBody2D
 
-const TP_TIMER = 32 #timer to use for boss teleport
+const TP_TIMER = 40 #timer to use for boss teleport
 const ANI_TIMER = 2 #timer to use for boss animation and attack
 
-var _tp_counter:int = 0 #counter for what part of array to index
-var _random_numbers:Array = [] #sort of "random" numbers for boss to tp to
+var _random_numbers:Array = [0,3,1,2,0,1,2,3,0,1,0,3,2] #sort of "random" numbers for boss to tp to
+#Array that holds positions where boss can teleport too
+var _pos_arr = [
+		[Vector2(-4250, 2400), "the middle of the map"],
+		[Vector2(-8700, 5500), "the bottom left side of the map"],
+		[Vector2(2500, 3000), "the bottom right side of the map"],
+		[Vector2(1500, 500), "the top right side of the map"]
+	]
+#Timer variables, used in process function
+###############################
 var _atk_timer:float = 0
 var _atk_prev_timer:float = 0
 var _tp_timer:float = 0
 var _tp_prev_timer:float = 0
-var _invulnerable
+###############################
+var _invulnerable #variable to track if boss is vulnerable or not
 var _can_teleport:bool = false #lets boss know if they can tp or not
+var _aoe_pos_ctr:int = 0 #counter to support where to index into array below
+#positions where an aoe attack can be dropped
+var _atk_positions: Array = [
+		Vector2(-5000,3000),
+		Vector2(0, 2000),
+		Vector2(-7000,5000),
+		Vector2(-3000,3000),
+		Vector2(2000,3000),
+		Vector2(-4000,3000),
+		Vector2(-9500,5500),
+		Vector2(-2500,3000),
+		Vector2(1250,500),
+		Vector2(-9000,6000),
+		Vector2(-3250,3250),
+		Vector2(-7500,3100),
+		Vector2(-100,3000)
+	]
 
 var aoe_attack = preload("res://Scenes/BossAttacks/AoeSlam.tscn")
 var boulder = preload("res://Scenes/BossAttacks/Boulder.tscn")
@@ -35,21 +61,21 @@ onready var auraShield = $aura_shield
 * @return None
 """
 func _ready():
-	position = Vector2(-4250, 2400)
+	var c = _random_numbers[Global._boss_tp_counter]
+	position = _pos_arr[c][0]
+	if not Global._first_time_in_boss:
+		Global._first_time_in_boss = true
+	else:
+		Global._boss_tp_counter += 1
+		GlobalSignals.emit_signal(
+			"exportEventMessage",
+			"Boss teleported to " + str(_pos_arr[c][1]),
+			"pink"
+		)
 	# warning-ignore:return_value_discarded
 	ServerConnection.connect("boss_is_vulnerable", self, "_set_invulnerability")
-	if ServerConnection.match_exists() and ServerConnection.get_server_status():
-#		var num_players = len(Global.player_names)
-#		for i in range(8):
-#			i *= 17
-#			var new_rand = (i * num_players) % 4
-#			if new_rand == _random_numbers[i-1]:
-#				new_rand = new_rand + 1 if (new_rand + 1) < 4 else new_rand - 1
-#			_random_numbers.append(new_rand)
-#	else:
-		_random_numbers = [3,1,0,2]
 	print("progress: " + str(Global.progress))
-	if Global.progress == 8:
+	if Global.progress == 0:
 		_can_teleport = false
 		healthbar.value = 200
 		_invulnerable = true;
@@ -83,21 +109,16 @@ func move_boss() -> void:
 * @return None
 """
 func teleport_boss() -> void:
-	var pos_arr = [
-		[Vector2(-4250, 2400), "the middle of the map"],
-		[Vector2(-8700, 5500), "the bottom left side of the map"],
-		[Vector2(2500, 3000), "the bottom right side of the map"],
-		[Vector2(1500, 500), "the top right side of the map"]
-	]
+	var c = _random_numbers[Global._boss_tp_counter]
 	GlobalSignals.emit_signal(
 		"exportEventMessage",
-		"Boss teleported to " + str(pos_arr[_tp_counter][1]),
+		"Boss teleported to " + str(_pos_arr[c][1]),
 		"pink"
 	)
-	position = pos_arr[_tp_counter][0]
-	_tp_counter += 1
-	if _tp_counter >= len(_random_numbers):
-		_tp_counter = 0
+	position = _pos_arr[c][0]
+	Global._boss_tp_counter += 1
+	if Global._boss_tp_counter >= len(_random_numbers):
+		Global._boss_tp_counter = 0
 
 """
 /*
@@ -120,21 +141,7 @@ func _del_timer(tmr):
 */
 """
 func spawn_aoe_attack() -> void:
-	var rng = RandomNumberGenerator.new()
-	rng.randomize()
-	var randomSector = rng.randi_range(1, 3)
-	var randomX: int = 0
-	var randomY: int = 0
-	if randomSector == 1:
-		randomX = rng.randi_range(-2000, 5000)
-		randomY = rng.randi_range(-1000, 5000)
-	elif randomSector == 2:
-		randomX = rng.randi_range(-11000, -5000)
-		randomY = rng.randi_range(2500, 7500)
-	else:
-		randomX = rng.randi_range(-6500, -2500)
-		randomY = rng.randi_range(2600, 3400)
-	var ran_pos = Vector2(randomX,randomY)
+	var ran_pos = get_aoe_pos()
 	var atk = aoe_attack.instance()
 	var bdr = boulder.instance()
 	var warAni = atkWarningAnimation.instance()
@@ -145,7 +152,7 @@ func spawn_aoe_attack() -> void:
 	warAni.position = Vector2(position.x + 600, position.y)
 	warAni.rotate(0.2)
 	warAni.scale = Vector2(5,5)
-	bdr.position = Vector2(randomX,randomY - 1000)
+	bdr.position = Vector2(ran_pos.x,ran_pos.y - 1000)
 	bdr.set_final_pos(ran_pos)
 	atk.position = ran_pos
 	get_parent().add_child(warAni)
@@ -257,3 +264,16 @@ func _set_invulnerability(val:bool) -> void:
 """
 func get_vulnerable_status() -> bool:
 	return _invulnerable
+
+"""
+* @pre None
+* @post returns a position to spawn an AOE attack at
+* @param None
+* @return bool
+"""
+func get_aoe_pos() -> Vector2:
+	var final = _atk_positions[_aoe_pos_ctr]
+	_aoe_pos_ctr += 1
+	if _aoe_pos_ctr >= len(_atk_positions):
+		_aoe_pos_ctr = 0
+	return final

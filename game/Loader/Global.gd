@@ -23,6 +23,10 @@ var players_in_minigame: int = 0
 # Counter tracking progression in final boss fight
 var progress = 0
 
+# Variable to track where boss can teleport in final boss
+var _boss_tp_counter = 0
+var _first_time_in_boss = false
+
 # Signals
 signal all_players_arrived()
 
