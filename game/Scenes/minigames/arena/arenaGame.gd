@@ -299,7 +299,7 @@ func _end_game(won_game:bool):
 	#Delete online player objects if they have not already died
 	for o_player in server_players:
 		var obj = o_player.get('player_obj') 
-		if obj != null:
+		if is_instance_valid(obj):
 			obj.queue_free()
 	Global.reset_minigame_players()
 	Global.state = Global.scenes.CAVE

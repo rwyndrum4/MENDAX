@@ -179,16 +179,16 @@ func set_color(player_num:int):
 		_:
 			player_color = "blue"
 
-"""
-* @pre Called whenever area2d of player detect and object inside
-* @post if the object is a sword, then boop that player
-* @param area (area of object intruding)
-"""
-func _on_sword_detector_area_entered(area):
-	if area.is_in_group("sword"):
-		var x = 1000
-		if area.get_parent().get_parent().position.x >= position.x:
-			x *= -1
-		var res_pos = position + Vector2(x,0)
-		position = position.move_toward(res_pos, 145)
-		ServerConnection.send_position_update(position)
+#"""
+#* @pre Called whenever area2d of player detect and object inside
+#* @post if the object is a sword, then boop that player
+#* @param area (area of object intruding)
+#"""
+#func _on_sword_detector_area_entered(area):
+#	if area.is_in_group("sword"):
+#		var x = 1000
+#		if area.get_parent().get_parent().position.x >= position.x:
+#			x *= -1
+#		var res_pos = position + Vector2(x,0)
+#		position = position.move_toward(res_pos, 145)
+#		ServerConnection.send_position_update(position)

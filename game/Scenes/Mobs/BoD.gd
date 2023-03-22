@@ -196,7 +196,7 @@ func _tp_timer_expired():
 			var ctr = 0
 			for p in server_players:
 				var obj = p.get('player_obj') 
-				if obj != null:
+				if is_instance_valid(obj):
 					ctr += 1
 					total += obj.position
 			var your_pos = get_parent().get_node("Player").position
