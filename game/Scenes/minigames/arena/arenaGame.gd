@@ -97,7 +97,7 @@ func _ready():
 		change_target_timer.connect("timeout",self, "_target_timer_expired")
 	#else if single player game
 	else:
-		TOTAL_TIME = 180
+		TOTAL_TIME = 120
 		myTimer.start(TOTAL_TIME)
 		start_arena_game()
 
@@ -343,7 +343,7 @@ func gen_results(server_on:bool) -> Dictionary:
 		for p in server_players:
 			var p_num = p.get('num')
 			var p_name = Global.get_player_name(p_num)
-			if p.get('player_obj') == null:
+			if not is_instance_valid(p.get('player_obj')):
 				res[p_name] = "Died"
 			else:
 				GameLoot.add_to_coin(p_num,20)
