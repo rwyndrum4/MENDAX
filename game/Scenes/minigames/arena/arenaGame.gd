@@ -69,8 +69,6 @@ func _ready():
 		ServerConnection.connect("arena_player_swung_sword",self,"other_player_swung_sword")
 		# warning-ignore:return_value_discarded
 		ServerConnection.connect("character_took_shield",self,"someone_took_shild")
-		# warning-ignore:return_value_discarded
-		ServerConnection.connect("player_booped",self,"someone_got_booped")
 		if ServerConnection._player_num == 1:
 			#in case p1 is last player to get to minigame
 			if Global.get_minigame_players() == Global.get_num_players() - 1:

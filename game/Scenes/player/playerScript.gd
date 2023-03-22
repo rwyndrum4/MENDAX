@@ -56,7 +56,7 @@ func _ready():
 		#timer that will go off roughly 15 times per second
 		var send_pos_tmr = Timer.new()
 		send_pos_tmr.one_shot = false
-		send_pos_tmr.wait_time = 0.065
+		send_pos_tmr.wait_time = 0.05
 		add_child(send_pos_tmr)
 		send_pos_tmr.start()
 		send_pos_tmr.connect("timeout", self, "_send_server_update")

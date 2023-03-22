@@ -76,7 +76,6 @@ func _ready():
 				ServerConnection.send_minigame_can_start()
 				_game_started = true
 				start_cave()
-				#Sends the riddle to other players once all are present
 		else:
 			#Set a five second timer to wait for other players to spawn in
 			var wait_for_start: Timer = Timer.new()
