@@ -68,6 +68,7 @@ func _ready():
 	ServerConnection.connect("minigame_can_start", self, "_can_start_game_other")
 	#Spawn the players if a match is ongoing
 	if ServerConnection.match_exists() and ServerConnection.get_server_status():
+		ServerConnection.send_spawn_notif()
 		spawn_players()
 		if ServerConnection._player_num == 1:
 			#in case p1 is last player to get to minigame

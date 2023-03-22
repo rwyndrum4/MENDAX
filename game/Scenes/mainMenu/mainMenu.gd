@@ -505,7 +505,7 @@ func create_spawn_player(char_pos:Vector2, player_name:String) -> Array:
 	#Create text and add it as a child of the new player obj
 	var player_title: Label = Label.new()
 	player_title.text = player_name
-	player_title.rect_position = char_pos
+	player_title.rect_position = Vector2(char_pos.x * 2.95, char_pos.y * 2.6)
 	player_title.add_font_override("font",load("res://Assets/ARIALBD.TTF"))
 	add_child(player_title)
 	#Add child to the scene
