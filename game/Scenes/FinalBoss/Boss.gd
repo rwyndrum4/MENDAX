@@ -39,14 +39,14 @@ func _ready():
 	# warning-ignore:return_value_discarded
 	ServerConnection.connect("boss_is_vulnerable", self, "_set_invulnerability")
 	if ServerConnection.match_exists() and ServerConnection.get_server_status():
-		var num_players = len(Global.player_names)
-		for i in range(8):
-			i *= 17
-			var new_rand = (i * num_players) % 4
-			if new_rand == _random_numbers[i-1]:
-				new_rand = new_rand + 1 if (new_rand + 1) < 4 else new_rand - 1
-			_random_numbers.append(new_rand)
-	else:
+#		var num_players = len(Global.player_names)
+#		for i in range(8):
+#			i *= 17
+#			var new_rand = (i * num_players) % 4
+#			if new_rand == _random_numbers[i-1]:
+#				new_rand = new_rand + 1 if (new_rand + 1) < 4 else new_rand - 1
+#			_random_numbers.append(new_rand)
+#	else:
 		_random_numbers = [3,1,0,2]
 	print("progress: " + str(Global.progress))
 	if Global.progress == 8:
