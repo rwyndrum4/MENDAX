@@ -77,15 +77,15 @@ func _ready():
 				_game_started = true
 				start_cave()
 				#Sends the riddle to other players once all are present
-			else:
-				#Set a five second timer to wait for other players to spawn in
-				var wait_for_start: Timer = Timer.new()
-				add_child(wait_for_start)
-				wait_for_start.wait_time = 5
-				wait_for_start.one_shot = true
-				wait_for_start.start()
-				# warning-ignore:return_value_discarded
-				wait_for_start.connect("timeout",self, "_start_timer_expired", [wait_for_start])
+		else:
+			#Set a five second timer to wait for other players to spawn in
+			var wait_for_start: Timer = Timer.new()
+			add_child(wait_for_start)
+			wait_for_start.wait_time = 5
+			wait_for_start.one_shot = true
+			wait_for_start.start()
+			# warning-ignore:return_value_discarded
+			wait_for_start.connect("timeout",self, "_start_timer_expired", [wait_for_start])
 	#Start cave scene if single player
 	else:
 		start_cave()
