@@ -29,7 +29,7 @@ var other_player = "res://Scenes/player/other_players/other_players.tscn"
 """
 func _ready():
 	#If there is a server connection, spawn all players
-	if ServerConnection.match_exists():
+	if ServerConnection.match_exists() and ServerConnection.get_server_status():
 		spawn_players()
 	#This is how you queue text to the textbox queue
 	textBox.queue_text("If you're ready to begin your challenge, press enter")
@@ -97,6 +97,7 @@ func spawn_players():
 			var new_player:KinematicBody2D = load(other_player).instance()
 			new_player.set_player_id(num)
 			new_player.set_color(num)
+			new_player.scale = Vector2(0.798, 0.813)
 			#Change size and pos of sprite
 			new_player.position = Global.player_positions[str(num)]
 			#Add child to the scene
