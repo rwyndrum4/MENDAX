@@ -111,16 +111,36 @@ func _process(_delta): #change to delta if used
 	if Global.progress == 5:
 		load_boss(2)
 	if Global.progress == 6 or Global.progress == 8:
-		if sword.direction == "right":
-			sword.get_node("pivot").position = $Player.position + Vector2(60,0)
-		elif sword.direction == "left":
-			sword.get_node("pivot").position = $Player.position + Vector2(-60,0)
+		handle_swords()
 	if Global.progress == 7:
 		load_boss(3)
 	if player.isInverted == true:
 		confuzzed.visible = true
 	else:
 		confuzzed.visible = false
+
+"""
+/*
+* @pre None
+* @post updates the sword positions of ALL players in game
+* @param None
+* @return None
+*/
+"""
+func handle_swords():
+	#main player's sword
+	if sword.direction == "right":
+		sword.get_node("pivot").position = player.position + Vector2(60,0)
+	elif sword.direction == "left":
+		sword.get_node("pivot").position = player.position + Vector2(-60,0)
+	#Server player's swords
+	for p in server_players:
+		var p_obj = p.get('player_obj')
+		if is_instance_valid(p_obj):
+			if p_obj.get('sword_dir') == "right":
+				p_obj._pivot.position = p_obj.position + Vector2(60,0)
+			elif p_obj.get('sword_dir') == "left":
+				p_obj._pivot.position = p_obj.position + Vector2(-60,0)
 
 """
 /*
@@ -380,6 +400,8 @@ func spawn_players():
 			var new_player:KinematicBody2D = load(other_player).instance()
 			new_player.set_player_id(num)
 			new_player.set_color(num)
+			new_player.sword_visibility(false)
+			new_player.healthbar_visibility(false)
 			#Change size and pos of sprite
 			new_player.position = Global.player_positions[str(num)]
 			#Add child to the scene
@@ -576,6 +598,13 @@ func load_boss(stage_num:int):
 	# Zoom out camera so player can view Mendax in all his glory
 	$Player.get_node("Camera2D").set("zoom", Vector2(2, 2))
 
+func give_players_combat_power():
+	player.healthbar_visibility(true)
+	for o_player in server_players:
+		if is_instance_valid(o_player.get('player_obj')):
+			o_player.get('player_obj').sword_visibility(true)
+			o_player.get('player_obj').healthbar_visibility(true)
+
 """
 /*
 * @pre None
@@ -630,7 +659,7 @@ func spawn_shields():
 """
 func give_shield(area, s_id):
 	if area.is_in_group("player") and _shields_available[s_id]:
-		ServerConnection.send_shield_notif()
+		ServerConnection.send_shield_notif(s_id)
 		_shields_available[s_id] = false
 		player.shield.giveShield()
 		get_node("shield_sprite" + str(s_id)).hide()
@@ -665,7 +694,7 @@ func someone_took_shield(player_id,_shield_num):
 	get_node("shield_sprite" + str(_shield_num)).hide()
 	start_shield_timer(_shield_num)
 	for o_player in server_players:
-		if player_id == o_player.get('num'):
+		if player_id == o_player.get('num') and is_instance_valid(o_player.get('player_obj')):
 			o_player.get('player_obj').shield.giveShield()
 			break
 

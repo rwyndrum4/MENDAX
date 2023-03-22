@@ -116,10 +116,30 @@ func _process(_delta): #change to delta if used
 		timerText.text = convert_time(myTimer.time_left)
 	if not is_instance_valid(main_player):
 		return
+	handle_swords()
+	
+"""
+/*
+* @pre None
+* @post updates the sword positions of ALL players in game
+* @param None
+* @return None
+*/
+"""
+func handle_swords():
+	#main player's sword
 	if sword.direction == "right":
 		swordPivot.position = main_player.position + Vector2(60,0)
 	elif sword.direction == "left":
 		swordPivot.position = main_player.position + Vector2(-60,0)
+	#Server player's swords
+	for p in server_players:
+		var p_obj = p.get('player_obj')
+		if is_instance_valid(p_obj):
+			if p_obj.get('sword_dir') == "right":
+				p_obj._pivot.position = p_obj.position + Vector2(60,0)
+			elif p_obj.get('sword_dir') == "left":
+				p_obj._pivot.position = p_obj.position + Vector2(-60,0)
 
 """
 /*

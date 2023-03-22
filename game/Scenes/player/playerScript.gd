@@ -248,3 +248,12 @@ func _invert_off(timer):
 	timer.queue_free()
 	isInverted = false
 	once = true
+
+"""
+* @pre None
+* @post sets healthbar visibility
+* @param value -> bool
+* @return None
+"""
+func healthbar_visibility(value:bool):
+	$ProgressBar.visible = value

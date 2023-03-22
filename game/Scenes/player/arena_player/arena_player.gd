@@ -54,11 +54,11 @@ func _ready():
 func _physics_process(_delta):
 	self.position = Global.get_player_pos(player_id)
 	control_animations(Global.get_player_input_vec(player_id))
-	#Control sword position
-	if _global_sword_dir == "right":
-		p_sword.position = (self.position/40) + Vector2(30,-60)
-	elif _global_sword_dir == "left":
-		p_sword.position = (self.position/40) + Vector2(-60,-60)
+	#Control sword position (depricated, now handled in arenaGame and entrySpace)
+#	if _global_sword_dir == "right":
+#		p_sword.position = (self.position/40) + Vector2(30,-60)
+#	elif _global_sword_dir == "left":
+#		p_sword.position = (self.position/40) + Vector2(-60,-60)
 
 """
 /*
@@ -147,24 +147,20 @@ func swing_sword(sword_direction: String):
 		_anim_player.play("slashLeft")
 		yield(_anim_player, 'animation_finished')
 
-"""	
-/*
+"""
 * @pre None
 * @post sets player id to what was passed int
 * @param id_in -> String
 * @return None
-*/
 """
 func set_player_id(id_in:int):
 	player_id = id_in
 
 """
-/*
 * @pre None
 * @post sets player color to what was passed int
 * @param player_num -> int
 * @return None
-*/
 """
 func set_color(player_num:int):
 	match player_num:
@@ -179,16 +175,20 @@ func set_color(player_num:int):
 		_:
 			player_color = "blue"
 
-#"""
-#* @pre Called whenever area2d of player detect and object inside
-#* @post if the object is a sword, then boop that player
-#* @param area (area of object intruding)
-#"""
-#func _on_sword_detector_area_entered(area):
-#	if area.is_in_group("sword"):
-#		var x = 1000
-#		if area.get_parent().get_parent().position.x >= position.x:
-#			x *= -1
-#		var res_pos = position + Vector2(x,0)
-#		position = position.move_toward(res_pos, 145)
-#		ServerConnection.send_position_update(position)
+"""
+* @pre None
+* @post sets sword visibility
+* @param value -> bool
+* @return None
+"""
+func sword_visibility(value:bool):
+	$Sword.visible = value
+
+"""
+* @pre None
+* @post sets healthbar visibility
+* @param value -> bool
+* @return None
+"""
+func healthbar_visibility(value:bool):
+	$ProgressBar.visible = value
