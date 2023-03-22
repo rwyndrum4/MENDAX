@@ -19,5 +19,6 @@ export var damage := 10
 */
 """
 func _init() -> void:
+	add_to_group("sword")
 	collision_layer = 19
 	collision_mask = 0

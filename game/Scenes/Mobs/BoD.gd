@@ -97,7 +97,7 @@ func take_damage(amount: int) -> void:
 	healthbar.value = healthbar.value - amount
 	
 	Global.bod_damage[str(1)]+=amount
-	if healthbar.value == 0:
+	if healthbar.value <= 0:
 		isDead = true
 		BodAnim.play("death")
 		call_deferred("defer_disabling_BoD")
@@ -105,7 +105,7 @@ func take_damage(amount: int) -> void:
 #Same as above function except it doesn't send data to server
 func take_damage_server(amount: int):
 	healthbar.value = healthbar.value - amount
-	if healthbar.value == 0:
+	if healthbar.value <= 0:
 		isDead = true
 		BodAnim.play("death")
 		call_deferred("defer_disabling_BoD")

@@ -56,6 +56,7 @@ func _ready():
 	playerHealth.value = 150
 	sword.direction = "right"
 	swordPivot.position = main_player.position + Vector2(60,20)
+	main_player.connect("p1_died", self, "_p1_died")
 	#If there is a server connection, spawn all players
 	if ServerConnection.match_exists() and ServerConnection.get_server_status():
 		TOTAL_TIME = 60
@@ -516,7 +517,7 @@ func other_player_swung_sword(player_id: int, direction: String):
 func _extend_timer(p_id: int):
 	# warning-ignore:return_value_discarded
 	alive_players.erase(p_id)
-	if len(alive_players) == 0:
+	if len(alive_players) == 0 and _player_dead:
 		_end_game(true)
 	var new_time: float = myTimer.time_left + EXTRA_TIME
 	myTimer.start(new_time)
@@ -678,3 +679,9 @@ func someone_got_booped(player_id: int, x: int, y: int):
 		if player_id == o_player.get('num'):
 			o_player.get('player_obj').was_booped(Vector2(x,y))
 			break
+
+func _p1_died():
+	_player_dead = true
+	spectate_mode()
+	if len(alive_players) == 0:
+		_end_game(true)

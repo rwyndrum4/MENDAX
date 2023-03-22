@@ -29,6 +29,8 @@ var ACCELERATION = 25000
 var MAX_SPEED = 500
 var velocity = Vector2.ZERO
 
+signal p1_died()
+
 """
 /*
 * @pre Called once when player is initialized
@@ -214,8 +216,7 @@ func take_damage(amount: int) -> void:
 		ServerConnection.send_arena_player_health(new_health)
 		healthbar.value = new_health
 		if healthbar.value <= 0 and Global.state == Global.scenes.ARENA_MINIGAME: #should fix it
-			get_parent()._player_dead = true
-			get_parent().spectate_mode()
+			emit_signal("p1_died")
 			queue_free()
 
 

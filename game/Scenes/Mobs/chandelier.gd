@@ -113,7 +113,7 @@ func take_damage(amount: int) -> void:
 	$AudioStreamPlayer2D.play()
 	healthbar.value = healthbar.value - amount
 	Global.chandelier_damage[str(1)]+=amount
-	if healthbar.value <= 0 and not _isDead:
+	if healthbar.value <= 0:
 		_isDead = true
 		set_physics_process(false)
 		chandelierAnim.play("death")
@@ -127,7 +127,7 @@ func take_damage(amount: int) -> void:
 #Same as above function except it doesn't send data to server
 func take_damage_server(amount: int):
 	healthbar.value = healthbar.value - amount
-	if healthbar.value == 0:
+	if healthbar.value <= 0:
 		_isDead = true
 		set_physics_process(false)
 		chandelierAnim.play("death")
