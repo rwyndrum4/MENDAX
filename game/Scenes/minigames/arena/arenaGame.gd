@@ -515,10 +515,12 @@ func other_player_swung_sword(player_id: int, direction: String):
 */
 """
 func _extend_timer(p_id: int):
-	# warning-ignore:return_value_discarded
-	alive_players.erase(p_id)
 	if len(alive_players) == 0 and _player_dead:
 		_end_game(true)
+	# warning-ignore:return_value_discarded
+	alive_players.erase(p_id)
+	if not is_instance_valid(myTimer):
+		return
 	var new_time: float = myTimer.time_left + EXTRA_TIME
 	myTimer.start(new_time)
 			
