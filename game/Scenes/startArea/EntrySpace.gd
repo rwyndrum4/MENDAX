@@ -782,7 +782,8 @@ func _other_player_hit(player_id: int, player_health: int):
 	for o_player in server_players:
 		if player_id == o_player.get('num'):
 			var p_obj = o_player.get('player_obj')
-			p_obj.take_damage(player_health)
+			if is_instance_valid(p_obj):
+				p_obj.take_damage(player_health)
 			Global.player_health[str(player_id)]=player_health
 			break
 
