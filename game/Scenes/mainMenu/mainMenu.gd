@@ -32,7 +32,7 @@ var num_players: int = 0
 #max players allowed
 const MAX_PLAYERS: int = 4
 #value to scale up animated sprites
-const SCALE_VAL = Vector2(0.798,0.813)
+const SCALE_VAL = Vector2(3,3)
 
 
 ### Member Variables ###
@@ -436,17 +436,17 @@ func delete_player_obj(player:AnimatedSprite, text:Label):
 func get_char_pos(sizeof_arr: int) -> Vector2:
 	var result: Vector2 = Vector2.ZERO
 	if sizeof_arr == 0:
-		result.x = 825
-		result.y = 420
+		result.x = 820 / 3
+		result.y = 425 / 3
 	elif sizeof_arr == 1:
-		result.x = 960
-		result.y = 420
+		result.x = 955 / 3
+		result.y = 425 / 3
 	elif sizeof_arr == 2:
-		result.x = 770
-		result.y = 490
+		result.x = 765 / 3
+		result.y = 495 / 3
 	elif sizeof_arr == 3:
-		result.x = 940
-		result.y = 480
+		result.x = 935 / 3
+		result.y = 485 / 3
 	return result
 
 """
