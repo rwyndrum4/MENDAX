@@ -29,7 +29,7 @@ func _ready():
 		else:
 			var wait_for_start: Timer = Timer.new()
 			add_child(wait_for_start)
-			wait_for_start.wait_time = 5
+			wait_for_start.wait_time = Global.WAIT_FOR_PLAYERS_TIME
 			wait_for_start.one_shot = true
 			wait_for_start.start()
 			# warning-ignore:return_value_discarded
@@ -111,9 +111,10 @@ func _dialogue_over():
 """
 func play_dialogue():
 	textbox.queue_text("You have done well to make it this far")
-	textbox.queue_text("Your next challenge will be to face off in a rhyhtm game")
-	textbox.queue_text("Why a rhythm game in a game like this you might be wondering")
-	textbox.queue_text("I am wondering the same thing, but anyway best of luck")
+	var var_text = "face off in" if ServerConnection.match_exists() else "play"
+	textbox.queue_text("Your next challenge will be to " + var_text + " a rhyhtm game")
+	textbox.queue_text("Why a rhythm game in a game inside of a cave you might be wondering")
+	textbox.queue_text("I don't know either, but good luck")
 
 """
 * @pre their is an online game going on

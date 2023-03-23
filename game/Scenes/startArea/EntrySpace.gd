@@ -84,7 +84,7 @@ func _ready():
 			#Set a five second timer to wait for other players to spawn in
 			var wait_for_start: Timer = Timer.new()
 			add_child(wait_for_start)
-			wait_for_start.wait_time = 5
+			wait_for_start.wait_time = Global.WAIT_FOR_PLAYERS_TIME
 			wait_for_start.one_shot = true
 			wait_for_start.start()
 			# warning-ignore:return_value_discarded

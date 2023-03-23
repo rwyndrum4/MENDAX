@@ -27,6 +27,9 @@ var progress = 0
 var _boss_tp_counter = 0
 var _first_time_in_boss = false
 
+# Variables for server times
+const WAIT_FOR_PLAYERS_TIME = 15
+
 # Signals
 signal all_players_arrived()
 
