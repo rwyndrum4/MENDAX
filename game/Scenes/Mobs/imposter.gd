@@ -34,16 +34,14 @@ func _ready():
 		imposter_color = "red"
 	
 func _physics_process(_delta):
+	if not is_instance_valid(get_parent().get_node("Player")):
+		return
 	var player_pos = null
-
 	#if not get_parent()._player_dead:
 	player_pos = get_parent().get_node("Player").position
 	velocity = position.direction_to(player_pos)* BASE_SPEED
 	velocity = move_and_slide(velocity)
 	control_animations(velocity)
-	#else:
-	
-	#control_animations(velocity)
 
 
 """

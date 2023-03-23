@@ -24,8 +24,10 @@ var at_ladder = false #variable to track if player is at the ladder
 var _shield_spawns: Array = [] #array that holds all shield objects
 var _shields_available: Array = [] #array that holds if each shield is available or not
 var _game_started = false #variable to tell if all players are in scene
+var _player_dead = false #variable to track if main player is dead or not
 var _enemies: Array = [] #Array of enemy objects
-var dummyBoss
+var _imposter_timer: Timer = null #Timer for when imposters will spawn
+var dummyBoss #variable to hold the boss when needed
 var _besier_arr: Array = [] #array to hold besiers for easy access
 var server_players: Array = [] #array to hold all OTHER players in cave (not you)
 var other_player = "res://Scenes/player/arena_player/arena_player.tscn" #class for other player's body objects
@@ -56,6 +58,8 @@ onready var wellLabeled = $well/Label
 """
 func _ready():
 	player.set_physics_process(false)
+	# warning-ignore:return_value_discarded
+	player.connect("p1_died", self, "_p1_died")
 	#hide cave instructions at start
 	instructions.hide()
 	$fogSprite.modulate.a8 = 0
@@ -67,7 +71,6 @@ func _ready():
 	Global.connect("all_players_arrived", self, "_can_start_game")
 	# warning-ignore:return_value_discarded
 	ServerConnection.connect("minigame_can_start", self, "_can_start_game_other")
-	#Spawn the players if a match is ongoing
 	if ServerConnection.match_exists() and ServerConnection.get_server_status():
 		ServerConnection.send_spawn_notif()
 		spawn_players()
@@ -100,9 +103,16 @@ func _ready():
 """
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta): #change to delta if used
-	timerText.text = convert_time(myTimer.time_left)
+	if is_instance_valid(myTimer):
+		timerText.text = convert_time(myTimer.time_left)
 	if not stop_steam_control:
 		control_steam()
+	#if not in final boss (aka normal cave b4 minigame, don't do rest)
+	if Global.progress < 4:
+		return
+	#Check if players have lost the game or not
+	if check_everyone_dead():
+		Global.state = Global.scenes.END_SCREEN
 	# Check for completion of boss stage 1
 	if Global.progress == 4:
 		#besier tracker not needed anymore
@@ -114,6 +124,9 @@ func _process(_delta): #change to delta if used
 		handle_swords()
 	if Global.progress == 7:
 		load_boss(3)
+	#Put all player related code after this, checks if still alive or not
+	if not is_instance_valid(player):
+		return
 	if player.isInverted == true:
 		confuzzed.visible = true
 	else:
@@ -128,11 +141,6 @@ func _process(_delta): #change to delta if used
 */
 """
 func handle_swords():
-	#main player's sword
-	if sword.direction == "right":
-		sword.get_node("pivot").position = player.position + Vector2(60,0)
-	elif sword.direction == "left":
-		sword.get_node("pivot").position = player.position + Vector2(-60,0)
 	#Server player's swords
 	for p in server_players:
 		var p_obj = p.get('player_obj')
@@ -141,6 +149,13 @@ func handle_swords():
 				p_obj._pivot.position = p_obj.position + Vector2(60,0)
 			elif p_obj.get('sword_dir') == "left":
 				p_obj._pivot.position = p_obj.position + Vector2(-60,0)
+	if not is_instance_valid(player):
+		return
+	#main player's sword
+	if sword.direction == "right":
+		sword.get_node("pivot").position = player.position + Vector2(60,0)
+	elif sword.direction == "left":
+		sword.get_node("pivot").position = player.position + Vector2(-60,0)
 
 """
 /*
@@ -555,13 +570,13 @@ func load_boss(stage_num:int):
 		add_child_below_node($Player, sword)
 		Global.progress = 6
 		#imposter spawns
-		var wait_for_start: Timer = Timer.new()
-		add_child(wait_for_start)
-		wait_for_start.wait_time = 5
-		wait_for_start.one_shot = false
-		wait_for_start.start()
+		_imposter_timer = Timer.new()
+		add_child(_imposter_timer)
+		_imposter_timer.wait_time = 5
+		_imposter_timer.one_shot = false
+		_imposter_timer.start()
 		# warning-ignore:return_value_discarded
-		wait_for_start.connect("timeout",self, "_imposter_spawn")
+		_imposter_timer.connect("timeout",self, "_imposter_spawn")
 	if stage_num == 3:
 		# Light up the cave
 		$Darkness.hide()
@@ -590,7 +605,8 @@ func load_boss(stage_num:int):
 	if stage_num > 1:
 		#Unhide player health bar and set total health to 150
 		$Player/ProgressBar.show()
-		$Player/ProgressBar.value = 150
+		#$Player/ProgressBar.value = 150
+		$Player/ProgressBar.value = 20
 		spawn_shields() #shield spawns now show up in 3 places
 	# Initialize, place, and spawn boss
 	boss.set("position", Vector2(-4250, 2160))
@@ -832,3 +848,59 @@ func _other_player_swung_sword(player_id: int, direction: String):
 			o_player['sword_dir'] = direction
 			o_player.get('player_obj').swing_sword(direction)
 			break
+
+"""
+/*
+* @pre main player died
+* @post turns on spectate mode and checks if game over
+* @param None
+* @return None
+*/
+"""
+func _p1_died():
+	_player_dead = true
+	#No more imposter spawns
+	_imposter_timer.disconnect("timeout",self, "_imposter_spawn")
+	_imposter_timer.queue_free()
+	spectate_mode()
+	if check_everyone_dead():
+		Global.state = Global.scenes.END_SCREEN
+
+"""
+/*
+* @pre player died
+* @post turns on spectate mode where you can swap to other players
+* @param None
+* @return None
+*/
+"""
+func spectate_mode():
+	var spec_one = true
+	for p in server_players:
+		var spec_cam = Camera2D.new()
+		add_child_below_node(p,spec_cam)
+		p['camera'] = spec_cam
+		p['current_camera'] = false
+		if spec_one:
+			p['current_camera'] = true
+			spec_cam.clear_current()
+			spec_cam.make_current()
+			spec_one = false
+
+"""
+/*
+* @pre None
+* @post checks if game over, returns bools for answer
+* @param None
+* @return bool (true = game over, false otherwise)
+*/
+"""
+func check_everyone_dead() -> bool:
+	var main_player_dead = false
+	var server_players_dead = true
+	if _player_dead:
+		main_player_dead = true
+	for p in server_players:
+		if is_instance_valid(p.get('player_obj')):
+			server_players_dead = false
+	return (main_player_dead and server_players_dead)

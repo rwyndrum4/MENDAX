@@ -114,8 +114,6 @@ func _process(_delta): #change to delta if used
 	#Game is over if all players dead
 	if is_instance_valid(myTimer):
 		timerText.text = convert_time(myTimer.time_left)
-	if not is_instance_valid(main_player):
-		return
 	handle_swords()
 	
 """
@@ -127,11 +125,6 @@ func _process(_delta): #change to delta if used
 */
 """
 func handle_swords():
-	#main player's sword
-	if sword.direction == "right":
-		swordPivot.position = main_player.position + Vector2(60,0)
-	elif sword.direction == "left":
-		swordPivot.position = main_player.position + Vector2(-60,0)
 	#Server player's swords
 	for p in server_players:
 		var p_obj = p.get('player_obj')
@@ -140,6 +133,13 @@ func handle_swords():
 				p_obj._pivot.position = p_obj.position + Vector2(60,0)
 			elif p_obj.get('sword_dir') == "left":
 				p_obj._pivot.position = p_obj.position + Vector2(-60,0)
+	if not is_instance_valid(sword):
+		return
+	#main player's sword
+	if sword.direction == "right":
+		swordPivot.position = main_player.position + Vector2(60,0)
+	elif sword.direction == "left":
+		swordPivot.position = main_player.position + Vector2(-60,0)
 
 """
 /*

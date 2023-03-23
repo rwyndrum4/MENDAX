@@ -215,7 +215,7 @@ func take_damage(amount: int) -> void:
 		Global.player_health[str(1)]=new_health
 		ServerConnection.send_arena_player_health(new_health)
 		healthbar.value = new_health
-		if healthbar.value <= 0 and Global.state == Global.scenes.ARENA_MINIGAME: #should fix it
+		if healthbar.value <= 0:
 			emit_signal("p1_died")
 			queue_free()
 
