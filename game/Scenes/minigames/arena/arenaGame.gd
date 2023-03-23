@@ -133,7 +133,7 @@ func handle_swords():
 				p_obj._pivot.position = p_obj.position + Vector2(60,0)
 			elif p_obj.get('sword_dir') == "left":
 				p_obj._pivot.position = p_obj.position + Vector2(-60,0)
-	if not is_instance_valid(sword):
+	if not is_instance_valid(main_player):
 		return
 	#main player's sword
 	if sword.direction == "right":
