@@ -193,7 +193,8 @@ func _input(_ev):
 			ladder.texture = $root/Assets/tiles/TilesCorrected/WallTile_Tilt_Horiz
 	#Spectator mode stuff
 	if _player_dead:
-		change_spectator()
+		if Input.is_action_just_pressed("jump",false):
+			change_spectator()
 	#DEBUG PURPOSES - REMOVE FOR FINAL GAME!!!
 	#IF YOU PRESS P -> TIMER WILL REDUCE TO 3 SECONDS
 	if Input.is_action_just_pressed("timer_debug_key",false):
