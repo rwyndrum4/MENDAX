@@ -161,7 +161,7 @@ current = true
 visible = false
 position = Vector2( 0, -45 )
 frames = SubResource( 15 )
-frame = 5
+frame = 4
 playing = true
 
 [node name="GUI" type="CanvasLayer" parent="."]
@@ -186,6 +186,15 @@ margin_right = 934.0
 margin_bottom = 263.0
 custom_fonts/font = SubResource( 20 )
 text = "Waiting on other players..."
+
+[node name="spectate_mode" type="Label" parent="GUI"]
+visible = false
+margin_left = 334.0
+margin_right = 934.0
+margin_bottom = 84.0
+custom_fonts/font = SubResource( 20 )
+text = "Spectating"
+align = 1
 
 [node name="exitCaveArea" type="Area2D" parent="."]
 position = Vector2( 1153, 1583 )

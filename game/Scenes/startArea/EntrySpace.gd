@@ -47,6 +47,7 @@ onready var ladder = $worldMap/Node2D_1/Ladder1x1
 onready var pitfall = $worldMap/Node2D_1/Pitfall1x1_2
 onready var player = $Player
 onready var wellLabeled = $well/Label
+onready var spectate_text = $GUI/spectate_mode
 
 """
 /*
@@ -190,6 +191,9 @@ func _input(_ev):
 	if at_ladder:
 		if Input.is_action_just_pressed("ui_accept",false) and not Input.is_action_just_pressed("ui_enter_chat"):
 			ladder.texture = $root/Assets/tiles/TilesCorrected/WallTile_Tilt_Horiz
+	#Spectator mode stuff
+	if _player_dead:
+		change_spectator()
 	#DEBUG PURPOSES - REMOVE FOR FINAL GAME!!!
 	#IF YOU PRESS P -> TIMER WILL REDUCE TO 3 SECONDS
 	if Input.is_action_just_pressed("timer_debug_key",false):
@@ -875,14 +879,19 @@ func _p1_died():
 */
 """
 func spectate_mode():
+	spectate_text.show()
 	var spec_one = true
 	for p in server_players:
+		if not is_instance_valid(p):
+			continue
 		var spec_cam = Camera2D.new()
 		add_child_below_node(p,spec_cam)
 		p['camera'] = spec_cam
 		p['current_camera'] = false
 		if spec_one:
 			p['current_camera'] = true
+			var p_name = Global.get_player_name(p.get('num'))
+			change_spectate_text(p_name)
 			spec_cam.clear_current()
 			spec_cam.make_current()
 			spec_one = false
@@ -904,3 +913,52 @@ func check_everyone_dead() -> bool:
 		if is_instance_valid(p.get('player_obj')):
 			server_players_dead = false
 	return (main_player_dead and server_players_dead)
+
+"""
+/*
+* @pre None
+* @post changes the text that says who you are watching
+* @param new_player (who you are watching now)
+* @return None
+*/
+"""
+func change_spectate_text(new_player:String):
+	spectate_text.text = "Spectating " + new_player
+
+"""
+/*
+* @pre None
+* @post changes who you are watching
+* @param None
+* @return None
+*/
+"""
+func change_spectator():
+	var next = false
+	#Iterate through all of the players
+	for p in server_players:
+		if not is_instance_valid(p):
+			continue
+		if p['current_camera'] == true:
+			p['current_camera'] = false
+			next = true
+		if next:
+			next = false
+			p['current_camera'] = true
+			p['camera'].clear_current()
+			p['camera'].make_current()
+			var p_name = Global.get_player_name(p.get('num'))
+			change_spectate_text(p_name)
+			break
+	#If last player was the one who had the camera
+	if next:
+		for p in server_players:
+			if not is_instance_valid(p):
+				continue
+			else:
+				p['current_camera'] = true
+				p['camera'].clear_current()
+				p['camera'].make_current()
+				var p_name = Global.get_player_name(p.get('num'))
+				change_spectate_text(p_name)
+				break
