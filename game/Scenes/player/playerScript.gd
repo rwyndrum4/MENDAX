@@ -9,6 +9,7 @@
 	10/27/2022 - Added character animation
 	11/28/2022 - Added death handling
 	2/14/2023  - Added inverted controls option
+	3/25/2023 - Added powerups
 """
 extends KinematicBody2D
 
@@ -18,6 +19,7 @@ onready var char_pos = $position
 onready var healthbar = $ProgressBar
 onready var isInverted = false
 onready var shield = $Shield
+onready var current_powerup = "default"
 var is_stopped = false
 var player_color:String = ""
 var once
@@ -25,7 +27,7 @@ var once
 # Player physics constants
 var ACCELERATION = 25000
 var MAX_SPEED = 500
-const FRICTION = 500
+var FRICTION = 500
 
 # Global velocity
 var velocity = Vector2.ZERO
@@ -55,6 +57,18 @@ func _ready():
 	character.play("idle_" + player_color)
 	once = true
 	
+"""
+/*
+* @pre An input of any sort
+* @post Input is handled
+* @param Takes in input as an event
+* @return none
+*/
+"""
+func _input(_ev):
+	if Input.is_action_just_pressed("toggle_powerup_debug", false):
+		toggle_powerup(null)
+		
 
 """
 /*
@@ -236,3 +250,101 @@ func _invert_off(timer):
 	timer.queue_free()
 	isInverted = false
 	once = true
+
+"""
+/*
+* @pre None
+* @post Removes the effects of the current powerup and applies effects of a new powerup ()
+* @param powerup -> 
+* @return None
+*/
+"""
+func toggle_powerup(powerup):
+	# If no powerup argument is supplied, assume we want to toggle to next powerup.
+	# Should only occur in testing
+	if powerup == null:
+		if current_powerup == "default":
+			powerup = "speed"
+		if current_powerup == "speed":
+			powerup = "strength"
+		if current_powerup == "strength":
+			powerup = "endurance"
+		if current_powerup == "endurance":
+			powerup = "luck"
+		if current_powerup == "luck":
+			powerup = "sus"
+		if current_powerup == "sus":
+			powerup = "reach"
+		if current_powerup == "reach":
+			powerup = "thorns"
+		if current_powerup == "thorns":
+			powerup = "glow"
+		if current_powerup == "glow":
+			powerup = "default"
+	# Remove effects of current powerup
+	# Don't need to worry about "default" case here
+	if current_powerup == "speed":
+		ACCELERATION = 25000
+		MAX_SPEED = 500
+	elif current_powerup == "strength":
+		# reduce damage back to normal
+		pass
+	if current_powerup == "endurance":
+		# reduce max HP back to normal
+		healthbar.max_value = 100
+	elif current_powerup == "luck":
+		# remove luck effect
+		pass
+	elif current_powerup == "sus":
+		set_color(ServerConnection._player_num)
+	elif current_powerup == "reach":
+		# change hurtbox back to normal size
+		pass
+	elif current_powerup == "thorns":
+		# remove thorns effect from hitbox
+		pass
+	elif current_powerup == "glow":
+		# remove glow effect
+		pass
+	# Set effects of new powerup
+	if powerup == "default":
+		current_powerup = "default"
+	elif powerup == "speed":
+		ACCELERATION = 40000
+		MAX_SPEED = 750
+		current_powerup = "speed"
+	elif powerup == "strength":
+		# increase sword damage
+		current_powerup = "strength"
+	elif powerup == "endurance":
+		# increase max HP and heal for same amount
+		healthbar.max_value = 150
+		healthbar.value+=50
+		current_powerup = "endurance"
+	elif powerup == "luck":
+		# add luck effect that grants coin for travel time
+		current_powerup = "luck"
+	elif powerup == "sus":
+		# change sprite color
+		var rng = RandomNumberGenerator.new()
+		var colors
+		if player_color == "blue":
+			colors = ["red", "green", "orange"]
+		if player_color == "red":
+			colors = ["blue", "green", "orange"]
+		if player_color == "green":
+			colors = ["blue", "red", "orange"]
+		if player_color == "orange":
+			colors = ["blue", "red", "green"]
+		var rand_index = rng.randi_range(0,2)
+		player_color = colors[rand_index]
+		current_powerup = "sus"
+	elif powerup == "reach":
+		# expand size of hurtbox
+		current_powerup = "reach"
+	elif powerup == "thorns":
+		# add thorns effect to hitbox
+		current_powerup = "thorns"
+	elif powerup == "glow":
+		# add glow effect
+		current_powerup = "glow"		
