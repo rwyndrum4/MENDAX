@@ -288,7 +288,7 @@ func toggle_powerup(powerup):
 		MAX_SPEED = 500
 	elif current_powerup == "strength":
 		# reduce damage back to normal
-		pass
+		$MyHurtBox.dmgMod = 0
 	if current_powerup == "endurance":
 		# reduce max HP back to normal
 		healthbar.max_value = 100
@@ -299,13 +299,15 @@ func toggle_powerup(powerup):
 		set_color(ServerConnection._player_num)
 	elif current_powerup == "reach":
 		# change hurtbox back to normal size
-		pass
+		$MyHurtBox.get_node("hitbox").scale = $MyHurtBox.get_node("hitbox").scale/2
 	elif current_powerup == "thorns":
 		# remove thorns effect from hitbox
 		pass
 	elif current_powerup == "glow":
-		# remove glow effect
-		pass
+		# show torch (NOTE: need to make so this resumes torch progress)
+		$light.show()
+		# hide glow effect
+		$Glow.hide()
 	# Set effects of new powerup
 	if powerup == "default":
 		current_powerup = "default"
@@ -315,6 +317,7 @@ func toggle_powerup(powerup):
 		current_powerup = "speed"
 	elif powerup == "strength":
 		# increase sword damage
+		$MyHurtBox.dmgMod = 50
 		current_powerup = "strength"
 	elif powerup == "endurance":
 		# increase max HP and heal for same amount
@@ -341,10 +344,14 @@ func toggle_powerup(powerup):
 		current_powerup = "sus"
 	elif powerup == "reach":
 		# expand size of hurtbox
+		$MyHurtBox.get_node("hitbox").scale = $MyHurtBox.get_node("hitbox").scale*2
 		current_powerup = "reach"
 	elif powerup == "thorns":
 		# add thorns effect to hitbox
 		current_powerup = "thorns"
 	elif powerup == "glow":
-		# add glow effect
+		# Hide torch (NOTE: need to make so this resumes torch progress)
+		$light.hide()
+		# show glow effect
+		$Glow.show()
 		current_powerup = "glow"		
