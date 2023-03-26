@@ -883,10 +883,11 @@ func spectate_mode():
 	spectate_text.show()
 	var spec_one = true
 	for p in server_players:
-		if not is_instance_valid(p):
+		var p_obj = p.get('player_obj')
+		if not is_instance_valid(p_obj):
 			continue
 		var spec_cam = Camera2D.new()
-		add_child_below_node(p,spec_cam)
+		add_child_below_node(p.get('player_obj'),spec_cam)
 		p['camera'] = spec_cam
 		p['current_camera'] = false
 		if spec_one:
@@ -939,7 +940,8 @@ func change_spectator():
 	var next = false
 	#Iterate through all of the players
 	for p in server_players:
-		if not is_instance_valid(p):
+		var p_obj = p.get('player_obj')
+		if not is_instance_valid(p_obj):
 			continue
 		if p['current_camera'] == true:
 			p['current_camera'] = false
