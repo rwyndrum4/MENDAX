@@ -12,6 +12,7 @@
 extends Control
 
 # Member Variables
+const PLAYER_HEALTH = 40
 const CAVE_TIME = 90 #how much time players spend in the cave
 var in_exit = false #variable to track if character is by the exit
 var in_menu = false #variable to track if character is in options menu
@@ -571,7 +572,7 @@ func load_boss(stage_num:int):
 	if stage_num > 1:
 		#Unhide player health bar and set total health to 150
 		$Player/ProgressBar.show()
-		$Player/ProgressBar.value = 150
+		$Player/ProgressBar.value = PLAYER_HEALTH
 		spawn_shields() #shield spawns now show up in 3 places
 	# Initialize, place, and spawn boss
 	boss.set("position", Vector2(-4250, 2160))
