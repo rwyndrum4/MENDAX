@@ -63,6 +63,8 @@ func _ready():
 	GlobalSignals.connect("exportEventMessage", self, "_event_chatbox_msg")
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("toggleHotbar", self, "toggle_hotbar")
+	# warning-ignore:return_value_discarded
+	GlobalSignals.connect("show_money_text", self, "show_money")
 	#Initialize the options menu and world environment
 	initialize_settings()
 	initialize_world_env()

@@ -6,6 +6,7 @@ var _speed = Vector2(0.01,0.01)
 var _got_too_big:bool = false
 var _atk_timer: float = 0.0
 var _atk_prev_timer: float = 0.0
+var _id: int = 0
 signal aoe_attack_hit()
 
 func _ready():
@@ -29,3 +30,9 @@ func _on_AoEAttack_area_entered(area):
 	if not _got_too_big and area.is_in_group("player"):
 		get_parent().player.take_damage(5)
 		emit_signal("aoe_attack_hit")
+
+func set_id(x:int) -> void:
+	_id = x
+
+func get_id() -> int:
+	return _id

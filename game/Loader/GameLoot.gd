@@ -34,3 +34,6 @@ func get_coin_val(player_num: int) -> int:
 """
 func add_to_coin(player_num:int, num_coin:int) -> void:
 	PlayerLoot[player_num-1]["num_coin"] += num_coin
+
+func reset() -> void:
+	PlayerLoot = []

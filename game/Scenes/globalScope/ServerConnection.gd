@@ -23,6 +23,7 @@ enum OpCodes {
 	UPDATE_BOSS_INVULNERABILITY,
 	SHIELD_TAKEN,
 	BESIER_LIT,
+	AOE_ATK_HIT,
 	SPAWNED
 }
 
@@ -44,6 +45,7 @@ signal minigame_player_spawned(id) #signal to tell if a player has arrived to a 
 signal minigame_rhythm_score(id, score) #send current score of rhythm game player
 signal final_boss_besier_lit(id, besier) #send that someone has lit a besier
 signal boss_is_vulnerable(value) #send that boss can be hit now
+signal aoe_attack_was_hit(atk_id) #an aoe attack was hit by another player
 
 #Other signals
 signal chat_message_received(msg,type,user_sent,from_user) #signal to tell game a chat message has come in
@@ -561,6 +563,17 @@ func send_besier_notif(besier_loc: int):
 		_socket.send_match_state_async(_match_id, OpCodes.BESIER_LIT, JSON.print(payload))
 
 """
+* @pre called when an aoe attack hits a player
+* @post tells other players the attack should dissapear
+* @param id -> int (id of the attack)
+* @return None
+"""
+func send_aoe_atk_hit(id:int):
+	if _socket:
+		var payload := {atk_id = id}
+		_socket.send_match_state_async(_match_id, OpCodes.AOE_ATK_HIT, JSON.print(payload))
+
+"""
 * @pre called when player spawns in an area
 * @post tells other players they are there, used for syncing players together
 * @param None
@@ -719,6 +732,12 @@ func _on_NakamaSocket_received_match_state(match_state: NakamaRTAPI.MatchData) -
 			var bes: int = int(decoded.besier)
 			
 			emit_signal("final_boss_besier_lit", id, bes)
+		OpCodes.AOE_ATK_HIT:
+			var decoded: Dictionary = JSON.parse(raw).result
+			
+			var attack_id: int = int(decoded.atk_id)
+			
+			emit_signal("aoe_attack_was_hit", attack_id)
 		OpCodes.SPAWNED:
 			var decoded: Dictionary = JSON.parse(raw).result
 			

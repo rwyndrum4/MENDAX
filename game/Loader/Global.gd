@@ -288,3 +288,69 @@ func _player_positions_updated(id:int, position:Vector2):
 """
 func _player_input_updated(id:int, vec:Vector2):
 	player_input_vectors[str(id)] = vec
+
+"""
+/*
+* @pre A player has left the game (just used in mainMenu right now)
+* @post removes the player from lists tracking players
+* @param p_name (name of the player that left)
+* @return None
+*/
+"""
+func remove_player_from_match(p_name:String) -> void:
+	#Code to fix the player_names dictionary
+	var found_desserter: bool = false
+	var desserter_value: String = ""
+	for p_num_str in player_names:
+		if found_desserter:
+			var save_name = player_names[p_num_str]
+			var to_int = int(p_num_str)
+			var new_num_str = str(to_int - 1)
+			player_names.erase(p_num_str)
+			player_names[new_num_str] = save_name
+		elif player_names[p_num_str] == p_name:
+			found_desserter = true
+			desserter_value = p_num_str
+			player_names.erase(p_num_str)
+	#Code to fix the player_positions dictionary
+	found_desserter = false
+	var last_pos = Vector2.ZERO
+	for p_num_str in player_positions:
+		if found_desserter:
+			var tmp = player_positions[p_num_str]
+			var to_int = int(p_num_str)
+			var new_num_str = str(to_int - 1)
+			player_positions.erase(p_num_str)
+			player_names[new_num_str] = last_pos
+			last_pos = tmp
+		elif p_num_str == desserter_value:
+			found_desserter = true
+			last_pos = player_positions[p_num_str]
+			player_positions.erase(p_num_str)
+
+"""
+/*
+* @pre None
+* @post reset ALL global variables
+* @param None
+* @return None
+*/
+"""
+func reset() -> void:
+	#reset all global variables back to original values
+	in_anim = 0
+	minigame = 0
+	players_in_minigame = 0
+	progress = 0
+	_boss_tp_counter = 0
+	_first_time_in_boss = false
+	player_names = {}
+	player_positions = {}
+	player_input_vectors = {}
+	current_matches = {}
+	skeleton_damage= {"1":0,"2":0,"3":0,"4":0}
+	player_health ={"1":0,"2":0,"3":0,"4":0}
+	chandelier_damage = {"1":0,"2":0,"3":0,"4":0}
+	bod_damage = {"1":0,"2":0,"3":0,"4":0}
+	#reset other global variable loader files
+	GameLoot.reset()

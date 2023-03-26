@@ -90,3 +90,11 @@ signal exportEventMessage(msg, color)
 """
 # warning-ignore:unused_signal
 signal toggleHotbar(setter)
+
+"""
+* Purpose - Send signal to global parent to show how much money player has
+* Used in - mainMenu.gd
+* Parameter - setter -> bool (true or false, true = show, false = hide)
+"""
+# warning-ignore:unused_signal
+signal show_money_text(setter)

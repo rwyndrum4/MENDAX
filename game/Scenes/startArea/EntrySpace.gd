@@ -150,7 +150,10 @@ func handle_swords():
 				p_obj._pivot.position = p_obj.position + Vector2(60,0)
 			elif p_obj.get('sword_dir') == "left":
 				p_obj._pivot.position = p_obj.position + Vector2(-60,0)
+	#Check whether player or sword are invalid
 	if not is_instance_valid(player):
+		return
+	if not is_instance_valid(sword):
 		return
 	#main player's sword
 	if sword.direction == "right":
@@ -192,7 +195,7 @@ func _input(_ev):
 		if Input.is_action_just_pressed("ui_accept",false) and not Input.is_action_just_pressed("ui_enter_chat"):
 			ladder.texture = $root/Assets/tiles/TilesCorrected/WallTile_Tilt_Horiz
 	#Spectator mode stuff
-	if _player_dead:
+	if _player_dead and len(server_players) > 0:
 		if Input.is_action_just_pressed("jump",false):
 			change_spectator()
 	#DEBUG PURPOSES - REMOVE FOR FINAL GAME!!!
@@ -404,6 +407,14 @@ func steam_area_deactivated():
 		object.hide()
 		object.stop()
 
+"""
+/*
+* @pre There is a match with other players
+* @post spawn all players that are not your character
+* @param None
+* @return None
+*/
+"""
 func spawn_players():
 	#set initial position the players should be on spawn
 	set_init_player_pos()
@@ -509,6 +520,15 @@ func _on_ladderArea_body_exited(_body: PhysicsBody2D): #change to body if want t
 """
 func _on_pitfallArea_body_entered(_body: PhysicsBody2D): #change to body if want to use
 	pitfall.texture = load("res://Assets/tiles/TilesCorrected/BlankTile.png")
+
+"""
+/*
+* @pre None
+* @post update the global player positions for player spawn positions
+* @param None
+* @return None
+*/
+"""
 func set_init_player_pos():
 	#num_str is the player number (1,2,3,4)
 	for num_str in Global.player_positions:
@@ -527,7 +547,7 @@ func set_init_player_pos():
 * @param None
 * @return Currently, timer stops and four bezier objects spawn
 */
-"""			
+"""
 func load_boss(stage_num:int):
 	myTimer.stop()
 	var boss = preload("res://Scenes/FinalBoss/Boss.tscn").instance()
@@ -538,80 +558,18 @@ func load_boss(stage_num:int):
 	ServerConnection.connect("arena_player_lost_health",self,"_other_player_hit")
 	# warning-ignore:return_value_discarded
 	ServerConnection.connect("arena_player_swung_sword",self,"_other_player_swung_sword")
+	#What to do for each stage
 	if stage_num == 1:
-		ServerConnection.connect("final_boss_besier_lit", self, "_besier_was_lit")
-		# Generate beziers
-		var bez1 = preload("res://Scenes/FinalBoss/Bezier.tscn").instance()
-		var bez2 = preload("res://Scenes/FinalBoss/Bezier.tscn").instance()
-		var bez3 = preload("res://Scenes/FinalBoss/Bezier.tscn").instance()
-		var bez4 = preload("res://Scenes/FinalBoss/Bezier.tscn").instance()
-		_besier_arr = [bez1, bez2, bez3, bez4]
-		# Assign ids (for the purpose of differentiating signals)
-		bez1._id = 1
-		bez2._id = 2
-		bez3._id = 3
-		bez4._id = 4
-		# Place beziers
-		bez1.set("position", Vector2(2750, 2000))
-		bez2.set("position", Vector2(1500, 0))
-		bez3.set("position", Vector2(-10000, 4000))
-		bez4.set("position", Vector2(-7750, 3250))
-		# Add beziers to scene
-		add_child_below_node($Darkness, bez1)
-		add_child_below_node($Darkness, bez2)
-		add_child_below_node($Darkness, bez3)
-		add_child_below_node($Darkness, bez4)
-	if stage_num == 2:
-		# Light up the cave
-		$Darkness.hide()
-		# Hide light from cave entrance
-		$Light2D.hide()
-		# Hide player torch light
-		$Player.get_node("light/Torch1").hide()
-		# Give player a sword
-		sword = preload("res://Scenes/player/Sword/Sword.tscn").instance()
-		sword.direction = "right"
-		sword.get_node("pivot").position = $Player.position + Vector2(60,20)
-		add_child_below_node($Player, sword)
-		Global.progress = 6
-		#imposter spawns
-		_imposter_timer = Timer.new()
-		add_child(_imposter_timer)
-		_imposter_timer.wait_time = 5
-		_imposter_timer.one_shot = false
-		_imposter_timer.start()
-		# warning-ignore:return_value_discarded
-		_imposter_timer.connect("timeout",self, "_imposter_spawn")
-	if stage_num == 3:
-		# Light up the cave
-		$Darkness.hide()
-		# Hide light from cave entrance
-		$Light2D.hide()
-		# Hide player torch light
-		$Player.get_node("light/Torch1").hide()
-		# Give player a sword
-		sword = preload("res://Scenes/player/Sword/Sword.tscn").instance()
-		sword.direction = "right"
-		sword.get_node("pivot").position = $Player.position + Vector2(60,20)
-		add_child_below_node($Player, sword)
-		Global.progress = 8
-		#spawn enemies from arena
-		spawn_stage_three_enemies()
-		#imposter spawns
-		var wait_for_start: Timer = Timer.new()
-		add_child(wait_for_start)
-		wait_for_start.wait_time = 5
-		wait_for_start.one_shot = false
-		wait_for_start.start()
-		# warning-ignore:return_value_discarded
-		wait_for_start.connect("timeout",self, "_imposter_spawn")
-		boss._set_invulnerability(true)
-		dummyBoss = boss
+		stage_1()
+	elif stage_num == 2:
+		stage_2()
+	elif stage_num == 3:
+		stage_3(boss)
+	#If it is not the first stage, then turn on shields
 	if stage_num > 1:
 		#Unhide player health bar and set total health to 150
 		$Player/ProgressBar.show()
-		#$Player/ProgressBar.value = 150
-		$Player/ProgressBar.value = 20
+		$Player/ProgressBar.value = 150
 		spawn_shields() #shield spawns now show up in 3 places
 	# Initialize, place, and spawn boss
 	boss.set("position", Vector2(-4250, 2160))
@@ -619,6 +577,110 @@ func load_boss(stage_num:int):
 	# Zoom out camera so player can view Mendax in all his glory
 	$Player.get_node("Camera2D").set("zoom", Vector2(2, 2))
 
+"""
+/*
+* @pre None
+* @post sets everything for stage 1
+* @param None
+* @return None
+*/
+"""
+func stage_1() -> void:
+	ServerConnection.connect("final_boss_besier_lit", self, "_besier_was_lit")
+	# Generate beziers
+	var bez1 = preload("res://Scenes/FinalBoss/Bezier.tscn").instance()
+	var bez2 = preload("res://Scenes/FinalBoss/Bezier.tscn").instance()
+	var bez3 = preload("res://Scenes/FinalBoss/Bezier.tscn").instance()
+	var bez4 = preload("res://Scenes/FinalBoss/Bezier.tscn").instance()
+	_besier_arr = [bez1, bez2, bez3, bez4]
+	# Assign ids (for the purpose of differentiating signals)
+	bez1._id = 1
+	bez2._id = 2
+	bez3._id = 3
+	bez4._id = 4
+	# Place beziers
+	bez1.set("position", Vector2(2750, 2000))
+	bez2.set("position", Vector2(1500, 0))
+	bez3.set("position", Vector2(-10000, 4000))
+	bez4.set("position", Vector2(-7750, 3250))
+	# Add beziers to scene
+	add_child_below_node($Darkness, bez1)
+	add_child_below_node($Darkness, bez2)
+	add_child_below_node($Darkness, bez3)
+	add_child_below_node($Darkness, bez4)
+
+"""
+/*
+* @pre None
+* @post sets everything for stage 2
+* @param None
+* @return None
+*/
+"""
+func stage_2() -> void:
+	# Light up the cave
+	$Darkness.hide()
+	# Hide light from cave entrance
+	$Light2D.hide()
+	# Hide player torch light
+	$Player.get_node("light/Torch1").hide()
+	# Give player a sword
+	sword = preload("res://Scenes/player/Sword/Sword.tscn").instance()
+	sword.direction = "right"
+	sword.get_node("pivot").position = $Player.position + Vector2(60,20)
+	add_child_below_node($Player, sword)
+	Global.progress = 6
+	#imposter spawns
+	_imposter_timer = Timer.new()
+	add_child(_imposter_timer)
+	_imposter_timer.wait_time = 5
+	_imposter_timer.one_shot = false
+	_imposter_timer.start()
+	# warning-ignore:return_value_discarded
+	_imposter_timer.connect("timeout",self, "_imposter_spawn")
+
+"""
+/*
+* @pre None
+* @post sets everything for stage 3
+* @param None
+* @return None
+*/
+"""
+func stage_3(boss) -> void:
+	# Light up the cave
+	$Darkness.hide()
+	# Hide light from cave entrance
+	$Light2D.hide()
+	# Hide player torch light
+	$Player.get_node("light/Torch1").hide()
+	# Give player a sword
+	sword = preload("res://Scenes/player/Sword/Sword.tscn").instance()
+	sword.direction = "right"
+	sword.get_node("pivot").position = $Player.position + Vector2(60,20)
+	add_child_below_node($Player, sword)
+	Global.progress = 8
+	#spawn enemies from arena
+	spawn_stage_three_enemies()
+	#imposter spawns
+	var wait_for_start: Timer = Timer.new()
+	add_child(wait_for_start)
+	wait_for_start.wait_time = 5
+	wait_for_start.one_shot = false
+	wait_for_start.start()
+	# warning-ignore:return_value_discarded
+	wait_for_start.connect("timeout",self, "_imposter_spawn")
+	boss._set_invulnerability(true)
+	dummyBoss = boss
+
+"""
+/*
+* @pre Inside of combat phase in final boss
+* @post Turns on healthbars and swords for players
+* @param None
+* @return None
+*/
+"""
 func give_players_combat_power():
 	player.healthbar_visibility(true)
 	for o_player in server_players:
@@ -883,6 +945,7 @@ func _p1_died():
 """
 func spectate_mode():
 	spectate_text.show()
+	$GUI/spectate_instructions.show()
 	var spec_one = true
 	for p in server_players:
 		var p_obj = p.get('player_obj')
@@ -909,14 +972,11 @@ func spectate_mode():
 */
 """
 func check_everyone_dead() -> bool:
-	var main_player_dead = false
 	var server_players_dead = true
-	if _player_dead:
-		main_player_dead = true
 	for p in server_players:
 		if is_instance_valid(p.get('player_obj')):
 			server_players_dead = false
-	return (main_player_dead and server_players_dead)
+	return (_player_dead and server_players_dead)
 
 """
 /*

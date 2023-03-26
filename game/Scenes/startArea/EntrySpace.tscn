@@ -1,4 +1,4 @@
-[gd_scene load_steps=54 format=2]
+[gd_scene load_steps=55 format=2]
 
 [ext_resource path="res://Scenes/startArea/worldMap.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Scenes/player/player.tscn" type="PackedScene" id=2]
@@ -68,6 +68,10 @@ font_data = ExtResource( 6 )
 
 [sub_resource type="DynamicFont" id=20]
 size = 75
+font_data = ExtResource( 20 )
+
+[sub_resource type="DynamicFont" id=21]
+size = 20
 font_data = ExtResource( 20 )
 
 [sub_resource type="CircleShape2D" id=5]
@@ -161,7 +165,7 @@ current = true
 visible = false
 position = Vector2( 0, -45 )
 frames = SubResource( 15 )
-frame = 3
+frame = 4
 playing = true
 
 [node name="GUI" type="CanvasLayer" parent="."]
@@ -194,6 +198,17 @@ margin_right = 934.0
 margin_bottom = 84.0
 custom_fonts/font = SubResource( 20 )
 text = "Spectating"
+align = 1
+
+[node name="spectate_instructions" type="Label" parent="GUI"]
+visible = false
+margin_left = 512.0
+margin_top = 72.0
+margin_right = 748.0
+margin_bottom = 95.0
+custom_colors/font_color = Color( 0.133333, 0.145098, 0.929412, 1 )
+custom_fonts/font = SubResource( 21 )
+text = "Press Space to skip to another player"
 align = 1
 
 [node name="exitCaveArea" type="Area2D" parent="."]

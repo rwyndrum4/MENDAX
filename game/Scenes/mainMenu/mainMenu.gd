@@ -55,7 +55,7 @@ var _match_code: String = ""
 """
 func _ready():
 	initialize_menu()
-	get_parent().toggle_hotbar(false)
+	GlobalSignals.emit_signal("toggleHotbar", false)
 	# warning-ignore:return_value_discarded
 	ServerConnection.connect("character_spawned",self,"spawn_character")
 	# warning-ignore:return_value_discarded
@@ -94,7 +94,8 @@ func _on_Start_pressed():
 		delete_player_obj(player['player_obj'],player['text_obj'])
 	if ServerConnection.match_exists() and ServerConnection.get_server_status():
 		if num_players == 1:
-			get_parent().chat_box.chat_event_message(
+			GlobalSignals.emit_signal(
+				"exportEventMessage",
 				"Disconnecting from match, single player mode started",
 				"white"
 			)
@@ -108,7 +109,7 @@ func _on_Start_pressed():
 	else:
 		Global.player_names["1"] = Save.game_data.username
 	#change scene to start area
-	get_parent().show_money(true)
+	GlobalSignals.emit_signal("show_money_text", true)
 	GameLoot.init_players(len(Global.player_names))
 	SceneTrans.change_scene(Global.scenes.START_AREA)
 
@@ -227,10 +228,19 @@ func initialize_menu():
 	reset_multiplayer()
 	#If chat has not been swapped back from previous game 
 	if not ServerConnection._is_global_chat:
+		Global.reset() #reset all global variables needed for next game if played
 		ServerConnection.switch_chat_methods() #switch back to using global chat
 		ServerConnection.join_chat_async_general() #rejoin global chat
-		get_parent().chat_box.chat_event_message("Switched from match chat to global chat", "blue")
-		get_parent().chat_box.chat_event_message("Game fully reset, please create a new one if desired", "pink")
+		GlobalSignals.emit_signal(
+			"exportEventMessage",
+			"Swapped back to global chat, please create a new game if desired",
+			"pink"
+		)
+		GlobalSignals.emit_signal(
+			"exportEventMessage",
+			"Match list cleared, please create or join a newly created match",
+			"blue"
+		)
 	#check if there is a username
 	if Save.game_data.username == "":
 		var win_text = "Welcome to Mendax!"
@@ -298,7 +308,8 @@ func spawn_character(player_name:String):
 */
 """
 func despawn_character(player_name:String):
-	num_players = 0
+	Global.remove_player_from_match(player_name) #reset global player trackers
+	num_players = 0 #reset num_player, will get fixed in spawn_character var num times
 	var player_names_copy:Array = []
 	#Save the names of the players that are still in the game
 	for dict in player_objects:
@@ -331,14 +342,18 @@ func no_game_created():
 	var code: String = generate_random_code()
 	_match_code = code
 	if not ServerConnection.get_server_status():
-		get_parent().chat_box.chat_event_message("Server not available", "red")
+		GlobalSignals.emit_signal(
+			"exportEventMessage",
+			"Server not available",
+			"red"
+		)
 	else:
 		yield(ServerConnection.create_match_group(code), "completed") #create new group
 		yield(ServerConnection.join_chat_async_group(), "completed") #join group chat
 		yield(ServerConnection.create_match(code), "completed")
 		ServerConnection.switch_chat_methods() #switch from using glabal to match chat
-		get_parent().chat_box.chat_event_message("New game created!", "white")
-		get_parent().chat_box.chat_event_message("Switched from global chat to match chat", "pink")
+		GlobalSignals.emit_signal("exportEventMessage","New game created!","white")
+		GlobalSignals.emit_signal("exportEventMessage","Switched from global chat to match chat","pink")
 		$showLobbyCode/code.text = code
 		$createGameButton.text = "Leave match"
 
@@ -347,7 +362,7 @@ func game_already_created():
 	reset_multiplayer()
 	ServerConnection.switch_chat_methods() #switch back to using global chat
 	ServerConnection.join_chat_async_general() #rejoin global chat
-	get_parent().chat_box.chat_event_message("Switched from match chat to global chat", "blue")
+	GlobalSignals.emit_signal("exportEventMessage","Switched from match chat to global chat","blue")
 	$createGameButton.text = "Create match"
 	$showLobbyCode/code.text = "XXXX"
 
@@ -386,7 +401,7 @@ func _on_enterLobbyCode_focus_entered():
 func _on_enterLobbyCode_text_entered(new_text):
 	var code = new_text.to_upper()
 	if len(code) != 4:
-		get_parent().chat_box.chat_event_message("Invalid code", "pink")
+		GlobalSignals.emit_signal("exportEventMessage","Invalid code","pink")
 	else:
 		if ServerConnection.get_server_status():
 			if Global.match_exists(code) and not ServerConnection.match_exists():
@@ -403,11 +418,11 @@ func _on_enterLobbyCode_text_entered(new_text):
 				yield(ServerConnection.join_match_group(), "completed") #join group
 				yield(ServerConnection.join_chat_async_group(), "completed") #join general group chat
 				ServerConnection.switch_chat_methods() #switch chat id to new general id
-				get_parent().chat_box.chat_event_message("Joined match and swapped to match chat", "pink")
+				GlobalSignals.emit_signal("exportEventMessage","Joined match and swapped to match chat","pink")
 			else:
-				get_parent().chat_box.chat_event_message("Match not available", "red")
+				GlobalSignals.emit_signal("exportEventMessage","Match not available","red")
 		else:
-			get_parent().chat_box.chat_event_message("Server not available", "red")
+			GlobalSignals.emit_signal("exportEventMessage","Server not available","red")
 			code_line_edit.text = ""
 			code_line_edit.hide()
 
