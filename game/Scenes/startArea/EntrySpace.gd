@@ -863,6 +863,8 @@ func _other_player_swung_sword(player_id: int, direction: String):
 */
 """
 func _p1_died():
+	if is_instance_valid(sword):
+		sword.queue_free()
 	_player_dead = true
 	#No more imposter spawns
 	_imposter_timer.disconnect("timeout",self, "_imposter_spawn")
@@ -887,14 +889,13 @@ func spectate_mode():
 		if not is_instance_valid(p_obj):
 			continue
 		var spec_cam = Camera2D.new()
-		add_child_below_node(p.get('player_obj'),spec_cam)
+		p_obj.add_child(spec_cam)
 		p['camera'] = spec_cam
 		p['current_camera'] = false
 		if spec_one:
 			p['current_camera'] = true
 			var p_name = Global.get_player_name(p.get('num'))
 			change_spectate_text(p_name)
-			print("here")
 			spec_cam.clear_current()
 			spec_cam.make_current()
 			spec_one = false
@@ -961,7 +962,7 @@ func change_spectator():
 				continue
 			else:
 				p['current_camera'] = true
-				#p['camera'].clear_current()
+				p['camera'].clear_current()
 				p['camera'].make_current()
 				var p_name = Global.get_player_name(p.get('num'))
 				change_spectate_text(p_name)
