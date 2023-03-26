@@ -306,11 +306,13 @@ func remove_player_from_match(p_name:String) -> void:
 			var save_name = player_names[p_num_str]
 			var to_int = int(p_num_str)
 			var new_num_str = str(to_int - 1)
+			# warning-ignore:return_value_discarded
 			player_names.erase(p_num_str)
 			player_names[new_num_str] = save_name
 		elif player_names[p_num_str] == p_name:
 			found_desserter = true
 			desserter_value = p_num_str
+			# warning-ignore:return_value_discarded
 			player_names.erase(p_num_str)
 	#Code to fix the player_positions dictionary
 	found_desserter = false
@@ -320,12 +322,14 @@ func remove_player_from_match(p_name:String) -> void:
 			var tmp = player_positions[p_num_str]
 			var to_int = int(p_num_str)
 			var new_num_str = str(to_int - 1)
+			# warning-ignore:return_value_discarded
 			player_positions.erase(p_num_str)
 			player_names[new_num_str] = last_pos
 			last_pos = tmp
 		elif p_num_str == desserter_value:
 			found_desserter = true
 			last_pos = player_positions[p_num_str]
+			# warning-ignore:return_value_discarded
 			player_positions.erase(p_num_str)
 
 """

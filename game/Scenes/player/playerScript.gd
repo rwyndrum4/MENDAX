@@ -173,6 +173,7 @@ func stop_go_player(value:bool):
 */
 """
 func control_animations(vel:Vector2):
+	vel = vel.normalized()
 	#Character moves NorthEast
 	if vel.y < 0 and vel.x > 0:
 		char_pos.scale.x = -1
@@ -181,22 +182,33 @@ func control_animations(vel:Vector2):
 	elif vel.y < 0 and vel.x < 0:
 		char_pos.scale.x = 1
 		character.play("roll_northwest_" + player_color)
-	#Character moves East or SouthEast
-	elif vel.x > 0:
+	#Character moves East
+	elif vel.x > 0 and vel.y == 0:
+		char_pos.scale.x = 1
+		character.play("roll_east_" + player_color)
+	#Character moves West
+	elif vel.x < 0 and vel.y == 0:
+		char_pos.scale.x = -1
+		character.play("roll_east_" + player_color)
+	#Character SouthEast
+	elif vel.x > 0 and vel.y > 0:
 		char_pos.scale.x = 1
 		character.play("roll_southeast_" + player_color)
-	#Character moves West or SoutWest
-	elif vel.x < 0:
+	#Character moves SoutWest
+	elif vel.x < 0 and vel.y > 0:
 		char_pos.scale.x = -1
 		character.play("roll_southeast_" + player_color)
 	#Character moves North
-	elif vel.y < 0:
+	elif vel.x == 0 and vel.y < 0:
+		char_pos.scale.x = 1
 		character.play("roll_north_" + player_color)
 	#Character moves South
-	elif vel.y > 0:
+	elif vel.x == 0 and vel.y > 0:
+		char_pos.scale.x = 1
 		character.play("roll_south_" + player_color)
 	#Character not moving (idle)
 	else:
+		char_pos.scale.x = 1
 		character.play("idle_" + player_color)
 
 """

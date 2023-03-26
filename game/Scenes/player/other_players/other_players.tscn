@@ -1,4 +1,4 @@
-[gd_scene load_steps=130 format=2]
+[gd_scene load_steps=194 format=2]
 
 [ext_resource path="res://Scenes/player/other_players/other_players.gd" type="Script" id=1]
 [ext_resource path="res://Assets/ben-character/blue/idle/2.png" type="Texture" id=2]
@@ -127,6 +127,70 @@
 [ext_resource path="res://Assets/ben-character/red/rolling/1.png" type="Texture" id=125]
 [ext_resource path="res://Assets/shieldFull.png" type="Texture" id=126]
 [ext_resource path="res://Scenes/player/Shield.gd" type="Script" id=127]
+[ext_resource path="res://Assets/ben-character/orange/rolling-side/frame0010.png" type="Texture" id=128]
+[ext_resource path="res://Assets/ben-character/orange/rolling-side/frame0006.png" type="Texture" id=129]
+[ext_resource path="res://Assets/ben-character/red/rolling-side/frame0001.png" type="Texture" id=130]
+[ext_resource path="res://Assets/ben-character/blue/rolling-side/frame0006.png" type="Texture" id=131]
+[ext_resource path="res://Assets/ben-character/blue/rolling-side/frame0007.png" type="Texture" id=132]
+[ext_resource path="res://Assets/ben-character/orange/rolling-side/frame0004.png" type="Texture" id=133]
+[ext_resource path="res://Assets/ben-character/red/rolling-side/frame0012.png" type="Texture" id=134]
+[ext_resource path="res://Assets/ben-character/blue/rolling-side/frame0010.png" type="Texture" id=135]
+[ext_resource path="res://Assets/ben-character/orange/rolling-side/frame0015.png" type="Texture" id=136]
+[ext_resource path="res://Assets/ben-character/blue/rolling-side/frame0012.png" type="Texture" id=137]
+[ext_resource path="res://Assets/ben-character/orange/rolling-side/frame0002.png" type="Texture" id=138]
+[ext_resource path="res://Assets/ben-character/blue/rolling-side/frame0003.png" type="Texture" id=139]
+[ext_resource path="res://Assets/ben-character/orange/rolling-side/frame0014.png" type="Texture" id=140]
+[ext_resource path="res://Assets/ben-character/red/rolling-side/frame0004.png" type="Texture" id=141]
+[ext_resource path="res://Assets/ben-character/red/rolling-side/frame0006.png" type="Texture" id=142]
+[ext_resource path="res://Assets/ben-character/orange/rolling-side/frame0012.png" type="Texture" id=143]
+[ext_resource path="res://Assets/ben-character/red/rolling-side/frame0010.png" type="Texture" id=144]
+[ext_resource path="res://Assets/ben-character/red/rolling-side/frame0011.png" type="Texture" id=145]
+[ext_resource path="res://Assets/ben-character/red/rolling-side/frame0013.png" type="Texture" id=146]
+[ext_resource path="res://Assets/ben-character/blue/rolling-side/frame0005.png" type="Texture" id=147]
+[ext_resource path="res://Assets/ben-character/blue/rolling-side/frame0009.png" type="Texture" id=148]
+[ext_resource path="res://Assets/ben-character/blue/rolling-side/frame0015.png" type="Texture" id=149]
+[ext_resource path="res://Assets/ben-character/orange/rolling-side/frame0007.png" type="Texture" id=150]
+[ext_resource path="res://Assets/ben-character/red/rolling-side/frame0000.png" type="Texture" id=151]
+[ext_resource path="res://Assets/ben-character/blue/rolling-side/frame0013.png" type="Texture" id=152]
+[ext_resource path="res://Assets/ben-character/red/rolling-side/frame0009.png" type="Texture" id=153]
+[ext_resource path="res://Assets/ben-character/blue/rolling-side/frame0001.png" type="Texture" id=154]
+[ext_resource path="res://Assets/ben-character/blue/rolling-side/frame0008.png" type="Texture" id=155]
+[ext_resource path="res://Assets/ben-character/blue/rolling-side/frame0011.png" type="Texture" id=156]
+[ext_resource path="res://Assets/ben-character/blue/rolling-side/frame0014.png" type="Texture" id=157]
+[ext_resource path="res://Assets/ben-character/orange/rolling-side/frame0001.png" type="Texture" id=158]
+[ext_resource path="res://Assets/ben-character/orange/rolling-side/frame0003.png" type="Texture" id=159]
+[ext_resource path="res://Assets/ben-character/blue/rolling-side/frame0000.png" type="Texture" id=160]
+[ext_resource path="res://Assets/ben-character/orange/rolling-side/frame0000.png" type="Texture" id=161]
+[ext_resource path="res://Assets/ben-character/orange/rolling-side/frame0008.png" type="Texture" id=162]
+[ext_resource path="res://Assets/ben-character/orange/rolling-side/frame0009.png" type="Texture" id=163]
+[ext_resource path="res://Assets/ben-character/orange/rolling-side/frame0013.png" type="Texture" id=164]
+[ext_resource path="res://Assets/ben-character/blue/rolling-side/frame0002.png" type="Texture" id=165]
+[ext_resource path="res://Assets/ben-character/red/rolling-side/frame0003.png" type="Texture" id=166]
+[ext_resource path="res://Assets/ben-character/red/rolling-side/frame0005.png" type="Texture" id=167]
+[ext_resource path="res://Assets/ben-character/red/rolling-side/frame0014.png" type="Texture" id=168]
+[ext_resource path="res://Assets/ben-character/blue/rolling-side/frame0004.png" type="Texture" id=169]
+[ext_resource path="res://Assets/ben-character/orange/rolling-side/frame0005.png" type="Texture" id=170]
+[ext_resource path="res://Assets/ben-character/red/rolling-side/frame0002.png" type="Texture" id=171]
+[ext_resource path="res://Assets/ben-character/red/rolling-side/frame0007.png" type="Texture" id=172]
+[ext_resource path="res://Assets/ben-character/red/rolling-side/frame0008.png" type="Texture" id=173]
+[ext_resource path="res://Assets/ben-character/orange/rolling-side/frame0011.png" type="Texture" id=174]
+[ext_resource path="res://Assets/ben-character/greeen/rolling-side/frame0006.png" type="Texture" id=175]
+[ext_resource path="res://Assets/ben-character/red/rolling-side/frame0015.png" type="Texture" id=176]
+[ext_resource path="res://Assets/ben-character/greeen/rolling-side/frame0000.png" type="Texture" id=177]
+[ext_resource path="res://Assets/ben-character/greeen/rolling-side/frame0011.png" type="Texture" id=178]
+[ext_resource path="res://Assets/ben-character/greeen/rolling-side/frame0002.png" type="Texture" id=179]
+[ext_resource path="res://Assets/ben-character/greeen/rolling-side/frame0007.png" type="Texture" id=180]
+[ext_resource path="res://Assets/ben-character/greeen/rolling-side/frame0013.png" type="Texture" id=181]
+[ext_resource path="res://Assets/ben-character/greeen/rolling-side/frame0005.png" type="Texture" id=182]
+[ext_resource path="res://Assets/ben-character/greeen/rolling-side/frame0003.png" type="Texture" id=183]
+[ext_resource path="res://Assets/ben-character/greeen/rolling-side/frame0004.png" type="Texture" id=184]
+[ext_resource path="res://Assets/ben-character/greeen/rolling-side/frame0001.png" type="Texture" id=185]
+[ext_resource path="res://Assets/ben-character/greeen/rolling-side/frame0009.png" type="Texture" id=186]
+[ext_resource path="res://Assets/ben-character/greeen/rolling-side/frame0008.png" type="Texture" id=187]
+[ext_resource path="res://Assets/ben-character/greeen/rolling-side/frame0010.png" type="Texture" id=188]
+[ext_resource path="res://Assets/ben-character/greeen/rolling-side/frame0012.png" type="Texture" id=189]
+[ext_resource path="res://Assets/ben-character/greeen/rolling-side/frame0014.png" type="Texture" id=190]
+[ext_resource path="res://Assets/ben-character/greeen/rolling-side/frame0015.png" type="Texture" id=191]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 9, 9 )
@@ -152,6 +216,26 @@ animations = [ {
 "loop": true,
 "name": "idle_red",
 "speed": 6.0
+}, {
+"frames": [ ExtResource( 160 ), ExtResource( 154 ), ExtResource( 165 ), ExtResource( 139 ), ExtResource( 169 ), ExtResource( 147 ), ExtResource( 131 ), ExtResource( 132 ), ExtResource( 155 ), ExtResource( 148 ), ExtResource( 135 ), ExtResource( 156 ), ExtResource( 137 ), ExtResource( 152 ), ExtResource( 157 ), ExtResource( 149 ) ],
+"loop": true,
+"name": "roll_east_blue",
+"speed": 10.0
+}, {
+"frames": [ ExtResource( 177 ), ExtResource( 185 ), ExtResource( 179 ), ExtResource( 183 ), ExtResource( 184 ), ExtResource( 182 ), ExtResource( 175 ), ExtResource( 180 ), ExtResource( 187 ), ExtResource( 186 ), ExtResource( 188 ), ExtResource( 178 ), ExtResource( 189 ), ExtResource( 181 ), ExtResource( 190 ), ExtResource( 191 ) ],
+"loop": true,
+"name": "roll_east_green",
+"speed": 10.0
+}, {
+"frames": [ ExtResource( 161 ), ExtResource( 158 ), ExtResource( 138 ), ExtResource( 159 ), ExtResource( 133 ), ExtResource( 170 ), ExtResource( 129 ), ExtResource( 150 ), ExtResource( 162 ), ExtResource( 163 ), ExtResource( 128 ), ExtResource( 174 ), ExtResource( 143 ), ExtResource( 164 ), ExtResource( 140 ), ExtResource( 136 ) ],
+"loop": true,
+"name": "roll_east_orange",
+"speed": 10.0
+}, {
+"frames": [ ExtResource( 151 ), ExtResource( 130 ), ExtResource( 171 ), ExtResource( 166 ), ExtResource( 141 ), ExtResource( 167 ), ExtResource( 142 ), ExtResource( 172 ), ExtResource( 173 ), ExtResource( 153 ), ExtResource( 144 ), ExtResource( 145 ), ExtResource( 134 ), ExtResource( 146 ), ExtResource( 168 ), ExtResource( 176 ) ],
+"loop": true,
+"name": "roll_east_red",
+"speed": 10.0
 }, {
 "frames": [ ExtResource( 78 ), ExtResource( 27 ), ExtResource( 52 ), ExtResource( 66 ), ExtResource( 25 ), ExtResource( 38 ), ExtResource( 28 ), ExtResource( 31 ), ExtResource( 29 ), ExtResource( 64 ), ExtResource( 72 ), ExtResource( 45 ) ],
 "loop": true,
