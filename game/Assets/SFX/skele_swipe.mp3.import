@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/skele_swipe.mp3-f14e6aaba5e88ec4354cddb46722453d.mp3str"
+
+[deps]
+
+source_file="res://Assets/SFX/skele_swipe.mp3"
+dest_files=[ "res://.import/skele_swipe.mp3-f14e6aaba5e88ec4354cddb46722453d.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

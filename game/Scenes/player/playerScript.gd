@@ -30,6 +30,7 @@ const FRICTION = 500
 # Global velocity
 var velocity = Vector2.ZERO
 
+var is_walk: bool = false
 """
 /*
 * @pre Called once when player is initialized
@@ -164,27 +165,35 @@ func control_animations(vel:Vector2):
 	if vel.y < 0 and vel.x > 0:
 		char_pos.scale.x = -1
 		character.play("roll_northwest_" + player_color)
+		is_walk = true
 	#Character moves NorthWest
 	elif vel.y < 0 and vel.x < 0:
 		char_pos.scale.x = 1
 		character.play("roll_northwest_" + player_color)
+		is_walk = true
 	#Character moves East or SouthEast
 	elif vel.x > 0:
 		char_pos.scale.x = 1
 		character.play("roll_southeast_" + player_color)
+		is_walk = true
 	#Character moves West or SoutWest
 	elif vel.x < 0:
 		char_pos.scale.x = -1
 		character.play("roll_southeast_" + player_color)
+		is_walk = true
 	#Character moves North
 	elif vel.y < 0:
 		character.play("roll_north_" + player_color)
+		is_walk = true
 	#Character moves South
 	elif vel.y > 0:
 		character.play("roll_south_" + player_color)
+		is_walk = true
 	#Character not moving (idle)
 	else:
 		character.play("idle_" + player_color)
+		is_walk = false
+	walkCheck()
 
 """
 /*
@@ -236,3 +245,13 @@ func _invert_off(timer):
 	timer.queue_free()
 	isInverted = false
 	once = true
+
+func walkCheck():
+	var currently = $walk.is_playing()
+	if is_walk:
+		if currently:
+			pass
+		else:
+			$walk.playing = true
+	else:
+		$walk.playing = false
