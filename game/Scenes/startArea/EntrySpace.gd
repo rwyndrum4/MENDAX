@@ -555,14 +555,11 @@ func load_boss(stage_num:int):
 	var boss = preload("res://Scenes/FinalBoss/Boss.tscn").instance()
 	_enemies.append(boss)
 	# warning-ignore:return_value_discarded
-	if not is_connected("arena_enemy_hit",self,"_someone_hit_enemy"):
-		ServerConnection.connect("arena_enemy_hit",self,"_someone_hit_enemy")
+	ServerConnection.connect("arena_enemy_hit",self,"_someone_hit_enemy")
 	# warning-ignore:return_value_discarded
-	if not is_connected("arena_player_lost_health",self,"_other_player_hit"):
-		ServerConnection.connect("arena_player_lost_health",self,"_other_player_hit")
+	ServerConnection.connect("arena_player_lost_health",self,"_other_player_hit")
 	# warning-ignore:return_value_discarded
-	if not is_connected("arena_player_swung_sword",self,"_other_player_swung_sword"):
-		ServerConnection.connect("arena_player_swung_sword",self,"_other_player_swung_sword")
+	ServerConnection.connect("arena_player_swung_sword",self,"_other_player_swung_sword")
 	#What to do for each stage
 	if stage_num == 1:
 		stage_1()
@@ -1012,7 +1009,7 @@ func change_spectator():
 		if p['current_camera'] == true:
 			p['current_camera'] = false
 			next = true
-		if next:
+		elif next:
 			next = false
 			p['current_camera'] = true
 			p['camera'].clear_current()
