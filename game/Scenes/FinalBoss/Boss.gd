@@ -106,7 +106,7 @@ func _process(delta):
 	#Clause to make boss shift (not teleport) and spawn attack
 	if (_atk_timer - _atk_prev_timer > ANI_TIMER):
 		move_boss()
-		spawn_aoe_attack()
+		#spawn_aoe_attack()
 		_atk_prev_timer = _atk_timer
 	#If can teleport and timer premits, do it
 	if _can_teleport and (_tp_timer - _tp_prev_timer > TP_TIMER):
