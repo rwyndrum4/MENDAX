@@ -20,7 +20,10 @@ onready var healthbar = $ProgressBar
 onready var isInverted = false
 onready var shield = $Shield
 onready var current_powerup = "default"
-onready var steps = 0
+var speed_ticks
+var speed_wait_period
+var luck_steps
+var reach_light_growing
 var is_stopped = false
 var player_color:String = ""
 var once
@@ -134,10 +137,9 @@ func _physics_process(delta):
 	control_animations(velocity)
 	# Luck implementation
 	if (abs(input_velocity.x) > 0 or abs(input_velocity.y) > 0) and current_powerup == "luck":
-		steps+=1
-		print(steps)
-		if steps == 777:
-			steps = 0
+		luck_steps+=1
+		if luck_steps == 777:
+			luck_steps = 0
 			var player_id = 1
 			if ServerConnection.match_exists() and ServerConnection.get_server_status():
 				player_id = ServerConnection._player_num
@@ -152,14 +154,31 @@ func _physics_process(delta):
 """
 /*
 * @pre Called every frame
-* @post continual processes are handled
+* @post continual processes are handled (all related to powerups)
 * @param _delta : elapsed time (in seconds) since previous frame. Remove _ to use.
 * @return None
 */
 """
 func _process(_delta):
-	pass
-	
+	if current_powerup == "speed":
+		speed_ticks+=1
+		if speed_ticks == 8:
+			$PowerupIndicator.energy = 2
+			var rng = RandomNumberGenerator.new()
+			rng.randomize()
+			speed_wait_period = rng.randi_range(0, 80)
+		elif speed_ticks == 20 + speed_wait_period:
+			$PowerupIndicator.energy = 1
+			speed_ticks = 0
+	if current_powerup == "reach":
+		if reach_light_growing:
+			$PowerupIndicator.texture_scale = $PowerupIndicator.texture_scale + 0.004
+			if $PowerupIndicator.texture_scale >= 1.0:
+				reach_light_growing = false
+		else:
+			$PowerupIndicator.texture_scale = $PowerupIndicator.texture_scale - 0.004
+			if $PowerupIndicator.texture_scale <= 0.9:
+				reach_light_growing = true
 """
 /*
 * @pre Called in arena game, when player hit by littleGuy
@@ -335,15 +354,18 @@ func toggle_powerup(powerup):
 	elif powerup == "speed":
 		ACCELERATION = 40000
 		MAX_SPEED = 750
-		current_powerup = "speed"
+		speed_ticks = 0
+		speed_wait_period = 0
+		$PowerupIndicator.energy = 1
 		$PowerupIndicator.show()
 		$PowerupIndicator.color = "98f26b"
+		current_powerup = "speed"
 	elif powerup == "strength":
 		# increase sword damage
 		$MyHurtBox.dmgMod = 50
-		current_powerup = "strength"
 		$PowerupIndicator.show()
 		$PowerupIndicator.color = "bc2b2b"
+		current_powerup = "strength"
 	elif powerup == "endurance":
 		# increase max HP and heal for same amount
 		healthbar.max_value = 150
@@ -353,6 +375,7 @@ func toggle_powerup(powerup):
 		current_powerup = "endurance"
 	elif powerup == "luck":
 		# add luck effect that grants coin for travel time
+		luck_steps = 0
 		$PowerupIndicator.show()
 		$PowerupIndicator.color = "c7bc11"
 		current_powerup = "luck"
@@ -376,6 +399,8 @@ func toggle_powerup(powerup):
 	elif powerup == "reach":
 		# expand size of hurtbox
 		$MyHurtBox.get_node("hitbox").scale = $MyHurtBox.get_node("hitbox").scale*2
+		reach_light_growing = true
+		$PowerupIndicator.texture_scale = 0.9
 		$PowerupIndicator.show()
 		$PowerupIndicator.color = "f09653"
 		current_powerup = "reach"
@@ -383,7 +408,7 @@ func toggle_powerup(powerup):
 		# Hide torch (NOTE: need to make so this resumes torch progress)
 		$light.hide()
 		# show glow effect
+		$PowerupIndicator.texture_scale = 4
 		$PowerupIndicator.show()
 		$PowerupIndicator.color = "37e5dd"
-		$PowerupIndicator.texture_scale = 4
 		current_powerup = "glow"		
