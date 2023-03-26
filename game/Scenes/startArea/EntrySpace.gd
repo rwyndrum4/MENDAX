@@ -58,6 +58,7 @@ onready var spectate_text = $GUI/spectate_mode
 */
 """
 func _ready():
+	set_physics_process(false) #turn of physics until game should start
 	player.set_physics_process(false)
 	# warning-ignore:return_value_discarded
 	player.connect("p1_died", self, "_p1_died")
@@ -260,6 +261,7 @@ func _can_start_game_other():
 * @return None
 """
 func start_cave():
+	set_physics_process(true)
 	player.set_physics_process(true)
 	#Reset player trackers for next game
 	Global.reset_minigame_players()
@@ -553,11 +555,14 @@ func load_boss(stage_num:int):
 	var boss = preload("res://Scenes/FinalBoss/Boss.tscn").instance()
 	_enemies.append(boss)
 	# warning-ignore:return_value_discarded
-	ServerConnection.connect("arena_enemy_hit",self,"_someone_hit_enemy")
+	if not is_connected("arena_enemy_hit",self,"_someone_hit_enemy"):
+		ServerConnection.connect("arena_enemy_hit",self,"_someone_hit_enemy")
 	# warning-ignore:return_value_discarded
-	ServerConnection.connect("arena_player_lost_health",self,"_other_player_hit")
+	if not is_connected("arena_player_lost_health",self,"_other_player_hit"):
+		ServerConnection.connect("arena_player_lost_health",self,"_other_player_hit")
 	# warning-ignore:return_value_discarded
-	ServerConnection.connect("arena_player_swung_sword",self,"_other_player_swung_sword")
+	if not is_connected("arena_player_swung_sword",self,"_other_player_swung_sword"):
+		ServerConnection.connect("arena_player_swung_sword",self,"_other_player_swung_sword")
 	#What to do for each stage
 	if stage_num == 1:
 		stage_1()

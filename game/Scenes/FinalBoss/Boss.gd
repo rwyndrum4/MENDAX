@@ -45,7 +45,7 @@ var _atk_positions: Array = [
 		Vector2(-7500,3100),
 		Vector2(-100,3000)
 	]
-var _atk_objects: Array = [] #array to store objects of aoe attacks
+var _atk_objects: Dictionary = {} #array to store objects of aoe attacks
 
 #Objects
 var aoe_attack = preload("res://Scenes/BossAttacks/AoeSlam.tscn")
@@ -106,7 +106,7 @@ func _process(delta):
 	#Clause to make boss shift (not teleport) and spawn attack
 	if (_atk_timer - _atk_prev_timer > ANI_TIMER):
 		move_boss()
-		#spawn_aoe_attack()
+		spawn_aoe_attack()
 		_atk_prev_timer = _atk_timer
 	#If can teleport and timer premits, do it
 	if _can_teleport and (_tp_timer - _tp_prev_timer > TP_TIMER):
@@ -235,10 +235,9 @@ func get_aoe_pos() -> Vector2:
 * @return None
 """
 func _delete_atk_from_server(atk_id:int) -> void:
-	var cur_atk = _atk_objects[atk_id]
+	var cur_atk = _atk_objects.get(atk_id)
 	if is_instance_valid(cur_atk):
 		cur_atk.queue_free()
-
 
 """
 /*
@@ -273,9 +272,10 @@ func _del_animation(warAni):
 """
 func _atk_can_go(atk,x_sprite):
 	x_sprite.queue_free()
-	atk.set_id(len(_atk_objects))
+	var id = len(_atk_objects)
+	atk.set_id(id)
 	get_parent().add_child(atk)
-	_atk_objects.append(atk)
+	_atk_objects[id] = atk
 	atk.connect("aoe_attack_hit",self,"_delete_aoe_atk", [atk])
 
 """
