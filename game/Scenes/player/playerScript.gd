@@ -20,6 +20,7 @@ onready var healthbar = $ProgressBar
 onready var isInverted = false
 onready var shield = $Shield
 onready var current_powerup = "default"
+onready var steps = 0
 var is_stopped = false
 var player_color:String = ""
 var once
@@ -131,7 +132,34 @@ func _physics_process(delta):
 	velocity = move_and_slide(velocity)
 	#Animate character
 	control_animations(velocity)
-
+	# Luck implementation
+	if (abs(input_velocity.x) > 0 or abs(input_velocity.y) > 0) and current_powerup == "luck":
+		steps+=1
+		print(steps)
+		if steps == 777:
+			steps = 0
+			var player_id = 1
+			if ServerConnection.match_exists() and ServerConnection.get_server_status():
+				player_id = ServerConnection._player_num
+			var player_name = Global.get_player_name(player_id)
+			GameLoot.add_to_coin(player_id, 1)
+			if player_name == Save.game_data.username:
+				var total_coin = GameLoot.get_coin_val(player_id)
+				get_parent().get_parent().change_money(total_coin)
+				PlayerInventory.add_item("Coin", 1)
+			
+	
+"""
+/*
+* @pre Called every frame
+* @post continual processes are handled
+* @param _delta : elapsed time (in seconds) since previous frame. Remove _ to use.
+* @return None
+*/
+"""
+func _process(_delta):
+	pass
+	
 """
 /*
 * @pre Called in arena game, when player hit by littleGuy
@@ -276,13 +304,11 @@ func toggle_powerup(powerup):
 		if current_powerup == "sus":
 			powerup = "reach"
 		if current_powerup == "reach":
-			powerup = "thorns"
-		if current_powerup == "thorns":
 			powerup = "glow"
 		if current_powerup == "glow":
 			powerup = "default"
 	# Remove effects of current powerup
-	# Don't need to worry about "default" case here
+	# Don't need to worry about "default"  or "luck" case here as these rely only on the current_powerup field being set
 	if current_powerup == "speed":
 		ACCELERATION = 25000
 		MAX_SPEED = 500
@@ -292,17 +318,11 @@ func toggle_powerup(powerup):
 	if current_powerup == "endurance":
 		# reduce max HP back to normal
 		healthbar.max_value = 100
-	elif current_powerup == "luck":
-		# remove luck effect
-		pass
 	elif current_powerup == "sus":
 		set_color(ServerConnection._player_num)
 	elif current_powerup == "reach":
 		# change hurtbox back to normal size
 		$MyHurtBox.get_node("hitbox").scale = $MyHurtBox.get_node("hitbox").scale/2
-	elif current_powerup == "thorns":
-		# remove thorns effect from hitbox
-		pass
 	elif current_powerup == "glow":
 		# show torch (NOTE: need to make so this resumes torch progress)
 		$light.show()
@@ -359,11 +379,6 @@ func toggle_powerup(powerup):
 		$PowerupIndicator.show()
 		$PowerupIndicator.color = "f09653"
 		current_powerup = "reach"
-	elif powerup == "thorns":
-		# add thorns effect to hitbox
-		$PowerupIndicator.show()
-		$PowerupIndicator.color = "410f5a"
-		current_powerup = "thorns"
 	elif powerup == "glow":
 		# Hide torch (NOTE: need to make so this resumes torch progress)
 		$light.hide()
