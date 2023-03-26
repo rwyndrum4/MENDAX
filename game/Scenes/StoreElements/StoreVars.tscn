@@ -81,6 +81,11 @@ stream = ExtResource( 5 )
 volume_db = -16.526
 bus = "Music"
 
+[node name="ItemList" type="ItemList" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+max_columns = 3
+
 [connection signal="pressed" from="Node2D/VBoxContainer/addMoney" to="." method="_on_addMoney_pressed"]
 [connection signal="pressed" from="Node2D/VBoxContainer/subMoney" to="." method="_on_subMoney_pressed"]
 [connection signal="pressed" from="Node2D/Back2Menu" to="." method="_on_Back2Menu_pressed"]
