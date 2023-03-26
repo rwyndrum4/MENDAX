@@ -893,6 +893,7 @@ func spectate_mode():
 			p['current_camera'] = true
 			var p_name = Global.get_player_name(p.get('num'))
 			change_spectate_text(p_name)
+			print("here")
 			spec_cam.clear_current()
 			spec_cam.make_current()
 			spec_one = false
@@ -958,7 +959,7 @@ func change_spectator():
 				continue
 			else:
 				p['current_camera'] = true
-				p['camera'].clear_current()
+				#p['camera'].clear_current()
 				p['camera'].make_current()
 				var p_name = Global.get_player_name(p.get('num'))
 				change_spectate_text(p_name)
