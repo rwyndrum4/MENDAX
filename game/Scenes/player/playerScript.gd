@@ -307,29 +307,39 @@ func toggle_powerup(powerup):
 		# show torch (NOTE: need to make so this resumes torch progress)
 		$light.show()
 		# hide glow effect
-		$Glow.hide()
+		$PowerupIndicator.texture_scale = 1
 	# Set effects of new powerup
 	if powerup == "default":
+		$PowerupIndicator.hide()
 		current_powerup = "default"
 	elif powerup == "speed":
 		ACCELERATION = 40000
 		MAX_SPEED = 750
 		current_powerup = "speed"
+		$PowerupIndicator.show()
+		$PowerupIndicator.color = "98f26b"
 	elif powerup == "strength":
 		# increase sword damage
 		$MyHurtBox.dmgMod = 50
 		current_powerup = "strength"
+		$PowerupIndicator.show()
+		$PowerupIndicator.color = "bc2b2b"
 	elif powerup == "endurance":
 		# increase max HP and heal for same amount
 		healthbar.max_value = 150
 		healthbar.value+=50
+		$PowerupIndicator.show()
+		$PowerupIndicator.color = "2b2ebc"
 		current_powerup = "endurance"
 	elif powerup == "luck":
 		# add luck effect that grants coin for travel time
+		$PowerupIndicator.show()
+		$PowerupIndicator.color = "c7bc11"
 		current_powerup = "luck"
 	elif powerup == "sus":
 		# change sprite color
 		var rng = RandomNumberGenerator.new()
+		rng.randomize()
 		var colors
 		if player_color == "blue":
 			colors = ["red", "green", "orange"]
@@ -341,17 +351,24 @@ func toggle_powerup(powerup):
 			colors = ["blue", "red", "green"]
 		var rand_index = rng.randi_range(0,2)
 		player_color = colors[rand_index]
+		$PowerupIndicator.hide()
 		current_powerup = "sus"
 	elif powerup == "reach":
 		# expand size of hurtbox
 		$MyHurtBox.get_node("hitbox").scale = $MyHurtBox.get_node("hitbox").scale*2
+		$PowerupIndicator.show()
+		$PowerupIndicator.color = "f09653"
 		current_powerup = "reach"
 	elif powerup == "thorns":
 		# add thorns effect to hitbox
+		$PowerupIndicator.show()
+		$PowerupIndicator.color = "410f5a"
 		current_powerup = "thorns"
 	elif powerup == "glow":
 		# Hide torch (NOTE: need to make so this resumes torch progress)
 		$light.hide()
 		# show glow effect
-		$Glow.show()
+		$PowerupIndicator.show()
+		$PowerupIndicator.color = "37e5dd"
+		$PowerupIndicator.texture_scale = 4
 		current_powerup = "glow"		
