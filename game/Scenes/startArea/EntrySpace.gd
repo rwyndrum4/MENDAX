@@ -1021,7 +1021,8 @@ func change_spectator():
 	#If last player was the one who had the camera
 	if next:
 		for p in server_players:
-			if not is_instance_valid(p):
+			var p_obj = p.get('player_obj')
+			if not is_instance_valid(p_obj):
 				continue
 			else:
 				p['current_camera'] = true
