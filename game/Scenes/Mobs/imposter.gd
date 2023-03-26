@@ -34,7 +34,8 @@ func _ready():
 		imposter_color = "red"
 	
 func _physics_process(_delta):
-	if not is_instance_valid(get_parent().get_node("Player")):
+	if get_parent()._player_dead:
+		queue_free()
 		return
 	var player_pos = null
 	#if not get_parent()._player_dead:
