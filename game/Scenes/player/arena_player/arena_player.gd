@@ -19,6 +19,7 @@ var _global_sword_dir = "right"
 var player_color: String = ""
 var is_stopped = false
 var player_id: int = 0
+var is_walk: bool = false
 
 # Player physics constants
 const ACCELERATION = 25000
@@ -60,6 +61,7 @@ func _physics_process(_delta):
 #	elif _global_sword_dir == "left":
 #		p_sword.position = (self.position/40) + Vector2(-60,-60)
 
+
 """
 /*
 * @pre None
@@ -73,10 +75,12 @@ func control_animations(vel):
 	#Character moves NorthEast
 	if vel.y < 0 and vel.x > 0:
 		char_pos.scale.x = -1
+		is_walk = true
 		character.play("roll_northwest_" + player_color)
 	#Character moves NorthWest
 	elif vel.y < 0 and vel.x < 0:
 		char_pos.scale.x = 1
+		is_walk = true
 		character.play("roll_northwest_" + player_color)
 	#Character moves East
 	elif vel.x > 0 and vel.y == 0:
@@ -89,24 +93,29 @@ func control_animations(vel):
 	#Character SouthEast
 	elif vel.x > 0 and vel.y > 0:
 		char_pos.scale.x = 1
+		is_walk = true
 		character.play("roll_southeast_" + player_color)
 	#Character moves SoutWest
 	elif vel.x < 0 and vel.y > 0:
 		char_pos.scale.x = -1
+		is_walk = true
 		character.play("roll_southeast_" + player_color)
 	#Character moves North
 	elif vel.x == 0 and vel.y < 0:
 		char_pos.scale.x = 1
 		character.play("roll_north_" + player_color)
+		is_walk = true
 	#Character moves South
 	elif vel.x == 0 and vel.y > 0:
 		char_pos.scale.x = 1
 		character.play("roll_south_" + player_color)
+		is_walk = true
 	#Character not moving (idle)
 	else:
 		char_pos.scale.x = 1
 		character.play("idle_" + player_color)
-
+		is_walk = false
+	walkCheck()
 """
 /*
 * @pre Called by when it detects a "hit" from a hitbox
@@ -196,3 +205,19 @@ func sword_visibility(value:bool):
 """
 func healthbar_visibility(value:bool):
 	$ProgressBar.visible = value
+
+"""
+* @pre None
+* @post sets walk play sound if is_walk is true
+* @param None
+* @return None
+"""
+func walkCheck():
+	var currently = $walk.is_playing()
+	if is_walk:
+		if currently:
+			pass
+		else:
+			$walk.playing = true
+	else:
+		$walk.playing = false

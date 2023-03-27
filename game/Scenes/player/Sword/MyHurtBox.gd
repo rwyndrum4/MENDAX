@@ -8,6 +8,8 @@ class_name MyHurtBox
 
 extends Area2D
 
+var dmgMod = 0
+
 """
 /*
 * @pre Called when made

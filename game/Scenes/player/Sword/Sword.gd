@@ -18,6 +18,10 @@ var direction
 """
 func _ready():
 	$pivot/Sprite/MyHitBox.add_to_group("sword")
+	# warning-ignore:return_value_discarded
+	GlobalSignals.connect("reach",self,"reach_up")
+	$pivot/Sprite/MyHitBox.set_type("player")
+
 
 """
 /*
@@ -58,3 +62,17 @@ func _process(_delta):
 		$pivot.scale.x = 1
 		
 		direction = "right"
+		
+"""
+* @pre Catches "reach" signal
+* @post activates or deactivates effect of "reach" powerup
+* @param state -> indicates whether the function should activate or deactivate
+"""		
+func reach_up(state):
+	if state == "deactivate":
+		$pivot/Sprite/MyHitBox/CollisionShape2D.position.y += 40
+		$pivot/Sprite/MyHitBox/CollisionShape2D.scale.y /= 1.5
+	elif state == "activate":
+		$pivot/Sprite/MyHitBox/CollisionShape2D.position.y -= 40
+		$pivot/Sprite/MyHitBox/CollisionShape2D.scale.y *= 1.5
+

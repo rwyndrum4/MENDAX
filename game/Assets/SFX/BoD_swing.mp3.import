@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/BoD_swing.mp3-1ed475f6ea9790c8f491654d68b82448.mp3str"
+
+[deps]
+
+source_file="res://Assets/SFX/BoD_swing.mp3"
+dest_files=[ "res://.import/BoD_swing.mp3-1ed475f6ea9790c8f491654d68b82448.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

@@ -318,7 +318,7 @@ collision_mask = 0
 script = ExtResource( 3 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="pivot/Sprite/MyHitBox"]
-position = Vector2( -0.690361, -42.7144 )
+position = Vector2( -0.69036, -42.7144 )
 shape = SubResource( 1 )
 disabled = true
 

@@ -98,3 +98,19 @@ signal toggleHotbar(setter)
 """
 # warning-ignore:unused_signal
 signal show_money_text(setter)
+
+"""
+* Purpose - Send a signal when a player activates/deactivates the reach powerup
+* Used in - playerScript.gd, arena_player.gd
+* Parameter - state -> denotes whether effect of powerup should be removed or added
+"""
+# warning-ignore:unused_signal
+signal reach(state)
+
+"""
+* Purpose - Send a signal when the strength power up is in use
+* Used in - mainmenu, player, and entry space
+* Parameter - dmg -> how much damage the sword will gain
+"""
+# warning-ignore:unused_signal
+signal strength(dmg)

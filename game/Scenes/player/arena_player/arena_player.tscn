@@ -192,7 +192,7 @@
 [ext_resource path="res://Assets/ben-character/greeen/rolling-side/frame0012.png" type="Texture" id=190]
 [ext_resource path="res://Assets/ben-character/greeen/rolling-side/frame0014.png" type="Texture" id=191]
 [ext_resource path="res://Assets/ben-character/greeen/rolling-side/frame0015.png" type="Texture" id=192]
-
+[ext_resource path="res://Assets/SFX/walk.mp3" type="AudioStream" id=193]
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 9, 9 )
 
@@ -590,3 +590,12 @@ script = ExtResource( 127 )
 
 [node name="ShieldDelay" type="Timer" parent="Shield"]
 one_shot = true
+
+[node name="walk" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 193 )
+volume_db = 10.0
+max_distance = 1500.0
+attenuation = 2.6
+bus = "SFX"
+
+[connection signal="area_entered" from="sword_detector" to="." method="_on_sword_detector_area_entered"]

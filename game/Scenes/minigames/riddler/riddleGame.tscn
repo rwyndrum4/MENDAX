@@ -1,8 +1,9 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=28 format=2]
 
 [ext_resource path="res://Assets/Teko-Light.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://Scenes/minigames/riddler/riddleGame.gd" type="Script" id=2]
 [ext_resource path="res://Scenes/player/player.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Assets/mainMenuAssets/Chest-spritesheet.png" type="Texture" id=4]
 [ext_resource path="res://Scenes/minigames/riddler/riddlerMap.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Scenes/textBox/textBox.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Scenes/Jester/jester.tscn" type="PackedScene" id=7]
@@ -32,6 +33,47 @@ extents = Vector2( 90, 92.5 )
 
 [sub_resource type="RectangleShape2D" id=3]
 extents = Vector2( 48.5, 48.5 )
+
+[sub_resource type="RectangleShape2D" id=21]
+extents = Vector2( 20.46, 19.3171 )
+
+[sub_resource type="AtlasTexture" id=13]
+flags = 4
+atlas = ExtResource( 4 )
+region = Rect2( 0, 132, 66, 66 )
+
+[sub_resource type="AtlasTexture" id=14]
+flags = 4
+atlas = ExtResource( 4 )
+region = Rect2( 132, 66, 66, 66 )
+
+[sub_resource type="AtlasTexture" id=15]
+flags = 4
+atlas = ExtResource( 4 )
+region = Rect2( 132, 0, 66, 66 )
+
+[sub_resource type="AtlasTexture" id=16]
+flags = 4
+atlas = ExtResource( 4 )
+region = Rect2( 66, 66, 66, 66 )
+
+[sub_resource type="AtlasTexture" id=17]
+flags = 4
+atlas = ExtResource( 4 )
+region = Rect2( 0, 66, 66, 66 )
+
+[sub_resource type="AtlasTexture" id=18]
+flags = 4
+atlas = ExtResource( 4 )
+region = Rect2( 66, 0, 66, 66 )
+
+[sub_resource type="SpriteFrames" id=19]
+animations = [ {
+"frames": [ SubResource( 13 ), SubResource( 14 ), SubResource( 15 ), SubResource( 16 ), SubResource( 17 ), SubResource( 18 ) ],
+"loop": false,
+"name": "open",
+"speed": 5.0
+} ]
 
 [sub_resource type="Curve2D" id=10]
 _data = {
@@ -251,28 +293,28 @@ position = Vector2( 1, 4 )
 shape = SubResource( 3 )
 
 [node name="item6area" type="Area2D" parent="."]
-visible = false
 position = Vector2( 1200, 1200 )
 collision_layer = 4
 collision_mask = 2
 
 [node name="itemareacollision" type="CollisionShape2D" parent="item6area"]
-position = Vector2( 3, -1 )
+position = Vector2( -937, -1011 )
 scale = Vector2( 1.5, 1.5 )
 shape = SubResource( 4 )
 
 [node name="item6" type="Area2D" parent="." groups=["hints"]]
-visible = false
 position = Vector2( 1200, 1200 )
 
-[node name="Sprite" type="Sprite" parent="item6"]
-position = Vector2( -1.99988, -6 )
-scale = Vector2( 0.2, 0.2 )
-texture = ExtResource( 8 )
+[node name="CollisionShape2D" type="CollisionShape2D" parent="item6"]
+position = Vector2( -931.44, -1017.8 )
+scale = Vector2( 3.45455, 3.2197 )
+shape = SubResource( 21 )
 
-[node name="itemcollision" type="CollisionShape2D" parent="item6"]
-position = Vector2( 1, 2 )
-shape = SubResource( 3 )
+[node name="AnimatedSprite" type="AnimatedSprite" parent="item6"]
+position = Vector2( -936, -1002.25 )
+scale = Vector2( 3.45455, 3.2197 )
+frames = SubResource( 19 )
+animation = "open"
 
 [node name="riddler" parent="." instance=ExtResource( 7 )]
 position = Vector2( -293, 180 )

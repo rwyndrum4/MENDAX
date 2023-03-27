@@ -40,6 +40,7 @@ func _ready():
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("textbox_empty",self,"turn_on_physics")
 
+
 """
 /*
 * @pre Called every frame
@@ -127,7 +128,9 @@ func _on_AnimationPlayer_animation_finished(_anim_name):
 		if !isIn:			
 			BodAnim.play("idle")
 		else:
+			$atk.play()
 			BodAnim.play("attack1")
+			
 	else:
 		$death.play()
 		yield($death, "finished")

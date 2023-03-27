@@ -28,7 +28,7 @@ var isDead = false
 var _player_target: int = 1
 
 # Global velocity
-var velocity = Vector2.ZERO
+var velocity = Vector2(1,1)
 var BASE_SPEED = 0.7
 var BASE_ACCELERATION = 500
 
@@ -44,12 +44,13 @@ func _ready():
 	_has_spawned = true
 	if _leveled_up:
 		level_up()
-	var anim = get_node("skeletonAnimationPlayer").get_animation("idle")
+	var anim = get_node("skeletonAnimationPlayer").get_animation("walk")
 	anim.set_loop(true)
 	skeletonAnim.play("idle")
 	healthbar.value = 100;
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("textbox_empty",self,"turn_on_physics")
+
 	
 """
 /*
@@ -214,9 +215,15 @@ func _on_detector_body_exited(_body):
 func _on_skeletonAnimationPlayer_animation_finished(_anim_name):
 	if !isDead:
 		if !isIn:			
-			skeletonAnim.play("idle")
+			if velocity == Vector2.ZERO:
+				skeletonAnim.play("idle")
+			else:
+				skeletonAnim.play("walk")
+			
 		else:
+			$atk.play()
 			skeletonAnim.play("attack1")
+			
 	else:
 		set_physics_process(false)
 		$death.play()
