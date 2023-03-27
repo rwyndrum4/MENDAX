@@ -8,6 +8,8 @@ signal aoe_attack_hit()
 func _ready():
 	scale = Vector2(2,2)
 	drawing.play("default")
+	$bwam.play()
+	$swoosh.playing = true
 
 func _process(_delta):
 	scale += _speed

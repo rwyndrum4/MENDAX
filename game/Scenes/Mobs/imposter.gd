@@ -1,3 +1,10 @@
+"""
+* Programmer Name - Jason Truong
+* Description - Code that designates mob animations
+* Date Created - 3/12/2022
+* Date Revisions:
+	3/25/2023 - Imposter stun fixes
+"""
 extends KinematicBody2D
 
 onready var character = $position/animated_sprite
@@ -22,6 +29,8 @@ var velocity = Vector2.ZERO
 var BASE_SPEED = 250
 var BASE_ACCELERATION = 500
 
+var is_walk: bool = false
+
 func _ready():
 	is_hit = false
 	randomize()
@@ -43,9 +52,7 @@ func _physics_process(_delta):
 	velocity = position.direction_to(player_pos)* BASE_SPEED
 	velocity = move_and_slide(velocity)
 	control_animations(velocity)
-	#else:
 	
-	#control_animations(velocity)
 
 
 """
@@ -83,30 +90,44 @@ func control_animations(vel:Vector2):
 	if vel.y < 0 and vel.x > 0:
 		char_pos.scale.x = -1
 		character.play("roll_northwest_" + imposter_color)
+		is_walk = true
 	#Character moves NorthWest
 	elif vel.y < 0 and vel.x < 0:
 		char_pos.scale.x = 1
 		character.play("roll_northwest_" + imposter_color)
+		is_walk = true
 	#Character moves East or SouthEast
 	elif vel.x > 0:
 		char_pos.scale.x = 1
 		character.play("roll_southeast_" + imposter_color)
+		is_walk = true
 	#Character moves West or SoutWest
 	elif vel.x < 0:
 		char_pos.scale.x = -1
 		character.play("roll_southeast_" + imposter_color)
+		is_walk = true
 	#Character moves North
 	elif vel.y < 0:
 		character.play("roll_north_" + imposter_color)
+		is_walk = true
 	#Character moves South
 	elif vel.y > 0:
 		character.play("roll_south_" + imposter_color)
+		is_walk = true
 	#Character not moving (idle)
 	else:
 		character.play("idle_" + imposter_color)
+		is_walk = false
+	walkCheck()
 
-
-
+"""
+/*
+* @pre None
+* @post imposter dequeues after explosion and player that got hit gets stunned
+* @param body
+* @return None
+*/
+"""
 func _on_Area2D_body_entered(body):
 	if "Player" in body.name:
 		is_hit = true
@@ -115,6 +136,8 @@ func _on_Area2D_body_entered(body):
 		set_physics_process(false)
 		area2d.queue_free()
 		collisionbox.queue_free()
+		$walk.playing = false
+		$boom.play()
 		character.play("explosion")
 		#enter health bar stuff here
 		Player.take_damage(10)
@@ -128,13 +151,34 @@ func _on_Area2D_body_entered(body):
 		queue_free()
 
 
-
+"""
+/*
+* @pre None
+* @post Imposter explodes and dequeues
+* @param None
+* @return None
+*/
+"""
+#Timer for imposter till explodes
 func _on_Timer_timeout():
 	if !is_hit:
 		set_physics_process(false)
 		area2d.queue_free()
 		collisionbox.queue_free()
+		$walk.playing = false
+		$boom.play()
 		character.play("explosion")
 		yield(character, "animation_finished")
 		queue_free() # Replace with function body.
 	return
+
+func walkCheck():
+
+	var currently = $walk.is_playing()
+	if is_walk:
+		if currently:
+			pass
+		else:
+			$walk.playing = true
+	else:
+		$walk.playing = false
