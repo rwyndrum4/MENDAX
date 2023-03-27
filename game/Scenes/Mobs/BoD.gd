@@ -40,6 +40,7 @@ func _ready():
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("textbox_empty",self,"turn_on_physics")
 
+
 """
 /*
 * @pre Called every frame

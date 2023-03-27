@@ -74,3 +74,11 @@ signal playerDeath(playerID)
 """
 # warning-ignore:unused_signal
 signal enemyDefeated(enemyID)
+
+"""
+* Purpose - Send a signal when the strength power up is in use
+* Used in - mainmenu, player, and entry space
+* Parameter - dmg -> how much damage the sword will gain
+"""
+# warning-ignore:unused_signal
+signal strength(dmg)

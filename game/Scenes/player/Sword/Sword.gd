@@ -18,6 +18,8 @@ var direction
 """
 func _ready():
 	$pivot/Sprite/MyHitBox.add_to_group("sword")
+	$pivot/Sprite/MyHitBox.set_type("player")
+
 
 """
 /*
@@ -58,3 +60,4 @@ func _process(_delta):
 		$pivot.scale.x = 1
 		
 		direction = "right"
+

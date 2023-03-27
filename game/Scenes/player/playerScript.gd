@@ -336,7 +336,7 @@ func toggle_powerup(powerup):
 		MAX_SPEED = 500
 	elif current_powerup == "strength":
 		# reduce damage back to normal
-		$MyHurtBox.dmgMod = 0
+		GlobalSignals.emit_signal("strength", -50)
 	if current_powerup == "endurance":
 		# reduce max HP back to normal
 		healthbar.max_value = 100
@@ -365,7 +365,7 @@ func toggle_powerup(powerup):
 		current_powerup = "speed"
 	elif powerup == "strength":
 		# increase sword damage
-		$MyHurtBox.dmgMod = 50
+		GlobalSignals.emit_signal("strength", 50)
 		$PowerupIndicator.show()
 		$PowerupIndicator.color = "bc2b2b"
 		current_powerup = "strength"
