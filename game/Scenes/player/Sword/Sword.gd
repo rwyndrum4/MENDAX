@@ -69,7 +69,9 @@ func _process(_delta):
 """		
 func reach_up(state):
 	if state == "deactivate":
-		$pivot/Sprite/MyHitBox/CollisionShape2D.scale = $pivot/Sprite/MyHitBox/CollisionShape2D.scale/4
+		$pivot/Sprite/MyHitBox/CollisionShape2D.position.y += 40
+		$pivot/Sprite/MyHitBox/CollisionShape2D.scale.y /= 1.5
 	elif state == "activate":
-		$pivot/Sprite/MyHitBox/CollisionShape2D.scale = $pivot/Sprite/MyHitBox/CollisionShape2D.scale*4
+		$pivot/Sprite/MyHitBox/CollisionShape2D.position.y -= 40
+		$pivot/Sprite/MyHitBox/CollisionShape2D.scale.y *= 1.5
 
