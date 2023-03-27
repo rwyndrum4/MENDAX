@@ -9,24 +9,38 @@
 extends Panel
 
 var default_tex = preload("res://Assets/2D Casual GUI/Usable/menu_tile.png")
-var empty_tex = null
+var highlighted_tex = preload("res://Assets/2D Casual GUI/Usable/highlighted_tile.png")
 
 var default_style: StyleBoxTexture = null
-var empty_style: StyleBoxTexture = null
+var highlighted_style: StyleBoxTexture = null
 
 var item = null
 var ItemClass = preload("res://Inventory/Item.tscn")
 var slot_index
 
+enum SlotType {
+	HOTBAR = 0,
+	INVENTORY,
+	SHIRT,
+	PANTS,
+	SHOES,
+}
+
+var slotType = null
+
 func refresh_style(): # useful for having a new empty inventory slot icon
-	pass
+	if slotType == SlotType.HOTBAR and PlayerInventory.active_item_slot == slot_index:
+		set('custom_styles/panel', highlighted_style)
+	else:
+		set('custom_styles/panel', default_style)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	default_style = StyleBoxTexture.new()
-	empty_style = StyleBoxTexture.new()
+	highlighted_style = StyleBoxTexture.new()
+	default_style.texture = default_tex
+	highlighted_style.texture = highlighted_tex
 	refresh_style()
-
 
 func pickFromSlot():
 	remove_child(item)

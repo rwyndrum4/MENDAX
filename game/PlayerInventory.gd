@@ -1,12 +1,17 @@
 extends Node
 
+signal active_item_updated
+
 const SlotClass = preload("res://Inventory/Slot.gd")
 const ItemClass = preload("res://Inventory/Item.gd")
 const NUM_INVENTORY_SLOTS = 20
+const NUM_HOTBAR_SLOTS = 3
+
+var active_item_slot = 0
 
 #--> slot_index: [item_name, item_quantity]
 var inventory = {
-	0: ["Coin", 0],
+	0: ["Coin", 10],
 }
 
 var hotbar = {
@@ -48,3 +53,14 @@ func update_slot_visual(slot_index, item_name, new_quantity):
 		slot.item.set_item(item_name, new_quantity)
 	else:
 		slot.initialize_item(item_name, new_quantity)
+
+func active_item_scroll_up() -> void:
+	active_item_slot = (active_item_slot + 1) % NUM_HOTBAR_SLOTS
+	emit_signal("active_item_updated")
+
+func active_item_scroll_down() -> void:
+	if active_item_slot == 0:
+		active_item_slot = NUM_HOTBAR_SLOTS - 1
+	else:
+		active_item_slot -= 1
+	emit_signal("active_item_updated")
