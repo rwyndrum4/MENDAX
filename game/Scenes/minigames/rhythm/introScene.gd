@@ -128,7 +128,6 @@ func spawn_players():
 		#Add animated player to scene
 		var num = int(num_str)
 		var p_pos: Vector2 = get_pos(num)
-		
 		#if player is YOUR player (aka player you control)
 		if num == ServerConnection._player_num:
 			player_one.position = p_pos
@@ -141,7 +140,7 @@ func spawn_players():
 			var new_player = onlinePlayer.instance()
 			#Change size and pos of sprite
 			new_player.position = p_pos
-			new_player.scale *= 5
+			new_player.scale *= 4
 			#Add child to the scene
 			add_child(new_player)
 			var ani = Global.player_colors[num] + "_idle"
