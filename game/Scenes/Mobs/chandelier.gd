@@ -97,6 +97,7 @@ func fire(extra_angle = Vector2(0,0)):
 	var bulenemy = bullete.instance()
 	get_parent().add_child(bulenemy)
 	bulenemy.global_position = global_position + Vector2(0, -90)
+	bulenemy.look_at(Player.global_position)
 	bulenemy.velocity = bulenemy.global_position.direction_to(
 		Player.global_position + extra_angle
 	)

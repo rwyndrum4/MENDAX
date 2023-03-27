@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://Scenes/BossAttacks/AoeSlam.gd" type="Script" id=1]
 [ext_resource path="res://Assets/final_boss_attack/frame0005.png" type="Texture" id=2]
@@ -8,6 +8,8 @@
 [ext_resource path="res://Assets/final_boss_attack/frame0006.png" type="Texture" id=6]
 [ext_resource path="res://Assets/final_boss_attack/frame0002.png" type="Texture" id=7]
 [ext_resource path="res://Assets/final_boss_attack/frame0003.png" type="Texture" id=8]
+[ext_resource path="res://Assets/SFX/bonfire.mp3" type="AudioStream" id=9]
+[ext_resource path="res://Assets/SFX/boom.mp3" type="AudioStream" id=10]
 
 [sub_resource type="CircleShape2D" id=1]
 
@@ -30,5 +32,20 @@ shape = SubResource( 1 )
 [node name="anim_drawing" type="AnimatedSprite" parent="."]
 scale = Vector2( 0.35, 0.35 )
 frames = SubResource( 2 )
+
+[node name="bwam" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 10 )
+volume_db = 10.0
+pitch_scale = 0.74
+attenuation = 0.527964
+bus = "SFX"
+
+[node name="swoosh" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 9 )
+volume_db = 24.0
+pitch_scale = 0.19
+max_distance = 1000.0
+attenuation = 0.415825
+bus = "SFX"
 
 [connection signal="area_entered" from="." to="." method="_on_AoEAttack_area_entered"]

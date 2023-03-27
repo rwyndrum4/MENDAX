@@ -128,7 +128,9 @@ func _on_AnimationPlayer_animation_finished(_anim_name):
 		if !isIn:			
 			BodAnim.play("idle")
 		else:
+			$atk.play()
 			BodAnim.play("attack1")
+			
 	else:
 		$death.play()
 		yield($death, "finished")
