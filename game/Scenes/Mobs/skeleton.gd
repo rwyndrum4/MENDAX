@@ -50,6 +50,7 @@ func _ready():
 	healthbar.value = 100;
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("textbox_empty",self,"turn_on_physics")
+
 	
 """
 /*

@@ -19,6 +19,8 @@ var direction
 func _ready():
 	$pivot/Sprite/MyHitBox.add_to_group("sword")
 	GlobalSignals.connect("reach",self,"reach_up")
+	$pivot/Sprite/MyHitBox.set_type("player")
+
 
 """
 /*
@@ -70,3 +72,4 @@ func reach_up(state):
 		$pivot/Sprite/MyHitBox/CollisionShape2D.scale = $pivot/Sprite/MyHitBox/CollisionShape2D.scale/4
 	elif state == "activate":
 		$pivot/Sprite/MyHitBox/CollisionShape2D.scale = $pivot/Sprite/MyHitBox/CollisionShape2D.scale*4
+
