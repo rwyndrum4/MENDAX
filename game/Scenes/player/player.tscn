@@ -359,7 +359,7 @@ light_mask = 0
 position = Vector2( -57, -37 )
 scale = Vector2( 3.75, 3.45918 )
 frames = SubResource( 12 )
-frame = 4
+frame = 3
 playing = true
 
 [node name="Torch1" type="Light2D" parent="light"]
@@ -380,6 +380,12 @@ script = ExtResource( 131 )
 
 [node name="ShieldDelay" type="Timer" parent="Shield"]
 one_shot = true
+
+[node name="PowerupIndicator" type="Light2D" parent="."]
+visible = false
+texture = ExtResource( 127 )
+color = Color( 0.596078, 0.94902, 0.419608, 1 )
+energy = 2.0
 
 [node name="walk" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource( 132 )

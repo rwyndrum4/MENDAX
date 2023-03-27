@@ -1,10 +1,17 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://Scenes/StoreElements/StoreVars.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/StoreElements/BalanceText.gd" type="Script" id=2]
 [ext_resource path="res://Assets/ARIALBD.TTF" type="DynamicFontData" id=3]
 [ext_resource path="res://Assets/SFX/cash-register-purchase-87313.mp3" type="AudioStream" id=4]
 [ext_resource path="res://Assets/SFX/bgm/Wholesome.mp3" type="AudioStream" id=5]
+[ext_resource path="res://Assets/Store/SpeedIcon.png" type="Texture" id=6]
+[ext_resource path="res://Assets/Store/EnduranceIcon.png" type="Texture" id=7]
+[ext_resource path="res://Assets/Store/ReachIcon.png" type="Texture" id=8]
+[ext_resource path="res://Assets/Store/StrengthIcon.png" type="Texture" id=9]
+[ext_resource path="res://Assets/Store/SusIcon.png" type="Texture" id=10]
+[ext_resource path="res://Assets/Store/GlowIcon.png" type="Texture" id=11]
+[ext_resource path="res://Assets/Store/LuckIcon.png" type="Texture" id=12]
 
 [sub_resource type="DynamicFont" id=1]
 size = 48
@@ -81,6 +88,69 @@ stream = ExtResource( 5 )
 volume_db = -16.526
 bus = "Music"
 
+[node name="buySpeedPowerup" type="TextureButton" parent="."]
+margin_left = 400.0
+margin_top = 160.0
+margin_right = 880.0
+margin_bottom = 640.0
+rect_scale = Vector2( 0.3, 0.3 )
+texture_normal = ExtResource( 6 )
+
+[node name="buyStrengthPowerup" type="TextureButton" parent="."]
+margin_left = 550.0
+margin_top = 160.0
+margin_right = 1030.0
+margin_bottom = 640.0
+rect_scale = Vector2( 0.3, 0.3 )
+texture_normal = ExtResource( 9 )
+
+[node name="buyEndurancePowerup" type="TextureButton" parent="."]
+margin_left = 700.0
+margin_top = 160.0
+margin_right = 1180.0
+margin_bottom = 640.0
+rect_scale = Vector2( 0.3, 0.3 )
+texture_normal = ExtResource( 7 )
+
+[node name="buyReachPowerup" type="TextureButton" parent="."]
+margin_left = 850.0
+margin_top = 160.0
+margin_right = 1330.0
+margin_bottom = 640.0
+rect_scale = Vector2( 0.3, 0.3 )
+texture_normal = ExtResource( 8 )
+
+[node name="buyLuckPowerup" type="TextureButton" parent="."]
+margin_left = 400.0
+margin_top = 310.0
+margin_right = 880.0
+margin_bottom = 790.0
+rect_scale = Vector2( 0.3, 0.3 )
+texture_normal = ExtResource( 12 )
+
+[node name="buySusPowerup" type="TextureButton" parent="."]
+margin_left = 550.0
+margin_top = 310.0
+margin_right = 1030.0
+margin_bottom = 790.0
+rect_scale = Vector2( 0.3, 0.3 )
+texture_normal = ExtResource( 10 )
+
+[node name="buyGlowPowerup" type="TextureButton" parent="."]
+margin_left = 700.0
+margin_top = 310.0
+margin_right = 1180.0
+margin_bottom = 790.0
+rect_scale = Vector2( 0.3, 0.3 )
+texture_normal = ExtResource( 11 )
+
 [connection signal="pressed" from="Node2D/VBoxContainer/addMoney" to="." method="_on_addMoney_pressed"]
 [connection signal="pressed" from="Node2D/VBoxContainer/subMoney" to="." method="_on_subMoney_pressed"]
 [connection signal="pressed" from="Node2D/Back2Menu" to="." method="_on_Back2Menu_pressed"]
+[connection signal="pressed" from="buySpeedPowerup" to="." method="_on_buySpeedPowerup_pressed"]
+[connection signal="pressed" from="buyStrengthPowerup" to="." method="_on_buyStrengthPowerup_pressed"]
+[connection signal="pressed" from="buyEndurancePowerup" to="." method="_on_buyEndurancePowerup_pressed"]
+[connection signal="pressed" from="buyReachPowerup" to="." method="_on_buyReachPowerup_pressed"]
+[connection signal="pressed" from="buyLuckPowerup" to="." method="_on_buyLuckPowerup_pressed"]
+[connection signal="pressed" from="buySusPowerup" to="." method="_on_buySusPowerup_pressed"]
+[connection signal="pressed" from="buyGlowPowerup" to="." method="_on_buyGlowPowerup_pressed"]
