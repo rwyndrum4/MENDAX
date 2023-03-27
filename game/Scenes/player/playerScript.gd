@@ -353,7 +353,7 @@ func toggle_powerup(powerup):
 		set_color(ServerConnection._player_num)
 	elif current_powerup == "reach":
 		# change hurtbox back to normal size
-		emit_signal("reach", "deactivate")
+		GlobalSignals.emit_signal("reach", "deactivate")
 	elif current_powerup == "glow":
 		# show torch (NOTE: need to make so this resumes torch progress)
 		$light.show()
