@@ -71,7 +71,7 @@ size = 75
 font_data = ExtResource( 20 )
 
 [sub_resource type="DynamicFont" id=21]
-size = 20
+size = 42
 font_data = ExtResource( 20 )
 
 [sub_resource type="CircleShape2D" id=5]

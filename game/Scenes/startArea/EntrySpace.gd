@@ -932,8 +932,9 @@ func _p1_died():
 		sword.queue_free()
 	_player_dead = true
 	#No more imposter spawns
-	_imposter_timer.disconnect("timeout",self, "_imposter_spawn")
-	_imposter_timer.queue_free()
+	if is_instance_valid(_imposter_timer):
+		_imposter_timer.disconnect("timeout",self, "_imposter_spawn")
+		_imposter_timer.queue_free()
 	spectate_mode()
 	if check_everyone_dead():
 		Global.state = Global.scenes.END_SCREEN
