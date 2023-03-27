@@ -52,6 +52,94 @@ func _on_subMoney_pressed():
 """
 func _on_Back2Menu_pressed():
 	Global.state = Global.scenes.MAIN_MENU
-	
 
+"""
+/*
+* @pre Button is pressed
+* @post Purchase and apply powerup
+* @param None
+* @return None
+*/
+"""
+func _on_buySpeedPowerup_pressed():
+	if(Global.money >= 10): #checks if money is adequate
+		Global.money -= 10 #removes 10
+		Global.powerup = "speed"
 
+"""
+/*
+* @pre Button is pressed
+* @post Purchase and apply powerup
+* @param None
+* @return None
+*/
+"""
+func _on_buyStrengthPowerup_pressed():
+	if(Global.money >= 10): #checks if money is adequate
+		Global.money -= 10 #removes 10
+		Global.powerup = "strength"
+
+"""
+/*
+* @pre Button is pressed
+* @post Purchase and apply powerup
+* @param None
+* @return None
+*/
+"""
+func _on_buyEndurancePowerup_pressed():
+	if(Global.money >= 10): #checks if money is adequate
+		Global.money -= 10 #removes 10
+		Global.powerup = "endurance"
+
+"""
+/*
+* @pre Button is pressed
+* @post Purchase and apply powerup
+* @param None
+* @return None
+*/
+"""
+func _on_buyReachPowerup_pressed():
+	if(Global.money >= 10): #checks if money is adequate
+		Global.money -= 10 #removes 10
+		Global.powerup = "reach"
+
+"""
+/*
+* @pre Button is pressed
+* @post Purchase and apply powerup
+* @param None
+* @return None
+*/
+"""
+func _on_buyLuckPowerup_pressed():
+	if(Global.money >= 10): #checks if money is adequate
+		Global.money -= 10 #removes 10
+		Global.powerup = "luck"
+
+"""
+/*
+* @pre Button is pressed
+* @post Purchase and apply powerup
+* @param None
+* @return None
+*/
+"""
+func _on_buySusPowerup_pressed():
+	if(Global.money >= 10): #checks if money is adequate
+		Global.money -= 10 #removes 10
+		Global.powerup = "sus"
+
+"""
+/*
+* @pre Button is pressed
+* @post Purchase and apply powerup
+* @param None
+* @return None
+*/
+"""
+func _on_buyGlowPowerup_pressed():
+	if(Global.money >= 10): #checks if money is adequate
+		Global.money -= 10 #removes 10
+		Global.powerup = "glow"

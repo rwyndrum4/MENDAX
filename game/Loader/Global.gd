@@ -10,6 +10,7 @@ extends Node
 
 # Player's balance
 var money: int = 0
+var powerup = "default"
 var player_inventory = preload("res://Inventory/Inventory.tscn").instance()
 var hotbar = preload("res://Inventory/Hotbar.tscn").instance()
 

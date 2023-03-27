@@ -61,6 +61,9 @@ func _ready():
 	character.play("idle_" + player_color)
 	once = true
 	
+	# Initialize powerup from menu:
+	toggle_powerup(Global.powerup)
+	
 """
 /*
 * @pre An input of any sort
