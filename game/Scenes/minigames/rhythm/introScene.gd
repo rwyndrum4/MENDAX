@@ -128,12 +128,13 @@ func spawn_players():
 		#Add animated player to scene
 		var num = int(num_str)
 		var p_pos: Vector2 = get_pos(num)
-		var ani = "idle_" + Global.player_colors[num]
+		
 		#if player is YOUR player (aka player you control)
 		if num == ServerConnection._player_num:
 			player_one.position = p_pos
 			$Player/Camera2D.offset = get_camera_offset(num)
 			player_one.set_color(num)
+			var ani = "idle_" + Global.player_colors[num]
 			player_one_ani.play(ani)
 		#if the player is another online player
 		else:
@@ -143,6 +144,7 @@ func spawn_players():
 			new_player.scale *= 5
 			#Add child to the scene
 			add_child(new_player)
+			var ani = Global.player_colors[num] + "_idle"
 			new_player.play_animation(ani)
 
 """
