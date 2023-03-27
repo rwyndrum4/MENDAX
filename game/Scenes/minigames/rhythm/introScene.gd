@@ -137,9 +137,10 @@ func spawn_players():
 			player_one_ani.play(ani)
 		#if the player is another online player
 		else:
-			var new_player:KinematicBody2D = onlinePlayer.instance()
+			var new_player = onlinePlayer.instance()
 			#Change size and pos of sprite
 			new_player.position = p_pos
+			new_player.scale *= 5
 			#Add child to the scene
 			add_child(new_player)
 			new_player.play_animation(ani)
