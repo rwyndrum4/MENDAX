@@ -74,3 +74,11 @@ signal playerDeath(playerID)
 """
 # warning-ignore:unused_signal
 signal enemyDefeated(enemyID)
+
+"""
+* Purpose - Send a signal when a player activates/deactivates the reach powerup
+* Used in - playerScript.gd, arena_player.gd
+* Parameter - state -> denotes whether effect of powerup should be removed or added
+"""
+# warning-ignore:unused_signal
+signal reach(state)

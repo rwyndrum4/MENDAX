@@ -344,7 +344,7 @@ func toggle_powerup(powerup):
 		set_color(ServerConnection._player_num)
 	elif current_powerup == "reach":
 		# change hurtbox back to normal size
-		$MyHurtBox.get_node("hitbox").scale = $MyHurtBox.get_node("hitbox").scale/2
+		emit_signal("reach", "deactivate")
 	elif current_powerup == "glow":
 		# show torch (NOTE: need to make so this resumes torch progress)
 		$light.show()
@@ -401,7 +401,7 @@ func toggle_powerup(powerup):
 		current_powerup = "sus"
 	elif powerup == "reach":
 		# expand size of hurtbox
-		$MyHurtBox.get_node("hitbox").scale = $MyHurtBox.get_node("hitbox").scale*2
+		GlobalSignals.emit_signal("reach", "activate")
 		reach_light_growing = true
 		$PowerupIndicator.texture_scale = 0.9
 		$PowerupIndicator.show()
