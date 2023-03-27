@@ -12,7 +12,7 @@
 extends Control
 
 # Member Variables
-const PLAYER_HEALTH = 40
+const PLAYER_HEALTH = 150
 const CAVE_TIME = 90 #how much time players spend in the cave
 var in_exit = false #variable to track if character is by the exit
 var in_menu = false #variable to track if character is in options menu
