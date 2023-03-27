@@ -553,7 +553,9 @@ func _on_item5_body_entered(_body:PhysicsBody2D)->void:
 
 func _on_item6_body_entered(_body:PhysicsBody2D)->void:
 	if itemarray[5]==0 and answerlength>=6:
-		enterarea($item6/Sprite,6)
+		enterarea($item6/AnimatedSprite,6)
+		get_node("item6/AnimatedSprite").playing=true
+		get_node("item6/AnimatedSprite").frame=0
 		item = ItemClass.instance()
 		
 
@@ -581,7 +583,7 @@ func _on_item5_body_exited(_body:PhysicsBody2D)->void:
 	$item5/Sprite.hide()
 	hintbox.hide()
 func _on_item6_body_exited(_body):
-	$item6/Sprite.hide()
+	$item6/AnimatedSprite.hide()
 	hintbox.hide()
 
 """
@@ -632,3 +634,5 @@ func set_init_player_pos():
 			3: Global._player_positions_updated(num,Vector2(800,1250))
 			4: Global._player_positions_updated(num,Vector2(880,1250))
 			_: printerr("THERE ARE MORE THAN 4 PLAYERS TRYING TO BE SPAWNED IN riddleGame.gd")
+
+#for chest
