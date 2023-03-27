@@ -89,59 +89,59 @@ volume_db = -16.526
 bus = "Music"
 
 [node name="buySpeedPowerup" type="TextureButton" parent="."]
-margin_left = 160.0
+margin_left = 400.0
 margin_top = 160.0
-margin_right = 640.0
+margin_right = 880.0
 margin_bottom = 640.0
-rect_scale = Vector2( 0.25, 0.25 )
+rect_scale = Vector2( 0.3, 0.3 )
 texture_normal = ExtResource( 6 )
 
 [node name="buyStrengthPowerup" type="TextureButton" parent="."]
-margin_left = 280.0
+margin_left = 550.0
 margin_top = 160.0
-margin_right = 760.0
+margin_right = 1030.0
 margin_bottom = 640.0
-rect_scale = Vector2( 0.25, 0.25 )
+rect_scale = Vector2( 0.3, 0.3 )
 texture_normal = ExtResource( 9 )
 
 [node name="buyEndurancePowerup" type="TextureButton" parent="."]
-margin_left = 400.0
+margin_left = 700.0
 margin_top = 160.0
-margin_right = 880.0
+margin_right = 1180.0
 margin_bottom = 640.0
-rect_scale = Vector2( 0.25, 0.25 )
+rect_scale = Vector2( 0.3, 0.3 )
 texture_normal = ExtResource( 7 )
 
 [node name="buyReachPowerup" type="TextureButton" parent="."]
-margin_left = 520.0
+margin_left = 850.0
 margin_top = 160.0
-margin_right = 1000.0
+margin_right = 1330.0
 margin_bottom = 640.0
-rect_scale = Vector2( 0.25, 0.25 )
+rect_scale = Vector2( 0.3, 0.3 )
 texture_normal = ExtResource( 8 )
 
 [node name="buyLuckPowerup" type="TextureButton" parent="."]
-margin_left = 160.0
-margin_top = 280.0
-margin_right = 640.0
-margin_bottom = 760.0
-rect_scale = Vector2( 0.25, 0.25 )
+margin_left = 400.0
+margin_top = 310.0
+margin_right = 880.0
+margin_bottom = 790.0
+rect_scale = Vector2( 0.3, 0.3 )
 texture_normal = ExtResource( 12 )
 
 [node name="buySusPowerup" type="TextureButton" parent="."]
-margin_left = 280.0
-margin_top = 280.0
-margin_right = 760.0
-margin_bottom = 760.0
-rect_scale = Vector2( 0.25, 0.25 )
+margin_left = 550.0
+margin_top = 310.0
+margin_right = 1030.0
+margin_bottom = 790.0
+rect_scale = Vector2( 0.3, 0.3 )
 texture_normal = ExtResource( 10 )
 
 [node name="buyGlowPowerup" type="TextureButton" parent="."]
-margin_left = 400.0
-margin_top = 280.0
-margin_right = 880.0
-margin_bottom = 760.0
-rect_scale = Vector2( 0.25, 0.25 )
+margin_left = 700.0
+margin_top = 310.0
+margin_right = 1180.0
+margin_bottom = 790.0
+rect_scale = Vector2( 0.3, 0.3 )
 texture_normal = ExtResource( 11 )
 
 [connection signal="pressed" from="Node2D/VBoxContainer/addMoney" to="." method="_on_addMoney_pressed"]
