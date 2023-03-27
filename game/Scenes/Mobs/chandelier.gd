@@ -115,7 +115,7 @@ func take_damage(amount: int) -> void:
 	$AudioStreamPlayer2D.play()
 	healthbar.value = healthbar.value - amount
 	Global.chandelier_damage[str(1)]+=amount
-	if healthbar.value <= 0 and not _isDead:
+	if healthbar.value <= 0:
 		_isDead = true
 		set_physics_process(false)
 		chandelierAnim.play("death")
@@ -129,7 +129,7 @@ func take_damage(amount: int) -> void:
 #Same as above function except it doesn't send data to server
 func take_damage_server(amount: int):
 	healthbar.value = healthbar.value - amount
-	if healthbar.value == 0:
+	if healthbar.value <= 0:
 		_isDead = true
 		set_physics_process(false)
 		chandelierAnim.play("death")
@@ -183,13 +183,13 @@ func level_up():
 	_fire_wait_time = 2
 	healthbar.value = healthbar.value + 40
 	#New timer that makes it so that BoD teleports ever 4 sec
-	var teleport_timer: Timer = Timer.new()
-	add_child(teleport_timer)
-	teleport_timer.wait_time = 16
-	teleport_timer.one_shot = false
-	teleport_timer.start()
-	# warning-ignore:return_value_discarded
-	teleport_timer.connect("timeout",self, "_tp_timer_expired")
+#	var teleport_timer: Timer = Timer.new()
+#	add_child(teleport_timer)
+#	teleport_timer.wait_time = 16
+#	teleport_timer.one_shot = false
+#	teleport_timer.start()
+#	# warning-ignore:return_value_discarded
+#	teleport_timer.connect("timeout",self, "_tp_timer_expired")
 
 """
 /*

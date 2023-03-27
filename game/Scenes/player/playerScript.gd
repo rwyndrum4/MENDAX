@@ -13,12 +13,14 @@
 """
 extends KinematicBody2D
 
-# Member Variables
+#Objects
 onready var character = $position/animated_sprite
 onready var char_pos = $position
 onready var healthbar = $ProgressBar
-onready var isInverted = false
 onready var shield = $Shield
+
+# Member Variables
+var isInverted = false
 onready var current_powerup = "default"
 var speed_ticks
 var speed_wait_period
@@ -27,16 +29,16 @@ var reach_light_growing
 var is_stopped = false
 var player_color:String = ""
 var once
-
 # Player physics constants
+const FRICTION = 500
 var ACCELERATION = 25000
 var MAX_SPEED = 500
-var FRICTION = 500
-
-# Global velocity
 var velocity = Vector2.ZERO
-
 var is_walk: bool = false
+
+signal p1_died()
+
+
 """
 /*
 * @pre Called once when player is initialized
@@ -54,13 +56,20 @@ func _ready():
 	GlobalSignals.connect("textbox_shift",self,"stop_go_player")
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("openMenu",self,"stop_go_player")
-	# if server wasnt' connected
+	# if server wasn't connected
 	if player_color == "":
 		player_color = "blue"
-		
 	#Initially have character idle
 	character.play("idle_" + player_color)
 	once = true
+	if ServerConnection.match_exists() and ServerConnection.get_server_status():
+		#timer that will go off roughly 15 times per second
+		var send_pos_tmr = Timer.new()
+		send_pos_tmr.one_shot = false
+		send_pos_tmr.wait_time = 0.05
+		add_child(send_pos_tmr)
+		send_pos_tmr.start()
+		send_pos_tmr.connect("timeout", self, "_send_server_update")
 	
 	# Initialize powerup from menu:
 	toggle_powerup(Global.powerup)
@@ -126,15 +135,6 @@ func _physics_process(delta):
 	# This ensures diagonal speed is not faster, which is especially significant when sliding against a wall.
 	else:
 		velocity = input_velocity.move_toward(0.7*input_velocity*MAX_SPEED, ACCELERATION*delta)
-	
-	#Send current player position to server if server and match is up
-	if ServerConnection.get_server_status() and ServerConnection.match_exists():
-		#Send position and input to other players (if has changed!)
-		ServerConnection.send_position_update(position)
-		ServerConnection.send_input_update(velocity.normalized())
-		#Store new position and input in order to check if has changed next time (if has changed!)
-		Global._player_positions_updated(ServerConnection._player_num, self.position)
-		Global._player_input_updated(ServerConnection._player_num, velocity.normalized())
 	# Factor in collisions
 	velocity = move_and_slide(velocity)
 	#Animate character
@@ -184,6 +184,21 @@ func _process(_delta):
 			if $PowerupIndicator.texture_scale <= 0.9:
 				reach_light_growing = true
 """
+* @pre Called 15 times per second
+* @post Sends the current player position to the server (and input vector if changed)
+* @param None (uses global vars: velocity and inherit position)
+* @return None
+"""
+func _send_server_update():
+	#Send position change to server (only if changed, logic in function)
+	ServerConnection.send_position_update(position)
+	#Sends input vector to server (only if changed, logic in function)
+	ServerConnection.send_input_update(velocity.normalized())
+	#Store new position and input in order to check if has changed next time (if has changed!)
+	Global._player_positions_updated(ServerConnection._player_num, self.position)
+	Global._player_input_updated(ServerConnection._player_num, velocity.normalized())
+
+"""
 /*
 * @pre Called in arena game, when player hit by littleGuy
 * @post slows the player's speed by 1/2
@@ -225,36 +240,43 @@ func stop_go_player(value:bool):
 */
 """
 func control_animations(vel:Vector2):
+	vel = vel.normalized()
 	#Character moves NorthEast
+	is_walk = true
 	if vel.y < 0 and vel.x > 0:
 		char_pos.scale.x = -1
 		character.play("roll_northwest_" + player_color)
-		is_walk = true
 	#Character moves NorthWest
 	elif vel.y < 0 and vel.x < 0:
 		char_pos.scale.x = 1
 		character.play("roll_northwest_" + player_color)
-		is_walk = true
-	#Character moves East or SouthEast
-	elif vel.x > 0:
+	#Character moves East
+	elif vel.x > 0 and vel.y == 0:
+		char_pos.scale.x = 1
+		character.play("roll_east_" + player_color)
+	#Character moves West
+	elif vel.x < 0 and vel.y == 0:
+		char_pos.scale.x = -1
+		character.play("roll_east_" + player_color)
+	#Character SouthEast
+	elif vel.x > 0 and vel.y > 0:
 		char_pos.scale.x = 1
 		character.play("roll_southeast_" + player_color)
-		is_walk = true
-	#Character moves West or SoutWest
-	elif vel.x < 0:
+	#Character moves SoutWest
+	elif vel.x < 0 and vel.y > 0:
 		char_pos.scale.x = -1
 		character.play("roll_southeast_" + player_color)
-		is_walk = true
 	#Character moves North
-	elif vel.y < 0:
+	elif vel.x == 0 and vel.y < 0:
+		char_pos.scale.x = 1
 		character.play("roll_north_" + player_color)
-		is_walk = true
 	#Character moves South
-	elif vel.y > 0:
+	elif vel.x == 0 and vel.y > 0:
+		char_pos.scale.x = 1
 		character.play("roll_south_" + player_color)
-		is_walk = true
 	#Character not moving (idle)
 	else:
+		char_pos.scale.x = 1
 		character.play("idle_" + player_color)
 		is_walk = false
 	walkCheck()
@@ -275,9 +297,8 @@ func take_damage(amount: int) -> void:
 		Global.player_health[str(1)]=new_health
 		ServerConnection.send_arena_player_health(new_health)
 		healthbar.value = new_health
-		if healthbar.value <= 0 and Global.state == Global.scenes.ARENA_MINIGAME: #should fix it
-			get_parent()._player_dead = true
-			get_parent().spectate_mode()
+		if healthbar.value <= 0:
+			emit_signal("p1_died")
 			queue_free()
 
 
@@ -309,6 +330,15 @@ func _invert_off(timer):
 	timer.queue_free()
 	isInverted = false
 	once = true
+
+"""
+* @pre None
+* @post sets healthbar visibility
+* @param value -> bool
+* @return None
+"""
+func healthbar_visibility(value:bool):
+	$ProgressBar.visible = value
 
 """
 /*
@@ -424,7 +454,13 @@ func toggle_powerup(powerup):
 		$PowerupIndicator.show()
 		$PowerupIndicator.color = "37e5dd"
 		current_powerup = "glow"		
-		
+
+"""
+* @pre None
+* @post sets walk play sound if is_walk is true
+* @param None
+* @return None
+"""
 func walkCheck():
 	var currently = $walk.is_playing()
 	if is_walk:

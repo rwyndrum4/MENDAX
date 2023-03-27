@@ -2,7 +2,6 @@
 
 [ext_resource path="res://Scenes/mainMenu/mainMenu.gd" type="Script" id=1]
 [ext_resource path="res://Assets/Intro/IntroScreen.png" type="Texture" id=2]
-[ext_resource path="res://Assets/mainMenuAssets/BAUHS93.TTF" type="DynamicFontData" id=3]
 [ext_resource path="res://Assets/Intro/MainMenuGradient.png" type="Texture" id=4]
 [ext_resource path="res://Assets/SFX/myTongue.wav" type="AudioStream" id=5]
 [ext_resource path="res://Assets/SFX/bgm/Magic Forest.mp3" type="AudioStream" id=7]
@@ -38,9 +37,12 @@ font_data = ExtResource( 10 )
 size = 32
 font_data = ExtResource( 10 )
 
-[sub_resource type="DynamicFont" id=1]
+[sub_resource type="DynamicFontData" id=14]
+font_path = "res://Assets/mainMenuAssets/BAUHS93.TTF"
+
+[sub_resource type="DynamicFont" id=13]
 size = 38
-font_data = ExtResource( 3 )
+font_data = SubResource( 14 )
 
 [sub_resource type="DynamicFont" id=10]
 size = 60
@@ -154,7 +156,7 @@ rect_scale = Vector2( 0.889601, 0.796081 )
 margin_right = 213.0
 margin_bottom = 50.0
 rect_pivot_offset = Vector2( -644, -266 )
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 13 )
 text = "Lobby Code"
 
 [node name="code" type="Label" parent="showLobbyCode"]

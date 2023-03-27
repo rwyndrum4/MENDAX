@@ -98,7 +98,7 @@ func take_damage(amount: int) -> void:
 	healthbar.value = healthbar.value - amount
 	
 	Global.bod_damage[str(1)]+=amount
-	if healthbar.value == 0:
+	if healthbar.value <= 0:
 		isDead = true
 		BodAnim.play("death")
 		call_deferred("defer_disabling_BoD")
@@ -106,7 +106,7 @@ func take_damage(amount: int) -> void:
 #Same as above function except it doesn't send data to server
 func take_damage_server(amount: int):
 	healthbar.value = healthbar.value - amount
-	if healthbar.value == 0:
+	if healthbar.value <= 0:
 		isDead = true
 		BodAnim.play("death")
 		call_deferred("defer_disabling_BoD")
@@ -199,7 +199,7 @@ func _tp_timer_expired():
 			var ctr = 0
 			for p in server_players:
 				var obj = p.get('player_obj') 
-				if obj != null:
+				if is_instance_valid(obj):
 					ctr += 1
 					total += obj.position
 			var your_pos = get_parent().get_node("Player").position

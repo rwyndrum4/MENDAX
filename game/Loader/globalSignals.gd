@@ -76,6 +76,30 @@ signal playerDeath(playerID)
 signal enemyDefeated(enemyID)
 
 """
+* Purpose - Send message from child node to global parent so chat can happen
+* Used in - boss.gd
+* Parameter - msg -> String (message sent), color -> String (color of text)
+"""
+# warning-ignore:unused_signal
+signal exportEventMessage(msg, color)
+
+"""
+* Purpose - Send signal to global parent from a child to hide hotbar
+* Used in - entrySpace.gd
+* Parameter - setter -> bool (true or false, true = show, false = hide)
+"""
+# warning-ignore:unused_signal
+signal toggleHotbar(setter)
+
+"""
+* Purpose - Send signal to global parent to show how much money player has
+* Used in - mainMenu.gd
+* Parameter - setter -> bool (true or false, true = show, false = hide)
+"""
+# warning-ignore:unused_signal
+signal show_money_text(setter)
+
+"""
 * Purpose - Send a signal when a player activates/deactivates the reach powerup
 * Used in - playerScript.gd, arena_player.gd
 * Parameter - state -> denotes whether effect of powerup should be removed or added

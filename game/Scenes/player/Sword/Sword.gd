@@ -18,6 +18,7 @@ var direction
 """
 func _ready():
 	$pivot/Sprite/MyHitBox.add_to_group("sword")
+	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("reach",self,"reach_up")
 	$pivot/Sprite/MyHitBox.set_type("player")
 

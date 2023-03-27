@@ -46,6 +46,7 @@ onready var onlinePlayer = preload("res://Scenes/player/arena_player/arena_playe
 """
 func _ready():
 	randomize()
+	main_player.set_physics_process(false)
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("enemyDefeated",self,"_enemy_defeated")
 	# warning-ignore:return_value_discarded
@@ -56,6 +57,7 @@ func _ready():
 	playerHealth.value = 150
 	sword.direction = "right"
 	swordPivot.position = main_player.position + Vector2(60,20)
+	main_player.connect("p1_died", self, "_p1_died")
 	#If there is a server connection, spawn all players
 	if ServerConnection.match_exists() and ServerConnection.get_server_status():
 		TOTAL_TIME = 60
@@ -69,8 +71,6 @@ func _ready():
 		ServerConnection.connect("arena_player_swung_sword",self,"other_player_swung_sword")
 		# warning-ignore:return_value_discarded
 		ServerConnection.connect("character_took_shield",self,"someone_took_shild")
-		# warning-ignore:return_value_discarded
-		ServerConnection.connect("player_booped",self,"someone_got_booped")
 		if ServerConnection._player_num == 1:
 			#in case p1 is last player to get to minigame
 			if Global.get_minigame_players() == Global.get_num_players() - 1:
@@ -83,7 +83,7 @@ func _ready():
 			#If they got the riddle successfully nothing else will happen
 			var wait_for_start: Timer = Timer.new()
 			add_child(wait_for_start)
-			wait_for_start.wait_time = 5
+			wait_for_start.wait_time = Global.WAIT_FOR_PLAYERS_TIME
 			wait_for_start.one_shot = true
 			wait_for_start.start()
 			# warning-ignore:return_value_discarded
@@ -97,7 +97,7 @@ func _ready():
 		change_target_timer.connect("timeout",self, "_target_timer_expired")
 	#else if single player game
 	else:
-		TOTAL_TIME = 180
+		TOTAL_TIME = 120
 		myTimer.start(TOTAL_TIME)
 		start_arena_game()
 
@@ -114,8 +114,28 @@ func _process(_delta): #change to delta if used
 	#Game is over if all players dead
 	if is_instance_valid(myTimer):
 		timerText.text = convert_time(myTimer.time_left)
+	handle_swords()
+	
+"""
+/*
+* @pre None
+* @post updates the sword positions of ALL players in game
+* @param None
+* @return None
+*/
+"""
+func handle_swords():
+	#Server player's swords
+	for p in server_players:
+		var p_obj = p.get('player_obj')
+		if is_instance_valid(p_obj):
+			if p_obj.get('sword_dir') == "right":
+				p_obj._pivot.position = p_obj.position + Vector2(60,0)
+			elif p_obj.get('sword_dir') == "left":
+				p_obj._pivot.position = p_obj.position + Vector2(-60,0)
 	if not is_instance_valid(main_player):
 		return
+	#main player's sword
 	if sword.direction == "right":
 		swordPivot.position = main_player.position + Vector2(60,0)
 	elif sword.direction == "left":
@@ -173,6 +193,7 @@ func _can_start_game_other():
 */
 """
 func start_arena_game():
+	main_player.set_physics_process(true)
 	$GUI/wait_on_players.queue_free()
 	var var_time: String = "a minute" if TOTAL_TIME == 120 else "two minutes"
 	textBox.queue_text("You have " + var_time + " to defeat all enemies.")
@@ -301,7 +322,7 @@ func _end_game(won_game:bool):
 	#Delete online player objects if they have not already died
 	for o_player in server_players:
 		var obj = o_player.get('player_obj') 
-		if obj != null:
+		if is_instance_valid(obj):
 			obj.queue_free()
 	Global.reset_minigame_players()
 	Global.state = Global.scenes.CAVE
@@ -322,7 +343,7 @@ func gen_results(server_on:bool) -> Dictionary:
 		for p in server_players:
 			var p_num = p.get('num')
 			var p_name = Global.get_player_name(p_num)
-			if p.get('player_obj') == null:
+			if not is_instance_valid(p.get('player_obj')):
 				res[p_name] = "Died"
 			else:
 				GameLoot.add_to_coin(p_num,20)
@@ -516,10 +537,12 @@ func other_player_swung_sword(player_id: int, direction: String):
 */
 """
 func _extend_timer(p_id: int):
+	if len(alive_players) == 0 and _player_dead:
+		_end_game(true)
 	# warning-ignore:return_value_discarded
 	alive_players.erase(p_id)
-	if len(alive_players) == 0:
-		_end_game(true)
+	if not is_instance_valid(myTimer):
+		return
 	var new_time: float = myTimer.time_left + EXTRA_TIME
 	myTimer.start(new_time)
 			
@@ -680,3 +703,9 @@ func someone_got_booped(player_id: int, x: int, y: int):
 		if player_id == o_player.get('num'):
 			o_player.get('player_obj').was_booped(Vector2(x,y))
 			break
+
+func _p1_died():
+	_player_dead = true
+	spectate_mode()
+	if len(alive_players) == 0:
+		_end_game(true)

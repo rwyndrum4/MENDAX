@@ -99,10 +99,16 @@ func _input(event):
 					playerInput.set_cursor_position(len(playerInput.text) +1)
 				#Auto fill for current players
 				elif "/whisper " in playerInput.text and ServerConnection.get_chatroom_players().size() > 0:
-					playerInput.text = "/whisper " + ServerConnection.get_chatroom_players().keys()[current_usr] + " "
+					var player_list: Array = []
+					#Grab different players depending on if in menu or in match
+					if ServerConnection.match_exists():
+						player_list = Global.player_names.values()
+					else:
+						player_list = ServerConnection.get_chatroom_players().keys()
+					playerInput.text = "/whisper " + player_list[current_usr] + " "
 					playerInput.set_cursor_position(len(playerInput.text) +1)
 					current_usr += 1
-					if current_usr == ServerConnection.get_chatroom_players().size():
+					if current_usr >= player_list.size():
 						current_usr = 0
 
 """

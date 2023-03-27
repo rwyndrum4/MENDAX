@@ -32,8 +32,8 @@ var BASE_ACCELERATION = 500
 var is_walk: bool = false
 
 func _ready():
-	is_hit = false
 	randomize()
+	is_hit = false
 	rng = randi() % 4
 	if rng == 0:
 		imposter_color = "green"
@@ -45,15 +45,15 @@ func _ready():
 		imposter_color = "red"
 	
 func _physics_process(_delta):
+	if get_parent()._player_dead:
+		queue_free()
+		return
 	var player_pos = null
-
 	#if not get_parent()._player_dead:
 	player_pos = get_parent().get_node("Player").position
 	velocity = position.direction_to(player_pos)* BASE_SPEED
 	velocity = move_and_slide(velocity)
 	control_animations(velocity)
-	
-
 
 """
 /*
@@ -85,7 +85,6 @@ func setup_pos(player_pos):
 */
 """
 func control_animations(vel:Vector2):
-	
 	#Character moves NorthEast
 	if vel.y < 0 and vel.x > 0:
 		char_pos.scale.x = -1
@@ -131,9 +130,10 @@ func control_animations(vel:Vector2):
 func _on_Area2D_body_entered(body):
 	if "Player" in body.name:
 		is_hit = true
+		$Timer.disconnect("timeout",self, "_on_Timer_timeout")
+		set_physics_process(false)
 		var Player = get_parent().get_node("Player")
 		Player.isInverted = true
-		set_physics_process(false)
 		area2d.queue_free()
 		collisionbox.queue_free()
 		$walk.playing = false
@@ -141,15 +141,8 @@ func _on_Area2D_body_entered(body):
 		character.play("explosion")
 		#enter health bar stuff here
 		Player.take_damage(10)
-		print("player got exploded 10 dmg")
 		yield(character, "animation_finished")
-		print("invert the controls")
-		
-		
-		
-		
 		queue_free()
-
 
 """
 /*
@@ -172,6 +165,12 @@ func _on_Timer_timeout():
 		queue_free() # Replace with function body.
 	return
 
+"""
+* @pre None
+* @post sets walk play sound if is_walk is true
+* @param None
+* @return None
+"""
 func walkCheck():
 
 	var currently = $walk.is_playing()

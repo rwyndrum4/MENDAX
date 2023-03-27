@@ -19,10 +19,12 @@ var type
 */
 """
 func _init() -> void:
+	add_to_group("sword")
 	collision_layer = 19
 	collision_mask = 0
 
 func _ready():
+	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("strength", self, "strength_up")
 	
 func strength_up(dmg):

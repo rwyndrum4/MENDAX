@@ -4,7 +4,6 @@ extends Control
 onready var DisplayText=$VBoxContainer/DisplayText
 #onready var ListItem=$VBoxContainer/ItemList
 
-onready var RestartButton=$VBoxContainer/Button
 onready var maxdamage=0
 onready var minhealth=0
 onready var currentmin=0
@@ -101,7 +100,6 @@ func refresh_scene():
 		show_question()
 func show_result():
 	#ListItem.hide()
-	#RestartButton.show()
 	#var score=round(correct/items.size()*100)
 	#DisplayText.text="Your score is "+str(score)
 	Global.progress = 7
@@ -122,6 +120,7 @@ func read_json_file(filename):
 	print(json_data)
 
 func _on_Button1_pressed():
+	$VBoxContainer/Button1.release_focus()
 	index_item+=1
 	if item.correctOptionIndex==0:
 		correct+=1
@@ -129,9 +128,8 @@ func _on_Button1_pressed():
 		print("correct")
 	refresh_scene()
 
-
-
 func _on_Button2_pressed():
+	$VBoxContainer/Button2.release_focus()
 	index_item+=1
 	if item.correctOptionIndex==1:
 		correct+=1
@@ -140,6 +138,7 @@ func _on_Button2_pressed():
 
 
 func _on_Button3_pressed():
+	$VBoxContainer/Button3.release_focus()
 	index_item+=1
 	if item.correctOptionIndex==2:
 		correct+=1
@@ -148,6 +147,7 @@ func _on_Button3_pressed():
 
 
 func _on_Button4_pressed():
+	$VBoxContainer/Button4.release_focus()
 	index_item+=1
 	if item.correctOptionIndex==3:
 		correct+=1
