@@ -931,6 +931,7 @@ func _p1_died():
 	if is_instance_valid(sword):
 		sword.queue_free()
 	_player_dead = true
+	Global._player_died_final_boss = true
 	#No more imposter spawns
 	if is_instance_valid(_imposter_timer):
 		_imposter_timer.disconnect("timeout",self, "_imposter_spawn")

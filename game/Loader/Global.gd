@@ -27,6 +27,9 @@ var progress = 0
 var _boss_tp_counter = 0
 var _first_time_in_boss = false
 
+# Track if player died in the final boss
+var _player_died_final_boss = false 
+
 # Variables for server times
 const WAIT_FOR_PLAYERS_TIME = 15
 
@@ -348,6 +351,7 @@ func reset() -> void:
 	progress = 0
 	_boss_tp_counter = 0
 	_first_time_in_boss = false
+	_player_died_final_boss = false
 	player_names = {}
 	player_positions = {}
 	player_input_vectors = {}
