@@ -128,7 +128,7 @@ func spawn_players():
 		#Add animated player to scene
 		var num = int(num_str)
 		var p_pos: Vector2 = get_pos(num)
-		var ani = Global.player_colors[num] + "_idle"
+		var ani = "idle_" + Global.player_colors[num]
 		#if player is YOUR player (aka player you control)
 		if num == ServerConnection._player_num:
 			player_one.position = p_pos
