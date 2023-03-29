@@ -31,8 +31,8 @@ var _first_time_in_boss = false
 # Track if player died in the final boss
 var _player_died_final_boss = false 
 
-# Variables for server times
-const WAIT_FOR_PLAYERS_TIME = 15
+# Variable for tracking how long you wait for players to load
+const WAIT_FOR_PLAYERS_TIME = 30
 
 # Signals
 signal all_players_arrived()
@@ -40,9 +40,9 @@ signal all_players_arrived()
 """
 -----------------------------SCENE LOADER INSTRUCTION-------------------------------------
 - state -> this is the variable that tracks what scene the game is currently in
-- You set state to one of the enum states defined in scene
+- You set state to one of the enum states defined in scenes
 - For example, if you want to change scene to main menu:
-  Global.state = Global.scene.MAIN_MENU
+  Global.state = Global.scenes.MAIN_MENU
 - The scene will only change if the process function in Scenes/globalScope/globalScope.gd
   detects that there has been a change in scene
 - The paths for all the scenes are also defined in Scenes/globalScope/globalScope.gd

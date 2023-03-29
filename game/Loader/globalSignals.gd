@@ -114,3 +114,11 @@ signal reach(state)
 """
 # warning-ignore:unused_signal
 signal strength(dmg)
+
+"""
+* Purpose - Change the amount of money that shows up on player screen
+* Used in - at the end of minigames
+* Parameter - amount (new amount that will be shown on screen)
+"""
+# warning-ignore:unused_signal
+signal money_screen_val()

@@ -293,8 +293,8 @@ func handle_coins(who_won:String):
 		GameLoot.add_to_coin(n,how_much)
 		if p_name == Save.game_data.username:
 			var total_coin = GameLoot.get_coin_val(n)
-			get_parent().change_money(total_coin)
-			get_parent().chat_box.chat_event_message(message, "blue")
+			GlobalSignals.emit_signal("money_screen_val", total_coin)
+			GlobalSignals.emit_signal("exportEventMessage", message, "blue")
 			PlayerInventory.add_item("Coin", 20)
 
 """
@@ -308,10 +308,11 @@ func handle_coins(who_won:String):
 func _single_player_check_answer(message_in:String, _whisper, _username):
 	if answer == message_in:
 		Global.reset_minigame_players()
-		get_parent().chat_box.chat_event_message("Correct answer! +20 gold for you", "blue")
+		var message = "Correct answer! +20 gold for you"
+		GlobalSignals.emit_signal("exportEventMessage", message, "blue")
 		GameLoot.add_to_coin(1,20)
 		var total_coin = GameLoot.get_coin_val(1)
-		get_parent().change_money(total_coin)
+		GlobalSignals.emit_signal("money_screen_val", total_coin)
 		PlayerInventory.add_item("Coin", 20)
 		Global.state = Global.scenes.CAVE
 

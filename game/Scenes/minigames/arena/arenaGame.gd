@@ -133,7 +133,7 @@ func handle_swords():
 				p_obj._pivot.position = p_obj.position + Vector2(60,0)
 			elif p_obj.get('sword_dir') == "left":
 				p_obj._pivot.position = p_obj.position + Vector2(-60,0)
-	if not is_instance_valid(main_player):
+	if (not is_instance_valid(main_player)) or (not is_instance_valid(sword)):
 		return
 	#main player's sword
 	if sword.direction == "right":
@@ -337,6 +337,7 @@ func _end_game(won_game:bool):
 */
 """
 func gen_results(server_on:bool) -> Dictionary:
+	var msg = "You failed to survive, 5 coin for you"
 	if server_on:
 		var res: Dictionary = {}
 		#Adding money for all players in server
@@ -355,13 +356,17 @@ func gen_results(server_on:bool) -> Dictionary:
 		var your_num = ServerConnection._player_num
 		if not _player_dead:
 			GameLoot.add_to_coin(your_num,20)
-		get_parent().change_money(GameLoot.get_coin_val(your_num))
+			msg = "You survived the arena, 20 coin for you"
+		GlobalSignals.emit_signal("money_screen_val", GameLoot.get_coin_val(your_num))
+		GlobalSignals.emit_signal("exportEventMessage", msg, "blue")
 		return res
 	else:
 		if not _player_dead:
 			GameLoot.add_to_coin(1,20)
 			PlayerInventory.add_item("Coin", 20)
-		get_parent().change_money(GameLoot.get_coin_val(1))
+			msg = "You survived the arena, 20 coin for you"
+		GlobalSignals.emit_signal("money_screen_val", GameLoot.get_coin_val(1))
+		GlobalSignals.emit_signal("exportEventMessage", msg, "blue")
 		return {Save.game_data.username: "Died" if _player_dead else "Lived"}
 
 """
@@ -488,8 +493,8 @@ func set_init_player_pos():
 """
 func other_player_hit(player_id: int, player_health: int):
 	for o_player in server_players:
-		if player_id == o_player.get('num'):
-			var p_obj = o_player.get('player_obj')
+		var p_obj = o_player.get('player_obj')
+		if player_id == o_player.get('num') and is_instance_valid(p_obj):
 			p_obj.take_damage(player_health)
 			Global.player_health[str(player_id)]=player_health
 			break
@@ -523,9 +528,10 @@ func someone_hit_enemy(enemy_id: int, dmg_taken: int, player_id: int,enemy_type:
 """
 func other_player_swung_sword(player_id: int, direction: String):
 	for o_player in server_players:
-		if player_id == o_player.get('num'):
+		var p_obj = o_player.get('player_obj')
+		if player_id == o_player.get('num') and is_instance_valid(p_obj):
 			o_player['sword_dir'] = direction
-			o_player.get('player_obj').swing_sword(direction)
+			p_obj.swing_sword(direction)
 			break
 
 """
@@ -537,15 +543,16 @@ func other_player_swung_sword(player_id: int, direction: String):
 */
 """
 func _extend_timer(p_id: int):
-	if len(alive_players) == 0 and _player_dead:
-		_end_game(true)
 	# warning-ignore:return_value_discarded
 	alive_players.erase(p_id)
-	if not is_instance_valid(myTimer):
+	#Check if game over since another player just died
+	if len(alive_players) == 0 and _player_dead:
+		_end_game(false)
 		return
-	var new_time: float = myTimer.time_left + EXTRA_TIME
-	myTimer.start(new_time)
-			
+	if is_instance_valid(myTimer):
+		var new_time: float = myTimer.time_left + EXTRA_TIME
+		myTimer.start(new_time)
+
 """
 /*
 * @pre Called when an enemy signals that it has been killed
@@ -566,7 +573,8 @@ func _enemy_defeated(enemyID:int):
 	#Same logic as above, but spawn extra BoD
 	if enemyID == 3:
 		add_child(_enemies[4])
-		_enemies[4].turn_on_physics()
+		if is_instance_valid(_enemies[4]):
+			_enemies[4].turn_on_physics()
 	#If no more enemies remaining you win!!!
 	if enemies_remaining == 0:
 		_end_game(true)
@@ -587,9 +595,6 @@ func spectate_mode():
 	spec_cam.zoom = Vector2(5,5)
 	spec_cam.position = Vector2(1900,1920)
 	$GUI/YouDied.show()
-	if len(alive_players) == 0:
-		_end_game(false)
-		return
 
 """
 /*
@@ -636,7 +641,8 @@ func give_shield(area):
 	if area.is_in_group("player") and _shield_available:
 		ServerConnection.send_shield_notif()
 		_shield_available = false
-		main_player.shield.giveShield()
+		if is_instance_valid(main_player):
+			main_player.shield.giveShield()
 		get_node("shield_sprite").hide()
 		start_shield_timer()
 
@@ -654,8 +660,9 @@ func someone_took_shild(player_id,_shield_num):
 	get_node("shield_sprite").hide()
 	start_shield_timer()
 	for o_player in server_players:
-		if player_id == o_player.get('num'):
-			o_player.get('player_obj').shield.giveShield()
+		var p_obj = o_player.get('player_obj')
+		if player_id == o_player.get('num') and is_instance_valid(p_obj):
+			p_obj.shield.giveShield()
 			break
 
 """
@@ -690,22 +697,14 @@ func _respawn_shield(tmr:Timer):
 
 """
 /*
-* @pre Someone got hit by a sword
-* @post move them to right position
-* @param player_id -> int (id of player)
-* 		 x -> int (x position to go to)
-*		 y -> int (y position to go to)
+* @pre the main player (you) died
+* @post spawn spectate mode or end game if all other players also dead
+* @param None
 * @return None
 */
 """
-func someone_got_booped(player_id: int, x: int, y: int):
-	for o_player in server_players:
-		if player_id == o_player.get('num'):
-			o_player.get('player_obj').was_booped(Vector2(x,y))
-			break
-
 func _p1_died():
 	_player_dead = true
 	spectate_mode()
 	if len(alive_players) == 0:
-		_end_game(true)
+		_end_game(false)
