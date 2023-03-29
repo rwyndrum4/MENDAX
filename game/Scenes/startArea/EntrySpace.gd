@@ -46,9 +46,9 @@ onready var secretPanel = $worldMap/Node2D_1/Wall3x3_6
 onready var secretPanelCollider = $worldMap/Node2D_1/colliders/secretDoor
 onready var ladder = $worldMap/Node2D_1/Ladder1x1
 onready var pitfall = $worldMap/Node2D_1/Pitfall1x1_2
-onready var player = $Player
 onready var wellLabeled = $well/Label
 onready var spectate_text = $GUI/spectate_mode
+onready var player = $Player
 
 """
 /*
@@ -60,9 +60,13 @@ onready var spectate_text = $GUI/spectate_mode
 """
 func _ready():
 	set_physics_process(false) #turn of physics until game should start
-	player.set_physics_process(false)
-	# warning-ignore:return_value_discarded
-	player.connect("p1_died", self, "_p1_died")
+	#If a player died in an earlier phase, delete their object
+	if Global._player_died_final_boss:
+		$Player.queue_free()
+	else:
+		$Player.set_physics_process(false)
+		# warning-ignore:return_value_discarded
+		$Player.connect("p1_died", self, "_p1_died")
 	#hide cave instructions at start
 	instructions.hide()
 	$fogSprite.modulate.a8 = 0
@@ -111,26 +115,24 @@ func _process(_delta): #change to delta if used
 	if not stop_steam_control:
 		control_steam()
 	#if not in final boss (aka normal cave b4 minigame, don't do rest)
-	if Global.progress < 4:
+	if not Global._in_final_boss:
 		return
+	handle_swords()
 	#Check if players have lost the game or not
 	if check_everyone_dead():
 		Global.state = Global.scenes.END_SCREEN
 	# Check for completion of boss stage 1
 	if Global.progress == 4:
 		#besier tracker not needed anymore
-		ServerConnection.disconnect("final_boss_besier_lit", self, "_besier_was_lit")
 		Global.state = Global.scenes.DILEMMA
 	if Global.progress == 5:
 		load_boss(2)
-	if Global.progress == 6 or Global.progress == 8:
-		handle_swords()
 	if Global.progress == 7:
 		load_boss(3)
 	#Put all player related code after this, checks if still alive or not
-	if not is_instance_valid(player):
+	if not is_instance_valid($Player):
 		return
-	if player.isInverted == true:
+	if $Player.isInverted == true:
 		confuzzed.visible = true
 	else:
 		confuzzed.visible = false
@@ -153,15 +155,15 @@ func handle_swords():
 			elif p_obj.get('sword_dir') == "left":
 				p_obj._pivot.position = p_obj.position + Vector2(-60,0)
 	#Check whether player or sword are invalid
-	if not is_instance_valid(player):
+	if not is_instance_valid($Player):
 		return
 	if not is_instance_valid(sword):
 		return
 	#main player's sword
 	if sword.direction == "right":
-		sword.get_node("pivot").position = player.position + Vector2(60,0)
+		sword.get_node("pivot").position = $Player.position + Vector2(60,0)
 	elif sword.direction == "left":
-		sword.get_node("pivot").position = player.position + Vector2(-60,0)
+		sword.get_node("pivot").position = $Player.position + Vector2(-60,0)
 
 """
 /*
@@ -172,7 +174,7 @@ func handle_swords():
 */
 """
 func _input(_ev):
-	if in_well:
+	if in_well and is_instance_valid(dummyBoss):
 		if Input.is_action_just_pressed("ui_press_e",false) and dummyBoss.get_vulnerable_status():
 			dummyBoss._set_invulnerability(false)
 			ServerConnection.send_boss_vulnerability()
@@ -193,7 +195,7 @@ func _input(_ev):
 				secretPanel.queue_free()
 			if is_instance_valid(secretPanelCollider):
 				secretPanelCollider.queue_free()
-	if at_ladder:
+	if at_ladder and is_instance_valid(ladder):
 		if Input.is_action_just_pressed("ui_accept",false) and not Input.is_action_just_pressed("ui_enter_chat"):
 			ladder.texture = $root/Assets/tiles/TilesCorrected/WallTile_Tilt_Horiz
 	#Spectator mode stuff
@@ -203,7 +205,8 @@ func _input(_ev):
 	#DEBUG PURPOSES - REMOVE FOR FINAL GAME!!!
 	#IF YOU PRESS P -> TIMER WILL REDUCE TO 3 SECONDS
 	if Input.is_action_just_pressed("timer_debug_key",false):
-		myTimer.start(3)
+		if is_instance_valid(myTimer):
+			myTimer.start(3)
 	#IF YOU PRESS O (capital 'o') -> TIMER WILL INCREASE TO ARBITRARILY MANY SECONDS
 	if Input.is_action_just_pressed("minigame_debug_key",false):
 		Global.minigame = Global.minigame + 1
@@ -212,7 +215,8 @@ func _input(_ev):
 		if Global.minigame > 2:
 			Global.progress = 4
 			Global.state = Global.scenes.DILEMMA
-		myTimer.start(30000)
+		if is_instance_valid(myTimer):
+			myTimer.start(30000)
 
 """
 /*
@@ -263,13 +267,18 @@ func _can_start_game_other():
 """
 func start_cave():
 	set_physics_process(true)
-	player.set_physics_process(true)
-	#Reset player trackers for next game
-	Global.reset_minigame_players()
-	#Hide waiting for players text
-	$GUI/wait_on_players.hide()
-	#Start timer
-	myTimer.start(CAVE_TIME)
+	#Start timer if not inside of the final boss
+	if Global.minigame < 4:
+		myTimer.start(CAVE_TIME)
+	else:
+		myTimer.queue_free()
+	#Check if main player is alive, send to spectate mode if not
+	if is_instance_valid($Player):
+		$Player.set_physics_process(true)
+	else:
+		spectate_mode()
+	Global.reset_minigame_players() #Reset player trackers for next game
+	$GUI/wait_on_players.hide() #Hide waiting for players text
 
 """
 * @post shows instructions on screen and sets in_cave to true
@@ -329,8 +338,10 @@ func _on_Timer_timeout():
 	elif Global.minigame == 2:
 		Global.minigame = 3
 		Global.state = Global.scenes.RHYTHM_INTRO
-	else: 
+	elif Global.minigame == 3:
+		Global.minigame = 4
 		load_boss(1)
+		myTimer.queue_free() #timer not needed for final boss
 
 """
 /*
@@ -353,7 +364,7 @@ func chatbox_use(value):
 */
 """
 func _on_right_side_area_entered(area):
-	if not area.is_in_group("player"):
+	if not area.is_in_group("player") or (not is_instance_valid($Player)):
 		return
 	var pos = $Player.position
 	if pos.x > -1200.0:
@@ -370,7 +381,7 @@ func _on_right_side_area_entered(area):
 */
 """
 func _on_left_side_area_entered(area):
-	if not area.is_in_group("player"):
+	if not area.is_in_group("player") or (not is_instance_valid($Player)):
 		return
 	var pos = $Player.position
 	if pos.x < -5800:
@@ -425,10 +436,10 @@ func spawn_players():
 	for num_str in Global.player_positions:
 		#Add animated player to scene
 		var num = int(num_str)
-		#if player is YOUR player (aka player you control)
-		if num == ServerConnection._player_num:
-			player.position = Global.player_positions[str(num)]
-			player.set_color(num)
+		#if player is YOUR player (aka player you control), and you are alive ^_
+		if num == ServerConnection._player_num and is_instance_valid($Player):
+			$Player.position = Global.player_positions[str(num)]
+			$Player.set_color(num)
 		#if the player is another online player
 		else:
 			var new_player:KinematicBody2D = load(other_player).instance()
@@ -552,9 +563,10 @@ func set_init_player_pos():
 */
 """
 func load_boss(stage_num:int):
-	myTimer.stop()
+	Global._in_final_boss = true
 	var boss = preload("res://Scenes/FinalBoss/Boss.tscn").instance()
 	_enemies.append(boss)
+	dummyBoss = boss #global variable that holds boss obj, use if desired
 	# warning-ignore:return_value_discarded
 	ServerConnection.connect("arena_enemy_hit",self,"_someone_hit_enemy")
 	# warning-ignore:return_value_discarded
@@ -568,17 +580,14 @@ func load_boss(stage_num:int):
 		stage_2()
 	elif stage_num == 3:
 		stage_3(boss)
-	#If it is not the first stage, then turn on shields
-	if stage_num > 1:
-		#Unhide player health bar and set total health to 150
-		$Player/ProgressBar.show()
-		$Player/ProgressBar.value = PLAYER_HEALTH
-		spawn_shields() #shield spawns now show up in 3 places
+	spawn_shields() #shield spawns now show up in 3 places
+	give_players_combat_power() #Unhide player swords, and show ONLY your own healthbar
 	# Initialize, place, and spawn boss
 	boss.set("position", Vector2(-4250, 2160))
 	add_child_below_node($worldMap, boss)
-	# Zoom out camera so player can view Mendax in all his glory
-	$Player.get_node("Camera2D").set("zoom", Vector2(2, 2))
+	if is_instance_valid($Player):
+		# Zoom out camera so player can view Mendax in all his glory
+		$Player.get_node("Camera2D").set("zoom", Vector2(2, 2))
 
 """
 /*
@@ -611,6 +620,11 @@ func stage_1() -> void:
 	add_child_below_node($Darkness, bez2)
 	add_child_below_node($Darkness, bez3)
 	add_child_below_node($Darkness, bez4)
+	# Give player a sword
+	sword = preload("res://Scenes/player/Sword/Sword.tscn").instance()
+	sword.direction = "right"
+	sword.get_node("pivot").position = $Player.position + Vector2(60,20)
+	add_child_below_node($Player, sword)
 
 """
 /*
@@ -626,13 +640,15 @@ func stage_2() -> void:
 	# Hide light from cave entrance
 	$Light2D.hide()
 	# Hide player torch light
+	Global.progress = 6
+	if not is_instance_valid($Player):
+		return
 	$Player.get_node("light/Torch1").hide()
 	# Give player a sword
 	sword = preload("res://Scenes/player/Sword/Sword.tscn").instance()
 	sword.direction = "right"
 	sword.get_node("pivot").position = $Player.position + Vector2(60,20)
 	add_child_below_node($Player, sword)
-	Global.progress = 6
 	#imposter spawns
 	_imposter_timer = Timer.new()
 	add_child(_imposter_timer)
@@ -655,16 +671,18 @@ func stage_3(boss) -> void:
 	$Darkness.hide()
 	# Hide light from cave entrance
 	$Light2D.hide()
-	# Hide player torch light
-	$Player.get_node("light/Torch1").hide()
+	spawn_stage_three_enemies() #spawn enemies from arena
+	boss._set_invulnerability(true)
+	Global.progress = 8
+	#Don't setup player stuff if they are already dead
+	if not is_instance_valid($Player):
+		return
+	$Player.get_node("light/Torch1").hide() # Hide player torch light
 	# Give player a sword
 	sword = preload("res://Scenes/player/Sword/Sword.tscn").instance()
 	sword.direction = "right"
 	sword.get_node("pivot").position = $Player.position + Vector2(60,20)
 	add_child_below_node($Player, sword)
-	Global.progress = 8
-	#spawn enemies from arena
-	spawn_stage_three_enemies()
 	#imposter spawns
 	var wait_for_start: Timer = Timer.new()
 	add_child(wait_for_start)
@@ -673,8 +691,6 @@ func stage_3(boss) -> void:
 	wait_for_start.start()
 	# warning-ignore:return_value_discarded
 	wait_for_start.connect("timeout",self, "_imposter_spawn")
-	boss._set_invulnerability(true)
-	dummyBoss = boss
 
 """
 /*
@@ -685,16 +701,21 @@ func stage_3(boss) -> void:
 */
 """
 func give_players_combat_power():
-	player.healthbar_visibility(true)
+	if is_instance_valid($Player):
+		$Player/ProgressBar.value = PLAYER_HEALTH
+		$Player.healthbar_visibility(true)
 	for o_player in server_players:
-		if is_instance_valid(o_player.get('player_obj')):
-			o_player.get('player_obj').sword_visibility(true)
-			o_player.get('player_obj').healthbar_visibility(true)
+		var p_obj = o_player.get('player_obj')
+		if is_instance_valid(p_obj):
+			p_obj.sword_visibility(true) #always show swords
+			#Show other players health bars if you are spectating
+			if not is_instance_valid($Player):
+				p_obj.healthbar_visibility(true)
 
 """
 /*
 * @pre None
-* @post Shield is spawned inside of game
+* @post Shields are spawned in the game
 * @param None
 * @return None
 */
@@ -710,31 +731,41 @@ func spawn_shields():
 	var inc = 0
 	for pos in shield_positions:
 	# Generate shild spawn
-		var shield_spawn = Area2D.new()
-		var col_2d = CollisionShape2D.new()
-		var shape = CircleShape2D.new()
-		shape.set_radius(80)
-		col_2d.set_shape(shape)
-		shield_spawn.position = pos
-		var shield_sprite = Sprite.new()
-		var spawn_sprite = Sprite.new()
-		shield_sprite.texture = load("res://Assets/shieldFull.png")
-		shield_sprite.scale = Vector2(1.5,1.5)
-		shield_sprite.position = pos
-		shield_sprite.set_name("shield_sprite" + str(inc))
-		spawn_sprite.texture = load("res://Assets/shield_spawn.png")
-		spawn_sprite.scale = Vector2(4,4)
-		spawn_sprite.position = pos
-		add_child(shield_spawn)
-		shield_spawn.add_child(col_2d)
-		#add_child_below_node(shield_spawn,col_2d)
-		add_child_below_node(shield_spawn,shield_sprite)
-		add_child_below_node(shield_spawn,spawn_sprite)
-		shield_spawn.connect("area_entered",self,"give_shield", [inc])
-		_shield_spawns.append(shield_spawn)
-		_shields_available.append(true)
+		create_shield(pos, inc)
 		inc += 1
 
+"""
+/*
+* @pre None
+* @post Helper function to place a shield for a certain position
+* @param None
+* @return None
+*/
+"""
+func create_shield(spawn_pos: Vector2, shield_id: int):
+	var shield_spawn = Area2D.new()
+	var col_2d = CollisionShape2D.new()
+	var shape = CircleShape2D.new()
+	shape.set_radius(80)
+	col_2d.set_shape(shape)
+	shield_spawn.position = spawn_pos
+	var shield_sprite = Sprite.new()
+	var spawn_sprite = Sprite.new()
+	shield_sprite.texture = load("res://Assets/shieldFull.png")
+	shield_sprite.scale = Vector2(1.5,1.5)
+	shield_sprite.position = spawn_pos
+	shield_sprite.set_name("shield_sprite" + str(shield_id))
+	spawn_sprite.texture = load("res://Assets/shield_spawn.png")
+	spawn_sprite.scale = Vector2(4,4)
+	spawn_sprite.position = spawn_pos
+	add_child(shield_spawn)
+	shield_spawn.add_child(col_2d)
+	add_child_below_node(shield_spawn,shield_sprite)
+	add_child_below_node(shield_spawn,spawn_sprite)
+	shield_spawn.connect("area_entered",self,"give_shield", [shield_id])
+	_shield_spawns.append(shield_spawn)
+	_shields_available.append(true)
+	
 """
 /*
 * @pre Called when a player grabs a shield from spawn
@@ -745,9 +776,11 @@ func spawn_shields():
 """
 func give_shield(area, s_id):
 	if area.is_in_group("player") and _shields_available[s_id]:
+		if not is_instance_valid($Player):
+			return
 		ServerConnection.send_shield_notif(s_id)
 		_shields_available[s_id] = false
-		player.shield.giveShield()
+		$Player.shield.giveShield()
 		get_node("shield_sprite" + str(s_id)).hide()
 		start_shield_timer(s_id)
 
@@ -780,8 +813,9 @@ func someone_took_shield(player_id,_shield_num):
 	get_node("shield_sprite" + str(_shield_num)).hide()
 	start_shield_timer(_shield_num)
 	for o_player in server_players:
-		if player_id == o_player.get('num') and is_instance_valid(o_player.get('player_obj')):
-			o_player.get('player_obj').shield.giveShield()
+		var p_obj = o_player.get('player_obj')
+		if player_id == o_player.get('num') and is_instance_valid(p_obj):
+			p_obj.shield.giveShield()
 			break
 
 """
@@ -806,8 +840,10 @@ func _respawn_shield(tmr:Timer, shield_id:int):
 */
 """
 func _imposter_spawn():
+	if not is_instance_valid($Player):
+		return
 	var new_imposter = imposter.instance()
-	new_imposter.setup_pos(player.position)
+	new_imposter.setup_pos($Player.position)
 	add_child(new_imposter)
 
 """
@@ -847,7 +883,8 @@ func _on_well_body_exited(body):
 
 func _shield_up_boss(timer):
 	timer.queue_free()
-	dummyBoss._set_invulnerability(true)
+	if is_instance_valid(dummyBoss):
+		dummyBoss._set_invulnerability(true)
 
 """
 * @pre Someone else lit up a besier
@@ -914,9 +951,10 @@ func _other_player_hit(player_id: int, player_health: int):
 """
 func _other_player_swung_sword(player_id: int, direction: String):
 	for o_player in server_players:
-		if player_id == o_player.get('num'):
+		var p_obj = o_player.get('player_obj')
+		if player_id == o_player.get('num') and is_instance_valid(p_obj):
 			o_player['sword_dir'] = direction
-			o_player.get('player_obj').swing_sword(direction)
+			p_obj.swing_sword(direction)
 			break
 
 """

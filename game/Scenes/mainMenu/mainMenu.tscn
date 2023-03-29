@@ -1,31 +1,14 @@
-[gd_scene load_steps=35 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://Scenes/mainMenu/mainMenu.gd" type="Script" id=1]
 [ext_resource path="res://Assets/Intro/IntroScreen.png" type="Texture" id=2]
-[ext_resource path="res://Assets/stars/frame0002.png" type="Texture" id=3]
+[ext_resource path="res://Scenes/mainMenu/StarsAnimation.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Assets/Intro/MainMenuGradient.png" type="Texture" id=4]
 [ext_resource path="res://Assets/SFX/myTongue.wav" type="AudioStream" id=5]
-[ext_resource path="res://Assets/stars/frame0004.png" type="Texture" id=6]
 [ext_resource path="res://Assets/SFX/bgm/Magic Forest.mp3" type="AudioStream" id=7]
 [ext_resource path="res://Assets/ARIALBD.TTF" type="DynamicFontData" id=8]
-[ext_resource path="res://Assets/stars/frame0008.png" type="Texture" id=9]
 [ext_resource path="res://Assets/Teko-Light.ttf" type="DynamicFontData" id=10]
 [ext_resource path="res://Assets/SFX/click.wav" type="AudioStream" id=11]
-[ext_resource path="res://Assets/stars/frame0010.png" type="Texture" id=12]
-[ext_resource path="res://Assets/stars/frame0011.png" type="Texture" id=13]
-[ext_resource path="res://Assets/stars/frame0014.png" type="Texture" id=14]
-[ext_resource path="res://Assets/stars/frame0013.png" type="Texture" id=15]
-[ext_resource path="res://Assets/stars/frame0015.png" type="Texture" id=16]
-[ext_resource path="res://Assets/stars/frame0001.png" type="Texture" id=17]
-[ext_resource path="res://Assets/stars/frame0006.png" type="Texture" id=18]
-[ext_resource path="res://Assets/stars/frame0009.png" type="Texture" id=19]
-[ext_resource path="res://Assets/stars/frame0007.png" type="Texture" id=20]
-[ext_resource path="res://Assets/stars/frame0005.png" type="Texture" id=21]
-[ext_resource path="res://Assets/stars/frame0003.png" type="Texture" id=22]
-[ext_resource path="res://Assets/stars/frame0000.png" type="Texture" id=23]
-[ext_resource path="res://Assets/stars/frame0012.png" type="Texture" id=24]
-[ext_resource path="res://Assets/stars/frame0016.png" type="Texture" id=25]
-[ext_resource path="res://Assets/stars/frame0017.png" type="Texture" id=26]
 
 [sub_resource type="Shader" id=5]
 code = "shader_type canvas_item;
@@ -46,14 +29,6 @@ void fragment(){
 [sub_resource type="ShaderMaterial" id=11]
 shader = SubResource( 5 )
 shader_param/mix_amount = 0.0
-
-[sub_resource type="SpriteFrames" id=15]
-animations = [ {
-"frames": [ ExtResource( 23 ), ExtResource( 17 ), ExtResource( 3 ), ExtResource( 22 ), ExtResource( 6 ), ExtResource( 21 ), ExtResource( 18 ), ExtResource( 20 ), ExtResource( 9 ), ExtResource( 19 ), ExtResource( 12 ), ExtResource( 13 ), ExtResource( 24 ), ExtResource( 15 ), ExtResource( 14 ), ExtResource( 16 ), ExtResource( 25 ), ExtResource( 26 ), ExtResource( 23 ), ExtResource( 17 ), ExtResource( 3 ), ExtResource( 22 ), ExtResource( 6 ) ],
-"loop": true,
-"name": "default",
-"speed": 5.0
-} ]
 
 [sub_resource type="DynamicFont" id=8]
 size = 32
@@ -95,9 +70,8 @@ material = SubResource( 11 )
 position = Vector2( 642.929, 367.47 )
 texture = ExtResource( 4 )
 
-[node name="Stars" type="AnimatedSprite" parent="."]
+[node name="Stars" parent="." instance=ExtResource( 3 )]
 position = Vector2( 640, 208 )
-frames = SubResource( 15 )
 
 [node name="menuButtons" type="VBoxContainer" parent="."]
 anchor_top = 1.0

@@ -11,6 +11,7 @@ extends Control
 
 
 # Member Variables:
+const STARS_BUFFER = 3
 var in_cave = false
 onready var player_one = $Player
 onready var instructions: Label = $enterCaveArea/enterDirections
@@ -28,6 +29,9 @@ var other_player = "res://Scenes/player/other_players/other_players.tscn"
 */
 """
 func _ready():
+	#Play stars animation from last frame in main menu
+	$Stars.frame = Global.stars_last_frame + STARS_BUFFER
+	$Stars.play()
 	#If there is a server connection, spawn all players
 	if ServerConnection.match_exists() and ServerConnection.get_server_status():
 		spawn_players()
@@ -48,11 +52,8 @@ func _process(_delta): #change to delta if using it
 			in_cave = false
 			# warning-ignore:return_value_discarded
 			$Enter.play()
-			#change scene to cave area
-			
-			#I DID THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			#change scene to cave area after Bush Transition finished playing
 			BushTrans.change_scene(Global.scenes.CAVE)
-			#CaveInTrans.change_scene(Global.scenes.CAVE)
 
 """
 /*

@@ -273,10 +273,11 @@ func _del_animation(warAni):
 func _atk_can_go(atk,x_sprite):
 	x_sprite.queue_free()
 	var id = len(_atk_objects)
-	atk.set_id(id)
-	get_parent().add_child(atk)
-	_atk_objects[id] = atk
-	atk.connect("aoe_attack_hit",self,"_delete_aoe_atk", [atk])
+	if is_instance_valid(atk):
+		atk.set_id(id)
+		get_parent().add_child(atk)
+		_atk_objects[id] = atk
+		atk.connect("aoe_attack_hit",self,"_delete_aoe_atk", [atk])
 
 """
 /*

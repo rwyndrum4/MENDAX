@@ -16,6 +16,8 @@ var hotbar = preload("res://Inventory/Hotbar.tscn").instance()
 
 #Entry First Time
 var in_anim: int = 0
+#variable to track what frame user was on after pressing start
+var stars_last_frame = 0 
 
 #track minigame
 var minigame: int = 0
@@ -23,13 +25,14 @@ var players_in_minigame: int = 0
 
 # Counter tracking progression in final boss fight
 var progress = 0
+var _in_final_boss = false
 
 # Variable to track where boss can teleport in final boss
 var _boss_tp_counter = 0
 var _first_time_in_boss = false
 
 # Track if player died in the final boss
-var _player_died_final_boss = false 
+var _player_died_final_boss = false
 
 # Variable for tracking how long you wait for players to load
 const WAIT_FOR_PLAYERS_TIME = 30
@@ -353,6 +356,7 @@ func reset() -> void:
 	_boss_tp_counter = 0
 	_first_time_in_boss = false
 	_player_died_final_boss = false
+	_first_time_in_boss = false
 	player_names = {}
 	player_positions = {}
 	player_input_vectors = {}
