@@ -193,7 +193,7 @@ func take_damage(amount: int) -> void:
 	ServerConnection.send_arena_enemy_hit(amount,0, "Boss")
 	if _invulnerable == false:
 		healthbar.value = healthbar.value - amount
-		if healthbar.value == 200 and Global.progress == 6:
+		if healthbar.value <= 200 and Global.progress == 6:
 			Global.state = Global.scenes.QUIZ
 		if healthbar.value == 0:
 			Global.state = Global.scenes.END_SCREEN
@@ -201,7 +201,7 @@ func take_damage(amount: int) -> void:
 #Same function as above but doesn't send data to the server
 func take_damage_server(amount: int) -> void:
 	healthbar.value = healthbar.value - amount
-	if healthbar.value == 200 and Global.progress == 6:
+	if healthbar.value <= 200 and Global.progress == 6:
 		Global.state = Global.scenes.QUIZ
 	if healthbar.value == 0:
 		Global.state = Global.scenes.END_SCREEN
