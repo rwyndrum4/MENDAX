@@ -82,14 +82,13 @@ func _ready():
 	ServerConnection.connect("aoe_attack_was_hit", self, "_delete_atk_from_server")
 	if Global.progress == 0:
 		_can_teleport = false
-		healthbar.value = 200
-		_invulnerable = true;
+		_invulnerable = true
+		healthbar.value = 400
 		auraShield.visible = true
 	else:
 		#In all other phases allow the boss to teleport
 		_can_teleport = true
 		healthbar.value = 400
-		_invulnerable = false;
 		auraShield.visible = false
 
 """
