@@ -7,9 +7,11 @@
 extends Node2D
 
 onready var textBox = $textBox
+onready var _curr_player = $Player
 var _players
 var _num_players = 0
 var _cancel
+var _color
 
 
 """
@@ -33,6 +35,8 @@ func _ready():
 			_players.remove(i)
 			break
 	_num_players = len(_players)
+	_curr_player.set_color(ServerConnection._player_num)
+
 	# Turn off player's torch
 	$Player.get_node("light").hide()
 	# Play dialogue
@@ -61,19 +65,21 @@ func _process(_delta):
 		Global.state = Global.scenes.CAVE
 	if textBox.text_queue.empty():
 		if _num_players >= 1:
-			$Button1.text = "Betray" + _players[0]
+			$Button1.text = _players[0]
 			$Button1.show()
 			$ButtonGlow1.show()
 		if _num_players >= 2:
-			$Button2.text = "Betray" + _players[1]
+			$Button2.text = _players[1]
 			$Button2.show()
 			$ButtonGlow2.show()
 		if _num_players >= 3:
-			$Button3.text = "Betray" + _players[2]
+			$Button3.text = _players[2]
 			$Button3.show()
 			$ButtonGlow3.show()
 		$Button4.show()
 		$ButtonGlow4.show()
+		$Label.show()
+		$Label/labelGlow.show()
 		
 """
 /*
