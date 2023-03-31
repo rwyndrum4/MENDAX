@@ -6,16 +6,18 @@
 """
 extends Light2D
 
-
 var _ticks = 0
 var _mode = "burn"
 var _drops = 0
-
+var burning = true
+onready var light = $Player/light
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
 
+func toggle_burning():
+	burning = !burning
 
 """
 /*
@@ -26,9 +28,10 @@ func _ready():
 */
 """
 func _process(_delta):
-	var tex_scale = get("texture_scale")
-	if tex_scale > 0.1:
-		set("texture_scale", tex_scale - 0.0025)
-	else:
-		set("energy", 0)
-		get_parent().hide()
+	if burning == true:
+		var tex_scale = get("texture_scale")
+		if tex_scale > 0.1:
+			set("texture_scale", tex_scale - 0.0025)
+		else:
+			set("energy", 0)
+			get_parent().hide()
