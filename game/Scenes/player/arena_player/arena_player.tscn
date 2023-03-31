@@ -549,11 +549,13 @@ shape = SubResource( 1 )
 [node name="position" type="Position2D" parent="."]
 
 [node name="animated_sprite" type="AnimatedSprite" parent="position"]
+light_mask = 0
 scale = Vector2( 3.53642, 3.53642 )
 frames = SubResource( 2 )
 animation = "roll_southeast_green"
 
 [node name="ProgressBar" type="ProgressBar" parent="."]
+light_mask = 0
 margin_left = -75.0
 margin_top = -110.0
 margin_right = -25.0
