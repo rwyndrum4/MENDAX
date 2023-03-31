@@ -1,24 +1,29 @@
 extends Area2D
 
 onready var drawing = $anim_drawing
+onready var swooshsfx = $CircleShape/swoosh
 const ATK_TIMER = 0.015
 var _speed = Vector2(0.01,0.01)
 var _got_too_big:bool = false
 var _atk_timer: float = 0.0
 var _atk_prev_timer: float = 0.0
 var _id: int = 0
+var _sound: int = 4.5
+
 signal aoe_attack_hit()
 
 func _ready():
 	scale = Vector2(2,2)
 	drawing.play("default")
 	$bwam.play()
-	$swoosh.playing = true
+	$CircleShape/swoosh.playing = true
 
 func _process(delta):
 	_atk_timer += delta
 	if (_atk_timer - _atk_prev_timer > ATK_TIMER):
 		scale += _speed
+		
+		swooshsfx.max_distance += _sound
 		_speed.x += 0.0008
 		_speed.y += 0.0008
 		if scale > Vector2(150,150):
