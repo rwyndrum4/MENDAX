@@ -150,12 +150,8 @@ func handle_swords():
 	for p in server_players:
 		var p_obj = p.get('player_obj')
 		if is_instance_valid(p_obj):
-			if p_obj.get('sword_dir') == "right":
-				p_obj._pivot.position = p_obj.position + Vector2(60,0)
-				p_obj._pivot.scale.x = 1
-			elif p_obj.get('sword_dir') == "left":
-				p_obj.p_sword.position = p_obj.position + Vector2(-60,0)
-				p_obj._pivot.scale.x = -1
+			var x = 60 if p['sword_dir'] == "right" else -60
+			p_obj._pivot.position = p_obj.position + Vector2(x,0)
 	#Check whether player or sword are invalid
 	if not is_instance_valid(player):
 		return
