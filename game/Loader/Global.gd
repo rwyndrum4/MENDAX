@@ -30,6 +30,8 @@ var _in_final_boss = false
 # Variable to track where boss can teleport in final boss
 var _boss_tp_counter = 0
 var _first_time_in_boss = false
+var riddle_answer = ""
+var rhythm_winner = ""
 
 # Track if player died in the final boss
 var _player_died_final_boss = false

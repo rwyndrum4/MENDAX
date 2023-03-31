@@ -130,7 +130,7 @@ func _process(_delta): #change to delta if used
 	if Global.progress == 7:
 		load_boss(3)
 	#Put all player related code after this, checks if still alive or not
-	if not is_instance_valid($Player):
+	if not is_instance_valid(player):
 		return
 	if $Player.isInverted == true:
 		confuzzed.visible = true
@@ -151,11 +151,13 @@ func handle_swords():
 		var p_obj = p.get('player_obj')
 		if is_instance_valid(p_obj):
 			if p_obj.get('sword_dir') == "right":
-				p_obj._pivot.position = p_obj.position + Vector2(60,0)
+				p_obj.p_sword.position = p_obj.position + Vector2(60,0)
+				p_obj._pivot.scale.x = 1
 			elif p_obj.get('sword_dir') == "left":
-				p_obj._pivot.position = p_obj.position + Vector2(-60,0)
+				p_obj.p_sword.position = p_obj.position + Vector2(-60,0)
+				p_obj._pivot.scale.x = -1
 	#Check whether player or sword are invalid
-	if not is_instance_valid($Player):
+	if not is_instance_valid(player):
 		return
 	if not is_instance_valid(sword):
 		return
@@ -273,7 +275,7 @@ func start_cave():
 	else:
 		myTimer.queue_free()
 	#Check if main player is alive, send to spectate mode if not
-	if is_instance_valid($Player):
+	if is_instance_valid(player):
 		$Player.set_physics_process(true)
 	else:
 		spectate_mode()
@@ -364,7 +366,7 @@ func chatbox_use(value):
 */
 """
 func _on_right_side_area_entered(area):
-	if not area.is_in_group("player") or (not is_instance_valid($Player)):
+	if not area.is_in_group("player") or (not is_instance_valid(player)):
 		return
 	var pos = $Player.position
 	if pos.x > -1200.0:
@@ -381,7 +383,7 @@ func _on_right_side_area_entered(area):
 */
 """
 func _on_left_side_area_entered(area):
-	if not area.is_in_group("player") or (not is_instance_valid($Player)):
+	if not area.is_in_group("player") or (not is_instance_valid(player)):
 		return
 	var pos = $Player.position
 	if pos.x < -5800:
@@ -437,7 +439,7 @@ func spawn_players():
 		#Add animated player to scene
 		var num = int(num_str)
 		#if player is YOUR player (aka player you control), and you are alive ^_
-		if num == ServerConnection._player_num and is_instance_valid($Player):
+		if num == ServerConnection._player_num and is_instance_valid(player):
 			$Player.position = Global.player_positions[str(num)]
 			$Player.set_color(num)
 		#if the player is another online player
@@ -585,7 +587,7 @@ func load_boss(stage_num:int):
 	# Initialize, place, and spawn boss
 	boss.set("position", Vector2(-4250, 2160))
 	add_child_below_node($worldMap, boss)
-	if is_instance_valid($Player):
+	if is_instance_valid(player):
 		# Zoom out camera so player can view Mendax in all his glory
 		$Player.get_node("Camera2D").set("zoom", Vector2(2, 2))
 
@@ -641,7 +643,7 @@ func stage_2() -> void:
 	$Light2D.hide()
 	# Hide player torch light
 	Global.progress = 6
-	if not is_instance_valid($Player):
+	if not is_instance_valid(player):
 		return
 	$Player.get_node("light/Torch1").hide()
 	# Give player a sword
@@ -675,7 +677,7 @@ func stage_3(boss) -> void:
 	boss._set_invulnerability(true)
 	Global.progress = 8
 	#Don't setup player stuff if they are already dead
-	if not is_instance_valid($Player):
+	if not is_instance_valid(player):
 		return
 	$Player.get_node("light/Torch1").hide() # Hide player torch light
 	# Give player a sword
@@ -701,7 +703,7 @@ func stage_3(boss) -> void:
 */
 """
 func give_players_combat_power():
-	if is_instance_valid($Player):
+	if is_instance_valid(player):
 		$Player/ProgressBar.value = PLAYER_HEALTH
 		$Player.healthbar_visibility(true)
 	for o_player in server_players:
@@ -709,7 +711,7 @@ func give_players_combat_power():
 		if is_instance_valid(p_obj):
 			p_obj.sword_visibility(true) #always show swords
 			#Show other players health bars if you are spectating
-			if not is_instance_valid($Player):
+			if not is_instance_valid(player):
 				p_obj.healthbar_visibility(true)
 
 """
@@ -776,7 +778,7 @@ func create_shield(spawn_pos: Vector2, shield_id: int):
 """
 func give_shield(area, s_id):
 	if area.is_in_group("player") and _shields_available[s_id]:
-		if not is_instance_valid($Player):
+		if not is_instance_valid(player):
 			return
 		ServerConnection.send_shield_notif(s_id)
 		_shields_available[s_id] = false
@@ -840,7 +842,7 @@ func _respawn_shield(tmr:Timer, shield_id:int):
 */
 """
 func _imposter_spawn():
-	if not is_instance_valid($Player):
+	if not is_instance_valid(player):
 		return
 	var new_imposter = imposter.instance()
 	new_imposter.setup_pos($Player.position)
@@ -966,6 +968,7 @@ func _other_player_swung_sword(player_id: int, direction: String):
 */
 """
 func _p1_died():
+	$fogSprite.hide()
 	if is_instance_valid(sword):
 		sword.queue_free()
 	_player_dead = true

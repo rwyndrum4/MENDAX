@@ -185,6 +185,7 @@ func start_riddle_game():
 	# warning-ignore:return_value_discarded
 	connect("textWait", self, "_finish_anim")
 	Global.in_anim = 1;
+	Global.riddle_answer = answer
 
 """
 /*
