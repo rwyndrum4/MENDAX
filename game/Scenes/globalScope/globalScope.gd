@@ -81,7 +81,8 @@ func _ready():
 	yield(server_checks(), "completed")
 
 func toggle_hotbar(en: bool):
-	hotbar.visible = en
+	pass
+	# hotbar.visible = en
 
 """
 /*
