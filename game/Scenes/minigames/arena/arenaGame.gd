@@ -46,6 +46,7 @@ onready var onlinePlayer = preload("res://Scenes/player/arena_player/arena_playe
 """
 func _ready():
 	randomize()
+	set_physics_process(false)
 	main_player.set_physics_process(false)
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("enemyDefeated",self,"_enemy_defeated")
@@ -130,7 +131,7 @@ func handle_swords():
 		var p_obj = p.get('player_obj')
 		if is_instance_valid(p_obj):
 			var x = 60 if p['sword_dir'] == "right" else -60
-			p_obj._pivot.position = p_obj.position + Vector2(x,0)
+			p_obj._pivot.position = Vector2(x,0)
 	if (not is_instance_valid(main_player)) or (not is_instance_valid(sword)):
 		return
 	#main player's sword
@@ -191,6 +192,7 @@ func _can_start_game_other():
 */
 """
 func start_arena_game():
+	set_physics_process(true)
 	main_player.set_physics_process(true)
 	$GUI/wait_on_players.queue_free()
 	var var_time: String = "a minute" if TOTAL_TIME == 120 else "two minutes"
