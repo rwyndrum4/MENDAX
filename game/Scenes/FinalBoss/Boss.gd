@@ -85,9 +85,16 @@ func _ready():
 		_invulnerable = true
 		healthbar.value = 400
 		auraShield.visible = true
+	elif Global.progress == 8:
+		#In all other phases allow the boss to teleport
+		_can_teleport = true
+		_invulnerable = true
+		healthbar.value = 400
+		auraShield.visible = false
 	else:
 		#In all other phases allow the boss to teleport
 		_can_teleport = true
+		_invulnerable = false
 		healthbar.value = 400
 		auraShield.visible = false
 
