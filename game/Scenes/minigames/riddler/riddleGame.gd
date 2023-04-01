@@ -164,6 +164,7 @@ func _finish_anim():
 */
 """
 func start_riddle_game():
+	Global.reset_minigame_players()
 	player_one.set_physics_process(true)
 	#play riddle animations
 	var t = Timer.new()
@@ -268,7 +269,6 @@ func init_riddle(file):
 """
 func _check_answer(answer_in:String, from_user: String):
 	if answer == answer_in:
-		Global.reset_minigame_players()
 		handle_coins(from_user)
 		Global.state = Global.scenes.CAVE
 

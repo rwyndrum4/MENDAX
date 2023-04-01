@@ -164,6 +164,7 @@ func _can_start_game_other():
 */
 """
 func start_rhythm_game():
+	Global.reset_minigame_players() #Reset minigame players and go to cave scene
 	$Frame/wait_on_players.queue_free()
 	var instructions:Popup = load("res://Scenes/minigames/rhythm/instructions.tscn").instance()
 	$Frame.add_child(instructions)
@@ -414,8 +415,6 @@ func end_rhythm_game():
 	wait_timer_look_leaderboard.queue_free()
 	GlobalSignals.emit_signal("toggleHotbar", true)
 	GlobalSignals.emit_signal("show_money_text", true)
-	#Reset minigame players and go to cave scene
-	Global.reset_minigame_players()
 	Global.state = Global.scenes.CAVE
 
 """

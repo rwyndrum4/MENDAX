@@ -192,6 +192,7 @@ func _can_start_game_other():
 */
 """
 func start_arena_game():
+	Global.reset_minigame_players()
 	set_physics_process(true)
 	main_player.set_physics_process(true)
 	$GUI/wait_on_players.queue_free()
@@ -324,7 +325,6 @@ func _end_game(won_game:bool):
 		var obj = o_player.get('player_obj') 
 		if is_instance_valid(obj):
 			obj.queue_free()
-	Global.reset_minigame_players()
 	Global.state = Global.scenes.CAVE
 
 

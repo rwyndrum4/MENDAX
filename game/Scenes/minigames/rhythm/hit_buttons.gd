@@ -42,7 +42,7 @@ func _unhandled_input(event):
 	if event.is_action(_color_animation):
 		#When key is pressed down (for both note and hold_note)
 		if event.is_action_pressed(_color_animation, false):
-			if _current_note != null:
+			if is_instance_valid(_current_note):
 				if _perfect:
 					play()
 					get_parent().increment_counters(3)
@@ -62,7 +62,7 @@ func _unhandled_input(event):
 					reset_no_null()
 		#When a key is released (ONLY FOR HOLD_NOTE)
 		elif event.is_action_released(_color_animation, false) and _note_type == "hold_note":
-			if _current_note != null:
+			if is_instance_valid(_current_note):
 				if _perfect:
 					play()
 					get_parent().increment_counters(3)
