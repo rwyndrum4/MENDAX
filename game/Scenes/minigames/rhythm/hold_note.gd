@@ -6,8 +6,10 @@ extends Area2D
 onready var hold_zone = $hold_pivot_node/hold_zone
 onready var first_label_text = $first_label/hit_type
 onready var second_label_text = $second_label/hit_type
-onready var second_sprite = $second_sprite
 onready var second_collider = $second_collider
+onready var first_collider = $first_collider
+onready var first_sprite = $first_sprite
+onready var second_sprite = $second_sprite
 var _current_label = null
 
 const MODULATE_VALUE = 8
@@ -183,7 +185,8 @@ func destroy(score: int, note_fully_missed = false):
 		_current_label = $first_label
 		_first_hit = true
 		_in_hold_phase = true
-		$first_collider.queue_free()
+		if is_instance_valid(first_collider):
+			first_collider.queue_free()
 	else:
 		if score > 0:
 			$final_hit_sound.play()
@@ -191,10 +194,14 @@ func destroy(score: int, note_fully_missed = false):
 		_current_label = $second_label
 		_second_hit = true
 		_in_hold_phase = false
-		$second_collider.queue_free()
-		hold_zone.queue_free()
-		$first_sprite.queue_free()
-		$second_sprite.queue_free()
+		if is_instance_valid(second_collider):
+			second_collider.queue_free()
+		if is_instance_valid(hold_zone):
+			hold_zone.queue_free()
+		if is_instance_valid(first_sprite):
+			first_sprite.queue_free()
+		if is_instance_valid(second_sprite):
+			second_sprite.queue_free()
 		delete_node = true
 	#Give a score for the hit
 	match score:
