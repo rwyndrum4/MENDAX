@@ -4,6 +4,8 @@ extends Area2D
 
 # Member Variables
 onready var text_label = $label_holder/hit_type
+onready var my_sprite = $Sprite
+onready var myColShape = $CollisionShape2D
 
 const MODULATE_VALUE = 8
 const SPAWN_Y = -20
@@ -113,8 +115,10 @@ func destroy(score: int):
 		0:
 			text_label.text = "MISSED"
 			text_label.modulate = Color("#e03442")
-	$Sprite.queue_free()
-	$CollisionShape2D.queue_free()
+	if is_instance_valid(my_sprite):
+		my_sprite.queue_free()
+	if is_instance_valid(myColShape):
+		myColShape.queue_free()
 	#Destroy the note when hit based on a timer
 	var destroy_timer: Timer = Timer.new()
 	destroy_timer.one_shot = true
