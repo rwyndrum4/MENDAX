@@ -21,9 +21,10 @@ func change_scene(target) -> void:
 	yield($AnimationPlayer, 'animation_finished')
 	$AnimationPlayer.play("SLIMES_ROLLOUT_P1")
 	yield($AnimationPlayer, 'animation_finished')
-	# warning-ignore:return_value_discarded
-	Global.state = target
+	
 	$AnimationPlayer.play("SLIMES_ROLLOUT_P2")
 	yield($AnimationPlayer, 'animation_finished')
 	$AnimationPlayer.play_backwards("BUSH")
-	
+	yield($AnimationPlayer, 'animation_finished')
+	# warning-ignore:return_value_discarded
+	Global.state = target

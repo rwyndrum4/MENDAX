@@ -464,7 +464,7 @@ position = Vector2( 1344, 64 )
 scale = Vector2( 3.53642, 3.53642 )
 frames = SubResource( 5 )
 animation = "roll_southeast_blue"
-frame = 9
+frame = 4
 playing = true
 
 [node name="animated_sprite2" type="AnimatedSprite" parent="Node2D"]
@@ -473,7 +473,7 @@ position = Vector2( 1344, 192 )
 scale = Vector2( 3.53642, 3.53642 )
 frames = SubResource( 5 )
 animation = "roll_southeast_green"
-frame = 3
+frame = 10
 playing = true
 
 [node name="animated_sprite3" type="AnimatedSprite" parent="Node2D"]
@@ -482,7 +482,7 @@ position = Vector2( 1344, 320 )
 scale = Vector2( 3.53642, 3.53642 )
 frames = SubResource( 5 )
 animation = "roll_southeast_orange"
-frame = 2
+frame = 9
 playing = true
 
 [node name="animated_sprite4" type="AnimatedSprite" parent="Node2D"]
@@ -491,7 +491,7 @@ position = Vector2( 1344, 448 )
 scale = Vector2( 3.53642, 3.53642 )
 frames = SubResource( 5 )
 animation = "roll_southeast_red"
-frame = 4
+frame = 11
 playing = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
