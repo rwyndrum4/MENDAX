@@ -62,11 +62,12 @@ func _ready():
 	set_physics_process(false) #turn of physics until game should start
 	#If a player died in an earlier phase, delete their object
 	if Global._player_died_final_boss:
-		$Player.queue_free()
+		if is_instance_valid(player):
+			player.queue_free()
 	else:
-		$Player.set_physics_process(false)
+		player.set_physics_process(false)
 		# warning-ignore:return_value_discarded
-		$Player.connect("p1_died", self, "_p1_died")
+		player.connect("p1_died", self, "_p1_died")
 	#hide cave instructions at start
 	instructions.hide()
 	$fogSprite.modulate.a8 = 0
@@ -132,7 +133,7 @@ func _process(_delta): #change to delta if used
 	#Put all player related code after this, checks if still alive or not
 	if not is_instance_valid(player):
 		return
-	if $Player.isInverted == true:
+	if player.isInverted == true:
 		confuzzed.visible = true
 	else:
 		confuzzed.visible = false
@@ -159,9 +160,9 @@ func handle_swords():
 		return
 	#main player's sword
 	if sword.direction == "right":
-		sword.get_node("pivot").position = $Player.position + Vector2(60,0)
+		sword.get_node("pivot").position = player.position + Vector2(60,0)
 	elif sword.direction == "left":
-		sword.get_node("pivot").position = $Player.position + Vector2(-60,0)
+		sword.get_node("pivot").position = player.position + Vector2(-60,0)
 
 """
 /*
@@ -272,7 +273,7 @@ func start_cave():
 		myTimer.queue_free()
 	#Check if main player is alive, send to spectate mode if not
 	if is_instance_valid(player):
-		$Player.set_physics_process(true)
+		player.set_physics_process(true)
 	else:
 		spectate_mode()
 	Global.reset_minigame_players() #Reset player trackers for next game
@@ -364,7 +365,7 @@ func chatbox_use(value):
 func _on_right_side_area_entered(area):
 	if not area.is_in_group("player") or (not is_instance_valid(player)):
 		return
-	var pos = $Player.position
+	var pos = player.position
 	if pos.x > -1200.0:
 		steam_area_activated()
 	else:
@@ -381,7 +382,7 @@ func _on_right_side_area_entered(area):
 func _on_left_side_area_entered(area):
 	if not area.is_in_group("player") or (not is_instance_valid(player)):
 		return
-	var pos = $Player.position
+	var pos = player.position
 	if pos.x < -5800:
 		steam_area_activated()
 	else:
@@ -436,8 +437,8 @@ func spawn_players():
 		var num = int(num_str)
 		#if player is YOUR player (aka player you control), and you are alive ^_
 		if num == ServerConnection._player_num and is_instance_valid(player):
-			$Player.position = Global.player_positions[str(num)]
-			$Player.set_color(num)
+			player.position = Global.player_positions[str(num)]
+			player.set_color(num)
 		#if the player is another online player
 		else:
 			var new_player:KinematicBody2D = load(other_player).instance()
@@ -585,7 +586,7 @@ func load_boss(stage_num:int):
 	add_child_below_node($worldMap, boss)
 	if is_instance_valid(player):
 		# Zoom out camera so player can view Mendax in all his glory
-		$Player.get_node("Camera2D").set("zoom", Vector2(2, 2))
+		player.get_node("Camera2D").set("zoom", Vector2(2, 2))
 
 """
 /*
@@ -621,8 +622,8 @@ func stage_1() -> void:
 	# Give player a sword
 	sword = preload("res://Scenes/player/Sword/Sword.tscn").instance()
 	sword.direction = "right"
-	sword.get_node("pivot").position = $Player.position + Vector2(60,20)
-	add_child_below_node($Player, sword)
+	sword.get_node("pivot").position = player.position + Vector2(60,20)
+	add_child_below_node(player, sword)
 
 """
 /*
@@ -641,12 +642,12 @@ func stage_2() -> void:
 	Global.progress = 6
 	if not is_instance_valid(player):
 		return
-	$Player.get_node("light/Torch1").hide()
+	player.get_node("light/Torch1").hide()
 	# Give player a sword
 	sword = preload("res://Scenes/player/Sword/Sword.tscn").instance()
 	sword.direction = "right"
-	sword.get_node("pivot").position = $Player.position + Vector2(60,20)
-	add_child_below_node($Player, sword)
+	sword.get_node("pivot").position = player.position + Vector2(60,20)
+	add_child_below_node(player, sword)
 	#imposter spawns
 	_imposter_timer = Timer.new()
 	add_child(_imposter_timer)
@@ -675,12 +676,12 @@ func stage_3(boss) -> void:
 	#Don't setup player stuff if they are already dead
 	if not is_instance_valid(player):
 		return
-	$Player.get_node("light/Torch1").hide() # Hide player torch light
+	player.get_node("light/Torch1").hide() # Hide player torch light
 	# Give player a sword
 	sword = preload("res://Scenes/player/Sword/Sword.tscn").instance()
 	sword.direction = "right"
-	sword.get_node("pivot").position = $Player.position + Vector2(60,20)
-	add_child_below_node($Player, sword)
+	sword.get_node("pivot").position = player.position + Vector2(60,20)
+	add_child_below_node(player, sword)
 	#imposter spawns
 	var wait_for_start: Timer = Timer.new()
 	add_child(wait_for_start)
@@ -701,7 +702,7 @@ func stage_3(boss) -> void:
 func give_players_combat_power():
 	if is_instance_valid(player):
 		$Player/ProgressBar.value = PLAYER_HEALTH
-		$Player.healthbar_visibility(true)
+		player.healthbar_visibility(true)
 	for o_player in server_players:
 		var p_obj = o_player.get('player_obj')
 		if is_instance_valid(p_obj):
@@ -778,7 +779,7 @@ func give_shield(area, s_id):
 			return
 		ServerConnection.send_shield_notif(s_id)
 		_shields_available[s_id] = false
-		$Player.shield.giveShield()
+		player.shield.giveShield()
 		get_node("shield_sprite" + str(s_id)).hide()
 		start_shield_timer(s_id)
 
@@ -841,7 +842,7 @@ func _imposter_spawn():
 	if not is_instance_valid(player):
 		return
 	var new_imposter = imposter.instance()
-	new_imposter.setup_pos($Player.position)
+	new_imposter.setup_pos(player.position)
 	add_child(new_imposter)
 
 """
