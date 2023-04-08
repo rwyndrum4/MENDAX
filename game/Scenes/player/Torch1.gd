@@ -10,7 +10,6 @@ var _ticks = 0
 var _mode = "burn"
 var _drops = 0
 var burning = true
-onready var light = $Player/light
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

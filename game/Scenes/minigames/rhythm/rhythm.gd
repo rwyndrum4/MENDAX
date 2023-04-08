@@ -415,6 +415,9 @@ func end_rhythm_game():
 	wait_timer_look_leaderboard.queue_free()
 	GlobalSignals.emit_signal("toggleHotbar", true)
 	GlobalSignals.emit_signal("show_money_text", true)
+	if ServerConnection.match_exists() and ServerConnection.get_server_status():
+		ServerConnection.send_num_good_notes(_good_counter)
+		Global._rhythm_goods_hit(ServerConnection._player_num, _good_counter)
 	Global.state = Global.scenes.CAVE
 
 """

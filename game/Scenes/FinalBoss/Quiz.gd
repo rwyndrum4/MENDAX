@@ -12,37 +12,27 @@ onready var textBox = $textBox
 var data=[
 	{
 		"number": 1,
-		"question": "Which player inflicted the most damage?",
-		"options": ["1", "2", "3","4"],
-		"correctOptionIndex": 4
+		"question": "Which player inflicted the most damage in the Arena?",
+		"correctOptionIndexes": []
 	},	
 	{
 		"number": 2,
-		"question": "Which player had the lowest health after the second minigame?",
-		"options": ["1", "2", "3","4"],
-		"correctOptionIndex": 4
+		"question": "Which player had the lowest health in the Arena?",
+		"correctOptionIndexes": []
 	},
 	{
 		"number": 3,
-		"question": "Which player inflicted the most damage on the chandelier?",
-		"options": ["1", "2", "3","4"],
-		"correctOptionIndex": 2
+		"question": "Which player inflicted the most damage on the chandeliers in the Arena?",
+		"correctOptionIndexes": []
 	},	
 	{
 		"number": 4,
-		"question": "Placeholder 4",
-		"options": ["1", "2", "3","4"],
-		"correctOptionIndex": 2
-	},
-	{
-		"number": 5,
-		"question": "Placeholder 5",
-		"options": ["1", "2", "3","4"],
-		"correctOptionIndex": 2
+		"question": "Which player hit the most good notes in the rhythm game?",
+		"correctOptionIndexes": []
 	}
 ]
 	
-var items : Array =data
+var items : Array = data
 var item : Dictionary
 var index_item : int
 var correct : float=0
@@ -58,23 +48,27 @@ var correct : float=0
 """
 # Called when the node enters the scene tree for the first time.
 func _ready():
- # Replace with function body.
+	# Replace with function body.
+	if ServerConnection.match_exists() and ServerConnection.get_server_status():
+		change_buttons_to_players()
+	else:
+		no_quiz_needed()
+		return
 	maxdmgdict()
 	minhealthdict()
-	
-	#print(ListItem.rect_size)
 	for d in data:
 		if d.get("number")==1:
-			d["correctOptionIndex"]=maxdamage-1
+			d["correctOptionIndexes"].append(maxdamage-1)
 		if d.get("number")==2:
-			d["correctOptionIndex"]=minhealth-1
-	#index_item=0
+			d["correctOptionIndexes"].append(minhealth-1)
+		if d.get("number")==3:
+			var chand_vals = Global.chandelier_damage.values()
+			d["correctOptionIndexes"] = get_winners(chand_vals)
+		if d.get("number")==4:
+			var goods = Global.player_good_notes.values()
+			d["correctOptionIndexes"] = get_winners(goods)
 	refresh_scene()
-	
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
 func maxdmgdict():
 	currentmax=-1
 	#maxdamage=2
@@ -83,31 +77,40 @@ func maxdmgdict():
 			maxdamage=i+1
 			currentmax=Global.bod_damage[str(i+1)]+Global.skeleton_damage[str(i+1)]+Global.chandelier_damage[str(i+1)]
 		
-func minhealthdict():	
+func minhealthdict():
 	currentmin=1000
 	#minhealth=2
 	for i in 4:
 		if(Global.player_health[str(i+1)]<currentmin):
 			currentmin=Global.player_health[str(i+1)]
 			minhealth=i+1
-		
+
+func get_winners(scores:Array) -> Array:
+	var maxVal = 0
+	var result = []
+	var inc = 0
+	for value in scores:
+		if value >= maxVal:
+			maxVal = value
+			result.append(inc)
+		inc += 1
+	return result
+
 func refresh_scene():
-	minhealthdict()
-	maxdmgdict()
 	if index_item>=items.size():
 		show_result()
 	else:
 		show_question()
+
 func show_result():
 	#ListItem.hide()
 	#var score=round(correct/items.size()*100)
 	#DisplayText.text="Your score is "+str(score)
 	Global.progress = 7
 	Global.state = Global.scenes.CAVE
+
 func show_question():
 	item=items[index_item]
-	print(item.question)
-	print(item.correctOptionIndex)
 	textBox.queue_text(str(item.question))
 	textBox.display_text()
 
@@ -119,10 +122,33 @@ func read_json_file(filename):
 	file.close()
 	print(json_data)
 
+func change_buttons_to_players():
+	var names = Global.player_names.values
+	var p_count = len(names)
+	for i in range(4):
+		if (i+1) >= p_count:
+			turn_off_button(i)
+		else:
+			change_button_text(names[i],i)
+
+func change_button_text(bText:String, id:int):
+	match id:
+		0: $VBoxContainer/Button1.text = bText
+		1: $VBoxContainer/Button2.text = bText
+		2: $VBoxContainer/Button3.text = bText
+		3: $VBoxContainer/Button4.text = bText
+
+func turn_off_button(id:int):
+	match id:
+		0: $VBoxContainer/Button1.hide()
+		1: $VBoxContainer/Button2.hide()
+		2: $VBoxContainer/Button3.hide()
+		3: $VBoxContainer/Button4.hide()
+
 func _on_Button1_pressed():
 	$VBoxContainer/Button1.release_focus()
 	index_item+=1
-	if item.correctOptionIndex==0:
+	if 0 in item.correctOptionIndexes:
 		correct+=1
 		#print(str(index))
 		print("correct")
@@ -131,7 +157,7 @@ func _on_Button1_pressed():
 func _on_Button2_pressed():
 	$VBoxContainer/Button2.release_focus()
 	index_item+=1
-	if item.correctOptionIndex==1:
+	if 1 in item.correctOptionIndexes:
 		correct+=1
 		print("correct")
 	refresh_scene()
@@ -140,7 +166,7 @@ func _on_Button2_pressed():
 func _on_Button3_pressed():
 	$VBoxContainer/Button3.release_focus()
 	index_item+=1
-	if item.correctOptionIndex==2:
+	if 2 in item.correctOptionIndexes:
 		correct+=1
 		print("correct")
 	refresh_scene()
@@ -149,7 +175,17 @@ func _on_Button3_pressed():
 func _on_Button4_pressed():
 	$VBoxContainer/Button4.release_focus()
 	index_item+=1
-	if item.correctOptionIndex==3:
+	if 3 in item.correctOptionIndexes:
 		correct+=1
 		print("correct")
 	refresh_scene()
+
+func no_quiz_needed():
+	$VBoxContainer/Button1.hide()
+	$VBoxContainer/Button2.hide()
+	$VBoxContainer/Button3.hide()
+	$VBoxContainer/Button4.hide()
+	GlobalSignals.connect("textbox_empty", self, "show_result")
+	textBox.queue_text("You are playing solo, no quiz needed")
+	textBox.queue_text("Good luck with the last phase of the boss")
+	textBox.queue_text("You may need it ^_^")
