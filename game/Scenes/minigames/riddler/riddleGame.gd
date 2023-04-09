@@ -354,7 +354,7 @@ func chatbox_use(value):
 """
 /*
 * @pre Called in ready function before minigame
-* @post Initalizes itemarray to 0s indicating no items have been found places hints randomly so there is no overlap
+* @post Initalizes itemarray to 0s also positions hints randomly
 * @param None
 * @return None
 */
@@ -376,21 +376,61 @@ func init_hiddenitems():
 	
 	for i in 169:
 		var tilepath="GridContainer/"+str(i+1)
-		print(tilepath)
+		#print(tilepath)
 		temppos=map.get_node(tilepath).rect_position
 		var tempx=temppos.x+144
 		var tempy=temppos.y+144
 		tilepositionsx.append(tempx)
 		tilepositionsy.append(tempy)
 	#for loop to position hints
-	for local_hint in hints:
+
 		#generate random tile for placement
-		for i in 170:
-			if i>28
-			validtiles.append()
-		#x=4
-		#y=3
-		#local_hint.position = Vector2(x,y)
+	for i in 169:
+		if i>=27 and i<=37:
+			validtiles.append(i)
+		elif i>=40 and i<=50:
+			validtiles.append(i)
+		elif i>=53 and i<=63:
+			validtiles.append(i)
+		elif i>=66 and i<=76:
+			if i!=73 and i!=67 and i!=68:
+				validtiles.append(i)
+		elif i>=79 and i<=89:
+			if i!=80 and i!=81 and i!=88:
+				validtiles.append(i)
+		elif i>=92 and i<=102:
+			validtiles.append(i)
+		elif i>=105 and i<=115:
+			validtiles.append(i)
+		elif i>=118 and i<=128:
+			validtiles.append(i)
+		elif i>=131 and i<=141:
+			validtiles.append(i)
+			
+	print(validtiles.has(132))
+	print(validtiles.has(130))
+	
+	for local_hint in hints:
+		var tile=1000
+		var rng = RandomNumberGenerator.new() 
+		while validtiles.has(tile)==false: # if tile position not valid regenerate
+			rng.randomize()
+			tile=rng.randi_range(0, 169)
+			#print(tile)
+		print(tile)
+		x=tilepositionsx[tile]
+		y=tilepositionsy[tile]
+		print(x)
+		print(y)
+		local_hint.position = Vector2(x,y)
+	$item1area.position=$item1.position
+	$item2area.position=$item2.position
+	$item3area.position=$item3.position
+	$item4area.position=$item4.position
+	$item5area.position=$item5.position
+	$item6area.position=$item6.position
+	"""
+	"""
 	"""
 func init_hiddenitems():
 	hintlength=hint.length()
@@ -564,8 +604,8 @@ func _on_item6area_body_exited(_body:PhysicsBody2D)->void:
 func _on_item1_body_entered(_body:PhysicsBody2D)->void:
 	if itemarray[0]==0 and answerlength>=1:
 		enterarea($item1/AnimatedSprite,1)
-		get_node("item2/AnimatedSprite").playing=true
-		get_node("item2/AnimatedSprite").frame=0
+		get_node("item1/AnimatedSprite").playing=true
+		get_node("item1/AnimatedSprite").frame=0
 		item = ItemClass.instance()
 		
 
