@@ -526,30 +526,41 @@ func _on_item6area_body_exited(_body:PhysicsBody2D)->void:
 """
 func _on_item1_body_entered(_body:PhysicsBody2D)->void:
 	if itemarray[0]==0 and answerlength>=1:
-		enterarea($item1/Sprite,1)
+		enterarea($item1/AnimatedSprite,1)
+		get_node("item2/AnimatedSprite").playing=true
+		get_node("item2/AnimatedSprite").frame=0
+		item = ItemClass.instance()
 		
 
 func _on_item2_body_entered(_body:PhysicsBody2D)->void:
 	if itemarray[1]==0 and answerlength>=2:
-		enterarea($item2/Sprite,2)
+		enterarea($item2/AnimatedSprite,2)
+		get_node("item2/AnimatedSprite").playing=true
+		get_node("item2/AnimatedSprite").frame=0
 		item = ItemClass.instance()
 		
 
 func _on_item3_body_entered(_body:PhysicsBody2D)->void:
 	if itemarray[2]==0 and answerlength>=3:
-		enterarea($item3/Sprite,3)
+		enterarea($item3/AnimatedSprite,3)
+		get_node("item3/AnimatedSprite").playing=true
+		get_node("item3/AnimatedSprite").frame=0
 		item = ItemClass.instance()
 		
 
 func _on_item4_body_entered(_body:PhysicsBody2D)->void:
 	if itemarray[3]==0 and answerlength>=4:
-		enterarea($item4/Sprite,4)
+		enterarea($item4AnimatedSprite,4)
+		get_node("item4/AnimatedSprite").playing=true
+		get_node("item4/AnimatedSprite").frame=0
 		item = ItemClass.instance()
 		
 
 func _on_item5_body_entered(_body:PhysicsBody2D)->void:
 	if itemarray[4]==0 and answerlength>=5:
-		enterarea($item5/Sprite,5)
+		enterarea($item5/AnimatedSprite,5)
+		get_node("item5/AnimatedSprite").playing=true
+		get_node("item5/AnimatedSprite").frame=0
 		item = ItemClass.instance()
 		
 
@@ -570,19 +581,19 @@ func _on_item6_body_entered(_body:PhysicsBody2D)->void:
 */
 """
 func _on_item1_body_exited(_body:PhysicsBody2D)->void:
-	$item1/Sprite.hide()
+	$item1/AnimatedSprite.hide()
 	hintbox.hide()
 func _on_item2_body_exited(_body:PhysicsBody2D)->void:
-	$item2/Sprite.hide()
+	$item2/AnimatedSprite.hide()
 	hintbox.hide()
 func _on_item3_body_exited(_body:PhysicsBody2D)->void:
-	$item3/Sprite.hide()
+	$item3/AnimatedSprite.hide()
 	hintbox.hide()
 func _on_item4_body_exited(_body:PhysicsBody2D)->void:
-	$item4/Sprite.hide()
+	$item4/AnimatedSprite.hide()
 	hintbox.hide()
 func _on_item5_body_exited(_body:PhysicsBody2D)->void:
-	$item5/Sprite.hide()
+	$item5/AnimatedSprite.hide()
 	hintbox.hide()
 func _on_item6_body_exited(_body):
 	$item6/AnimatedSprite.hide()
