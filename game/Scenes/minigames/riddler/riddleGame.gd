@@ -393,10 +393,10 @@ func init_hiddenitems():
 		elif i>=53 and i<=63:
 			validtiles.append(i)
 		elif i>=66 and i<=76:
-			if i!=73 and i!=67 and i!=68:
+			if i!=73 and i!=67 and i!=68 and i!=69:
 				validtiles.append(i)
 		elif i>=79 and i<=89:
-			if i!=80 and i!=81 and i!=88:
+			if i!=80 and i!=81 and i!=82 and i!=88:
 				validtiles.append(i)
 		elif i>=92 and i<=102:
 			validtiles.append(i)
@@ -417,74 +417,20 @@ func init_hiddenitems():
 			rng.randomize()
 			tile=rng.randi_range(0, 169)
 			#print(tile)
-		print(tile)
-		x=tilepositionsx[tile]
-		y=tilepositionsy[tile]
-		print(x)
-		print(y)
+		#print(tile)
+		x=tilepositionsx[tile]-400
+		y=tilepositionsy[tile]-450
+		#print(x)
+		#print(y)
 		local_hint.position = Vector2(x,y)
-	$item1area.position=$item1.position
-	$item2area.position=$item2.position
-	$item3area.position=$item3.position
-	$item4area.position=$item4.position
-	$item5area.position=$item5.position
-	$item6area.position=$item6.position
-	"""
-	"""
-	"""
-func init_hiddenitems():
-	hintlength=hint.length()
-	answerlength=answer.length()
-	lettersleft=answer.length()
-	for i in 6:
-		itemarray.append(0)
-	#initalizing 2d overlap arrays for x and y 7 rows and 2 entries per each row
-	for i in range(0,7):
-		x_overlap.append([])
-		y_overlap.append([])
-		for _j in range(0,2):
-			x_overlap[i].append(0)
-			y_overlap[i].append(0)
-	x_overlap[0][0]=init_playerpos.x-10; #left endpoint of player_pos
-	x_overlap[0][1]=init_playerpos.x+10;# right endpoint of player_pos
-	y_overlap[0][0]=init_playerpos.y-10;
-	y_overlap[0][1]=init_playerpos.y+10;
-	#need to randomize locations of hidden hints
-	var hints= get_tree().get_nodes_in_group("hints")
 	
-	var hintcounter=1 #helps keep track of hints in for loop
-	var overlap;#1 if overlap found in for loop 2 if overlap found
-	var x;
-	var y;
-	for local_hint in hints:
-		overlap=1
-		while overlap==1:
-			x=rand_range(0, 3000) #range of game map reduced  due to size of hint area
-			y=rand_range(0,3000)#range of game map reduced  due to size of hint area
-			for i in range(0, hintcounter):
-				if ((x+150)>=x_overlap[i][0] or (x-150)<=x_overlap[i][1]) and ((y+150)>=y_overlap[i][0] or (y-150)<=y_overlap[i][1]): #overlap in both x and y direcitons indicates overlap
-					overlap=2
-			#logic below makes loop behave like do while will break if  overlap not found
-			if overlap==2:
-				overlap=1
-			if overlap==1:
-				overlap=2 
-				
-		local_hint.position = Vector2(x,y)
-		#set overlaps for hint using hintcounter
-		x_overlap[hintcounter][0]=x-150; #left endpoint of hint area box
-		x_overlap[hintcounter][1]=x+150;# right endpoint of hint area box
-		y_overlap[hintcounter][0]=init_playerpos.y-150;
-		y_overlap[hintcounter][1]=init_playerpos.y+150;
-		hintcounter=hintcounter+1
 	$item1area.position=$item1.position
 	$item2area.position=$item2.position
 	$item3area.position=$item3.position
 	$item4area.position=$item4.position
 	$item5area.position=$item5.position
 	$item6area.position=$item6.position
-		
-"""
+	
 """
 /*
 * @pre Called when player find hidden item
@@ -627,7 +573,7 @@ func _on_item3_body_entered(_body:PhysicsBody2D)->void:
 
 func _on_item4_body_entered(_body:PhysicsBody2D)->void:
 	if itemarray[3]==0 and answerlength>=4:
-		enterarea($item4AnimatedSprite,4)
+		enterarea($item4/AnimatedSprite,4)
 		get_node("item4/AnimatedSprite").playing=true
 		get_node("item4/AnimatedSprite").frame=0
 		item = ItemClass.instance()

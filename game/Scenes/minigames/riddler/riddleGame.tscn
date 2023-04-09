@@ -173,11 +173,10 @@ custom_colors/title_color = Color( 0.0431373, 0.0431373, 0.0431373, 1 )
 custom_fonts/title_font = SubResource( 9 )
 
 [node name="item1area" type="Area2D" parent="."]
-position = Vector2( 2359.45, 2303.06 )
+position = Vector2( 2257, 667 )
 collision_mask = 2
 
 [node name="itemareacollision" type="CollisionShape2D" parent="item1area"]
-position = Vector2( -104.45, -1635.06 )
 scale = Vector2( 1.5, 1.5 )
 shape = SubResource( 4 )
 
@@ -185,22 +184,19 @@ shape = SubResource( 4 )
 position = Vector2( 2257, 667 )
 
 [node name="itemcollision" type="CollisionShape2D" parent="item1"]
-position = Vector2( -1.99982, 4 )
 shape = SubResource( 3 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="item1"]
-position = Vector2( -9.99976, 6 )
 scale = Vector2( 3.45455, 3.2197 )
 frames = SubResource( 19 )
 animation = "open"
 
 [node name="item2area" type="Area2D" parent="."]
-position = Vector2( 200, 2402 )
+position = Vector2( 922, 2494 )
 collision_layer = 4
 collision_mask = 2
 
 [node name="itemareacollision" type="CollisionShape2D" parent="item2area"]
-position = Vector2( 727, 87 )
 scale = Vector2( 1.5, 1.5 )
 shape = SubResource( 4 )
 
@@ -208,7 +204,6 @@ shape = SubResource( 4 )
 position = Vector2( 922, 2494 )
 
 [node name="itemcollision" type="CollisionShape2D" parent="item2"]
-position = Vector2( 9, -10 )
 shape = SubResource( 3 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="item2"]
@@ -222,7 +217,6 @@ collision_layer = 4
 collision_mask = 2
 
 [node name="itemareacollision" type="CollisionShape2D" parent="item3area"]
-position = Vector2( -1, -3 )
 scale = Vector2( 1.5, 1.5 )
 shape = SubResource( 4 )
 
@@ -230,22 +224,19 @@ shape = SubResource( 4 )
 position = Vector2( 1804, 1456 )
 
 [node name="itemcollision" type="CollisionShape2D" parent="item3"]
-position = Vector2( 1, -4 )
 shape = SubResource( 3 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="item3"]
-position = Vector2( 0, -3 )
 scale = Vector2( 3.45455, 3.42803 )
 frames = SubResource( 19 )
 animation = "open"
 
 [node name="item4area" type="Area2D" parent="."]
-position = Vector2( 2294, 2056 )
+position = Vector2( 2278, 2064 )
 collision_layer = 4
 collision_mask = 2
 
 [node name="itemareacollision" type="CollisionShape2D" parent="item4area"]
-position = Vector2( -3, 1 )
 scale = Vector2( 1.5, 1.5 )
 shape = SubResource( 4 )
 
@@ -253,7 +244,6 @@ shape = SubResource( 4 )
 position = Vector2( 2278, 2064 )
 
 [node name="itemcollision" type="CollisionShape2D" parent="item4"]
-position = Vector2( 8, -2 )
 shape = SubResource( 3 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="item4"]
@@ -262,12 +252,11 @@ frames = SubResource( 19 )
 animation = "open"
 
 [node name="item5area" type="Area2D" parent="."]
-position = Vector2( 604, 538 )
+position = Vector2( 602, 544 )
 collision_layer = 4
 collision_mask = 2
 
 [node name="itemareacollision" type="CollisionShape2D" parent="item5area"]
-position = Vector2( 2, 2 )
 scale = Vector2( 1.5, 1.5 )
 shape = SubResource( 4 )
 
@@ -275,7 +264,6 @@ shape = SubResource( 4 )
 position = Vector2( 602, 544 )
 
 [node name="itemcollision" type="CollisionShape2D" parent="item5"]
-position = Vector2( 3.00006, 0 )
 scale = Vector2( 3.45455, 3.2197 )
 shape = SubResource( 21 )
 
@@ -285,12 +273,11 @@ frames = SubResource( 19 )
 animation = "open"
 
 [node name="item6area" type="Area2D" parent="."]
-position = Vector2( 1200, 1200 )
+position = Vector2( 1688, 830 )
 collision_layer = 4
 collision_mask = 2
 
 [node name="itemareacollision" type="CollisionShape2D" parent="item6area"]
-position = Vector2( 493, -371 )
 scale = Vector2( 1.5, 1.5 )
 shape = SubResource( 4 )
 
@@ -298,7 +285,6 @@ shape = SubResource( 4 )
 position = Vector2( 1688, 830 )
 
 [node name="itemcollision" type="CollisionShape2D" parent="item6"]
-position = Vector2( -0.999939, -4 )
 scale = Vector2( 3.45455, 3.2197 )
 shape = SubResource( 21 )
 
