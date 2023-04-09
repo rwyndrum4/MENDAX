@@ -18,11 +18,15 @@ var ItemClass = preload("res://Inventory/Item.tscn")
 var other_player = "res://Scenes/player/other_players/other_players.tscn" #Scene for players that online oppenents use
 
 # Scene Nodes
+onready var riddlemap=preload("res://Scenes/minigames/riddler/riddlerMap.tscn")
 onready var myTimer: Timer = $GUI/Timer
 onready var timerText: Label = $GUI/Timer/timerText
 onready var textBox = $GUI/textBox
 onready var hintbox=$GUI/show_letter
 onready var itemarray=[] #determines if items have been found
+onready var tilepositionsx=[]# creates array of tile positions fo rhints
+onready var tilepositionsy=[]# creates array of tile positions fo rhints
+onready var validtiles=[] #array of valid tiles for positioning
 onready var hint="";# set in init riddle
 onready var riddle="";#set in init riddle
 onready var riddlefile = 'res://Assets/riddle_jester/riddles.txt'
@@ -355,6 +359,39 @@ func chatbox_use(value):
 * @return None
 */
 """
+
+func init_hiddenitems():
+	hintlength=hint.length()
+	answerlength=answer.length()
+	lettersleft=answer.length()
+	for i in 6:
+		itemarray.append(0)
+	# get hints
+	var hints= get_tree().get_nodes_in_group("hints")
+	var map=riddlemap.instance()
+	var temppos=0
+	var x=0
+	var y=0
+	#Create array of tile positions
+	
+	for i in 169:
+		var tilepath="GridContainer/"+str(i+1)
+		print(tilepath)
+		temppos=map.get_node(tilepath).rect_position
+		var tempx=temppos.x+144
+		var tempy=temppos.y+144
+		tilepositionsx.append(tempx)
+		tilepositionsy.append(tempy)
+	#for loop to position hints
+	for local_hint in hints:
+		#generate random tile for placement
+		for i in 170:
+			if i>28
+			validtiles.append()
+		#x=4
+		#y=3
+		#local_hint.position = Vector2(x,y)
+	"""
 func init_hiddenitems():
 	hintlength=hint.length()
 	answerlength=answer.length()
@@ -407,7 +444,7 @@ func init_hiddenitems():
 	$item5area.position=$item5.position
 	$item6area.position=$item6.position
 		
-
+"""
 """
 /*
 * @pre Called when player find hidden item
