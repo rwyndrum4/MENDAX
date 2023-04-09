@@ -131,7 +131,12 @@ func _process(delta):
 * @return None
 """
 func move_boss() -> void:
-	position.y -= 100
+	$MyHurtBox/hitbox.hide()
+	$MyHurtBox/hitbox.disabled = true
+	$MyHurtBox/hitboxDuck.show()
+	$MyHurtBox/hitboxDuck.disabled = false
+	$Sprite.hide()
+	$DuckSprite.show()
 	var back_timer = Timer.new()
 	back_timer.one_shot = true
 	back_timer.wait_time = 0.5
@@ -254,7 +259,12 @@ func _delete_atk_from_server(atk_id:int) -> void:
 */
 """
 func _del_timer(tmr):
-	position.y += 100
+	$MyHurtBox/hitbox.show()
+	$MyHurtBox/hitbox.disabled = false
+	$MyHurtBox/hitboxDuck.hide()
+	$MyHurtBox/hitboxDuck.disabled = true
+	$Sprite.show()
+	$DuckSprite.hide()
 	tmr.queue_free()
 
 """
