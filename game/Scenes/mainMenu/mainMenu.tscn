@@ -98,11 +98,11 @@ margin_bottom = 68.0
 rect_pivot_offset = Vector2( -644, -266 )
 text = "Market"
 
-[node name="Tests" type="Button" parent="menuButtons" groups=["my_buttons"]]
+[node name="Tutorial" type="Button" parent="menuButtons" groups=["my_buttons"]]
 margin_top = 72.0
 margin_right = 118.0
 margin_bottom = 92.0
-text = "Tests"
+text = "Tutorial"
 
 [node name="Credits" type="Button" parent="menuButtons" groups=["my_buttons"]]
 margin_top = 96.0
@@ -185,7 +185,7 @@ bus = "Music"
 [connection signal="pressed" from="menuButtons/Start" to="." method="_on_Start_pressed"]
 [connection signal="pressed" from="menuButtons/Options" to="." method="_on_Options_pressed"]
 [connection signal="pressed" from="menuButtons/Market" to="." method="_on_Market_pressed"]
-[connection signal="pressed" from="menuButtons/Tests" to="." method="_on_Tests_pressed"]
+[connection signal="pressed" from="menuButtons/Tutorial" to="." method="_on_Tutorial_pressed"]
 [connection signal="pressed" from="menuButtons/Credits" to="." method="_on_Credits_pressed"]
 [connection signal="pressed" from="menuButtons/Quit" to="." method="_on_Quit_pressed"]
 [connection signal="pressed" from="createGameButton" to="." method="_on_createGameButton_pressed"]

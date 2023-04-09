@@ -1,4 +1,4 @@
-[gd_scene load_steps=210 format=2]
+[gd_scene load_steps=211 format=2]
 
 [ext_resource path="res://Assets/ben-character/blue/rolling/5.png" type="Texture" id=1]
 [ext_resource path="res://Scenes/player/playerScript.gd" type="Script" id=2]
@@ -443,7 +443,7 @@ light_mask = 0
 position = Vector2( -57, -37 )
 scale = Vector2( 3.75, 3.45918 )
 frames = SubResource( 12 )
-frame = 3
+frame = 1
 playing = true
 
 [node name="Torch1" type="Light2D" parent="light"]

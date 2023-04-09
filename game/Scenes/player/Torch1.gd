@@ -26,6 +26,7 @@ func _ready():
 */
 """
 func _process(_delta):
+	print("Im running")
 	var tex_scale = get("texture_scale")
 	if tex_scale > 0.1:
 		set("texture_scale", tex_scale - 0.0025)
