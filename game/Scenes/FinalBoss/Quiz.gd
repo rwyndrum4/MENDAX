@@ -123,7 +123,7 @@ func read_json_file(filename):
 	print(json_data)
 
 func change_buttons_to_players():
-	var names = Global.player_names.values
+	var names = Global.player_names.values()
 	var p_count = len(names)
 	for i in range(4):
 		if (i+1) >= p_count:
