@@ -433,7 +433,7 @@ func init_hiddenitems():
 	
 """
 /*
-* @pre Called when player find hidden item
+* @pre Called when player finds hidden item
 * @post If item hasn't been found gives player letters for hint
 * @param Player
 * @return None
@@ -443,6 +443,10 @@ func enterarea(spritepath,itemnumber):
 	$Player/Labelarea.hide()
 	if itemarray[itemnumber-1]==0: #means item has not been found
 		spritepath.show()
+		GameLoot.add_to_coin(1,3)
+		var total_coin = GameLoot.get_coin_val(1)
+		get_parent().change_money(total_coin)
+		PlayerInventory.add_item("Coin", 3)
 		var letter; # single letters found
 		var letters=""; # string of letters if mutiple letter hint
 		var lettercount=1;#keeps track so we don't return more than 2 letters
