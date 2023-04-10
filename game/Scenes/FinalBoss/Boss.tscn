@@ -1,6 +1,6 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=18 format=2]
 
-[ext_resource path="res://Assets/Mendax1stForm_pixelated.png" type="Texture" id=1]
+[ext_resource path="res://Assets/MendaxFinalPixelated_w_trans.png" type="Texture" id=1]
 [ext_resource path="res://Assets/TorchLight3.png" type="Texture" id=2]
 [ext_resource path="res://Scenes/FinalBoss/Boss.gd" type="Script" id=3]
 [ext_resource path="res://Scenes/player/Sword/MyHurtBox.gd" type="Script" id=4]
@@ -14,9 +14,7 @@
 [ext_resource path="res://Assets/SuperSaiyan/superSaiyan0000.png" type="Texture" id=12]
 [ext_resource path="res://Assets/SuperSaiyan/superSaiyan0006.png" type="Texture" id=13]
 [ext_resource path="res://Assets/SuperSaiyan/superSaiyan0009.png" type="Texture" id=14]
-
-[sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 622, 397.5 )
+[ext_resource path="res://Assets/MendaxFinalPixelatedDuckAnim_w_trans.png" type="Texture" id=15]
 
 [sub_resource type="StyleBoxFlat" id=3]
 bg_color = Color( 0.760784, 0.192157, 0.192157, 1 )
@@ -27,9 +25,6 @@ border_width_bottom = 3
 border_color = Color( 0.0705882, 0.027451, 0.027451, 0 )
 border_blend = true
 anti_aliasing_size = 0.235
-
-[sub_resource type="RectangleShape2D" id=4]
-extents = Vector2( 17, 20.85 )
 
 [sub_resource type="SpriteFrames" id=5]
 animations = [ {
@@ -45,6 +40,10 @@ script = ExtResource( 3 )
 [node name="Sprite" type="Sprite" parent="."]
 texture = ExtResource( 1 )
 
+[node name="DuckSprite" type="Sprite" parent="."]
+visible = false
+texture = ExtResource( 15 )
+
 [node name="Light2D" type="Light2D" parent="."]
 position = Vector2( -6, -46 )
 texture = ExtResource( 2 )
@@ -52,9 +51,10 @@ texture_scale = 20.0
 color = Color( 1, 0.996078, 0.717647, 1 )
 energy = 0.9
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2( 0, -0.5 )
-shape = SubResource( 1 )
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+position = Vector2( 0, -30.05 )
+scale = Vector2( 0.025, 0.1 )
+polygon = PoolVector2Array( -13520, -2179.5, -14200, -839.5, -10400, 670.5, -21160, 1140.5, -24160, 1780.5, -19200, 2850.5, -8400, 2710.5, -80, 3820.5, 3200, 2700.5, 10880, 2820.5, 13080, 3410.5, 23880, 2550.5, 15480, 1330.5, 9880, 670.5, 13440, -159.5, 14280, -929.5, 13760, -1839.5, 7320, -2799.5, 4080, -3279.5, -1080, -3419.5 )
 
 [node name="ProgressBar" type="ProgressBar" parent="."]
 margin_left = -25.0
@@ -71,13 +71,19 @@ position = Vector2( 0, 300 )
 scale = Vector2( 40, 10 )
 script = ExtResource( 4 )
 
-[node name="hitbox" type="CollisionShape2D" parent="MyHurtBox"]
-position = Vector2( -0.1, -5.15 )
-shape = SubResource( 4 )
+[node name="hitbox" type="CollisionPolygon2D" parent="MyHurtBox"]
+position = Vector2( 0, -30.05 )
+scale = Vector2( 0.025, 0.1 )
+polygon = PoolVector2Array( -604, 148.5, -529, 84.5, -259, 38.5, -354, -113.5, -337, -246.5, -27, -371.5, 102, -357.5, 344, -212.5, 357, -122.5, 335, -45.5, 247, 38.5, 385, 102.5, 596, 225.5, 327, 312.5, 272, 252.5, 80, 240.5, -2, 352.5, -210, 241.5, -480, 255.5 )
+
+[node name="hitboxDuck" type="CollisionPolygon2D" parent="MyHurtBox"]
+visible = false
+polygon = PoolVector2Array( -8.525, -5.1, -10.225, -16, -10.25, -22.8, -9.725, -28.8, -7.425, -34.4, -4.125, -39.5, -2.275, -41, 0.225, -41.1, 3.35, -35.3, 3.4, -33.8, 5.4, -30.6, 5.45, -29, 6.125, -27.8, 6.775, -24.6, 7.3, -21.9, 7.275, -17.4, 6.725, -12.8, 5.775, -5.4, 4.3, -5.6, 2.25, -5.5, -0.15, 5.9, -5.25, -5.6 )
+disabled = true
 
 [node name="aura_shield" type="AnimatedSprite" parent="."]
 position = Vector2( 0, -300 )
 scale = Vector2( 8, 8 )
 frames = SubResource( 5 )
-frame = 4
+frame = 5
 playing = true

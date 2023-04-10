@@ -20,6 +20,7 @@ enum OpCodes {
 	UPDATE_ARENA_ENEMY_MOVE,
 	UPDATE_CAN_START_GAME,
 	UPDATE_RHYTHM_SCORE,
+	SEND_NUM_GOOD_NOTES,
 	UPDATE_BOSS_INVULNERABILITY,
 	SHIELD_TAKEN,
 	BESIER_LIT,
@@ -43,6 +44,7 @@ signal arena_enemy_hit(enemy_id, damage_taken,player_id,enemy_type) #signal to t
 signal minigame_can_start() #signal that the minigame can be started
 signal minigame_player_spawned(id) #signal to tell if a player has arrived to a scene
 signal minigame_rhythm_score(id, score) #send current score of rhythm game player
+signal good_notes_hit(id, num_goods) #send how many good notes were hit
 signal final_boss_besier_lit(id, besier) #send that someone has lit a besier
 signal boss_is_vulnerable(value) #send that boss can be hit now
 signal aoe_attack_was_hit(atk_id) #an aoe attack was hit by another player
@@ -51,7 +53,7 @@ signal aoe_attack_was_hit(atk_id) #an aoe attack was hit by another player
 signal chat_message_received(msg,type,user_sent,from_user) #signal to tell game a chat message has come in
 
 const KEY := "nakama_mendax" #key that is stored in the server
-var IP_ADDRESS: String = "18.216.146.230" #ip address of server
+var IP_ADDRESS: String = "3.15.166.79" #ip address of server
 
 var _session: NakamaSession #user session
 
@@ -530,6 +532,17 @@ func send_rhythm_score(new_score:int):
 		_socket.send_match_state_async(_match_id, OpCodes.UPDATE_RHYTHM_SCORE, JSON.print(payload))
 
 """
+* @pre called at end of rhythm game, number of good notes hit
+* @post tells server which player hit how many good notes
+* @param num_goods -> int
+* @return None
+"""
+func send_num_good_notes(num_goods:int):
+	if _socket:
+		var payload := {id = _player_num, num_notes = num_goods}
+		_socket.send_match_state_async(_match_id, OpCodes.SEND_NUM_GOOD_NOTES, JSON.print(payload))
+
+"""
 * @pre called when someone gets rid of boss invulnerability
 * @post tells server that boss is vulnerable
 * @param None
@@ -714,6 +727,13 @@ func _on_NakamaSocket_received_match_state(match_state: NakamaRTAPI.MatchData) -
 			var score: int = int(decoded.score)
 			
 			emit_signal("minigame_rhythm_score", id, score)
+		OpCodes.SEND_NUM_GOOD_NOTES:
+			var decoded: Dictionary = JSON.parse(raw).result
+			
+			var id: int = int(decoded.id)
+			var num_goods: int = int(decoded.num_notes)
+			
+			emit_signal("good_notes_hit", id, num_goods)
 		OpCodes.UPDATE_CAN_START_GAME:
 			emit_signal("minigame_can_start")
 		OpCodes.UPDATE_BOSS_INVULNERABILITY:

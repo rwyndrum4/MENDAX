@@ -19,7 +19,6 @@ onready var world_env = $WorldEnvironment
 onready var fps_label = $GUI/fpsLabel
 onready var menu_button = $GUI/SettingsMenu/SettingsTabs/Exit/exitSettings/GridContainer/mainMenuButton
 onready var current_song = $BGM/mainmenu
-onready var hotbar = $GUI/Hotbar
 
 #Scene Paths
 var main_menu = "res://Scenes/mainMenu/mainMenu.tscn"
@@ -66,6 +65,8 @@ func _ready():
 	GlobalSignals.connect("toggleHotbar", self, "toggle_hotbar")
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("show_money_text", self, "show_money")
+	# warning-ignore:return_value_discarded
+	GlobalSignals.connect("money_screen_val", self, "change_money")
 	#Initialize the options menu and world environment
 	initialize_settings()
 	initialize_world_env()
@@ -80,7 +81,8 @@ func _ready():
 	yield(server_checks(), "completed")
 
 func toggle_hotbar(en: bool):
-	hotbar.visible = en
+	pass
+	# hotbar.visible = en
 
 """
 /*

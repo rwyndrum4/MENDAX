@@ -8,6 +8,7 @@ func add_results(results:Array):
 		var p_name = arr[0]
 		var p_score = arr[1]
 		if count == 1:
+			Global.rhythm_winner = p_name
 			res_str += "[center][color=#f5a02a]1st: "
 			res_str += p_name + "         " + str(p_score)
 			res_str += "[/color][/center]\n"

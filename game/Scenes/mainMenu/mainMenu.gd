@@ -111,6 +111,7 @@ func _on_Start_pressed():
 	#change scene to start area
 	GlobalSignals.emit_signal("show_money_text", true)
 	GameLoot.init_players(len(Global.player_names))
+	Global.stars_last_frame = $Stars.frame
 	SceneTrans.change_scene(Global.scenes.START_AREA)
 
 """
@@ -222,6 +223,7 @@ func getRandAlphInd(rng):
 */
 """
 func initialize_menu():
+	$Stars.play("default")
 	#Grab focus on start button so keys can be used to navigate buttons
 	startButton.grab_focus()
 	#reset any online stuff if they came from a previous game

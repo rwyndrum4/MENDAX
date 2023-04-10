@@ -416,6 +416,7 @@ animation = "roll_southeast_green"
 
 [node name="ProgressBar" type="ProgressBar" parent="."]
 visible = false
+light_mask = 0
 margin_left = -75.0
 margin_top = -110.0
 margin_right = -25.0
@@ -443,7 +444,6 @@ light_mask = 0
 position = Vector2( -57, -37 )
 scale = Vector2( 3.75, 3.45918 )
 frames = SubResource( 12 )
-frame = 1
 playing = true
 
 [node name="Torch1" type="Light2D" parent="light"]

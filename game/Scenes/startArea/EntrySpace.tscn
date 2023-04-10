@@ -165,6 +165,7 @@ current = true
 visible = false
 position = Vector2( 0, -45 )
 frames = SubResource( 15 )
+frame = 4
 playing = true
 
 [node name="GUI" type="CanvasLayer" parent="."]
@@ -192,20 +193,19 @@ text = "Waiting on other players..."
 
 [node name="spectate_mode" type="Label" parent="GUI"]
 visible = false
-margin_left = 334.0
-margin_top = 64.0
-margin_right = 934.0
-margin_bottom = 148.0
+margin_left = 312.0
+margin_right = 912.0
+margin_bottom = 84.0
 custom_fonts/font = SubResource( 20 )
 text = "Spectating"
 align = 1
 
 [node name="spectate_instructions" type="Label" parent="GUI"]
 visible = false
-margin_left = 512.0
-margin_top = 136.0
-margin_right = 748.0
-margin_bottom = 159.0
+margin_left = 384.0
+margin_top = 72.0
+margin_right = 845.0
+margin_bottom = 119.0
 custom_colors/font_color = Color( 0.133333, 0.145098, 0.929412, 1 )
 custom_fonts/font = SubResource( 21 )
 text = "Press Space to skip to another player"

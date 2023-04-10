@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://Assets/Intro/IntroScreen.png" type="Texture" id=1]
 [ext_resource path="res://Scenes/startArea/startArea.gd" type="Script" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://Scenes/textBox/textBox.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Assets/Intro/fire_anim/fire.tres" type="Texture" id=7]
 [ext_resource path="res://Assets/Intro/BrightnessGradient.png" type="Texture" id=8]
+[ext_resource path="res://Scenes/mainMenu/StarsAnimation.tscn" type="PackedScene" id=9]
 
 [sub_resource type="ShaderMaterial" id=4]
 
@@ -54,6 +55,9 @@ modulate = Color( 0.0941176, 0.0588235, 0, 0.752941 )
 material = SubResource( 6 )
 position = Vector2( 642.929, 367.47 )
 texture = ExtResource( 8 )
+
+[node name="Stars" parent="." instance=ExtResource( 9 )]
+position = Vector2( 640, 208 )
 
 [node name="Player" parent="." instance=ExtResource( 3 )]
 position = Vector2( 776, 462 )

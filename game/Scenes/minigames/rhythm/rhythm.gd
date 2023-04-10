@@ -78,8 +78,8 @@ onready var _map = beatmap_file.new()
 func _ready():
 	$ButtonHelper.add_constant_override("separation", 110)
 	randomize()
-	get_parent().toggle_hotbar(false)
-	get_parent().show_money(false)
+	GlobalSignals.emit_signal("toggleHotbar", false)
+	GlobalSignals.emit_signal("show_money_text", false)
 	# warning-ignore:return_value_discarded
 	conductor.connect("finished",self,"end_rhythm_game")
 	# warning-ignore:return_value_discarded
@@ -164,6 +164,7 @@ func _can_start_game_other():
 */
 """
 func start_rhythm_game():
+	Global.reset_minigame_players() #Reset minigame players and go to cave scene
 	$Frame/wait_on_players.queue_free()
 	var instructions:Popup = load("res://Scenes/minigames/rhythm/instructions.tscn").instance()
 	$Frame.add_child(instructions)
@@ -395,7 +396,7 @@ func end_rhythm_game():
 		var score = (5 - ctr) * 5
 		GameLoot.add_to_coin(n,score)
 		var total_coin = GameLoot.get_coin_val(n)
-		get_parent().change_money(total_coin)
+		GlobalSignals.emit_signal("money_screen_val", total_coin)
 		if arr[0] == Save.game_data.username:
 			PlayerInventory.add_item("Coin", score)
 		ctr += 1
@@ -412,10 +413,11 @@ func end_rhythm_game():
 	wait_timer_look_leaderboard.start()
 	yield(wait_timer_look_leaderboard, "timeout")
 	wait_timer_look_leaderboard.queue_free()
-	get_parent().toggle_hotbar(true)
-	get_parent().show_money(true)
-	#Reset minigame players and go to cave scene
-	Global.reset_minigame_players()
+	GlobalSignals.emit_signal("toggleHotbar", true)
+	GlobalSignals.emit_signal("show_money_text", true)
+	if ServerConnection.match_exists() and ServerConnection.get_server_status():
+		ServerConnection.send_num_good_notes(_good_counter)
+		Global._rhythm_goods_hit(ServerConnection._player_num, _good_counter)
 	Global.state = Global.scenes.CAVE
 
 """
