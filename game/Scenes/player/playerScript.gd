@@ -10,6 +10,8 @@
 	11/28/2022 - Added death handling
 	2/14/2023  - Added inverted controls option
 	3/25/2023 - Added powerups
+* known bugs:
+	4/9/23 - Killing chandeliers with powerup causes spectator mode to incorrectly terminate in arena
 """
 extends KinematicBody2D
 
