@@ -12,6 +12,7 @@
 	3/25/2023 - Added powerups
 * known bugs:
 	4/9/23 - Killing chandeliers with powerup causes spectator mode to incorrectly terminate in arena
+		cause could also be damage incoming from non-player sources
 """
 extends KinematicBody2D
 
