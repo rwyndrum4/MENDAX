@@ -70,7 +70,8 @@ enum scenes {
 	GAMEOVER,
 	QUIZ,
 	DILEMMA,
-	END_SCREEN
+	END_SCREEN,
+	TUTORIAL
 }
 
 # Hold dictionary mapping player num to name

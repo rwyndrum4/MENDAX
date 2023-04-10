@@ -1,0 +1,210 @@
+[gd_scene load_steps=21 format=2]
+
+[ext_resource path="res://Assets/tutorial_map/tut_map.png" type="Texture" id=1]
+[ext_resource path="res://Assets/tutorial_map/tut_mountain.png" type="Texture" id=2]
+[ext_resource path="res://Assets/tutorial_map/tut_background_tree.png" type="Texture" id=3]
+[ext_resource path="res://Assets/tutorial_map/tut_stars.png" type="Texture" id=4]
+[ext_resource path="res://Assets/tutorial_map/tut_foreground_tree.png" type="Texture" id=5]
+[ext_resource path="res://Scenes/player/player.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Assets/tutorial_map/tut_fence.png" type="Texture" id=7]
+[ext_resource path="res://Scenes/Tutorial/tutorial.gd" type="Script" id=8]
+[ext_resource path="res://Assets/tutorial_map/log2.png" type="Texture" id=9]
+[ext_resource path="res://Scenes/textBox/textBox.tscn" type="PackedScene" id=10]
+[ext_resource path="res://Assets/tutorial_map/tut_moon.png" type="Texture" id=11]
+[ext_resource path="res://Assets/ben-character/mc_sword.png" type="Texture" id=12]
+[ext_resource path="res://Assets/tutorial_map/tut_clouds.png" type="Texture" id=13]
+[ext_resource path="res://Scenes/Tutorial/ParallaxCloud.gd" type="Script" id=14]
+[ext_resource path="res://Assets/tutorial_map/tut_cart.png" type="Texture" id=15]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 5465.5, 10 )
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 10, 193.5 )
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 15.6717, 161.12 )
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 36.25, 26.5 )
+
+[sub_resource type="RectangleShape2D" id=5]
+extents = Vector2( 57.5, 58 )
+
+[node name="tutorial" type="Node2D"]
+script = ExtResource( 8 )
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxStar" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2( 0.05, 1 )
+motion_mirroring = Vector2( 1280, 0 )
+
+[node name="Sprite" type="Sprite" parent="ParallaxBackground/ParallaxStar"]
+texture = ExtResource( 4 )
+centered = false
+
+[node name="ParallaxMoon" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2( 0.05, 1 )
+motion_mirroring = Vector2( 1280, 0 )
+
+[node name="Sprite2" type="Sprite" parent="ParallaxBackground/ParallaxMoon"]
+position = Vector2( 394, 16 )
+texture = ExtResource( 11 )
+centered = false
+
+[node name="ParallaxCloud" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2( 0.04, 1 )
+motion_mirroring = Vector2( 1280, 0 )
+script = ExtResource( 14 )
+
+[node name="Sprite" type="Sprite" parent="ParallaxBackground/ParallaxCloud"]
+modulate = Color( 1, 1, 1, 0.529412 )
+texture = ExtResource( 13 )
+centered = false
+
+[node name="ParallaxMountain" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2( 0.1, 1 )
+motion_mirroring = Vector2( 1280, 0 )
+
+[node name="Sprite" type="Sprite" parent="ParallaxBackground/ParallaxMountain"]
+texture = ExtResource( 2 )
+centered = false
+
+[node name="ParallaxB_tree" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2( 0.8, 1 )
+motion_mirroring = Vector2( 1280, 0 )
+
+[node name="Sprite" type="Sprite" parent="ParallaxBackground/ParallaxB_tree"]
+texture = ExtResource( 3 )
+centered = false
+
+[node name="ParallaxF_tree" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_mirroring = Vector2( 1280, 0 )
+
+[node name="Sprite" type="Sprite" parent="ParallaxBackground/ParallaxF_tree"]
+texture = ExtResource( 5 )
+centered = false
+
+[node name="road" type="TextureRect" parent="."]
+margin_right = 12800.0
+margin_bottom = 720.0
+texture = ExtResource( 1 )
+stretch_mode = 2
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+position = Vector2( -27, 330 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2( 5491.5, 368 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2( 5492, -24 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2( 964, 173.5 )
+shape = SubResource( 2 )
+
+[node name="fence_top" type="TextureRect" parent="."]
+margin_right = 12800.0
+margin_bottom = 720.0
+texture = ExtResource( 7 )
+stretch_mode = 2
+
+[node name="ColorRect" type="ColorRect" parent="."]
+margin_top = 719.0
+margin_right = 12800.0
+margin_bottom = 1439.0
+color = Color( 0.0156863, 0.0509804, 0.0235294, 1 )
+
+[node name="Player" parent="." instance=ExtResource( 6 )]
+position = Vector2( 1103, 461 )
+scale = Vector2( 0.797615, 0.81306 )
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+current = true
+
+[node name="fence_bot" type="TextureRect" parent="."]
+margin_top = 322.0
+margin_right = 12800.0
+margin_bottom = 1042.0
+texture = ExtResource( 7 )
+stretch_mode = 2
+
+[node name="roadblock" type="TextureRect" parent="."]
+modulate = Color( 0.533333, 0.533333, 0.533333, 1 )
+margin_left = 771.0
+margin_top = 472.0
+margin_right = 921.0
+margin_bottom = 622.0
+rect_rotation = -26.9
+texture = ExtResource( 9 )
+stretch_mode = 5
+
+[node name="cart" type="TextureRect" parent="."]
+modulate = Color( 0.513726, 0.513726, 0.513726, 1 )
+margin_left = 421.0
+margin_top = 215.0
+margin_right = 621.0
+margin_bottom = 365.0
+rect_scale = Vector2( 2.5, 2.5 )
+texture = ExtResource( 15 )
+
+[node name="ParallaxForeground" type="ParallaxBackground" parent="."]
+layer = 1
+visible = false
+scale = Vector2( 2, 2 )
+transform = Transform2D( 2, 0, 0, 2, 0, 0 )
+
+[node name="ParallaxF_tree" type="ParallaxLayer" parent="ParallaxForeground"]
+motion_scale = Vector2( 1, 0.5 )
+motion_mirroring = Vector2( 1280, 0 )
+
+[node name="Sprite" type="Sprite" parent="ParallaxForeground/ParallaxF_tree"]
+texture = ExtResource( 5 )
+centered = false
+
+[node name="textBox" parent="." instance=ExtResource( 10 )]
+visible = false
+
+[node name="blocked_road_detector" type="Area2D" parent="."]
+position = Vector2( 1103, 455 )
+scale = Vector2( 0.797615, 0.81306 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="blocked_road_detector"]
+position = Vector2( -197.464, 94.7039 )
+scale = Vector2( 1, 0.999999 )
+shape = SubResource( 3 )
+
+[node name="sword_pickup" type="Area2D" parent="."]
+
+[node name="TextureRect" type="TextureRect" parent="sword_pickup"]
+margin_left = 2518.0
+margin_top = 393.0
+margin_right = 2618.0
+margin_bottom = 593.0
+rect_rotation = 45.0
+texture = ExtResource( 12 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="sword_pickup"]
+position = Vector2( 2462.25, 516 )
+shape = SubResource( 4 )
+
+[node name="cave" type="Area2D" parent="."]
+
+[node name="Label" type="Label" parent="cave"]
+margin_left = 4401.0
+margin_top = 439.0
+margin_right = 4577.0
+margin_bottom = 453.0
+text = "CAVE HERE( IN THE FUTURE)"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="cave"]
+position = Vector2( 4472, 519 )
+shape = SubResource( 5 )
+
+[connection signal="area_entered" from="blocked_road_detector" to="." method="_on_blocked_road_detector_area_entered"]
+[connection signal="area_entered" from="sword_pickup" to="." method="_on_sword_pickup_area_entered"]
+[connection signal="area_entered" from="cave" to="." method="_on_cave_area_entered"]

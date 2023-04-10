@@ -26,6 +26,7 @@ var _my_id: int = 0
 var isIn = false
 var isDead = false
 var _player_target: int = 1
+var _in_tutorial:bool = false
 
 # Global velocity
 var velocity = Vector2(1,1)
@@ -41,15 +42,23 @@ var BASE_ACCELERATION = 500
 */
 """
 func _ready():
+	
 	_has_spawned = true
 	if _leveled_up:
 		level_up()
-	var anim = get_node("skeletonAnimationPlayer").get_animation("walk")
-	anim.set_loop(true)
-	skeletonAnim.play("idle")
+
 	healthbar.value = 100;
-	# warning-ignore:return_value_discarded
-	GlobalSignals.connect("textbox_empty",self,"turn_on_physics")
+	
+	if !_in_tutorial:
+		# warning-ignore:return_value_discarded
+		GlobalSignals.connect("textbox_empty",self,"turn_on_physics")
+		var anim = get_node("skeletonAnimationPlayer").get_animation("walk")
+		anim.set_loop(true)
+		skeletonAnim.play("idle")
+	else:
+		var anim = get_node("skeletonAnimationPlayer").get_animation("idle")
+		anim.set_loop(true)	
+		skeletonAnim.play("idle")
 
 	
 """

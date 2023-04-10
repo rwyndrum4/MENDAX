@@ -144,15 +144,15 @@ func _on_Market_pressed():
 
 """
 /*
-* @pre Tests Button is pressed
+* @pre Tutorial Button is pressed
 * @post directly load the cave (for debug purposes)
 * @param None
 * @return None
 */
 """
-func _on_Tests_pressed():
+func _on_Tutorial_pressed():
 	#Global.state = Global.scenes.CAVE
-	Global.state=Global.scenes.END_SCREEN
+	SceneTrans.change_scene(Global.scenes.TUTORIAL)
 
 """
 /*

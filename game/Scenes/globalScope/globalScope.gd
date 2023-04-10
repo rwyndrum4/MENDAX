@@ -33,6 +33,7 @@ var gameover = "res://Scenes/mainMenu/gameOver.tscn"
 var quiz="res://Scenes/FinalBoss/Quiz.tscn"
 var dilemma = "res://Scenes/FinalBoss/Dilemma.tscn"
 var endscreen = "res://Scenes/EndScene/EndScene.tscn"
+var tutorial = "res://Scenes/Tutorial/tutorial.tscn"
 
 #Current scene running
 var current_scene = null
@@ -150,6 +151,9 @@ func _change_scene_to(state):
 	elif state == Global.scenes.RHYTHM_INTRO:
 		stopall()
 		current_scene = load(rhythm_intro).instance()
+	elif state == Global.scenes.TUTORIAL:
+		stopall()
+		current_scene = load(tutorial).instance()
 	elif state == Global.scenes.RHYTHM_MINIGAME:
 		stopall()
 		current_scene = load(rhythm_minigame).instance()
