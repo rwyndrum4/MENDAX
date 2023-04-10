@@ -94,6 +94,8 @@ var chandelier_damage: Dictionary = {"1":0,"2":0,"3":0,"4":0}
 var bod_damage: Dictionary = {"1":0,"2":0,"3":0,"4":0}
 #Dictionary that stores how player colors are distributed
 var player_colors: Dictionary = {1:"blue",2:"red",3:"green",4:"orange"}
+#Dictionary to track how many good notes each player hit in minigame
+var player_good_notes:Dictionary = {}
 
 """
 /*
@@ -110,6 +112,8 @@ func _ready():
 	ServerConnection.connect("input_updated",self,"_player_input_updated")
 	# warning-ignore:return_value_discarded
 	ServerConnection.connect("minigame_player_spawned",self, "_minigame_player_spawn")
+	# warning-ignore:return_value_discarded
+	ServerConnection.connect("good_notes_hit", self, "_rhythm_goods_hit")
 
 """
 /*
@@ -340,6 +344,17 @@ func remove_player_from_match(p_name:String) -> void:
 			last_pos = player_positions[p_num_str]
 			# warning-ignore:return_value_discarded
 			player_positions.erase(p_num_str)
+
+"""
+/*
+* @pre Rhythm game finished
+* @post sets how many good notes each player hit
+* @param p_id (layer_id), num_goods (number good notes hit)
+* @return None
+*/
+"""
+func _rhythm_goods_hit(p_id: int, num_goods:int):
+	player_good_notes[p_id] = num_goods
 
 """
 /*

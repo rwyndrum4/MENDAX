@@ -24,7 +24,7 @@ onready var current_song = $BGM/mainmenu
 var main_menu = "res://Scenes/mainMenu/mainMenu.tscn"
 var market = "res://Scenes/StoreElements/StoreVars.tscn"
 var start_area = "res://Scenes/startArea/startArea.tscn"
-var cave = preload("res://Scenes/startArea/EntrySpace.tscn")
+var cave = "res://Scenes/startArea/EntrySpace.tscn"
 var riddler_minigame = "res://Scenes/minigames/riddler/riddleGame.tscn"
 var arena_minigame = "res://Scenes/minigames/arena/arenaGame.tscn"
 var rhythm_intro = "res://Scenes/minigames/rhythm/introScene.tscn"
@@ -138,7 +138,7 @@ func _change_scene_to(state):
 	elif state == Global.scenes.CAVE:
 		stopall()
 		$BGM/cave.play()
-		current_scene = cave.instance()
+		current_scene = load(cave).instance()
 	elif state == Global.scenes.RIDDLER_MINIGAME:
 		stopall()
 		$BGM/riddler.play()
