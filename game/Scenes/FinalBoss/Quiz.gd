@@ -185,6 +185,7 @@ func no_quiz_needed():
 	$VBoxContainer/Button2.hide()
 	$VBoxContainer/Button3.hide()
 	$VBoxContainer/Button4.hide()
+	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("textbox_empty", self, "show_result")
 	textBox.queue_text("You are playing solo, no quiz needed")
 	textBox.queue_text("Good luck with the last phase of the boss")
