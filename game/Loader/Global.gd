@@ -16,6 +16,8 @@ var hotbar = preload("res://Inventory/Hotbar.tscn").instance()
 
 #Entry First Time
 var in_anim: int = 0
+#variable to track what frame user was on after pressing start
+var stars_last_frame = 0 
 
 #track minigame
 var minigame: int = 0
@@ -23,16 +25,19 @@ var players_in_minigame: int = 0
 
 # Counter tracking progression in final boss fight
 var progress = 0
+var _in_final_boss = false
 
 # Variable to track where boss can teleport in final boss
 var _boss_tp_counter = 0
 var _first_time_in_boss = false
+var riddle_answer = ""
+var rhythm_winner = ""
 
 # Track if player died in the final boss
-var _player_died_final_boss = false 
+var _player_died_final_boss = false
 
-# Variables for server times
-const WAIT_FOR_PLAYERS_TIME = 15
+# Variable for tracking how long you wait for players to load
+const WAIT_FOR_PLAYERS_TIME = 30
 
 # Signals
 signal all_players_arrived()
@@ -40,9 +45,9 @@ signal all_players_arrived()
 """
 -----------------------------SCENE LOADER INSTRUCTION-------------------------------------
 - state -> this is the variable that tracks what scene the game is currently in
-- You set state to one of the enum states defined in scene
+- You set state to one of the enum states defined in scenes
 - For example, if you want to change scene to main menu:
-  Global.state = Global.scene.MAIN_MENU
+  Global.state = Global.scenes.MAIN_MENU
 - The scene will only change if the process function in Scenes/globalScope/globalScope.gd
   detects that there has been a change in scene
 - The paths for all the scenes are also defined in Scenes/globalScope/globalScope.gd
@@ -89,6 +94,8 @@ var chandelier_damage: Dictionary = {"1":0,"2":0,"3":0,"4":0}
 var bod_damage: Dictionary = {"1":0,"2":0,"3":0,"4":0}
 #Dictionary that stores how player colors are distributed
 var player_colors: Dictionary = {1:"blue",2:"red",3:"green",4:"orange"}
+#Dictionary to track how many good notes each player hit in minigame
+var player_good_notes:Dictionary = {}
 
 """
 /*
@@ -105,6 +112,8 @@ func _ready():
 	ServerConnection.connect("input_updated",self,"_player_input_updated")
 	# warning-ignore:return_value_discarded
 	ServerConnection.connect("minigame_player_spawned",self, "_minigame_player_spawn")
+	# warning-ignore:return_value_discarded
+	ServerConnection.connect("good_notes_hit", self, "_rhythm_goods_hit")
 
 """
 /*
@@ -338,6 +347,17 @@ func remove_player_from_match(p_name:String) -> void:
 
 """
 /*
+* @pre Rhythm game finished
+* @post sets how many good notes each player hit
+* @param p_id (layer_id), num_goods (number good notes hit)
+* @return None
+*/
+"""
+func _rhythm_goods_hit(p_id: int, num_goods:int):
+	player_good_notes[p_id] = num_goods
+
+"""
+/*
 * @pre None
 * @post reset ALL global variables
 * @param None
@@ -353,6 +373,7 @@ func reset() -> void:
 	_boss_tp_counter = 0
 	_first_time_in_boss = false
 	_player_died_final_boss = false
+	_first_time_in_boss = false
 	player_names = {}
 	player_positions = {}
 	player_input_vectors = {}

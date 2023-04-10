@@ -1,10 +1,9 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Assets/tiles/TilesCorrected/GroundTile.png" type="Texture" id=3]
 [ext_resource path="res://Assets/tiles/TilesCorrected/WallTile_NoTilt_Vert.png" type="Texture" id=4]
 [ext_resource path="res://Assets/tiles/TilesCorrected/BlankTile.png" type="Texture" id=5]
 [ext_resource path="res://Assets/tiles/TilesCorrected/WallTile_NoTilt_Horiz.png" type="Texture" id=6]
-[ext_resource path="res://Assets/tiles/TilesCorrected/WallTile_Tilt.png" type="Texture" id=8]
 [ext_resource path="res://Assets/tiles/TilesCorrected/WallTile_Tilt_Horiz.png" type="Texture" id=9]
 [ext_resource path="res://Assets/tiles/TilesCorrected/WallTile_Tilt_Vert.png" type="Texture" id=11]
 [ext_resource path="res://Assets/tiles/TilesCorrected/CornerTile_A.png" type="Texture" id=14]
@@ -49,7 +48,7 @@ texture = ExtResource( 3 )
 margin_top = 288.0
 margin_right = 288.0
 margin_bottom = 576.0
-texture = ExtResource( 8 )
+texture = ExtResource( 9 )
 flip_h = true
 
 [node name="2_2" type="TextureRect" parent="CornerA3x3_1"]
@@ -122,7 +121,7 @@ texture = ExtResource( 3 )
 margin_top = 288.0
 margin_right = 288.0
 margin_bottom = 576.0
-texture = ExtResource( 8 )
+texture = ExtResource( 9 )
 flip_h = true
 
 [node name="2_2" type="TextureRect" parent="CornerA3x3_6"]
@@ -194,7 +193,7 @@ texture = ExtResource( 3 )
 margin_top = 288.0
 margin_right = 288.0
 margin_bottom = 576.0
-texture = ExtResource( 8 )
+texture = ExtResource( 9 )
 flip_h = true
 
 [node name="2_2" type="TextureRect" parent="CornerA3x3_4"]
@@ -267,7 +266,7 @@ texture = ExtResource( 3 )
 margin_top = 288.0
 margin_right = 288.0
 margin_bottom = 576.0
-texture = ExtResource( 8 )
+texture = ExtResource( 9 )
 flip_h = true
 
 [node name="2_2" type="TextureRect" parent="CornerA3x3_2"]
@@ -340,7 +339,7 @@ texture = ExtResource( 3 )
 margin_top = 288.0
 margin_right = 288.0
 margin_bottom = 576.0
-texture = ExtResource( 8 )
+texture = ExtResource( 9 )
 flip_h = true
 
 [node name="2_2" type="TextureRect" parent="CornerA3x3_3"]
@@ -413,7 +412,7 @@ texture = ExtResource( 3 )
 margin_top = 288.0
 margin_right = 288.0
 margin_bottom = 576.0
-texture = ExtResource( 8 )
+texture = ExtResource( 9 )
 flip_h = true
 
 [node name="2_2" type="TextureRect" parent="CornerA3x3_7"]
@@ -485,7 +484,7 @@ texture = ExtResource( 3 )
 margin_top = 288.0
 margin_right = 288.0
 margin_bottom = 576.0
-texture = ExtResource( 8 )
+texture = ExtResource( 9 )
 flip_h = true
 
 [node name="2_2" type="TextureRect" parent="CornerA3x3_5"]
@@ -547,14 +546,14 @@ flip_v = true
 margin_left = 288.0
 margin_right = 576.0
 margin_bottom = 288.0
-texture = ExtResource( 8 )
+texture = ExtResource( 9 )
 flip_h = true
 
 [node name="1_3" type="TextureRect" parent="CornerB3x3_1"]
 margin_left = 576.0
 margin_right = 864.0
 margin_bottom = 288.0
-texture = ExtResource( 8 )
+texture = ExtResource( 9 )
 flip_h = true
 
 [node name="2_1" type="TextureRect" parent="CornerB3x3_1"]
@@ -619,14 +618,14 @@ flip_v = true
 margin_left = 288.0
 margin_right = 576.0
 margin_bottom = 288.0
-texture = ExtResource( 8 )
+texture = ExtResource( 9 )
 flip_h = true
 
 [node name="1_3" type="TextureRect" parent="CornerB3x3_2"]
 margin_left = 576.0
 margin_right = 864.0
 margin_bottom = 288.0
-texture = ExtResource( 8 )
+texture = ExtResource( 9 )
 flip_h = true
 
 [node name="2_1" type="TextureRect" parent="CornerB3x3_2"]
@@ -839,14 +838,14 @@ flip_v = true
 margin_left = 288.0
 margin_right = 576.0
 margin_bottom = 288.0
-texture = ExtResource( 8 )
+texture = ExtResource( 9 )
 flip_h = true
 
 [node name="1_3" type="TextureRect" parent="CornerB3x3_3"]
 margin_left = 576.0
 margin_right = 864.0
 margin_bottom = 288.0
-texture = ExtResource( 8 )
+texture = ExtResource( 9 )
 flip_h = true
 
 [node name="2_1" type="TextureRect" parent="CornerB3x3_3"]
@@ -913,14 +912,14 @@ flip_v = true
 margin_left = 288.0
 margin_right = 576.0
 margin_bottom = 288.0
-texture = ExtResource( 8 )
+texture = ExtResource( 9 )
 flip_h = true
 
 [node name="1_3" type="TextureRect" parent="CornerB3x3_4"]
 margin_left = 576.0
 margin_right = 864.0
 margin_bottom = 288.0
-texture = ExtResource( 8 )
+texture = ExtResource( 9 )
 flip_h = true
 
 [node name="2_1" type="TextureRect" parent="CornerB3x3_4"]
@@ -986,14 +985,14 @@ flip_v = true
 margin_left = 288.0
 margin_right = 576.0
 margin_bottom = 288.0
-texture = ExtResource( 8 )
+texture = ExtResource( 9 )
 flip_h = true
 
 [node name="1_3" type="TextureRect" parent="CornerB3x3_5"]
 margin_left = 576.0
 margin_right = 864.0
 margin_bottom = 288.0
-texture = ExtResource( 8 )
+texture = ExtResource( 9 )
 flip_h = true
 
 [node name="2_1" type="TextureRect" parent="CornerB3x3_5"]
@@ -1060,14 +1059,14 @@ flip_v = true
 margin_left = 288.0
 margin_right = 576.0
 margin_bottom = 288.0
-texture = ExtResource( 8 )
+texture = ExtResource( 9 )
 flip_h = true
 
 [node name="1_3" type="TextureRect" parent="CornerB3x3_6"]
 margin_left = 576.0
 margin_right = 864.0
 margin_bottom = 288.0
-texture = ExtResource( 8 )
+texture = ExtResource( 9 )
 flip_h = true
 
 [node name="2_1" type="TextureRect" parent="CornerB3x3_6"]
@@ -1134,14 +1133,14 @@ flip_v = true
 margin_left = 288.0
 margin_right = 576.0
 margin_bottom = 288.0
-texture = ExtResource( 8 )
+texture = ExtResource( 9 )
 flip_h = true
 
 [node name="1_3" type="TextureRect" parent="CornerB3x3_7"]
 margin_left = 576.0
 margin_right = 864.0
 margin_bottom = 288.0
-texture = ExtResource( 8 )
+texture = ExtResource( 9 )
 flip_h = true
 
 [node name="2_1" type="TextureRect" parent="CornerB3x3_7"]
@@ -2772,14 +2771,14 @@ flip_v = true
 margin_left = 288.0
 margin_right = 576.0
 margin_bottom = 288.0
-texture = ExtResource( 8 )
+texture = ExtResource( 9 )
 flip_h = true
 
 [node name="1_3" type="TextureRect" parent="CornerB3x3"]
 margin_left = 576.0
 margin_right = 864.0
 margin_bottom = 288.0
-texture = ExtResource( 8 )
+texture = ExtResource( 9 )
 flip_h = true
 
 [node name="2_1" type="TextureRect" parent="CornerB3x3"]

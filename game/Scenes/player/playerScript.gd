@@ -10,6 +10,9 @@
 	11/28/2022 - Added death handling
 	2/14/2023  - Added inverted controls option
 	3/25/2023 - Added powerups
+* known bugs:
+	4/9/23 - Killing chandeliers with powerup causes spectator mode to incorrectly terminate in arena
+		cause could also be damage incoming from non-player sources
 """
 extends KinematicBody2D
 
@@ -18,6 +21,8 @@ onready var character = $position/animated_sprite
 onready var char_pos = $position
 onready var healthbar = $ProgressBar
 onready var shield = $Shield
+onready var torch = $light/Torch1
+onready var torchlight = $light
 
 # Member Variables
 var isInverted = false
@@ -85,7 +90,10 @@ func _ready():
 func _input(_ev):
 	if Input.is_action_just_pressed("toggle_powerup_debug", false):
 		toggle_powerup(null)
-		
+	if Input.is_action_just_pressed("toggle_torch"):
+		torch.visible = !torch.visible
+		torchlight.visible = !torchlight.visible
+		torch.toggle_burning()
 
 """
 /*

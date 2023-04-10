@@ -82,14 +82,20 @@ func _ready():
 	ServerConnection.connect("aoe_attack_was_hit", self, "_delete_atk_from_server")
 	if Global.progress == 0:
 		_can_teleport = false
-		healthbar.value = 200
-		_invulnerable = true;
+		_invulnerable = true
+		healthbar.value = 400
 		auraShield.visible = true
+	elif Global.progress == 8:
+		#In all other phases allow the boss to teleport
+		_can_teleport = true
+		_invulnerable = true
+		healthbar.value = 400
+		auraShield.visible = false
 	else:
 		#In all other phases allow the boss to teleport
 		_can_teleport = true
+		_invulnerable = false
 		healthbar.value = 400
-		_invulnerable = false;
 		auraShield.visible = false
 
 """
@@ -125,7 +131,12 @@ func _process(delta):
 * @return None
 """
 func move_boss() -> void:
-	position.y -= 100
+	$MyHurtBox/hitbox.hide()
+	$MyHurtBox/hitbox.disabled = true
+	$MyHurtBox/hitboxDuck.show()
+	$MyHurtBox/hitboxDuck.disabled = false
+	$Sprite.hide()
+	$DuckSprite.show()
 	var back_timer = Timer.new()
 	back_timer.one_shot = true
 	back_timer.wait_time = 0.5
@@ -193,7 +204,7 @@ func take_damage(amount: int) -> void:
 	ServerConnection.send_arena_enemy_hit(amount,0, "Boss")
 	if _invulnerable == false:
 		healthbar.value = healthbar.value - amount
-		if healthbar.value == 200 and Global.progress == 6:
+		if healthbar.value <= 200 and Global.progress == 6:
 			Global.state = Global.scenes.QUIZ
 		if healthbar.value == 0:
 			Global.state = Global.scenes.END_SCREEN
@@ -201,7 +212,7 @@ func take_damage(amount: int) -> void:
 #Same function as above but doesn't send data to the server
 func take_damage_server(amount: int) -> void:
 	healthbar.value = healthbar.value - amount
-	if healthbar.value == 200 and Global.progress == 6:
+	if healthbar.value <= 200 and Global.progress == 6:
 		Global.state = Global.scenes.QUIZ
 	if healthbar.value == 0:
 		Global.state = Global.scenes.END_SCREEN
@@ -248,7 +259,12 @@ func _delete_atk_from_server(atk_id:int) -> void:
 */
 """
 func _del_timer(tmr):
-	position.y += 100
+	$MyHurtBox/hitbox.show()
+	$MyHurtBox/hitbox.disabled = false
+	$MyHurtBox/hitboxDuck.hide()
+	$MyHurtBox/hitboxDuck.disabled = true
+	$Sprite.show()
+	$DuckSprite.hide()
 	tmr.queue_free()
 
 """
@@ -273,10 +289,11 @@ func _del_animation(warAni):
 func _atk_can_go(atk,x_sprite):
 	x_sprite.queue_free()
 	var id = len(_atk_objects)
-	atk.set_id(id)
-	get_parent().add_child(atk)
-	_atk_objects[id] = atk
-	atk.connect("aoe_attack_hit",self,"_delete_aoe_atk", [atk])
+	if is_instance_valid(atk):
+		atk.set_id(id)
+		get_parent().add_child(atk)
+		_atk_objects[id] = atk
+		atk.connect("aoe_attack_hit",self,"_delete_aoe_atk", [atk])
 
 """
 /*

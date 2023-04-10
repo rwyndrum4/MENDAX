@@ -1,7 +1,8 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://Scenes/mainMenu/mainMenu.gd" type="Script" id=1]
 [ext_resource path="res://Assets/Intro/IntroScreen.png" type="Texture" id=2]
+[ext_resource path="res://Scenes/mainMenu/StarsAnimation.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Assets/Intro/MainMenuGradient.png" type="Texture" id=4]
 [ext_resource path="res://Assets/SFX/myTongue.wav" type="AudioStream" id=5]
 [ext_resource path="res://Assets/SFX/bgm/Magic Forest.mp3" type="AudioStream" id=7]
@@ -68,6 +69,9 @@ modulate = Color( 0.207843, 0.207843, 0.207843, 0.776471 )
 material = SubResource( 11 )
 position = Vector2( 642.929, 367.47 )
 texture = ExtResource( 4 )
+
+[node name="Stars" parent="." instance=ExtResource( 3 )]
+position = Vector2( 640, 208 )
 
 [node name="menuButtons" type="VBoxContainer" parent="."]
 anchor_top = 1.0

@@ -9,8 +9,7 @@ func add_results(playersRes:Dictionary):
 		res_str += "[center][color="
 		res_str += _colors[ctr] + "]"
 		var status = playersRes[p_name]
-		res_str += p_name + ": " + status + " -> "
-		res_str += "+ 20 coin" if status == "Lived" else "No rewards"
+		res_str += p_name + ": " + status
 		res_str += "[/color][/center]\n"
 		ctr += 1
 	$textResults.bbcode_enabled = true

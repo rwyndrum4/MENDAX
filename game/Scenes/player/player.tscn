@@ -416,6 +416,7 @@ animation = "roll_southeast_green"
 
 [node name="ProgressBar" type="ProgressBar" parent="."]
 visible = false
+light_mask = 0
 margin_left = -75.0
 margin_top = -110.0
 margin_right = -25.0
