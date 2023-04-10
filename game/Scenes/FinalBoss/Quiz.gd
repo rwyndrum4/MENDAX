@@ -123,10 +123,10 @@ func read_json_file(filename):
 	print(json_data)
 
 func change_buttons_to_players():
-	var names = Global.player_names.values()
+	var names: Array = Global.player_names.values()
 	var p_count = len(names)
 	for i in range(4):
-		if (i+1) >= p_count:
+		if (i+1) > p_count:
 			turn_off_button(i)
 		else:
 			change_button_text(names[i],i)
