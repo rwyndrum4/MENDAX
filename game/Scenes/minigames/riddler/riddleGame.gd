@@ -18,11 +18,15 @@ var ItemClass = preload("res://Inventory/Item.tscn")
 var other_player = "res://Scenes/player/other_players/other_players.tscn" #Scene for players that online oppenents use
 
 # Scene Nodes
+onready var riddlemap=preload("res://Scenes/minigames/riddler/riddlerMap.tscn")
 onready var myTimer: Timer = $GUI/Timer
 onready var timerText: Label = $GUI/Timer/timerText
 onready var textBox = $GUI/textBox
 onready var hintbox=$GUI/show_letter
 onready var itemarray=[] #determines if items have been found
+onready var tilepositionsx=[]# creates array of tile positions fo rhints
+onready var tilepositionsy=[]# creates array of tile positions fo rhints
+onready var validtiles=[] #array of valid tiles for positioning
 onready var hint="";# set in init riddle
 onready var riddle="";#set in init riddle
 onready var riddlefile = 'res://Assets/riddle_jester/riddles.txt'
@@ -352,67 +356,86 @@ func chatbox_use(value):
 """
 /*
 * @pre Called in ready function before minigame
-* @post Initalizes itemarray to 0s indicating no items have been found places hints randomly so there is no overlap
+* @post Initalizes itemarray to 0s also positions hints randomly
 * @param None
 * @return None
 */
 """
+
 func init_hiddenitems():
 	hintlength=hint.length()
 	answerlength=answer.length()
 	lettersleft=answer.length()
 	for i in 6:
 		itemarray.append(0)
-	#initalizing 2d overlap arrays for x and y 7 rows and 2 entries per each row
-	for i in range(0,7):
-		x_overlap.append([])
-		y_overlap.append([])
-		for _j in range(0,2):
-			x_overlap[i].append(0)
-			y_overlap[i].append(0)
-	x_overlap[0][0]=init_playerpos.x-10; #left endpoint of player_pos
-	x_overlap[0][1]=init_playerpos.x+10;# right endpoint of player_pos
-	y_overlap[0][0]=init_playerpos.y-10;
-	y_overlap[0][1]=init_playerpos.y+10;
-	#need to randomize locations of hidden hints
+	# get hints
 	var hints= get_tree().get_nodes_in_group("hints")
+	var map=riddlemap.instance()
+	var temppos=0
+	var x=0
+	var y=0
+	#Create array of tile positions
 	
-	var hintcounter=1 #helps keep track of hints in for loop
-	var overlap;#1 if overlap found in for loop 2 if overlap found
-	var x;
-	var y;
+	for i in 169:
+		var tilepath="GridContainer/"+str(i+1)
+		#print(tilepath)
+		temppos=map.get_node(tilepath).rect_position
+		var tempx=temppos.x+144
+		var tempy=temppos.y+144
+		tilepositionsx.append(tempx)
+		tilepositionsy.append(tempy)
+	#for loop to position hints
+
+		#generate random tile for placement
+	for i in 169:
+		if i>=27 and i<=37:
+			validtiles.append(i)
+		elif i>=40 and i<=50:
+			validtiles.append(i)
+		elif i>=53 and i<=63:
+			validtiles.append(i)
+		elif i>=66 and i<=76:
+			if i!=73 and i!=67 and i!=68 and i!=69:
+				validtiles.append(i)
+		elif i>=79 and i<=89:
+			if i!=80 and i!=81 and i!=82 and i!=88:
+				validtiles.append(i)
+		elif i>=92 and i<=102:
+			validtiles.append(i)
+		elif i>=105 and i<=115:
+			validtiles.append(i)
+		elif i>=118 and i<=128:
+			validtiles.append(i)
+		elif i>=131 and i<=141:
+			validtiles.append(i)
+			
+	print(validtiles.has(132))
+	print(validtiles.has(130))
+	
 	for local_hint in hints:
-		overlap=1
-		while overlap==1:
-			x=rand_range(0, 3000) #range of game map reduced  due to size of hint area
-			y=rand_range(0,3000)#range of game map reduced  due to size of hint area
-			for i in range(0, hintcounter):
-				if ((x+150)>=x_overlap[i][0] or (x-150)<=x_overlap[i][1]) and ((y+150)>=y_overlap[i][0] or (y-150)<=y_overlap[i][1]): #overlap in both x and y direcitons indicates overlap
-					overlap=2
-			#logic below makes loop behave like do while will break if  overlap not found
-			if overlap==2:
-				overlap=1
-			if overlap==1:
-				overlap=2 
-				
+		var tile=1000
+		var rng = RandomNumberGenerator.new() 
+		while validtiles.has(tile)==false: # if tile position not valid regenerate
+			rng.randomize()
+			tile=rng.randi_range(0, 169)
+			#print(tile)
+		#print(tile)
+		x=tilepositionsx[tile]-400
+		y=tilepositionsy[tile]-450
+		#print(x)
+		#print(y)
 		local_hint.position = Vector2(x,y)
-		#set overlaps for hint using hintcounter
-		x_overlap[hintcounter][0]=x-150; #left endpoint of hint area box
-		x_overlap[hintcounter][1]=x+150;# right endpoint of hint area box
-		y_overlap[hintcounter][0]=init_playerpos.y-150;
-		y_overlap[hintcounter][1]=init_playerpos.y+150;
-		hintcounter=hintcounter+1
+	
 	$item1area.position=$item1.position
 	$item2area.position=$item2.position
 	$item3area.position=$item3.position
 	$item4area.position=$item4.position
 	$item5area.position=$item5.position
 	$item6area.position=$item6.position
-		
-
+	
 """
 /*
-* @pre Called when player find hidden item
+* @pre Called when player finds hidden item
 * @post If item hasn't been found gives player letters for hint
 * @param Player
 * @return None
@@ -422,6 +445,10 @@ func enterarea(spritepath,itemnumber):
 	$Player/Labelarea.hide()
 	if itemarray[itemnumber-1]==0: #means item has not been found
 		spritepath.show()
+		GameLoot.add_to_coin(1,3)
+		var total_coin = GameLoot.get_coin_val(1)
+		get_parent().change_money(total_coin)
+		PlayerInventory.add_item("Coin", 3)
 		var letter; # single letters found
 		var letters=""; # string of letters if mutiple letter hint
 		var lettercount=1;#keeps track so we don't return more than 2 letters
@@ -528,30 +555,41 @@ func _on_item6area_body_exited(_body:PhysicsBody2D)->void:
 """
 func _on_item1_body_entered(_body:PhysicsBody2D)->void:
 	if itemarray[0]==0 and answerlength>=1:
-		enterarea($item1/Sprite,1)
+		enterarea($item1/AnimatedSprite,1)
+		get_node("item1/AnimatedSprite").playing=true
+		get_node("item1/AnimatedSprite").frame=0
+		item = ItemClass.instance()
 		
 
 func _on_item2_body_entered(_body:PhysicsBody2D)->void:
 	if itemarray[1]==0 and answerlength>=2:
-		enterarea($item2/Sprite,2)
+		enterarea($item2/AnimatedSprite,2)
+		get_node("item2/AnimatedSprite").playing=true
+		get_node("item2/AnimatedSprite").frame=0
 		item = ItemClass.instance()
 		
 
 func _on_item3_body_entered(_body:PhysicsBody2D)->void:
 	if itemarray[2]==0 and answerlength>=3:
-		enterarea($item3/Sprite,3)
+		enterarea($item3/AnimatedSprite,3)
+		get_node("item3/AnimatedSprite").playing=true
+		get_node("item3/AnimatedSprite").frame=0
 		item = ItemClass.instance()
 		
 
 func _on_item4_body_entered(_body:PhysicsBody2D)->void:
 	if itemarray[3]==0 and answerlength>=4:
-		enterarea($item4/Sprite,4)
+		enterarea($item4/AnimatedSprite,4)
+		get_node("item4/AnimatedSprite").playing=true
+		get_node("item4/AnimatedSprite").frame=0
 		item = ItemClass.instance()
 		
 
 func _on_item5_body_entered(_body:PhysicsBody2D)->void:
 	if itemarray[4]==0 and answerlength>=5:
-		enterarea($item5/Sprite,5)
+		enterarea($item5/AnimatedSprite,5)
+		get_node("item5/AnimatedSprite").playing=true
+		get_node("item5/AnimatedSprite").frame=0
 		item = ItemClass.instance()
 		
 
@@ -572,19 +610,19 @@ func _on_item6_body_entered(_body:PhysicsBody2D)->void:
 */
 """
 func _on_item1_body_exited(_body:PhysicsBody2D)->void:
-	$item1/Sprite.hide()
+	$item1/AnimatedSprite.hide()
 	hintbox.hide()
 func _on_item2_body_exited(_body:PhysicsBody2D)->void:
-	$item2/Sprite.hide()
+	$item2/AnimatedSprite.hide()
 	hintbox.hide()
 func _on_item3_body_exited(_body:PhysicsBody2D)->void:
-	$item3/Sprite.hide()
+	$item3/AnimatedSprite.hide()
 	hintbox.hide()
 func _on_item4_body_exited(_body:PhysicsBody2D)->void:
-	$item4/Sprite.hide()
+	$item4/AnimatedSprite.hide()
 	hintbox.hide()
 func _on_item5_body_exited(_body:PhysicsBody2D)->void:
-	$item5/Sprite.hide()
+	$item5/AnimatedSprite.hide()
 	hintbox.hide()
 func _on_item6_body_exited(_body):
 	$item6/AnimatedSprite.hide()
