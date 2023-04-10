@@ -243,7 +243,7 @@ func _can_send_riddle():
 """
 func init_riddle(file):
 	var f = File.new()
-	var _err=f.open(file, File.READ)
+	f.open(file, File.READ)
 	var key=1
 	while !f.eof_reached():
 		var line=f.get_line()

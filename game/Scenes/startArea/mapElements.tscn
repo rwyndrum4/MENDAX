@@ -112,7 +112,7 @@ texture = ExtResource( 1 )
 margin_top = 288.0
 margin_right = 288.0
 margin_bottom = 576.0
-texture = ExtResource( 4 )
+texture = ExtResource( 8 )
 flip_h = true
 
 [node name="2_2" type="TextureRect" parent="CornerA3x3"]
@@ -174,14 +174,14 @@ flip_v = true
 margin_left = 288.0
 margin_right = 576.0
 margin_bottom = 288.0
-texture = ExtResource( 4 )
+texture = ExtResource( 8 )
 flip_h = true
 
 [node name="1_3" type="TextureRect" parent="CornerB3x3"]
 margin_left = 576.0
 margin_right = 864.0
 margin_bottom = 288.0
-texture = ExtResource( 4 )
+texture = ExtResource( 8 )
 flip_h = true
 
 [node name="2_1" type="TextureRect" parent="CornerB3x3"]

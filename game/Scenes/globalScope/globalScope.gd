@@ -19,7 +19,6 @@ onready var world_env = $WorldEnvironment
 onready var fps_label = $GUI/fpsLabel
 onready var menu_button = $GUI/SettingsMenu/SettingsTabs/Exit/exitSettings/GridContainer/mainMenuButton
 onready var current_song = $BGM/mainmenu
-onready var hotbar = $GUI/Hotbar
 
 #Scene Paths
 var main_menu = "res://Scenes/mainMenu/mainMenu.tscn"
