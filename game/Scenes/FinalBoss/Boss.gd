@@ -53,7 +53,7 @@ var boulder = preload("res://Scenes/BossAttacks/Boulder.tscn")
 var atkWarningAnimation = preload("res://Scenes/BossAttacks/atkWarning.tscn")
 
 #Scene Objects
-onready var healthbar = $ProgressBar
+onready var healthbar = $GUI/ProgressBar
 onready var bossBox = $MyHurtBox/hitbox
 onready var auraShield = $aura_shield
 

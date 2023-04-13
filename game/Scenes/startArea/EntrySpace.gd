@@ -597,6 +597,10 @@ func load_boss(stage_num:int):
 */
 """
 func stage_1() -> void:
+	#Intro dialogue for stage 1
+	textBox.queue_text("[color=#c71e1e]Mendax[/color]: Well done on your efforts in the games")
+	textBox.queue_text("[color=#c71e1e]Mendax[/color]: The finale starts now")
+	textBox.queue_text("[color=#c71e1e]Mendax[/color]: You must first light up the cave before challenging me")
 	ServerConnection.connect("final_boss_besier_lit", self, "_besier_was_lit")
 	# Generate beziers
 	var bez1 = preload("res://Scenes/FinalBoss/Bezier.tscn").instance()
@@ -642,6 +646,9 @@ func stage_2() -> void:
 	Global.progress = 6
 	if not is_instance_valid(player):
 		return
+	#Intro dialogue for stage 2
+	textBox.queue_text("[color=#c71e1e]Mendax[/color]: Welcome back to the cave")
+	textBox.queue_text("[color=#c71e1e]Mendax[/color]: Your decisions have been noted, continue the fight")
 	player.get_node("light/Torch1").hide()
 	# Give player a sword
 	sword = preload("res://Scenes/player/Sword/Sword.tscn").instance()
@@ -676,6 +683,9 @@ func stage_3(boss) -> void:
 	#Don't setup player stuff if they are already dead
 	if not is_instance_valid(player):
 		return
+	#Intro dialogue for stage 3
+	textBox.queue_text("[color=#c71e1e]Mendax[/color]: I have gained immortality")
+	textBox.queue_text("[color=#c71e1e]Mendax[/color]: There might be a way to cleanse it, or not, who knows?")
 	player.get_node("light/Torch1").hide() # Hide player torch light
 	# Give player a sword
 	sword = preload("res://Scenes/player/Sword/Sword.tscn").instance()
