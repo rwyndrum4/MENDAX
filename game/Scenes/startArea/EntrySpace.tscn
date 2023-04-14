@@ -402,6 +402,25 @@ text = "Press E to Get Rid of Invulnerability!
 align = 1
 valign = 1
 
+[node name="well2" type="Area2D" parent="."]
+position = Vector2( -6472, 5016 )
+collision_layer = 4
+
+[node name="circle" type="CollisionShape2D" parent="well2"]
+shape = SubResource( 19 )
+
+[node name="Label" type="Label" parent="well2"]
+margin_left = -205.288
+margin_top = -44.5889
+margin_right = 213.712
+margin_bottom = 63.4111
+theme = SubResource( 17 )
+custom_fonts/font = SubResource( 18 )
+text = "Press E to Get Rid of Invulnerability!
+"
+align = 1
+valign = 1
+
 [connection signal="timeout" from="GUI/Timer" to="." method="_on_Timer_timeout"]
 [connection signal="body_entered" from="exitCaveArea" to="." method="_on_exitCaveArea_body_entered"]
 [connection signal="body_exited" from="exitCaveArea" to="." method="_on_exitCaveArea_body_exited"]
@@ -414,3 +433,5 @@ valign = 1
 [connection signal="body_entered" from="pitfallArea" to="." method="_on_pitfallArea_body_entered"]
 [connection signal="body_entered" from="well" to="." method="_on_well_body_entered"]
 [connection signal="body_exited" from="well" to="." method="_on_well_body_exited"]
+[connection signal="body_entered" from="well2" to="." method="_on_well_body_entered"]
+[connection signal="body_exited" from="well2" to="." method="_on_well_body_exited"]

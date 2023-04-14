@@ -48,6 +48,7 @@ func _ready():
 	randomize()
 	set_physics_process(false)
 	main_player.set_physics_process(false)
+	sword.add_to_group("sword")
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("enemyDefeated",self,"_enemy_defeated")
 	# warning-ignore:return_value_discarded

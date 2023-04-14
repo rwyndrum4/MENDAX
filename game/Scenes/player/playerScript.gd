@@ -53,6 +53,7 @@ signal p1_died()
 */
 """
 func _ready():
+	set_meta("player_name", "player")
 	#adding area 2d to this group, can be checked in area2d signals
 	#example in littleGuy.gd
 	$MyHurtBox.add_to_group("player")

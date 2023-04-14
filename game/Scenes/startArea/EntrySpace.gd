@@ -47,6 +47,7 @@ onready var secretPanelCollider = $worldMap/Node2D_1/colliders/secretDoor
 onready var ladder = $worldMap/Node2D_1/Ladder1x1
 onready var pitfall = $worldMap/Node2D_1/Pitfall1x1_2
 onready var wellLabeled = $well/Label
+onready var wellLabeled2 = $well2/Label
 onready var spectate_text = $GUI/spectate_mode
 onready var player = $Player
 
@@ -73,6 +74,7 @@ func _ready():
 	$fogSprite.modulate.a8 = 0
 	GlobalSignals.emit_signal("toggleHotbar", true)
 	wellLabeled.visible = false
+	wellLabeled2.visible = false
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("openChatbox", self, "chatbox_use")
 	# warning-ignore:return_value_discarded
@@ -623,11 +625,7 @@ func stage_1() -> void:
 	add_child_below_node($Darkness, bez2)
 	add_child_below_node($Darkness, bez3)
 	add_child_below_node($Darkness, bez4)
-	# Give player a sword
-	sword = preload("res://Scenes/player/Sword/Sword.tscn").instance()
-	sword.direction = "right"
-	sword.get_node("pivot").position = player.position + Vector2(60,20)
-	add_child_below_node(player, sword)
+	add_player_sword()
 
 """
 /*
@@ -650,11 +648,7 @@ func stage_2() -> void:
 	textBox.queue_text("[color=#c71e1e]Mendax[/color]: Welcome back to the cave")
 	textBox.queue_text("[color=#c71e1e]Mendax[/color]: Your decisions have been noted, continue the fight")
 	player.get_node("light/Torch1").hide()
-	# Give player a sword
-	sword = preload("res://Scenes/player/Sword/Sword.tscn").instance()
-	sword.direction = "right"
-	sword.get_node("pivot").position = player.position + Vector2(60,20)
-	add_child_below_node(player, sword)
+	add_player_sword()
 	#imposter spawns
 	_imposter_timer = Timer.new()
 	add_child(_imposter_timer)
@@ -687,11 +681,7 @@ func stage_3(boss) -> void:
 	textBox.queue_text("[color=#c71e1e]Mendax[/color]: I have gained immortality")
 	textBox.queue_text("[color=#c71e1e]Mendax[/color]: There might be a way to cleanse it, or not, who knows?")
 	player.get_node("light/Torch1").hide() # Hide player torch light
-	# Give player a sword
-	sword = preload("res://Scenes/player/Sword/Sword.tscn").instance()
-	sword.direction = "right"
-	sword.get_node("pivot").position = player.position + Vector2(60,20)
-	add_child_below_node(player, sword)
+	add_player_sword()
 	#imposter spawns
 	var wait_for_start: Timer = Timer.new()
 	add_child(wait_for_start)
@@ -700,6 +690,22 @@ func stage_3(boss) -> void:
 	wait_for_start.start()
 	# warning-ignore:return_value_discarded
 	wait_for_start.connect("timeout",self, "_imposter_spawn")
+
+"""
+/*
+* @pre None
+* @post adds the player's sword to the scene
+* @param None
+* @return None
+*/
+"""
+func add_player_sword():
+	# Give player a sword
+	sword = preload("res://Scenes/player/Sword/Sword.tscn").instance()
+	sword.direction = "right"
+	sword.get_node("pivot").position = player.position + Vector2(60,20)
+	add_child_below_node(player, sword)
+	sword.add_to_group("sword")
 
 """
 /*
@@ -881,13 +887,19 @@ func spawn_stage_three_enemies():
 func _on_well_body_entered(body):
 	if Global.progress == 8:
 		if "Player" in body.name:
-			wellLabeled.visible = true
+			if player.position.x > -3700:
+				wellLabeled.visible = true
+			else:
+				wellLabeled2.visible = true
 			in_well = true
 
 func _on_well_body_exited(body):
 	if Global.progress == 8:
 		if "Player" in body.name:
-			wellLabeled.visible = false
+			if player.position.x > -3700:
+				wellLabeled.visible = false
+			else:
+				wellLabeled2.visible = false
 			in_well = false
 
 func _shield_up_boss(timer):

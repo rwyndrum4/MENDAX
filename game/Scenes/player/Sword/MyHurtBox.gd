@@ -33,7 +33,6 @@ func _init() -> void:
 func _ready() -> void:
 	# warning-ignore:return_value_discarded
 	connect("area_entered", self, "_on_area_entered")
-	
 
 """
 /*
@@ -46,5 +45,10 @@ func _ready() -> void:
 func _on_area_entered(hitbox: MyHitBox) -> void:
 	if hitbox == null:
 		return
-	if owner.has_method("take_damage") and hitbox.is_in_group("sword"):
+	#Checks to see if owner is an Arena Enemy (BoD, Skeleton, Chandelier)
+	#Also checks if the hitbox is from the sword and not another enemy
+	if owner.has_meta("enemy_name") and hitbox.is_in_group("sword"):
+		owner.take_damage(hitbox.damage)
+	#Player should take damage no matter what hits them
+	elif owner.has_meta("player_name"):
 		owner.take_damage(hitbox.damage)
