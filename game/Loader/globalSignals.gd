@@ -122,3 +122,19 @@ signal strength(dmg)
 """
 # warning-ignore:unused_signal
 signal money_screen_val()
+
+"""
+* Purpose - Teleport player to new position using tp
+* Used in - final boss game
+* Parameter - pos (position to telport them to)
+"""
+# warning-ignore:unused_signal
+signal teleport_player(pos)
+
+"""
+* Purpose - player moved inside of the cave 
+* Used in - cave, for minimap purposes
+* Parameter - pos (position to show where they are)
+"""
+# warning-ignore:unused_signal
+signal player_moved(pos)

@@ -62,6 +62,8 @@ func _ready():
 	GlobalSignals.connect("textbox_shift",self,"stop_go_player")
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("openMenu",self,"stop_go_player")
+	# warning-ignore:return_value_discarded
+	GlobalSignals.connect("teleport_player", self, "player_teleported")
 	# if server wasn't connected
 	if player_color == "":
 		player_color = "blue"
@@ -148,6 +150,9 @@ func _physics_process(delta):
 	velocity = move_and_slide(velocity)
 	#Animate character
 	control_animations(velocity)
+	#If in cave, give out current position for minimap purposes
+	if Global.state == Global.scenes.CAVE:
+		GlobalSignals.emit_signal("player_moved", position)
 	# Luck implementation
 	if (abs(input_velocity.x) > 0 or abs(input_velocity.y) > 0) and current_powerup == "luck":
 		luck_steps+=1
@@ -479,3 +484,12 @@ func walkCheck():
 			$walk.playing = true
 	else:
 		$walk.playing = false
+
+"""
+* @pre None
+* @post changes player position if they walk through a teleporter
+* @param None
+* @return None
+"""
+func player_teleported(new_pos:Vector2):
+	position = new_pos
