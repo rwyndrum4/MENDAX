@@ -450,6 +450,7 @@ func enterarea(spritepath,itemnumber):
 		var total_coin = GameLoot.get_coin_val(p_num)
 		GlobalSignals.emit_signal("money_screen_val", total_coin)
 		PlayerInventory.add_item("Coin", 3)
+		ServerConnection.send_money_earned(3)
 		var letter; # single letters found
 		var letters=""; # string of letters if mutiple letter hint
 		var lettercount=1;#keeps track so we don't return more than 2 letters

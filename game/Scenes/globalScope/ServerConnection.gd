@@ -25,6 +25,7 @@ enum OpCodes {
 	SHIELD_TAKEN,
 	BESIER_LIT,
 	AOE_ATK_HIT,
+	EARNED_MONEY,
 	SPAWNED
 }
 
@@ -48,6 +49,7 @@ signal good_notes_hit(id, num_goods) #send how many good notes were hit
 signal final_boss_besier_lit(id, besier) #send that someone has lit a besier
 signal boss_is_vulnerable(value) #send that boss can be hit now
 signal aoe_attack_was_hit(atk_id) #an aoe attack was hit by another player
+signal someone_earned_money(id, amount)
 
 #Other signals
 signal chat_message_received(msg,type,user_sent,from_user) #signal to tell game a chat message has come in
@@ -587,6 +589,17 @@ func send_aoe_atk_hit(id:int):
 		_socket.send_match_state_async(_match_id, OpCodes.AOE_ATK_HIT, JSON.print(payload))
 
 """
+* @pre called when someone earns money that isn't locally tracked
+* @post tells other players the attack should dissapear
+* @param id -> int (id of the attack)
+* @return None
+"""
+func send_money_earned(amount_in: int):
+	if _socket:
+		var payload := {id = _player_num, amount = amount_in}
+		_socket.send_match_state_async(_match_id, OpCodes.EARNED_MONEY, JSON.print(payload))
+
+"""
 * @pre called when player spawns in an area
 * @post tells other players they are there, used for syncing players together
 * @param None
@@ -758,6 +771,13 @@ func _on_NakamaSocket_received_match_state(match_state: NakamaRTAPI.MatchData) -
 			var attack_id: int = int(decoded.atk_id)
 			
 			emit_signal("aoe_attack_was_hit", attack_id)
+		OpCodes.EARNED_MONEY:
+			var decoded: Dictionary = JSON.parse(raw).result
+			
+			var id: int = int(decoded.id)
+			var money: int = int(decoded.amount)
+			
+			emit_signal("someone_earned_money", id, money)
 		OpCodes.SPAWNED:
 			var decoded: Dictionary = JSON.parse(raw).result
 			

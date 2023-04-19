@@ -267,7 +267,6 @@ func _can_start_game_other():
 * @return None
 """
 func start_cave():
-	print("hi")
 	set_physics_process(true)
 	#Start timer if not inside of the final boss
 	if Global.minigame < 4:

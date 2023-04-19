@@ -2,6 +2,9 @@ extends Node
 
 var PlayerLoot: Array = []
 
+func _ready():
+	ServerConnection.connect("someone_earned_money", self, "server_update_money")
+
 """
 * @pre need to know how many players in game
 * @post Sets all current players
@@ -34,6 +37,15 @@ func get_coin_val(player_num: int) -> int:
 """
 func add_to_coin(player_num:int, num_coin:int) -> void:
 	PlayerLoot[player_num-1]["num_coin"] += num_coin
+
+"""
+* @pre None
+* @post Whenever someone picks up some money that is not tracked locally
+* @param id (id of player), amount (amount of money picked up)
+* @return int
+"""
+func server_update_money(id: int, amount: int) -> void:
+	PlayerLoot[id]["num_coin"] += amount
 
 func reset() -> void:
 	PlayerLoot = []
