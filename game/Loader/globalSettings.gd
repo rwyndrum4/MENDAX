@@ -158,6 +158,26 @@ func update_volume(bus_idx,value):
 		AudioServer.set_bus_mute(bus_idx, false)
 	Save.save_data()
 
+"""
+/*
+* @pre Function is called from within settingsMenu.gd
+* @post function changes the user's name
+* @param username -> String
+* @return None
+*/
+"""
 func update_username(username:String):
 	Save.game_data.username = username
+	Save.save_data()
+
+"""
+/*
+* @pre Function is called whenever player earns money in the game
+* @post saves the players money to file
+* @param amount (amount of money to add to user's total)
+* @return None
+*/
+"""
+func save_money(amount: int):
+	Save.game_data.money += amount
 	Save.save_data()

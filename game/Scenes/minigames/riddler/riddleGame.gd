@@ -294,13 +294,10 @@ func handle_coins(who_won:String):
 		else:
 			message = "Someone else found the answer, +5 gold for you"
 			how_much = 5
-		var n = Global.get_player_num(p_name)
-		GameLoot.add_to_coin(n,how_much)
+		var p_num = Global.get_player_num(p_name)
+		GameLoot.add_to_coin(p_num,how_much)
 		if p_name == Save.game_data.username:
-			var total_coin = GameLoot.get_coin_val(n)
-			GlobalSignals.emit_signal("money_screen_val", total_coin)
 			GlobalSignals.emit_signal("exportEventMessage", message, "blue")
-			PlayerInventory.add_item("Coin", how_much)
 
 """
 /*
@@ -316,9 +313,6 @@ func _single_player_check_answer(message_in:String, _whisper, _username):
 		var message = "Correct answer! +20 gold for you"
 		GlobalSignals.emit_signal("exportEventMessage", message, "blue")
 		GameLoot.add_to_coin(1,20)
-		var total_coin = GameLoot.get_coin_val(1)
-		GlobalSignals.emit_signal("money_screen_val", total_coin)
-		PlayerInventory.add_item("Coin", 20)
 		Global.state = Global.scenes.CAVE
 
 """
@@ -447,9 +441,6 @@ func enterarea(spritepath,itemnumber):
 		spritepath.show()
 		var p_num = ServerConnection._player_num if ServerConnection.match_exists() else 1
 		GameLoot.add_to_coin(p_num,3)
-		var total_coin = GameLoot.get_coin_val(p_num)
-		GlobalSignals.emit_signal("money_screen_val", total_coin)
-		PlayerInventory.add_item("Coin", 3)
 		ServerConnection.send_money_earned(3)
 		var letter; # single letters found
 		var letters=""; # string of letters if mutiple letter hint

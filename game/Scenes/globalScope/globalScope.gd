@@ -71,6 +71,7 @@ func _ready():
 	initialize_settings()
 	initialize_world_env()
 	initialize_fps_label()
+	PlayerInventory.add_item("Coin", Save.game_data.money) #add players coins to inventory
 	#Load initial scene (main menu)
 	current_scene = load(main_menu).instance()
 	add_child(current_scene)
@@ -365,8 +366,8 @@ func show_money(should_show:bool) -> void:
 * @return None
 */
 """
-func change_money(value:int) -> void:
-	$GUI/money.change_total(value)
+func change_money() -> void:
+	$GUI/money.change_total(Save.game_data.money)
 
 """
 /*

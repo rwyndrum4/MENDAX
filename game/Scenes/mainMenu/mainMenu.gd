@@ -94,6 +94,7 @@ func _on_Start_pressed():
 		delete_player_obj(player['player_obj'],player['text_obj'])
 	if ServerConnection.match_exists() and ServerConnection.get_server_status():
 		if num_players == 1:
+			ServerConnection._player_num = 1
 			GlobalSignals.emit_signal(
 				"exportEventMessage",
 				"Disconnecting from match, single player mode started",
@@ -107,9 +108,11 @@ func _on_Start_pressed():
 		else:
 			yield(ServerConnection.leave_general_chat(), "completed")
 	else:
+		ServerConnection._player_num = 1
 		Global.player_names["1"] = Save.game_data.username
 	#change scene to start area
 	GlobalSignals.emit_signal("show_money_text", true)
+	GlobalSignals.emit_signal("money_screen_val")
 	GameLoot.init_players(len(Global.player_names))
 	Global.stars_last_frame = $Stars.frame
 	SceneTrans.change_scene(Global.scenes.START_AREA)

@@ -96,10 +96,10 @@ margin_bottom = 44.0
 text = "Quit"
 
 [node name="Scores" type="VBoxContainer" parent="."]
-margin_left = 1014.0
-margin_top = 406.0
-margin_right = 1054.0
-margin_bottom = 446.0
+margin_left = 1016.0
+margin_top = 375.0
+margin_right = 1056.0
+margin_bottom = 415.0
 
 [connection signal="pressed" from="Buttons/MainMenu" to="." method="_on_MainMenu_pressed"]
 [connection signal="pressed" from="Buttons/Quit" to="." method="_on_Quit_pressed"]

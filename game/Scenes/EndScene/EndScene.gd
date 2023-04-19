@@ -53,7 +53,7 @@ func _process(_delta):
 func add_scores() -> void:
 	var silver_font = DynamicFont.new()
 	silver_font.font_data = load("res://Assets/Silver.ttf")
-	silver_font.size = 40
+	silver_font.size = 80
 	silver_font.outline_size = 4
 	silver_font.outline_color = Color.blue
 	silver_font.use_filter = true
