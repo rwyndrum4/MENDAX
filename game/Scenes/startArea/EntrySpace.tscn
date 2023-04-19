@@ -142,6 +142,7 @@ shadow_enabled = true
 shadow_gradient_length = 10.0
 
 [node name="Darkness" type="Light2D" parent="."]
+visible = false
 position = Vector2( -3120, 3208 )
 scale = Vector2( 2.74444, 1.47778 )
 texture = ExtResource( 5 )
@@ -165,7 +166,7 @@ current = true
 visible = false
 position = Vector2( 0, -45 )
 frames = SubResource( 15 )
-frame = 4
+frame = 1
 playing = true
 
 [node name="GUI" type="CanvasLayer" parent="."]
@@ -372,6 +373,19 @@ __meta__ = {
 scale = Vector2( 2.12582, 2.45751 )
 shape = SubResource( 5 )
 
+[node name="chasmArea" type="Area2D" parent="."]
+position = Vector2( 3956, 2715 )
+rotation = -1.5562
+scale = Vector2( -21.8257, 2.99971 )
+collision_layer = 4
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="chasmOval" type="CollisionShape2D" parent="chasmArea"]
+scale = Vector2( 2.12582, 2.45751 )
+shape = SubResource( 5 )
+
 [node name="pitfallArea" type="Area2D" parent="."]
 position = Vector2( 1297, 2423 )
 scale = Vector2( 2.81069, 2.75853 )
@@ -412,6 +426,8 @@ valign = 1
 [connection signal="body_exited" from="leverArea" to="." method="_on_leverArea_body_exited"]
 [connection signal="body_entered" from="ladderArea" to="." method="_on_ladderArea_body_entered"]
 [connection signal="body_exited" from="ladderArea" to="." method="_on_ladderArea_body_exited"]
+[connection signal="body_entered" from="chasmArea" to="." method="_on_chasmArea_body_entered"]
+[connection signal="body_exited" from="chasmArea" to="." method="_on_chasmArea_body_exited"]
 [connection signal="body_entered" from="pitfallArea" to="." method="_on_pitfallArea_body_entered"]
 [connection signal="body_entered" from="well" to="." method="_on_well_body_entered"]
 [connection signal="body_exited" from="well" to="." method="_on_well_body_exited"]

@@ -34,6 +34,8 @@ var server_players: Array = [] #array to hold all OTHER players in cave (not you
 var other_player = "res://Scenes/player/arena_player/arena_player.tscn" #class for other player's body objects
 var imposter = preload("res://Scenes/Mobs/imposter.tscn") #imposter enemies class
 var sword = null #sword for the player
+var _has_ladder = false
+var at_chasm = false
 
 # Scene Objects
 onready var confuzzed = $Player/confuzzle
@@ -43,8 +45,11 @@ onready var timerText: Label = $GUI/Timer/timerText
 onready var textBox = $GUI/textBox
 onready var steamAnimations = $steamControl/steamAnimations
 onready var secretPanel = $worldMap/Node2D_1/Wall3x3_6
-onready var secretPanelCollider = $worldMap/Node2D_1/colliders/secretDoor
+onready var secretPanelCollider1 = $worldMap/Node2D_1/colliders/secretDoor
+onready var secretPanelCollider2 = $worldMap/Node2D_1/colliders/secretDoor2
 onready var ladder = $worldMap/Node2D_1/Ladder1x1
+onready var chasmSpan = $worldMap/Node2D_1/ChasmWithLadder
+onready var chasmBarrier = $worldMap/Node2D_1/colliders/ChasmCollider2
 onready var pitfall = $worldMap/Node2D_1/Pitfall1x1_2
 onready var wellLabeled = $well/Label
 onready var spectate_text = $GUI/spectate_mode
@@ -192,11 +197,21 @@ func _input(_ev):
 		if Input.is_action_just_pressed("ui_accept",false) and not Input.is_action_just_pressed("ui_enter_chat"):
 			if is_instance_valid(secretPanel):
 				secretPanel.queue_free()
-			if is_instance_valid(secretPanelCollider):
-				secretPanelCollider.queue_free()
+			if is_instance_valid(secretPanelCollider1):
+				secretPanelCollider1.queue_free()
+			if is_instance_valid(secretPanelCollider2):
+				secretPanelCollider2.queue_free()
 	if at_ladder and is_instance_valid(ladder):
 		if Input.is_action_just_pressed("ui_accept",false) and not Input.is_action_just_pressed("ui_enter_chat"):
 			ladder.texture = $root/Assets/tiles/TilesCorrected/WallTile_Tilt_Horiz
+			_has_ladder = true
+	if at_chasm and _has_ladder:
+		if Input.is_action_just_pressed("ui_accept",false) and not Input.is_action_just_pressed("ui_enter_chat"):
+			print("got chasm")
+			if is_instance_valid(chasmBarrier):
+				chasmBarrier.queue_free()
+			chasmSpan.show()
+			_has_ladder = false
 	#Spectator mode stuff
 	if _player_dead and len(server_players) > 0:
 		if Input.is_action_just_pressed("jump",false):
@@ -522,6 +537,28 @@ func _on_ladderArea_body_entered(_body: PhysicsBody2D): #change to body if want 
 """
 func _on_ladderArea_body_exited(_body: PhysicsBody2D): #change to body if want to use
 	at_ladder = false
+
+"""
+/*
+* @pre Called when player enters the chasm's Area2D zone
+* @post sets at_chasm to true (for interactability purposes)
+* @param _body -> body of the player
+* @return None
+*/
+"""	
+func _on_chasmArea_body_entered(_body: PhysicsBody2D):
+	at_chasm = true
+
+"""
+/*
+* @pre Called when player exits the chasm's Area2D zone
+* @post sets at_chasm to false (for interactability purposes)
+* @param _body -> body of the player
+* @return None
+*/
+"""
+func _on_chasmArea_body_exited(_body: PhysicsBody2D):
+	at_chasm = false
 
 """
 /*
