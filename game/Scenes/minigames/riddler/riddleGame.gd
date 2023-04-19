@@ -300,7 +300,7 @@ func handle_coins(who_won:String):
 			var total_coin = GameLoot.get_coin_val(n)
 			GlobalSignals.emit_signal("money_screen_val", total_coin)
 			GlobalSignals.emit_signal("exportEventMessage", message, "blue")
-			PlayerInventory.add_item("Coin", 20)
+			PlayerInventory.add_item("Coin", how_much)
 
 """
 /*
@@ -445,9 +445,10 @@ func enterarea(spritepath,itemnumber):
 	$Player/Labelarea.hide()
 	if itemarray[itemnumber-1]==0: #means item has not been found
 		spritepath.show()
-		GameLoot.add_to_coin(1,3)
-		var total_coin = GameLoot.get_coin_val(1)
-		get_parent().change_money(total_coin)
+		var p_num = ServerConnection._player_num if ServerConnection.match_exists() else 1
+		GameLoot.add_to_coin(p_num,3)
+		var total_coin = GameLoot.get_coin_val(p_num)
+		GlobalSignals.emit_signal("money_screen_val", total_coin)
 		PlayerInventory.add_item("Coin", 3)
 		var letter; # single letters found
 		var letters=""; # string of letters if mutiple letter hint

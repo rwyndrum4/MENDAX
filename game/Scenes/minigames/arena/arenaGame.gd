@@ -349,10 +349,8 @@ func gen_results(server_on:bool) -> Dictionary:
 				res[p_name] = "Died"
 			else:
 				GameLoot.add_to_coin(p_num,20)
-				if Save.game_data.username == p_name:
-					PlayerInventory.add_item("Coin", 20)
 				res[p_name] = "Lived"
-		#Adding money for you 
+		#Adding money for you
 		res[Save.game_data.username] = "Died" if _player_dead else "Lived"
 		var your_num = ServerConnection._player_num
 		if not _player_dead:

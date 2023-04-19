@@ -9,8 +9,8 @@ func _ready():
 		var color_num = ServerConnection._player_num - 1 #player nums are 1 - 4, sub 1 for array
 		if color_num in range(0,4): #check in case above goes wrong
 			$p_indicator.set_frame_color(COLORS[color_num])
-	#catch signals of main player moving
-	GlobalSignals.connect("player_moved", self, "update_map")
+	# warning-ignore:return_value_discarded
+	GlobalSignals.connect("player_moved", self, "update_map") #catch signals of main player moving
 	var blink_tmr = Timer.new()
 	blink_tmr.wait_time = 0.5
 	blink_tmr.one_shot = false

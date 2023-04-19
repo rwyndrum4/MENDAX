@@ -171,7 +171,7 @@ current = true
 visible = false
 position = Vector2( 0, -45 )
 frames = SubResource( 15 )
-frame = 1
+frame = 4
 playing = true
 
 [node name="GUI" type="CanvasLayer" parent="."]
@@ -445,7 +445,7 @@ valign = 1
 script = ExtResource( 22 )
 
 [node name="right_side_tp" type="Area2D" parent="teleporters"]
-position = Vector2( 2747, 2023 )
+position = Vector2( 3024, 2434 )
 scale = Vector2( 7, 7 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="teleporters/right_side_tp"]
