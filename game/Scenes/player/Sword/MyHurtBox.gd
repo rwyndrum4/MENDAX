@@ -52,3 +52,5 @@ func _on_area_entered(hitbox: MyHitBox) -> void:
 	#Player should take damage no matter what hits them
 	elif owner.has_meta("player_name"):
 		owner.take_damage(hitbox.damage)
+	elif owner.has_meta("boss"):
+		owner.take_damage(hitbox.damage)

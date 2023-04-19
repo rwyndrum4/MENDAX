@@ -80,7 +80,7 @@ disabled = true
 position = Vector2( 0, -300 )
 scale = Vector2( 8, 8 )
 frames = SubResource( 5 )
-frame = 2
+frame = 9
 playing = true
 
 [node name="GUI" type="CanvasLayer" parent="."]
