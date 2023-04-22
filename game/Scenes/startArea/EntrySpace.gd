@@ -17,6 +17,7 @@ const CAVE_TIME = 90 #how much time players spend in the cave
 var in_exit = false #variable to track if character is by the exit
 var in_menu = false #variable to track if character is in options menu
 var in_well = false #variable to track if character is by well
+var in_shop = false #variable to track if character is by shop
 var steam_active = false #variable to tell if steam in passage is active
 var stop_steam_control = false #variable to tell whether process function needs to check steam
 var steam_modulate:float = 0 #modualte value that is gradually added to modulate of steam
@@ -52,8 +53,11 @@ onready var chasmSpan = $worldMap/Node2D_1/ChasmWithLadder
 onready var chasmBarrier = $worldMap/Node2D_1/colliders/ChasmCollider2
 onready var pitfall = $worldMap/Node2D_1/Pitfall1x1_2
 onready var wellLabeled = $well/Label
+onready var shopLabeled = $shop/Label
 onready var spectate_text = $GUI/spectate_mode
 onready var player = $Player
+
+onready var storeDisplay = load("res://Scenes/StoreElements/StoreVars.tscn")
 
 """
 /*
@@ -64,7 +68,11 @@ onready var player = $Player
 */
 """
 func _ready():
-	set_physics_process(false) #turn of physics until game should start
+	set_physics_process(false) #turn off physics until game should start
+	# Place player in front of shop if they are leaving from it.
+	if Global.lastPos == "shop":
+		$Player.position = Vector2(-10700, 5150)
+		Global.lastPos == "cave"
 	#If a player died in an earlier phase, delete their object
 	if Global._player_died_final_boss:
 		if is_instance_valid(player):
@@ -78,6 +86,7 @@ func _ready():
 	$fogSprite.modulate.a8 = 0
 	GlobalSignals.emit_signal("toggleHotbar", true)
 	wellLabeled.visible = false
+	shopLabeled.visible = false
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("openChatbox", self, "chatbox_use")
 	# warning-ignore:return_value_discarded
@@ -212,6 +221,10 @@ func _input(_ev):
 				chasmBarrier.queue_free()
 			chasmSpan.show()
 			_has_ladder = false
+	if in_shop:
+		if Input.is_action_just_pressed("ui_press_e",false):
+			Global.lastPos = "shop"
+			Global.state = Global.scenes.MARKET
 	#Spectator mode stuff
 	if _player_dead and len(server_players) > 0:
 		if Input.is_action_just_pressed("jump",false):
@@ -1108,3 +1121,29 @@ func change_spectator():
 				var p_name = Global.get_player_name(p.get('num'))
 				change_spectate_text(p_name)
 				break
+
+"""
+/*
+* @pre Called when player enters the shop's Area2D zone
+* @post allows player to interact with the shop
+* @param _body -> body of the player
+* @return None
+*/
+"""
+func _on_shop_body_entered(body):
+	if "Player" in body.name:
+		shopLabeled.visible = true
+		in_shop = true
+
+"""
+/*
+* @pre Called when player exits the shop's Area2D zone
+* @post removes ability of player to interact with the shop
+* @param _body -> body of the player
+* @return None
+*/
+"""
+func _on_shop_body_exited(body):
+	if "Player" in body.name:
+		shopLabeled.visible = false
+		in_well = false

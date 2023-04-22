@@ -7,6 +7,8 @@
 """
 extends Node
 
+onready var prior
+
 """
 /*
 * @pre None
@@ -51,7 +53,11 @@ func _on_subMoney_pressed():
 */
 """
 func _on_Back2Menu_pressed():
-	Global.state = Global.scenes.MAIN_MENU
+	if Global.lastPos == "shop":
+		print("got here")
+		Global.state = Global.scenes.CAVE
+	else:
+		Global.state = Global.scenes.MAIN_MENU
 
 """
 /*

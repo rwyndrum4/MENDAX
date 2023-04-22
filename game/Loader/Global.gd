@@ -14,6 +14,9 @@ var powerup = "default"
 var player_inventory = preload("res://Inventory/Inventory.tscn").instance()
 var hotbar = preload("res://Inventory/Hotbar.tscn").instance()
 
+# place to track where player should go when they exit the shop
+var lastPos = "mainMenu"
+
 #Entry First Time
 var in_anim: int = 0
 #variable to track what frame user was on after pressing start

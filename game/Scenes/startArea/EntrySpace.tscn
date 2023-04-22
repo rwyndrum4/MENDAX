@@ -142,7 +142,6 @@ shadow_enabled = true
 shadow_gradient_length = 10.0
 
 [node name="Darkness" type="Light2D" parent="."]
-visible = false
 position = Vector2( -3120, 3208 )
 scale = Vector2( 2.74444, 1.47778 )
 texture = ExtResource( 5 )
@@ -166,7 +165,7 @@ current = true
 visible = false
 position = Vector2( 0, -45 )
 frames = SubResource( 15 )
-frame = 1
+frame = 4
 playing = true
 
 [node name="GUI" type="CanvasLayer" parent="."]
@@ -417,6 +416,25 @@ text = "Press E to Get Rid of Invulnerability!
 align = 1
 valign = 1
 
+[node name="shop" type="Area2D" parent="."]
+position = Vector2( -10982, 5152 )
+collision_layer = 4
+
+[node name="circle" type="CollisionShape2D" parent="shop"]
+shape = SubResource( 19 )
+
+[node name="Label" type="Label" parent="shop"]
+margin_left = 224.0
+margin_top = 55.0
+margin_right = 643.0
+margin_bottom = 163.0
+theme = SubResource( 17 )
+custom_fonts/font = SubResource( 18 )
+text = "Press E to enter/exit shop!
+"
+align = 1
+valign = 1
+
 [connection signal="timeout" from="GUI/Timer" to="." method="_on_Timer_timeout"]
 [connection signal="body_entered" from="exitCaveArea" to="." method="_on_exitCaveArea_body_entered"]
 [connection signal="body_exited" from="exitCaveArea" to="." method="_on_exitCaveArea_body_exited"]
@@ -431,3 +449,5 @@ valign = 1
 [connection signal="body_entered" from="pitfallArea" to="." method="_on_pitfallArea_body_entered"]
 [connection signal="body_entered" from="well" to="." method="_on_well_body_entered"]
 [connection signal="body_exited" from="well" to="." method="_on_well_body_exited"]
+[connection signal="body_entered" from="shop" to="." method="_on_shop_body_entered"]
+[connection signal="body_exited" from="shop" to="." method="_on_shop_body_exited"]
