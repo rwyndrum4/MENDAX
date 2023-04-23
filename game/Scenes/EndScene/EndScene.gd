@@ -63,7 +63,11 @@ func add_scores() -> void:
 	score_label.add_color_override("font_color",Color.white)
 	$Scores.add_child(score_label)
 	for val in GameLoot.PlayerLoot:
-		var p_name = Global.get_player_name(val.get("p_num"))
+		var p_num = val.get("p_num")
+		var score = val.get("num_coin")
+		if p_num == ServerConnection._player_num:
+			GlobalSettings.save_score(score)
+		var p_name = Global.get_player_name(p_num)
 		var s_font = DynamicFont.new()
 		s_font.font_data = load("res://Assets/Silver.ttf")
 		s_font.size = 40
@@ -71,7 +75,7 @@ func add_scores() -> void:
 		s_font.outline_color = Color(0,0,0,1)
 		s_font.use_filter = true
 		var s_label: Label = Label.new()
-		s_label.text = p_name + ": " + str(val.get("num_coin"))
+		s_label.text = p_name + ": " + str(score)
 		s_label.add_font_override("font",s_font)
 		s_label.add_color_override("font_color",Color.white)
 		$Scores.add_child(s_label)

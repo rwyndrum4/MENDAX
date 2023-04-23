@@ -336,6 +336,7 @@ func despawn_character(player_name:String):
 */
 """
 func _on_createGameButton_pressed():
+	startButton.grab_focus()
 	if ServerConnection.match_exists():
 		#leave the match if the game is alredy created
 		game_already_created()
@@ -404,6 +405,7 @@ func _on_enterLobbyCode_focus_entered():
 */
 """
 func _on_enterLobbyCode_text_entered(new_text):
+	startButton.grab_focus()
 	var code = new_text.to_upper()
 	if len(code) != 4:
 		GlobalSignals.emit_signal("exportEventMessage","Invalid code","pink")
@@ -581,3 +583,8 @@ func _button_down():
 
 func _on_lobbyCode_mouse_entered():
 	pass # Replace with function body.
+
+func _on_HighScores_pressed():
+	var h_scn = load("res://Scenes/mainMenu/HighScores.tscn").instance()
+	add_child(h_scn)
+	h_scn.popup_centered()

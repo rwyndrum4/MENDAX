@@ -121,6 +121,16 @@ margin_bottom = 140.0
 focus_neighbour_bottom = NodePath("../Start")
 text = "Quit"
 
+[node name="HighScores" type="Button" parent="."]
+margin_left = 592.0
+margin_top = 464.0
+margin_right = 692.0
+margin_bottom = 489.0
+rect_scale = Vector2( 1.771, 1.771 )
+rect_pivot_offset = Vector2( -644, -266 )
+focus_neighbour_left = NodePath("../menuButtons/Start")
+text = "High Scores"
+
 [node name="createGameButton" type="Button" parent="." groups=["my_buttons"]]
 margin_left = 1095.0
 margin_top = 11.0
@@ -192,6 +202,7 @@ bus = "Music"
 [connection signal="pressed" from="menuButtons/Tutorial" to="." method="_on_Tutorial_pressed"]
 [connection signal="pressed" from="menuButtons/Credits" to="." method="_on_Credits_pressed"]
 [connection signal="pressed" from="menuButtons/Quit" to="." method="_on_Quit_pressed"]
+[connection signal="pressed" from="HighScores" to="." method="_on_HighScores_pressed"]
 [connection signal="pressed" from="createGameButton" to="." method="_on_createGameButton_pressed"]
 [connection signal="pressed" from="joinLobby/joinGame" to="." method="_on_joinGame_pressed"]
 [connection signal="focus_entered" from="joinLobby/enterLobbyCode" to="." method="_on_enterLobbyCode_focus_entered"]

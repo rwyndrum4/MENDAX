@@ -25,7 +25,8 @@ const DEFAULT: Dictionary = {
 	"music_vol": -10,
 	"sfx_vol": -10,
 	"mouse_sens": 0.1,
-	"money": 0
+	"money": 0,
+	"high_scores": [0,0,0,0,0]
 }
 
 #dictionary to store the user data
