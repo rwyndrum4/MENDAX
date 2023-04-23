@@ -52,6 +52,7 @@ onready var ladder = $worldMap/Node2D_1/Ladder1x1
 onready var chasmSpan = $worldMap/Node2D_1/ChasmWithLadder
 onready var chasmBarrier = $worldMap/Node2D_1/colliders/ChasmCollider2
 onready var pitfall = $worldMap/Node2D_1/Pitfall1x1_2
+onready var pitfall2 = $worldMap/Node2D_1/Pitfall1x1_1
 onready var wellLabeled = $well/Label
 onready var shopLabeled = $shop/Label
 onready var spectate_text = $GUI/spectate_mode
@@ -577,13 +578,24 @@ func _on_chasmArea_body_exited(_body: PhysicsBody2D):
 """
 /*
 * @pre Called when player enters the pitfall's Area2D zone
-* @post replaces the tile with a pit (blank tile)
+* @post replaces the tile with a pit of spikes
 * @param _body -> body of the player
 * @return None
 */
 """
 func _on_pitfallArea_body_entered(_body: PhysicsBody2D): #change to body if want to use
-	pitfall.texture = load("res://Assets/tiles/TilesCorrected/BlankTile.png")
+	pitfall.texture = load("res://Assets/tiles/TilesCorrected/SpikesPixelated.png")
+
+"""
+/*
+* @pre Called when player enters the pitfall's Area2D zone
+* @post replaces the tile with a pit of spikes
+* @param _body -> body of the player
+* @return None
+*/
+"""	
+func _on_pitfallArea2_body_entered(_body: PhysicsBody2D): #change to body if want to use
+	pitfall2.texture = load("res://Assets/tiles/TilesCorrected/SpikesPixelated.png")
 
 """
 /*
