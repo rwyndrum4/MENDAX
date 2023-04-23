@@ -299,3 +299,73 @@ func grab_button(current_tab):
 		get_node("SettingsTabs/Gameplay/GameplaySettings/audioSettings/MouseSense/MouseSensSlider").grab_focus()
 	elif current_tab == 3:
 		get_node("SettingsTabs/Exit/exitSettings/GridContainer/quitButton").grab_focus()
+
+"""
+/*
+* @pre called when ip is entered to change
+* @post puts in text to show
+* @param None
+* @return None
+*/
+"""
+func _on_serverIpInput_focus_entered():
+	$SettingsTabs/Gameplay/GameplaySettings/audioSettings/HBoxContainer2/serverIpInput.placeholder_text = "ENTER to submit, Arrow Keys to exit"
+	changing_username = true
+
+"""
+/*
+* @pre called when ip text line is exited
+* @post gets rid of the placeholder text
+* @param None
+* @return None
+*/
+"""
+func _on_serverIpInput_focus_exited():
+	$SettingsTabs/Gameplay/GameplaySettings/audioSettings/HBoxContainer2/serverIpInput.placeholder_text = ""
+	changing_username = false
+
+"""
+/*
+* @pre called if text is entered
+* @post changes new server ip address
+* @param None
+* @return None
+*/
+"""
+func _on_serverIpInput_text_entered(new_text):
+	ServerConnection.IP_ADDRESS = new_text
+
+"""
+/*
+* @pre called when passwd is entered to change
+* @post puts in text to show
+* @param None
+* @return None
+*/
+"""
+func _on_serverPassw_focus_entered():
+	$SettingsTabs/Gameplay/GameplaySettings/audioSettings/HBoxContainer3/serverPassw.placeholder_text = "ENTER to submit, Arrow Keys to exit"
+	changing_username = true
+
+"""
+/*
+* @pre called when pass text line is exited
+* @post gets rid of the placeholder text
+* @param None
+* @return None
+*/
+"""
+func _on_serverPassw_focus_exited():
+	$SettingsTabs/Gameplay/GameplaySettings/audioSettings/HBoxContainer3/serverPassw.placeholder_text = ""
+	changing_username = false
+
+"""
+/*
+* @pre called if text is entered
+* @post changes new server password
+* @param None
+* @return None
+*/
+"""
+func _on_serverPassw_text_entered(new_text):
+	ServerConnection.KEY = new_text

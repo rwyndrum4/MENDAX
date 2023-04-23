@@ -588,3 +588,4 @@ func _on_HighScores_pressed():
 	var h_scn = load("res://Scenes/mainMenu/HighScores.tscn").instance()
 	add_child(h_scn)
 	h_scn.popup_centered()
+	$HighScores.release_focus()
