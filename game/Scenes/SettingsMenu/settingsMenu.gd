@@ -36,6 +36,8 @@ onready var sfxVolSlider = $SettingsTabs/Audio/MarginContainer/audioSettings/Sfx
 onready var mouseVal = $SettingsTabs/Gameplay/GameplaySettings/audioSettings/MouseSense/MouseVal
 onready var mouseSlider = $SettingsTabs/Gameplay/GameplaySettings/audioSettings/MouseSense/MouseSensSlider
 onready var usernameInput = $SettingsTabs/Gameplay/GameplaySettings/audioSettings/HBoxContainer/usernameInput
+onready var ipInput = $SettingsTabs/Gameplay/GameplaySettings/audioSettings/HBoxContainer2/serverIpInput
+onready var passInput = $SettingsTabs/Gameplay/GameplaySettings/audioSettings/HBoxContainer3/serverPassw
 
 """
 /*
@@ -309,7 +311,7 @@ func grab_button(current_tab):
 */
 """
 func _on_serverIpInput_focus_entered():
-	$SettingsTabs/Gameplay/GameplaySettings/audioSettings/HBoxContainer2/serverIpInput.placeholder_text = "ENTER to submit, Arrow Keys to exit"
+	ipInput.placeholder_text = "ENTER to submit, Arrow Keys to exit"
 	changing_username = true
 
 """
@@ -321,7 +323,7 @@ func _on_serverIpInput_focus_entered():
 */
 """
 func _on_serverIpInput_focus_exited():
-	$SettingsTabs/Gameplay/GameplaySettings/audioSettings/HBoxContainer2/serverIpInput.placeholder_text = ""
+	ipInput.placeholder_text = ""
 	changing_username = false
 
 """
@@ -344,7 +346,7 @@ func _on_serverIpInput_text_entered(new_text):
 */
 """
 func _on_serverPassw_focus_entered():
-	$SettingsTabs/Gameplay/GameplaySettings/audioSettings/HBoxContainer3/serverPassw.placeholder_text = "ENTER to submit, Arrow Keys to exit"
+	passInput.placeholder_text = "ENTER to submit, Arrow Keys to exit"
 	changing_username = true
 
 """
@@ -356,7 +358,7 @@ func _on_serverPassw_focus_entered():
 */
 """
 func _on_serverPassw_focus_exited():
-	$SettingsTabs/Gameplay/GameplaySettings/audioSettings/HBoxContainer3/serverPassw.placeholder_text = ""
+	passInput.placeholder_text = ""
 	changing_username = false
 
 """
