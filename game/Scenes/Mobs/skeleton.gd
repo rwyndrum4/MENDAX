@@ -27,6 +27,7 @@ var isIn = false
 var isDead = false
 var _player_target: int = 1
 var _in_tutorial:bool = false
+var _first_time_hit_tut:bool = true
 
 # Global velocity
 var velocity = Vector2(1,1)
@@ -168,6 +169,11 @@ func take_damage(amount: int) -> void:
 	ServerConnection.send_arena_enemy_hit(amount,_my_id, _name) #1 is the type of enemy, reference EnemyTypes in arenaGame.gd
 	healthbar.value = healthbar.value - amount
 	Global.skeleton_damage[str(1)]+=amount
+	if _first_time_hit_tut and _in_tutorial:
+		_first_time_hit_tut = false
+		#rip not a global textbox
+		get_parent().textbox.queue_text("Skeleton's healthbar got lowered! Keep attacking it!")
+
 	if healthbar.value == 0:
 		isDead = true
 		skeletonAnim.play("death")
@@ -235,9 +241,10 @@ func _on_skeletonAnimationPlayer_animation_finished(_anim_name):
 			
 	else:
 		set_physics_process(false)
+		GlobalSignals.emit_signal("enemyDefeated", _my_id)
 		$death.play()
 		yield($death, "finished")
-		GlobalSignals.emit_signal("enemyDefeated", _my_id)
+		
 		queue_free()
 
 """

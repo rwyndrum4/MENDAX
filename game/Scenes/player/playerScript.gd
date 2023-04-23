@@ -107,8 +107,14 @@ func _physics_process(delta):
 	#don't move player if textbox is playing or options are open
 	if is_stopped:
 		control_animations(Vector2.ZERO) #play idle animation
+		if is_instance_valid(get_parent().get_node("Player").get_node_or_null("Sword")):
+			var temp_sword = get_parent().get_node("Player").get_node("Sword")
+			temp_sword.set_process(false)
 		return
-	
+	else:
+		if is_instance_valid(get_parent().get_node("Player").get_node_or_null("Sword")):
+			var temp_sword = get_parent().get_node("Player").get_node("Sword")
+			temp_sword.set_process(true)
 	# Initialize input velocity
 	var input_velocity = Vector2.ZERO
 	# Inverted controls if invert is active <------------------------------------------------BEN I CHANGED THIS

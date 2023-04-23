@@ -592,7 +592,7 @@ visible = false
 position = Vector2( 0, 5 )
 frames = SubResource( 2 )
 animation = "attack1"
-frame = 1
+frame = 7
 playing = true
 
 [node name="sprite" type="Sprite" parent="Position2D"]

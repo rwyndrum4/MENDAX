@@ -13,13 +13,16 @@
 	12/19/2022 - fixed bugs dealing with players spawning
 	1/10/2022 - Adding ability to swap to match chat
 	1/29/2023 - added sfx for buttons
+	4/22/2023 - Added textbox for tutorial
 """
 extends Control
 
 # Member Variables
 onready var startButton = $menuButtons/Start
 onready var code_line_edit = $joinLobby/enterLobbyCode
-
+onready var textbox = $textBox
+onready var blink = $"Blink(#Blackpink_Fan)/AnimationPlayer"
+onready var canvasVis = $"Blink(#Blackpink_Fan)"
 #### Variables for showing players on rocks ###
 #array for holding player objects that are created
 var player_objects: Array = [] 
@@ -54,6 +57,7 @@ var _match_code: String = ""
 */
 """
 func _ready():
+	canvasVis.visible = false
 	initialize_menu()
 	GlobalSignals.emit_signal("toggleHotbar", false)
 	# warning-ignore:return_value_discarded
@@ -64,6 +68,13 @@ func _ready():
 		button.connect("mouse_entered", self, "_mouse_button_entered")
 		button.connect("focus_entered", self, "_mouse_button_entered")
 		button.connect("button_down", self, "_button_down")
+	if Global.anim_id == 2:
+		canvasVis.visible = true
+		$menuButtons/Start.release_focus()
+		blink.play("BLIIIINK_BLIIIIIINK")
+		yield(blink, "animation_finished")
+		textbox.queue_text("How did I get here?")
+		canvasVis.visible = false
 
 """
 /*
