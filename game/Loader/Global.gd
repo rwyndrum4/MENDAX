@@ -16,6 +16,8 @@ var hotbar = preload("res://Inventory/Hotbar.tscn").instance()
 
 # place to track where player should go when they exit the shop
 var lastPos = "mainMenu"
+# place to track whether player is cloaked
+var isCloaked = false
 
 #Entry First Time
 var in_anim: int = 0

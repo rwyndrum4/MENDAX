@@ -1,4 +1,4 @@
-[gd_scene load_steps=211 format=2]
+[gd_scene load_steps=212 format=2]
 
 [ext_resource path="res://Assets/ben-character/blue/rolling/5.png" type="Texture" id=1]
 [ext_resource path="res://Scenes/player/playerScript.gd" type="Script" id=2]
@@ -196,6 +196,7 @@
 [ext_resource path="res://Assets/ben-character/greeen/rolling-side/frame0014.png" type="Texture" id=194]
 [ext_resource path="res://Assets/ben-character/greeen/rolling-side/frame0015.png" type="Texture" id=195]
 [ext_resource path="res://Assets/SFX/walk.mp3" type="AudioStream" id=196]
+[ext_resource path="res://Assets/CloakLight.png" type="Texture" id=197]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 9, 9 )
@@ -444,6 +445,7 @@ light_mask = 0
 position = Vector2( -57, -37 )
 scale = Vector2( 3.75, 3.45918 )
 frames = SubResource( 12 )
+frame = 4
 playing = true
 
 [node name="Torch1" type="Light2D" parent="light"]
@@ -477,3 +479,11 @@ volume_db = 10.0
 max_distance = 1000.0
 attenuation = 2.6
 bus = "SFX"
+
+[node name="CloakOfDarkness" type="Light2D" parent="."]
+visible = false
+texture = ExtResource( 197 )
+texture_scale = 3.0
+color = Color( 0.913725, 0.843137, 0.886275, 1 )
+energy = 3.0
+mode = 1

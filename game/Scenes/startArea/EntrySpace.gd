@@ -56,6 +56,7 @@ onready var wellLabeled = $well/Label
 onready var shopLabeled = $shop/Label
 onready var spectate_text = $GUI/spectate_mode
 onready var player = $Player
+onready var voidLight = $voidLight
 
 onready var storeDisplay = load("res://Scenes/StoreElements/StoreVars.tscn")
 
@@ -1126,7 +1127,7 @@ func change_spectator():
 /*
 * @pre Called when player enters the shop's Area2D zone
 * @post allows player to interact with the shop
-* @param _body -> body of the player
+* @param body -> body of the player
 * @return None
 */
 """
@@ -1139,7 +1140,7 @@ func _on_shop_body_entered(body):
 /*
 * @pre Called when player exits the shop's Area2D zone
 * @post removes ability of player to interact with the shop
-* @param _body -> body of the player
+* @param body -> body of the player
 * @return None
 */
 """
@@ -1147,3 +1148,17 @@ func _on_shop_body_exited(body):
 	if "Player" in body.name:
 		shopLabeled.visible = false
 		in_well = false
+
+"""
+/*
+* @pre Called when player enters the shop's Area2D zone
+* @post destroys the void and applies the Cloak of Darkness to the player that entered it
+* @param body -> body of the player
+* @return None
+*/
+"""
+func _on_void_body_entered(body):
+	if "Player" in body.name:
+		body.get_node("CloakOfDarkness").show()
+		Global.isCloaked = true
+		voidLight.queue_free()

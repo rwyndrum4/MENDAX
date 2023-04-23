@@ -78,6 +78,9 @@ func _ready():
 	
 	# Initialize powerup from menu:
 	toggle_powerup(Global.powerup)
+	# Add cloak of darkness effect
+	if Global.isCloaked:
+		$CloakOfDarkness.show()
 	
 """
 /*
