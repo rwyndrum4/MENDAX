@@ -444,6 +444,7 @@ light_mask = 0
 position = Vector2( -57, -37 )
 scale = Vector2( 3.75, 3.45918 )
 frames = SubResource( 12 )
+frame = 3
 playing = true
 
 [node name="Torch1" type="Light2D" parent="light"]
@@ -454,6 +455,8 @@ texture = ExtResource( 127 )
 texture_scale = 20.0
 color = Color( 0.839216, 0.454902, 0.0980392, 1 )
 script = ExtResource( 129 )
+
+[node name="Timer" type="Timer" parent="light/Torch1"]
 
 [node name="Shield" type="Sprite" parent="."]
 light_mask = 0

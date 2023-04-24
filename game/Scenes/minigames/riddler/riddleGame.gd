@@ -42,6 +42,7 @@ onready var transCam = $Path2D/PathFollow2D/camTrans
 onready var riddler = $riddler
 onready var playerCam = $Player/Camera2D
 onready var player_one = $Player #Player object of player YOU control
+onready var torch = $Player/light/Torch1
 
 #signals
 signal textWait()
@@ -56,6 +57,7 @@ signal textWait()
 """
 func _ready():
 	player_one.set_physics_process(false)
+	torch.toggle_burning()
 	init_playerpos=$Player.position
 	# warning-ignore:return_value_discarded
 	ServerConnection.connect("riddle_received", self, "set_riddle_from_server")
