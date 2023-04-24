@@ -146,3 +146,11 @@ signal player_moved(pos)
 """
 # warning-ignore:unused_signal
 signal bought_powerup(pwr)
+
+"""
+* Purpose - reset server after ip or pass change
+* Used in - Settings
+* Parameter - None
+"""
+# warning-ignore:unused_signal
+signal reset_server()

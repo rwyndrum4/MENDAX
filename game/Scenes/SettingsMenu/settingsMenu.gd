@@ -336,6 +336,7 @@ func _on_serverIpInput_focus_exited():
 """
 func _on_serverIpInput_text_entered(new_text):
 	ServerConnection.IP_ADDRESS = new_text
+	GlobalSignals.emit_signal("reset_server")
 
 """
 /*
@@ -371,3 +372,4 @@ func _on_serverPassw_focus_exited():
 """
 func _on_serverPassw_text_entered(new_text):
 	ServerConnection.KEY = new_text
+	GlobalSignals.emit_signal("reset_server")

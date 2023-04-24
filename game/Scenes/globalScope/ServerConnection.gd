@@ -55,7 +55,7 @@ signal someone_earned_money(id, amount)
 signal chat_message_received(msg,type,user_sent,from_user) #signal to tell game a chat message has come in
 
 var KEY := "nakama_mendax" #key that is stored in the server
-var IP_ADDRESS: String = "18.221.200.80" #ip address of server
+var IP_ADDRESS: String = "3.144.158.73" #ip address of server
 
 var _session: NakamaSession #user session
 

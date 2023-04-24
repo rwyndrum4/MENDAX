@@ -69,6 +69,8 @@ func _ready():
 	GlobalSignals.connect("show_money_text", self, "show_money")
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("money_screen_val", self, "change_money")
+	# warning-ignore:return_value_discarded
+	GlobalSignals.connect("reset_server", self, "server_checks")
 	#Initialize the options menu and world environment
 	initialize_settings()
 	initialize_world_env()
