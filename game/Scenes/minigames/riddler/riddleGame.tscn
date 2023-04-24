@@ -187,6 +187,7 @@ position = Vector2( 2257, 667 )
 shape = SubResource( 3 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="item1"]
+visible = false
 scale = Vector2( 3.45455, 3.2197 )
 frames = SubResource( 19 )
 animation = "open"
@@ -207,6 +208,7 @@ position = Vector2( 922, 2494 )
 shape = SubResource( 3 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="item2"]
+visible = false
 scale = Vector2( 3.45455, 3.2197 )
 frames = SubResource( 19 )
 animation = "open"
@@ -227,6 +229,7 @@ position = Vector2( 1804, 1456 )
 shape = SubResource( 3 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="item3"]
+visible = false
 scale = Vector2( 3.45455, 3.42803 )
 frames = SubResource( 19 )
 animation = "open"
@@ -247,6 +250,7 @@ position = Vector2( 2278, 2064 )
 shape = SubResource( 3 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="item4"]
+visible = false
 scale = Vector2( 3.45455, 3.2197 )
 frames = SubResource( 19 )
 animation = "open"
@@ -268,6 +272,7 @@ scale = Vector2( 3.45455, 3.2197 )
 shape = SubResource( 21 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="item5"]
+visible = false
 scale = Vector2( 3.45455, 3.2197 )
 frames = SubResource( 19 )
 animation = "open"
@@ -289,6 +294,7 @@ scale = Vector2( 3.45455, 3.2197 )
 shape = SubResource( 21 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="item6"]
+visible = false
 scale = Vector2( 3.45455, 3.2197 )
 frames = SubResource( 19 )
 animation = "open"
