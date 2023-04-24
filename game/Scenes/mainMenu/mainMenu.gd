@@ -59,6 +59,8 @@ var _match_code: String = ""
 func _ready():
 	canvasVis.visible = false
 	initialize_menu()
+	# warning-ignore:return_value_discarded
+	GlobalSignals.connect("textbox_empty", self, "tutorial_textbox")
 	GlobalSignals.emit_signal("toggleHotbar", false)
 	# warning-ignore:return_value_discarded
 	ServerConnection.connect("character_spawned",self,"spawn_character")
@@ -68,12 +70,13 @@ func _ready():
 		button.connect("mouse_entered", self, "_mouse_button_entered")
 		button.connect("focus_entered", self, "_mouse_button_entered")
 		button.connect("button_down", self, "_button_down")
+	#after getting out of tutorial
 	if Global.anim_id == 2:
 		canvasVis.visible = true
-		$menuButtons/Start.release_focus()
 		blink.play("BLIIIINK_BLIIIIIINK")
 		yield(blink, "animation_finished")
 		textbox.queue_text("How did I get here?")
+		startButton.release_focus()
 		canvasVis.visible = false
 
 """
@@ -90,6 +93,7 @@ func _process(_delta): #if you want to use delta, then change it to delta
 		code_line_edit.hide()
 	if Input.is_action_just_pressed("ui_cancel"):
 		startButton.grab_focus()
+
 
 """
 /*
@@ -236,7 +240,8 @@ func getRandAlphInd(rng):
 func initialize_menu():
 	$Stars.play("default")
 	#Grab focus on start button so keys can be used to navigate buttons
-	startButton.grab_focus()
+	if Global.anim_id != 2:
+		startButton.grab_focus()
 	#reset any online stuff if they came from a previous game
 	reset_multiplayer()
 	#If chat has not been swapped back from previous game 
@@ -571,6 +576,10 @@ func _delete_get_user_input_obj():
 	else:
 		GlobalSettings.update_username(given_username)
 		startButton.grab_focus()
+
+func tutorial_textbox():
+	startButton.grab_focus()
+
 
 """
 /*

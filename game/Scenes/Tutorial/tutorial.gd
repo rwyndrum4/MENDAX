@@ -21,6 +21,12 @@ onready var _fog2 = $FOG/fog/ParallaxCloud2/Sprite
 onready var _fog3 = $FOG/fog/ParallaxCloud3/Sprite
 onready var _fog4 = $ParallaxForeground/ParallaxCloud/Sprite
 
+onready var _fog1s = $FOG/fog/ParallaxCloud
+onready var _fog2s = $FOG/fog/ParallaxCloud2
+onready var _fog3s = $FOG/fog/ParallaxCloud3
+onready var _fog4s = $ParallaxForeground/ParallaxCloud
+
+
 var swordObj = preload("res://Scenes/player/Sword/Sword.tscn")
 var swordPivot = null
 var sword = null
@@ -255,6 +261,11 @@ func _on_cave_area_entered(_area):
 */
 """
 func _on_Button_pressed():
+	_fog1s.CLOUD_SPEED = _fog1s.CLOUD_SPEED * 200
+	_fog2s.CLOUD_SPEED = _fog2s.CLOUD_SPEED * 200
+	_fog3s.CLOUD_SPEED = _fog3s.CLOUD_SPEED * 200
+	_fog4s.CLOUD_SPEED = _fog4s.CLOUD_SPEED * 200
+	
 	SceneTrans.change_scene(Global.scenes.MAIN_MENU)
 	button.visible = false
 	
