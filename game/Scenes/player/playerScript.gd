@@ -167,7 +167,6 @@ func _physics_process(delta):
 			var player_id = 1
 			if ServerConnection.match_exists() and ServerConnection.get_server_status():
 				player_id = ServerConnection._player_num
-			var player_name = Global.get_player_name(player_id)
 			GameLoot.add_to_coin(player_id, 1)
 
 """

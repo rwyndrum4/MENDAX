@@ -241,7 +241,7 @@ margin_bottom = 1439.0
 color = Color( 0.0156863, 0.0509804, 0.0235294, 1 )
 
 [node name="Player" parent="." instance=ExtResource( 6 )]
-position = Vector2( 6789, 494 )
+position = Vector2( 1052, 500 )
 scale = Vector2( 0.797615, 0.81306 )
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
@@ -251,7 +251,7 @@ current = true
 visible = false
 position = Vector2( 0, -45 )
 frames = SubResource( 7 )
-frame = 5
+frame = 2
 playing = true
 
 [node name="fence_bot" type="TextureRect" parent="."]
