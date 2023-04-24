@@ -1,4 +1,4 @@
-[gd_scene load_steps=56 format=2]
+[gd_scene load_steps=55 format=2]
 
 [ext_resource path="res://Scenes/startArea/worldMap.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Scenes/player/player.tscn" type="PackedScene" id=2]
@@ -76,12 +76,6 @@ size = 42
 font_data = ExtResource( 20 )
 
 [sub_resource type="CircleShape2D" id=5]
-
-[sub_resource type="DynamicFont" id=7]
-size = 42
-extra_spacing_char = 15
-extra_spacing_space = 15
-font_data = ExtResource( 6 )
 
 [sub_resource type="SpriteFrames" id=9]
 animations = [ {
@@ -166,7 +160,7 @@ current = true
 visible = false
 position = Vector2( 0, -45 )
 frames = SubResource( 15 )
-frame = 4
+frame = 5
 playing = true
 
 [node name="GUI" type="CanvasLayer" parent="."]
@@ -224,20 +218,6 @@ __meta__ = {
 [node name="caveExitOval" type="CollisionShape2D" parent="exitCaveArea"]
 scale = Vector2( 2.12582, 2.45751 )
 shape = SubResource( 5 )
-
-[node name="exitDirections" type="Label" parent="exitCaveArea"]
-visible = false
-margin_left = 20.0
-margin_top = -10.0
-margin_right = 359.0
-margin_bottom = 115.0
-rect_rotation = 90.0
-rect_scale = Vector2( 0.0838492, 0.334329 )
-custom_colors/font_color = Color( 0.980392, 0.980392, 0.980392, 1 )
-custom_fonts/font = SubResource( 7 )
-text = "Press Enter 
-to exit cave"
-align = 1
 
 [node name="steamControl" type="Node" parent="."]
 

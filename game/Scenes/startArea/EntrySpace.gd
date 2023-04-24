@@ -40,7 +40,6 @@ var at_chasm = false
 
 # Scene Objects
 onready var confuzzed = $Player/confuzzle
-onready var instructions: Label = $exitCaveArea/exitDirections
 onready var myTimer: Timer = $GUI/Timer
 onready var timerText: Label = $GUI/Timer/timerText
 onready var textBox = $GUI/textBox
@@ -83,8 +82,6 @@ func _ready():
 		player.set_physics_process(false)
 		# warning-ignore:return_value_discarded
 		player.connect("p1_died", self, "_p1_died")
-	#hide cave instructions at start
-	instructions.hide()
 	$fogSprite.modulate.a8 = 0
 	GlobalSignals.emit_signal("toggleHotbar", true)
 	wellLabeled.visible = false
@@ -310,25 +307,23 @@ func start_cave():
 	$GUI/wait_on_players.hide() #Hide waiting for players text
 
 """
-* @post shows instructions on screen and sets in_cave to true
+* @post sets in_cave to true
 * @param _body -> body of the player
 * @return None
 """
 func _on_exitCaveArea_body_entered(_body: PhysicsBody2D): #change to body if want to use
-	instructions.show()
 	in_exit = true
 	
 """
 /*
 * @pre Called when player exits the Area2D zone
-* @post hides instructions on screen and sets in_cave to false
+* @post sets in_cave to false
 * @param _body -> body of the player
 * @return None
 */
 """
 func _on_exitCaveArea_body_exited(_body: PhysicsBody2D): #change to body if want to use
 	in_exit = false
-	instructions.hide()
 	
 """
 /*

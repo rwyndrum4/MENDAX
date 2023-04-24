@@ -85,5 +85,5 @@ disabled = true
 position = Vector2( 0, -300 )
 scale = Vector2( 8, 8 )
 frames = SubResource( 5 )
-frame = 5
+frame = 3
 playing = true
