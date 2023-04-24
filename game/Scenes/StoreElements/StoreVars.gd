@@ -7,57 +7,9 @@
 """
 extends Node
 
-onready var prior
+const POWER_COST = 50
 
-"""
-/*
-* @pre None
-* @post None
-* @param None
-* @return None
-*/
-"""
-func _ready():
-	pass#$tavernbg.play() #constant looping bg music
-"""
-/*
-* @pre Button is pressed
-* @post Player's money gets added
-* @param None
-* @return None
-*/
-"""
-func _on_addMoney_pressed():
-	Global.money += 1 #adds 1
-	$Kaching.play() #plays sound
-	
-"""
-/*
-* @pre Button is pressed
-* @post Player's money gets subtracted
-* @param None
-* @return None
-*/
-"""
-func _on_subMoney_pressed():
-	if(Global.money != 0): #checks if money is 0
-		Global.money -= 1 #subtracts 1
-		$Kaching.play() #plays sound
-
-"""
-/*
-* @pre Button is pressed
-* @post Goes back to main menu scene
-* @param None
-* @return None
-*/
-"""
-func _on_Back2Menu_pressed():
-	if Global.lastPos == "shop":
-		print("got here")
-		Global.state = Global.scenes.CAVE
-	else:
-		Global.state = Global.scenes.MAIN_MENU
+signal bought_powerup(pwr)
 
 """
 /*
@@ -68,9 +20,15 @@ func _on_Back2Menu_pressed():
 */
 """
 func _on_buySpeedPowerup_pressed():
-	if(Global.money >= 10): #checks if money is adequate
-		Global.money -= 10 #removes 10
+	if(Save.game_data.money >= POWER_COST): #checks if money is adequate
+		if Global.state != Global.scenes.MAIN_MENU:
+			GameLoot.add_to_coin(ServerConnection._player_num, -POWER_COST)
+			ServerConnection.send_money_earned(-POWER_COST)
+		else:
+			GlobalSettings.save_money(-POWER_COST)
+			show_balance()
 		Global.powerup = "speed"
+		GlobalSignals.emit_signal("bought_powerup", Global.powerup)
 
 """
 /*
@@ -81,9 +39,15 @@ func _on_buySpeedPowerup_pressed():
 */
 """
 func _on_buyStrengthPowerup_pressed():
-	if(Global.money >= 10): #checks if money is adequate
-		Global.money -= 10 #removes 10
+	if(Save.game_data.money >= POWER_COST): #checks if money is adequate
+		if Global.state != Global.scenes.MAIN_MENU:
+			GameLoot.add_to_coin(ServerConnection._player_num, -POWER_COST)
+			ServerConnection.send_money_earned(-POWER_COST)
+		else:
+			GlobalSettings.save_money(-POWER_COST)
+			show_balance()
 		Global.powerup = "strength"
+		GlobalSignals.emit_signal("bought_powerup", Global.powerup)
 
 """
 /*
@@ -94,9 +58,15 @@ func _on_buyStrengthPowerup_pressed():
 */
 """
 func _on_buyEndurancePowerup_pressed():
-	if(Global.money >= 10): #checks if money is adequate
-		Global.money -= 10 #removes 10
+	if(Save.game_data.money >= POWER_COST): #checks if money is adequate
+		if Global.state != Global.scenes.MAIN_MENU:
+			GameLoot.add_to_coin(ServerConnection._player_num, -POWER_COST)
+			ServerConnection.send_money_earned(-POWER_COST)
+		else:
+			GlobalSettings.save_money(-POWER_COST)
+			show_balance()
 		Global.powerup = "endurance"
+		GlobalSignals.emit_signal("bought_powerup", Global.powerup)
 
 """
 /*
@@ -107,9 +77,15 @@ func _on_buyEndurancePowerup_pressed():
 */
 """
 func _on_buyReachPowerup_pressed():
-	if(Global.money >= 10): #checks if money is adequate
-		Global.money -= 10 #removes 10
+	if(Save.game_data.money >= POWER_COST): #checks if money is adequate
+		if Global.state != Global.scenes.MAIN_MENU:
+			GameLoot.add_to_coin(ServerConnection._player_num, -POWER_COST)
+			ServerConnection.send_money_earned(-POWER_COST)
+		else:
+			GlobalSettings.save_money(-POWER_COST)
+			show_balance()
 		Global.powerup = "reach"
+		GlobalSignals.emit_signal("bought_powerup", Global.powerup)
 
 """
 /*
@@ -120,9 +96,15 @@ func _on_buyReachPowerup_pressed():
 */
 """
 func _on_buyLuckPowerup_pressed():
-	if(Global.money >= 10): #checks if money is adequate
-		Global.money -= 10 #removes 10
+	if(Save.game_data.money >= POWER_COST): #checks if money is adequate
+		if Global.state != Global.scenes.MAIN_MENU:
+			GameLoot.add_to_coin(ServerConnection._player_num, -POWER_COST)
+			ServerConnection.send_money_earned(-POWER_COST)
+		else:
+			GlobalSettings.save_money(-POWER_COST)
+			show_balance()
 		Global.powerup = "luck"
+		GlobalSignals.emit_signal("bought_powerup", Global.powerup)
 
 """
 /*
@@ -133,9 +115,15 @@ func _on_buyLuckPowerup_pressed():
 */
 """
 func _on_buySusPowerup_pressed():
-	if(Global.money >= 10): #checks if money is adequate
-		Global.money -= 10 #removes 10
+	if(Save.game_data.money >= POWER_COST): #checks if money is adequate
+		if Global.state != Global.scenes.MAIN_MENU:
+			GameLoot.add_to_coin(ServerConnection._player_num, -POWER_COST)
+			ServerConnection.send_money_earned(-POWER_COST)
+		else:
+			GlobalSettings.save_money(-POWER_COST)
+			show_balance()
 		Global.powerup = "sus"
+		GlobalSignals.emit_signal("bought_powerup", Global.powerup)
 
 """
 /*
@@ -146,6 +134,16 @@ func _on_buySusPowerup_pressed():
 */
 """
 func _on_buyGlowPowerup_pressed():
-	if(Global.money >= 10): #checks if money is adequate
-		Global.money -= 10 #removes 10
+	if(Save.game_data.money >= POWER_COST): #checks if money is adequate
+		if Global.state != Global.scenes.MAIN_MENU:
+			GameLoot.add_to_coin(ServerConnection._player_num, -POWER_COST)
+			ServerConnection.send_money_earned(-POWER_COST)
+		else:
+			GlobalSettings.save_money(-POWER_COST)
+			show_balance()
 		Global.powerup = "glow"
+		GlobalSignals.emit_signal("bought_powerup", Global.powerup)
+
+func show_balance():
+	$Balance.show()
+	$Balance.text = "Balance: " + str(Save.game_data.money)

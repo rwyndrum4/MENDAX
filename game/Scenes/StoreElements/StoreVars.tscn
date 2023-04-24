@@ -1,7 +1,7 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://Scenes/StoreElements/StoreVars.gd" type="Script" id=1]
-[ext_resource path="res://Scenes/StoreElements/BalanceText.gd" type="Script" id=2]
+[ext_resource path="res://Assets/Silver.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://Assets/ARIALBD.TTF" type="DynamicFontData" id=3]
 [ext_resource path="res://Assets/SFX/cash-register-purchase-87313.mp3" type="AudioStream" id=4]
 [ext_resource path="res://Assets/SFX/bgm/Wholesome.mp3" type="AudioStream" id=5]
@@ -13,68 +13,41 @@
 [ext_resource path="res://Assets/Store/GlowIcon.png" type="Texture" id=11]
 [ext_resource path="res://Assets/Store/LuckIcon.png" type="Texture" id=12]
 
+[sub_resource type="DynamicFont" id=2]
+size = 32
+font_data = ExtResource( 2 )
+
 [sub_resource type="DynamicFont" id=1]
 size = 48
 outline_size = 1
 font_data = ExtResource( 3 )
 
-[node name="Node" type="Node"]
+[node name="Node" type="Popup"]
+visible = true
+margin_right = 900.0
+margin_bottom = 600.0
 script = ExtResource( 1 )
 
-[node name="Node2D" type="Control" parent="."]
-anchor_right = 1.0
-anchor_bottom = 1.0
-
-[node name="ColorRect" type="ColorRect" parent="Node2D"]
+[node name="ColorRect" type="ColorRect" parent="."]
+modulate = Color( 1, 1, 1, 0.588235 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color( 0.309804, 0.207843, 0.207843, 1 )
 
-[node name="BalanceText" type="RichTextLabel" parent="Node2D"]
-anchor_left = 0.5
-anchor_right = 0.5
-margin_left = -38.0
-margin_top = 80.919
-margin_right = 72.0
-margin_bottom = 145.919
-text = "asdf"
-script = ExtResource( 2 )
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Node2D"]
-anchor_top = 1.0
-anchor_bottom = 1.0
-margin_left = 39.0
-margin_top = -320.0
-margin_right = 130.0
-margin_bottom = -276.0
-
-[node name="addMoney" type="Button" parent="Node2D/VBoxContainer"]
-margin_right = 91.0
-margin_bottom = 20.0
-text = "Add 1 Dollar"
-
-[node name="subMoney" type="Button" parent="Node2D/VBoxContainer"]
-margin_top = 24.0
-margin_right = 91.0
-margin_bottom = 44.0
-text = "Sub 1 Dollar"
-
-[node name="Back2Menu" type="Button" parent="Node2D"]
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -80.0
-margin_top = -30.0
-text = "<<"
+[node name="Balance" type="Label" parent="."]
+margin_left = 407.0
+margin_top = 64.0
+margin_right = 447.0
+margin_bottom = 101.0
+custom_fonts/font = SubResource( 2 )
 
 [node name="RichTextLabel" type="RichTextLabel" parent="."]
 anchor_left = 0.5
 anchor_right = 0.5
-margin_left = -90.0
-margin_top = 14.0
-margin_right = 110.0
-margin_bottom = 99.0
+margin_left = -71.0
+margin_top = 5.0
+margin_right = 129.0
+margin_bottom = 90.0
 custom_fonts/normal_font = SubResource( 1 )
 text = "STORE"
 
@@ -89,64 +62,61 @@ volume_db = -16.526
 bus = "Music"
 
 [node name="buySpeedPowerup" type="TextureButton" parent="."]
-margin_left = 400.0
-margin_top = 160.0
-margin_right = 880.0
-margin_bottom = 640.0
+margin_left = 178.0
+margin_top = 177.0
+margin_right = 658.0
+margin_bottom = 657.0
 rect_scale = Vector2( 0.3, 0.3 )
 texture_normal = ExtResource( 6 )
 
 [node name="buyStrengthPowerup" type="TextureButton" parent="."]
-margin_left = 550.0
-margin_top = 160.0
-margin_right = 1030.0
-margin_bottom = 640.0
+margin_left = 328.0
+margin_top = 177.0
+margin_right = 808.0
+margin_bottom = 657.0
 rect_scale = Vector2( 0.3, 0.3 )
 texture_normal = ExtResource( 9 )
 
 [node name="buyEndurancePowerup" type="TextureButton" parent="."]
-margin_left = 700.0
-margin_top = 160.0
-margin_right = 1180.0
-margin_bottom = 640.0
+margin_left = 478.0
+margin_top = 177.0
+margin_right = 958.0
+margin_bottom = 657.0
 rect_scale = Vector2( 0.3, 0.3 )
 texture_normal = ExtResource( 7 )
 
 [node name="buyReachPowerup" type="TextureButton" parent="."]
-margin_left = 850.0
-margin_top = 160.0
-margin_right = 1330.0
-margin_bottom = 640.0
+margin_left = 628.0
+margin_top = 177.0
+margin_right = 1108.0
+margin_bottom = 657.0
 rect_scale = Vector2( 0.3, 0.3 )
 texture_normal = ExtResource( 8 )
 
 [node name="buyLuckPowerup" type="TextureButton" parent="."]
-margin_left = 400.0
-margin_top = 310.0
-margin_right = 880.0
-margin_bottom = 790.0
+margin_left = 178.0
+margin_top = 327.0
+margin_right = 658.0
+margin_bottom = 807.0
 rect_scale = Vector2( 0.3, 0.3 )
 texture_normal = ExtResource( 12 )
 
 [node name="buySusPowerup" type="TextureButton" parent="."]
-margin_left = 550.0
-margin_top = 310.0
-margin_right = 1030.0
-margin_bottom = 790.0
+margin_left = 328.0
+margin_top = 327.0
+margin_right = 808.0
+margin_bottom = 807.0
 rect_scale = Vector2( 0.3, 0.3 )
 texture_normal = ExtResource( 10 )
 
 [node name="buyGlowPowerup" type="TextureButton" parent="."]
-margin_left = 700.0
-margin_top = 310.0
-margin_right = 1180.0
-margin_bottom = 790.0
+margin_left = 478.0
+margin_top = 327.0
+margin_right = 958.0
+margin_bottom = 807.0
 rect_scale = Vector2( 0.3, 0.3 )
 texture_normal = ExtResource( 11 )
 
-[connection signal="pressed" from="Node2D/VBoxContainer/addMoney" to="." method="_on_addMoney_pressed"]
-[connection signal="pressed" from="Node2D/VBoxContainer/subMoney" to="." method="_on_subMoney_pressed"]
-[connection signal="pressed" from="Node2D/Back2Menu" to="." method="_on_Back2Menu_pressed"]
 [connection signal="pressed" from="buySpeedPowerup" to="." method="_on_buySpeedPowerup_pressed"]
 [connection signal="pressed" from="buyStrengthPowerup" to="." method="_on_buyStrengthPowerup_pressed"]
 [connection signal="pressed" from="buyEndurancePowerup" to="." method="_on_buyEndurancePowerup_pressed"]

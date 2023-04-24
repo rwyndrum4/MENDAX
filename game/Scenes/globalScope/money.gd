@@ -17,10 +17,6 @@ func _ready() -> void:
 * @return None
 """
 func change_total(new_value:int) -> void:
-	if len(str(new_value)) == 1:
-		rect_position.x = 1180
-	elif len(str(new_value)) == 2:
-		rect_position.x = 1170
-	elif len(str(new_value)) == 3:
-		rect_position.x = 1160
+	var x = len(str(new_value))
+	rect_position.x = 1190 - (10 * x)
 	text = "Coin: " + str(new_value)

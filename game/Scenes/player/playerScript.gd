@@ -64,6 +64,8 @@ func _ready():
 	GlobalSignals.connect("openMenu",self,"stop_go_player")
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("teleport_player", self, "player_teleported")
+	# warning-ignore:return_value_discarded
+	GlobalSignals.connect("bought_powerup", self, "toggle_powerup")
 	# if server wasn't connected
 	if player_color == "":
 		player_color = "blue"

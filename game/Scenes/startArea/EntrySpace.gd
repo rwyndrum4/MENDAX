@@ -225,7 +225,7 @@ func _input(_ev):
 	if in_shop:
 		if Input.is_action_just_pressed("ui_press_e",false):
 			Global.lastPos = "shop"
-			Global.state = Global.scenes.MARKET
+			Global.state = Global.scenes.MARKET_CAVE
 	#Spectator mode stuff
 	if _player_dead and len(server_players) > 0:
 		if Input.is_action_just_pressed("jump",false):

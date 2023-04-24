@@ -19,10 +19,10 @@ onready var world_env = $WorldEnvironment
 onready var fps_label = $GUI/fpsLabel
 onready var menu_button = $GUI/SettingsMenu/SettingsTabs/Exit/exitSettings/GridContainer/mainMenuButton
 onready var current_song = $BGM/mainmenu
+onready var market = $GUI/Market
 
 #Scene Paths
 var main_menu = "res://Scenes/mainMenu/mainMenu.tscn"
-var market = "res://Scenes/StoreElements/StoreVars.tscn"
 var start_area = "res://Scenes/startArea/startArea.tscn"
 var cave = "res://Scenes/startArea/EntrySpace.tscn"
 var riddler_minigame = "res://Scenes/minigames/riddler/riddleGame.tscn"
@@ -41,6 +41,8 @@ var current_scene = null
 var local_state = null
 #Bool to tell if in a popup or not
 var in_popup: bool = false
+#Bool to tell if in market
+var in_market: bool = false
 #Bools to tell if in chatbox or not, work like a locking mechanism
 var in_chatbox: bool = false
 #Bools to tell if you can open the settings or not
@@ -103,7 +105,9 @@ func _process(_delta): #if you want to use _delta, remove _
 		#change the scene
 		_change_scene_to(Global.state)
 	if Input.is_action_just_pressed("ui_cancel",false) and local_state != Global.scenes.MAIN_MENU:
-		if in_popup:
+		if in_market:
+			in_market = false
+		elif in_popup:
 			settings_menu.hide()
 			in_popup = false
 		elif can_open_settings:
@@ -130,7 +134,15 @@ func _change_scene_to(state):
 		Global.state = Global.scenes.MAIN_MENU
 		return
 	elif state == Global.scenes.MARKET:
-		current_scene = load(market).instance()
+		market.popup_centered()
+		market.show_balance()
+		Global.state = Global.scenes.MAIN_MENU
+		return
+	elif state == Global.scenes.MARKET_CAVE:
+		in_market = true
+		market.popup_centered()
+		Global.state = Global.scenes.CAVE
+		return
 	elif state == Global.scenes.CREDITS:
 		credits.popup_centered()
 		Global.state = Global.scenes.MAIN_MENU
@@ -316,6 +328,10 @@ func not_popup(state) -> bool:
 		Global.scenes.OPTIONS_FROM_MAIN:
 			return false
 		Global.scenes.CREDITS:
+			return false
+		Global.scenes.MARKET:
+			return false
+		Global.scenes.MARKET_CAVE:
 			return false
 		_:
 			return true

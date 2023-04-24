@@ -19,6 +19,7 @@ func _ready():
 * @return None
 """
 func init_players(num_players:int) -> void:
+	PlayerLoot = []
 	for i in range(1,num_players+1):
 		var dict: Dictionary = {
 			"p_num": i,

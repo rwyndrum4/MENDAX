@@ -138,3 +138,11 @@ signal teleport_player(pos)
 """
 # warning-ignore:unused_signal
 signal player_moved(pos)
+
+"""
+* Purpose - player bought a powerup
+* Used in - market
+* Parameter - pwr (String of powerup)
+"""
+# warning-ignore:unused_signal
+signal bought_powerup(pwr)
