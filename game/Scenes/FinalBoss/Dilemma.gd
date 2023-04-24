@@ -80,21 +80,6 @@ func _process(_delta):
 		$ButtonGlow4.show()
 		$Label.show()
 		$Label/labelGlow.show()
-		
-"""
-/*
-* @pre An input of any sort
-* @post None
-* @param Takes in an event
-* @return None
-*/
-"""
-func _input(_ev):
-	#DEBUG PURPOSES - REMOVE FOR FINAL GAME!!!
-	#IF YOU PRESS P -> You will advance to the next stage of the boss fight 
-	if Input.is_action_just_pressed("timer_debug_key",false):
-		Global.progress = 5
-		Global.state = Global.scenes.CAVE
 
 
 func _on_Button1_pressed():

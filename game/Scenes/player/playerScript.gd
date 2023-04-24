@@ -96,8 +96,6 @@ func _ready():
 */
 """
 func _input(_ev):
-	if Input.is_action_just_pressed("toggle_powerup_debug", false):
-		toggle_powerup(null)
 	if Input.is_action_just_pressed("toggle_torch"):
 		torch.toggle_burning()
 

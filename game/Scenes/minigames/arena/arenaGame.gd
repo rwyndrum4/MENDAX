@@ -208,23 +208,6 @@ func start_arena_game():
 
 """
 /*
-* @pre An input of any sort
-* @post None
-* @param Takes in an event
-* @return None
-*/
-"""
-func _input(_ev):
-	#DEBUG PURPOSES - REMOVE FOR FINAL GAME!!!
-	#IF YOU PRESS P -> TIMER WILL REDUCE TO 3 SECONDS
-	if Input.is_action_just_pressed("timer_debug_key",false):
-		myTimer.start(3)
-	#IF YOU PRESS O (capital 'o') -> TIMER WILL INCREASE TO ARBITRARILY MANY SECONDS
-	if Input.is_action_just_pressed("extend_timer_debug_key",false):
-		myTimer.start(30000)
-
-"""
-/*
 * @pre Called when need to convert seconds to MIN:SEC format
 * @post Returns string of current time
 * @param time_in -> float 

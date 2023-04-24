@@ -120,13 +120,6 @@ func _input(_ev):
 	if textBox.queue_text_length() == 0 and Global.in_anim == 1:
 		Global.in_anim = 0
 		emit_signal("textWait")
-	#DEBUG PURPOSES - REMOVE FOR FINAL GAME!!!
-	#IF YOU PRESS P -> TIMER WILL REDUCE TO 3 SECONDS
-	if Input.is_action_just_pressed("timer_debug_key",false):
-		myTimer.start(3)
-	#IF YOU PRESS Q -> TIMER WILL INCREASE TO ARBITRARILY MANY SECONDS
-	if Input.is_action_just_pressed("extend_timer_debug_key",false):
-		myTimer.start(30000)
 
 """
 /*

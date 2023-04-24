@@ -163,7 +163,7 @@ func _on_Market_pressed():
 """
 /*
 * @pre Tutorial Button is pressed
-* @post directly load the cave (for debug purposes)
+* @post load tutorial
 * @param None
 * @return None
 */
