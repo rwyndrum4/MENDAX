@@ -10,6 +10,7 @@
 script = ExtResource( 2 )
 
 [node name="TileTexture" type="Sprite" parent="."]
+light_mask = 0
 texture = ExtResource( 1 )
 
 [node name="Hitbox" type="CollisionPolygon2D" parent="."]

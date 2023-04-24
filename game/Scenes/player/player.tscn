@@ -445,7 +445,7 @@ light_mask = 0
 position = Vector2( -57, -37 )
 scale = Vector2( 3.75, 3.45918 )
 frames = SubResource( 12 )
-frame = 1
+frame = 3
 playing = true
 
 [node name="Torch1" type="Light2D" parent="light"]
