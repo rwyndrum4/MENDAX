@@ -154,7 +154,7 @@ func queue_text_length():
 func hide_textbox():
 	start_symbol.text = ""
 	end_symbol.text = ""
-	text_box.text = ""
+	text_box.bbcode_text = ""
 	textbox_container.hide()
 
 """
@@ -181,7 +181,7 @@ func show_textbox():
 """
 func display_text():
 	var next_text = text_queue.pop_front()
-	text_box.text = next_text
+	text_box.bbcode_text = next_text
 	text_box.percent_visible = 0.0
 	show_textbox()
 	change_state(State.READING)

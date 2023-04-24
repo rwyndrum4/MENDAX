@@ -43,6 +43,8 @@ func _ready():
 		imposter_color = "orange"
 	else:
 		imposter_color = "red"
+	character.play("idle_" + imposter_color)
+	is_walk = false
 	
 func _physics_process(_delta):
 	if get_parent()._player_dead:
@@ -129,6 +131,7 @@ func control_animations(vel:Vector2):
 """
 func _on_Area2D_body_entered(body):
 	if "Player" in body.name:
+		var _my_id = 1111
 		is_hit = true
 		$Timer.disconnect("timeout",self, "_on_Timer_timeout")
 		set_physics_process(false)
@@ -138,6 +141,7 @@ func _on_Area2D_body_entered(body):
 		collisionbox.queue_free()
 		$walk.playing = false
 		$boom.play()
+		GlobalSignals.emit_signal("enemyDefeated", _my_id)
 		character.play("explosion")
 		#enter health bar stuff here
 		Player.take_damage(10)

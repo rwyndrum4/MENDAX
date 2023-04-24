@@ -6,6 +6,10 @@
 """
 extends Light2D
 
+#objects
+onready var timer = $Timer
+onready var light = get_parent()
+
 var _ticks = 0
 var _mode = "burn"
 var _drops = 0
@@ -13,24 +17,32 @@ var burning = true
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	timer.start(120)
+	toggle_burning()
+	visible = true
+	light.visible = true
 
 func toggle_burning():
-	burning = !burning
+	timer.set_paused(!visible)
+	light.visible = !light.visible
+	visible = !visible
 
+"""
+Use to refresh torch, dont instance new
+"""
+func replenish_torch():
+	timer.set_wait_time(120)
+	
 """
 /*
 * @pre Called every frame
-* @post Adjust light level of torch every 200 ticks. Disappear torch animation and last trace of light once peak reduction is met
 * @param None
 * @return None
 */
 """
 func _process(_delta):
-	if burning == true:
-		var tex_scale = get("texture_scale")
-		if tex_scale > 0.1:
-			set("texture_scale", tex_scale - 0.0025)
-		else:
-			set("energy", 0)
-			get_parent().hide()
+	if visible:
+		set("texture_scale",((timer.get_time_left()/120)*100))
+		set("energy", 1)
+	else:
+		set("energy", 0)
