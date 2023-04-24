@@ -584,7 +584,9 @@ func _on_chasmArea_body_exited(_body: PhysicsBody2D):
 */
 """
 func _on_pitfallArea_body_entered(_body: PhysicsBody2D): #change to body if want to use
-	pitfall.texture = load("res://Assets/tiles/TilesCorrected/SpikesPixelated.png")
+	if Global.progress > 0:
+		pitfall.texture = load("res://Assets/tiles/TilesCorrected/SpikesPixelated.png")
+		player.take_damage(30)
 
 """
 /*
@@ -595,7 +597,9 @@ func _on_pitfallArea_body_entered(_body: PhysicsBody2D): #change to body if want
 */
 """	
 func _on_pitfallArea2_body_entered(_body: PhysicsBody2D): #change to body if want to use
-	pitfall2.texture = load("res://Assets/tiles/TilesCorrected/SpikesPixelated.png")
+	if Global.progress > 0:
+		pitfall2.texture = load("res://Assets/tiles/TilesCorrected/SpikesPixelated.png")
+		player.take_damage(30)
 
 """
 /*

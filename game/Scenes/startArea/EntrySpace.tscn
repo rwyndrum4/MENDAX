@@ -143,7 +143,6 @@ shadow_enabled = true
 shadow_gradient_length = 10.0
 
 [node name="Darkness" type="Light2D" parent="."]
-visible = false
 position = Vector2( -3103, 3216 )
 scale = Vector2( 2.74444, 1.47778 )
 texture = ExtResource( 5 )
@@ -167,7 +166,7 @@ current = true
 visible = false
 position = Vector2( 0, -45 )
 frames = SubResource( 15 )
-frame = 2
+frame = 4
 playing = true
 
 [node name="GUI" type="CanvasLayer" parent="."]
