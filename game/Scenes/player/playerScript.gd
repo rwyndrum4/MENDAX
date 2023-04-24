@@ -163,12 +163,7 @@ func _physics_process(delta):
 				player_id = ServerConnection._player_num
 			var player_name = Global.get_player_name(player_id)
 			GameLoot.add_to_coin(player_id, 1)
-			if player_name == Save.game_data.username:
-				var total_coin = GameLoot.get_coin_val(player_id)
-				get_parent().get_parent().change_money(total_coin)
-				PlayerInventory.add_item("Coin", 1)
-			
-	
+
 """
 /*
 * @pre Called every frame
