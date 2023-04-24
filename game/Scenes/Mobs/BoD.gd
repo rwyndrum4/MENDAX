@@ -30,6 +30,7 @@ var teleport_timer:Timer = null
 */
 """
 func _ready():
+	set_meta("enemy_name","BoD")
 	_has_spawned = true
 	if _leveled_up:
 		level_up()

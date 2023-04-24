@@ -33,6 +33,7 @@ var _fire_wait_time: int = 3
 */
 """
 func _ready():
+	set_meta("enemy_name","Chandelier")
 	_has_spawned = true
 	var anim = get_node("AnimationPlayer").get_animation("idle")
 	anim.set_loop(true)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Scenes/textBox/textBox.gd" type="Script" id=1]
 [ext_resource path="res://Assets/Silver.ttf" type="DynamicFontData" id=2]
@@ -19,7 +19,12 @@ border_color = Color( 1, 1, 1, 1 )
 size = 70
 font_data = ExtResource( 2 )
 
+[sub_resource type="DynamicFont" id=3]
+size = 70
+font_data = ExtResource( 2 )
+
 [node name="textBox" type="CanvasLayer"]
+layer = 128
 script = ExtResource( 1 )
 
 [node name="Container" type="MarginContainer" parent="."]
@@ -66,16 +71,14 @@ size_flags_vertical = 0
 custom_fonts/font = SubResource( 2 )
 text = "*"
 
-[node name="Text" type="Label" parent="Container/MarginContainer/HBoxContainer"]
+[node name="Text" type="RichTextLabel" parent="Container/MarginContainer/HBoxContainer"]
 margin_left = 26.0
 margin_right = 1206.0
 margin_bottom = 190.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_fonts/font = SubResource( 2 )
-text = "Placeholder text this is just me testing how many wo"
-autowrap = true
-clip_text = true
+custom_fonts/normal_font = SubResource( 3 )
+bbcode_enabled = true
 
 [node name="End" type="Label" parent="Container/MarginContainer/HBoxContainer"]
 margin_left = 1210.0

@@ -592,7 +592,7 @@ visible = false
 position = Vector2( 0, 5 )
 frames = SubResource( 2 )
 animation = "attack1"
-frame = 1
+frame = 7
 playing = true
 
 [node name="sprite" type="Sprite" parent="Position2D"]
@@ -613,6 +613,8 @@ position = Vector2( 0, 1 )
 shape = SubResource( 1 )
 
 [node name="MyHurtBox" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 0
 script = ExtResource( 9 )
 
 [node name="hitbox" type="CollisionShape2D" parent="MyHurtBox"]
@@ -621,7 +623,7 @@ shape = SubResource( 1 )
 
 [node name="MyHitBox" type="Area2D" parent="."]
 position = Vector2( -10, 1 )
-collision_layer = 2
+collision_layer = 0
 script = ExtResource( 10 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="MyHitBox"]
@@ -638,6 +640,7 @@ anims/idle = SubResource( 45 )
 anims/walk = SubResource( 47 )
 
 [node name="detector" type="Area2D" parent="."]
+collision_layer = 0
 
 [node name="box" type="CollisionShape2D" parent="detector"]
 position = Vector2( 50, 0 )

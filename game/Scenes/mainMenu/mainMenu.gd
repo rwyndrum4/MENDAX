@@ -13,13 +13,16 @@
 	12/19/2022 - fixed bugs dealing with players spawning
 	1/10/2022 - Adding ability to swap to match chat
 	1/29/2023 - added sfx for buttons
+	4/22/2023 - Added textbox for tutorial
 """
 extends Control
 
 # Member Variables
 onready var startButton = $menuButtons/Start
 onready var code_line_edit = $joinLobby/enterLobbyCode
-
+onready var textbox = $textBox
+onready var blink = $"Blink(#Blackpink_Fan)/AnimationPlayer"
+onready var canvasVis = $"Blink(#Blackpink_Fan)"
 #### Variables for showing players on rocks ###
 #array for holding player objects that are created
 var player_objects: Array = [] 
@@ -54,7 +57,10 @@ var _match_code: String = ""
 */
 """
 func _ready():
+	canvasVis.visible = false
 	initialize_menu()
+	# warning-ignore:return_value_discarded
+	GlobalSignals.connect("textbox_empty", self, "tutorial_textbox")
 	GlobalSignals.emit_signal("toggleHotbar", false)
 	# warning-ignore:return_value_discarded
 	ServerConnection.connect("character_spawned",self,"spawn_character")
@@ -64,6 +70,14 @@ func _ready():
 		button.connect("mouse_entered", self, "_mouse_button_entered")
 		button.connect("focus_entered", self, "_mouse_button_entered")
 		button.connect("button_down", self, "_button_down")
+	#after getting out of tutorial
+	if Global.anim_id == 2:
+		canvasVis.visible = true
+		blink.play("BLIIIINK_BLIIIIIINK")
+		yield(blink, "animation_finished")
+		textbox.queue_text("How did I get here?")
+		startButton.release_focus()
+		canvasVis.visible = false
 
 """
 /*
@@ -80,6 +94,7 @@ func _process(_delta): #if you want to use delta, then change it to delta
 	if Input.is_action_just_pressed("ui_cancel"):
 		startButton.grab_focus()
 
+
 """
 /*
 * @pre Start Button is pressed
@@ -94,6 +109,7 @@ func _on_Start_pressed():
 		delete_player_obj(player['player_obj'],player['text_obj'])
 	if ServerConnection.match_exists() and ServerConnection.get_server_status():
 		if num_players == 1:
+			ServerConnection._player_num = 1
 			GlobalSignals.emit_signal(
 				"exportEventMessage",
 				"Disconnecting from match, single player mode started",
@@ -107,9 +123,11 @@ func _on_Start_pressed():
 		else:
 			yield(ServerConnection.leave_general_chat(), "completed")
 	else:
+		ServerConnection._player_num = 1
 		Global.player_names["1"] = Save.game_data.username
 	#change scene to start area
 	GlobalSignals.emit_signal("show_money_text", true)
+	GlobalSignals.emit_signal("money_screen_val")
 	GameLoot.init_players(len(Global.player_names))
 	Global.stars_last_frame = $Stars.frame
 	SceneTrans.change_scene(Global.scenes.START_AREA)
@@ -224,8 +242,10 @@ func getRandAlphInd(rng):
 """
 func initialize_menu():
 	$Stars.play("default")
+	GlobalSignals.emit_signal("show_money_text", false)
 	#Grab focus on start button so keys can be used to navigate buttons
-	startButton.grab_focus()
+	if Global.anim_id != 2:
+		startButton.grab_focus()
 	#reset any online stuff if they came from a previous game
 	reset_multiplayer()
 	#If chat has not been swapped back from previous game 
@@ -333,6 +353,7 @@ func despawn_character(player_name:String):
 */
 """
 func _on_createGameButton_pressed():
+	startButton.grab_focus()
 	if ServerConnection.match_exists():
 		#leave the match if the game is alredy created
 		game_already_created()
@@ -401,6 +422,7 @@ func _on_enterLobbyCode_focus_entered():
 */
 """
 func _on_enterLobbyCode_text_entered(new_text):
+	startButton.grab_focus()
 	var code = new_text.to_upper()
 	if len(code) != 4:
 		GlobalSignals.emit_signal("exportEventMessage","Invalid code","pink")
@@ -561,6 +583,10 @@ func _delete_get_user_input_obj():
 		GlobalSettings.update_username(given_username)
 		startButton.grab_focus()
 
+func tutorial_textbox():
+	startButton.grab_focus()
+
+
 """
 /*
 * @pre None
@@ -578,3 +604,9 @@ func _button_down():
 
 func _on_lobbyCode_mouse_entered():
 	pass # Replace with function body.
+
+func _on_HighScores_pressed():
+	var h_scn = load("res://Scenes/mainMenu/HighScores.tscn").instance()
+	add_child(h_scn)
+	h_scn.popup_centered()
+	$HighScores.release_focus()

@@ -450,7 +450,7 @@ tracks/3/keys = {
 extents = Vector2( 42.5, 33 )
 
 [node name="BoD" type="KinematicBody2D"]
-collision_layer = 4
+collision_layer = 8
 script = ExtResource( 2 )
 
 [node name="Position2D" type="Position2D" parent="."]
@@ -478,6 +478,8 @@ position = Vector2( 0, 1 )
 shape = SubResource( 1 )
 
 [node name="MyHurtBox" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 0
 script = ExtResource( 9 )
 
 [node name="hitbox" type="CollisionShape2D" parent="MyHurtBox"]
@@ -486,6 +488,7 @@ shape = SubResource( 1 )
 
 [node name="MyHitBox" type="Area2D" parent="."]
 position = Vector2( 64, -3 )
+collision_layer = 0
 script = ExtResource( 10 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="MyHitBox"]
@@ -503,6 +506,7 @@ anims/spellatk = SubResource( 47 )
 anims/walk = SubResource( 48 )
 
 [node name="detector" type="Area2D" parent="."]
+collision_layer = 0
 
 [node name="box" type="CollisionShape2D" parent="detector"]
 position = Vector2( 67, -3 )

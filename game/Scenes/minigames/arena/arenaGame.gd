@@ -48,6 +48,7 @@ func _ready():
 	randomize()
 	set_physics_process(false)
 	main_player.set_physics_process(false)
+	sword.add_to_group("sword")
 	# warning-ignore:return_value_discarded
 	GlobalSignals.connect("enemyDefeated",self,"_enemy_defeated")
 	# warning-ignore:return_value_discarded
@@ -348,24 +349,19 @@ func gen_results(server_on:bool) -> Dictionary:
 				res[p_name] = "Died"
 			else:
 				GameLoot.add_to_coin(p_num,20)
-				if Save.game_data.username == p_name:
-					PlayerInventory.add_item("Coin", 20)
 				res[p_name] = "Lived"
-		#Adding money for you 
+		#Adding money for you
 		res[Save.game_data.username] = "Died" if _player_dead else "Lived"
 		var your_num = ServerConnection._player_num
 		if not _player_dead:
 			GameLoot.add_to_coin(your_num,20)
 			msg = "You survived the arena, 20 coin for you"
-		GlobalSignals.emit_signal("money_screen_val", GameLoot.get_coin_val(your_num))
 		GlobalSignals.emit_signal("exportEventMessage", msg, "blue")
 		return res
 	else:
 		if not _player_dead:
 			GameLoot.add_to_coin(1,20)
-			PlayerInventory.add_item("Coin", 20)
 			msg = "You survived the arena, 20 coin for you"
-		GlobalSignals.emit_signal("money_screen_val", GameLoot.get_coin_val(1))
 		GlobalSignals.emit_signal("exportEventMessage", msg, "blue")
 		return {Save.game_data.username: "Died" if _player_dead else "Lived"}
 
