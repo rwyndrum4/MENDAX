@@ -97,8 +97,6 @@ func _input(_ev):
 	if Input.is_action_just_pressed("toggle_powerup_debug", false):
 		toggle_powerup(null)
 	if Input.is_action_just_pressed("toggle_torch"):
-		torch.visible = !torch.visible
-		torchlight.visible = !torchlight.visible
 		torch.toggle_burning()
 
 """
@@ -113,8 +111,14 @@ func _physics_process(delta):
 	#don't move player if textbox is playing or options are open
 	if is_stopped:
 		control_animations(Vector2.ZERO) #play idle animation
+		if is_instance_valid(get_parent().get_node("Player").get_node_or_null("Sword")):
+			var temp_sword = get_parent().get_node("Player").get_node("Sword")
+			temp_sword.set_process(false)
 		return
-	
+	else:
+		if is_instance_valid(get_parent().get_node("Player").get_node_or_null("Sword")):
+			var temp_sword = get_parent().get_node("Player").get_node("Sword")
+			temp_sword.set_process(true)
 	# Initialize input velocity
 	var input_velocity = Vector2.ZERO
 	# Inverted controls if invert is active <------------------------------------------------BEN I CHANGED THIS
@@ -164,7 +168,6 @@ func _physics_process(delta):
 			var player_id = 1
 			if ServerConnection.match_exists() and ServerConnection.get_server_status():
 				player_id = ServerConnection._player_num
-			var player_name = Global.get_player_name(player_id)
 			GameLoot.add_to_coin(player_id, 1)
 
 """

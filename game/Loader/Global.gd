@@ -19,6 +19,8 @@ var lastPos = "mainMenu"
 # place to track whether player is cloaked
 var isCloaked = false
 
+#type of id for in_anim
+var anim_id = 0
 #Entry First Time
 var in_anim: int = 0
 #variable to track what frame user was on after pressing start
