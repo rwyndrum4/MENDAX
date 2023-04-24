@@ -26,7 +26,7 @@ animations = [ {
 } ]
 
 [sub_resource type="StyleBoxFlat" id=3]
-bg_color = Color( 0.431373, 0.0313726, 0.0313726, 1 )
+bg_color = Color( 0.760784, 0.192157, 0.192157, 1 )
 border_width_left = 3
 border_width_top = 3
 border_width_right = 2
@@ -43,12 +43,10 @@ font_data = ExtResource( 16 )
 script = ExtResource( 3 )
 
 [node name="Sprite" type="Sprite" parent="."]
-light_mask = 0
 texture = ExtResource( 1 )
 
 [node name="DuckSprite" type="Sprite" parent="."]
 visible = false
-light_mask = 0
 texture = ExtResource( 15 )
 
 [node name="Light2D" type="Light2D" parent="."]

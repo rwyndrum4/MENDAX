@@ -435,7 +435,6 @@ position = Vector2( -1, 0 )
 shape = SubResource( 4 )
 
 [node name="Listener2D" type="Listener2D" parent="."]
-current = true
 
 [node name="LightOccluder2D" type="LightOccluder2D" parent="."]
 occluder = SubResource( 5 )
@@ -445,7 +444,7 @@ light_mask = 0
 position = Vector2( -57, -37 )
 scale = Vector2( 3.75, 3.45918 )
 frames = SubResource( 12 )
-frame = 3
+frame = 1
 playing = true
 
 [node name="Torch1" type="Light2D" parent="light"]

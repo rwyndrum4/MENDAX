@@ -21,7 +21,7 @@
 [ext_resource path="res://Assets/mist/frame0018.png" type="Texture" id=19]
 [ext_resource path="res://Assets/Silver.ttf" type="DynamicFontData" id=20]
 [ext_resource path="res://Assets/mist/frame0019.png" type="Texture" id=21]
-[ext_resource path="res://Scenes/startArea/teleporters.gd" type="Script" id=22]
+[ext_resource path="res://Assets/CloakLight.png" type="Texture" id=22]
 [ext_resource path="res://Assets/teleporter.png" type="Texture" id=23]
 [ext_resource path="res://Assets/mist/frame0006.png" type="Texture" id=24]
 [ext_resource path="res://Assets/mist/frame0020.png" type="Texture" id=25]
@@ -41,7 +41,7 @@
 [ext_resource path="res://Assets/mist/frame0012.png" type="Texture" id=60]
 [ext_resource path="res://Assets/mist/frame0013.png" type="Texture" id=61]
 [ext_resource path="res://Assets/mist/frame0000.png" type="Texture" id=63]
-[ext_resource path="res://Assets/CloakLight.png" type="Texture" id=64]
+[ext_resource path="res://Scenes/startArea/teleporters.gd" type="Script" id=64]
 
 [sub_resource type="ShaderMaterial" id=11]
 shader = ExtResource( 3 )
@@ -166,7 +166,7 @@ current = true
 visible = false
 position = Vector2( 0, -45 )
 frames = SubResource( 15 )
-frame = 3
+frame = 5
 playing = true
 
 [node name="GUI" type="CanvasLayer" parent="."]
@@ -414,6 +414,7 @@ position = Vector2( 725, 4150 )
 collision_layer = 4
 
 [node name="circle" type="CollisionShape2D" parent="well"]
+scale = Vector2( 11, 11 )
 shape = SubResource( 19 )
 
 [node name="Label" type="Label" parent="well"]
@@ -423,8 +424,7 @@ margin_right = 213.712
 margin_bottom = 63.4111
 theme = SubResource( 17 )
 custom_fonts/font = SubResource( 18 )
-text = "Press E to Get Rid of Invulnerability!
-"
+text = "Press E to Get Rid of Invulnerability!"
 align = 1
 valign = 1
 
@@ -433,6 +433,8 @@ position = Vector2( -10982, 5152 )
 collision_layer = 4
 
 [node name="circle" type="CollisionShape2D" parent="shop"]
+position = Vector2( -1, -1 )
+scale = Vector2( 9.62669, 7.31677 )
 shape = SubResource( 19 )
 
 [node name="Label" type="Label" parent="shop"]
@@ -442,12 +444,14 @@ margin_right = 643.0
 margin_bottom = 163.0
 theme = SubResource( 17 )
 custom_fonts/font = SubResource( 18 )
-text = "Press E to enter/exit shop!
+text = "Press E to enter/exit shop!"
+
 [node name="well2" type="Area2D" parent="."]
 position = Vector2( -6472, 5016 )
 collision_layer = 4
 
 [node name="circle" type="CollisionShape2D" parent="well2"]
+scale = Vector2( 11, 11 )
 shape = SubResource( 19 )
 
 [node name="Label" type="Label" parent="well2"]
@@ -457,13 +461,13 @@ margin_right = 213.712
 margin_bottom = 63.4111
 theme = SubResource( 17 )
 custom_fonts/font = SubResource( 18 )
-text = "Press E to Get Rid of Invulnerability!
-"
+text = "Press E to Get Rid of Invulnerability!"
 align = 1
 valign = 1
 
 [node name="voidLight" type="Area2D" parent="."]
 position = Vector2( 4568, 2778 )
+scale = Vector2( 1.03373, 1.02964 )
 collision_layer = 4
 
 [node name="circle" type="CollisionShape2D" parent="voidLight"]
@@ -471,8 +475,9 @@ shape = SubResource( 19 )
 
 [node name="light" type="Light2D" parent="voidLight"]
 position = Vector2( 1, 0 )
-texture = ExtResource( 64 )
+texture = ExtResource( 22 )
 texture_scale = 0.3
+
 [node name="teleporters" type="Node" parent="."]
 script = ExtResource( 64 )
 
@@ -515,8 +520,8 @@ texture = ExtResource( 23 )
 [connection signal="body_exited" from="well" to="." method="_on_well_body_exited"]
 [connection signal="body_entered" from="shop" to="." method="_on_shop_body_entered"]
 [connection signal="body_exited" from="shop" to="." method="_on_shop_body_exited"]
-[connection signal="body_entered" from="voidLight" to="." method="_on_void_body_entered"]
 [connection signal="body_entered" from="well2" to="." method="_on_well_body_entered"]
 [connection signal="body_exited" from="well2" to="." method="_on_well_body_exited"]
+[connection signal="body_entered" from="voidLight" to="." method="_on_void_body_entered"]
 [connection signal="area_entered" from="teleporters/right_side_tp" to="teleporters" method="_on_right_side_tp_area_entered"]
 [connection signal="area_entered" from="teleporters/left_side_tp" to="teleporters" method="_on_left_side_tp_area_entered"]
