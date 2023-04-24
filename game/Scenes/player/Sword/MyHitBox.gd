@@ -19,7 +19,6 @@ var type
 */
 """
 func _init() -> void:
-	add_to_group("sword")
 	collision_layer = 19
 	collision_mask = 0
 

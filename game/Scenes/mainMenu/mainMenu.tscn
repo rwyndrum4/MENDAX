@@ -37,6 +37,10 @@ void fragment(){
 shader = SubResource( 5 )
 shader_param/mix_amount = 0.0
 
+[sub_resource type="DynamicFont" id=15]
+size = 42
+font_data = ExtResource( 10 )
+
 [sub_resource type="DynamicFont" id=8]
 size = 32
 font_data = ExtResource( 10 )
@@ -235,6 +239,15 @@ margin_bottom = 140.0
 focus_neighbour_bottom = NodePath("../Start")
 text = "Quit"
 
+[node name="HighScores" type="Button" parent="."]
+margin_left = 1112.0
+margin_top = 640.0
+margin_right = 1267.0
+margin_bottom = 712.0
+focus_neighbour_left = NodePath("../menuButtons/Start")
+custom_fonts/font = SubResource( 15 )
+text = "High Scores"
+
 [node name="createGameButton" type="Button" parent="." groups=["my_buttons"]]
 margin_left = 1095.0
 margin_top = 11.0
@@ -323,6 +336,7 @@ anims/RESET = SubResource( 19 )
 [connection signal="pressed" from="menuButtons/Tutorial" to="." method="_on_Tutorial_pressed"]
 [connection signal="pressed" from="menuButtons/Credits" to="." method="_on_Credits_pressed"]
 [connection signal="pressed" from="menuButtons/Quit" to="." method="_on_Quit_pressed"]
+[connection signal="pressed" from="HighScores" to="." method="_on_HighScores_pressed"]
 [connection signal="pressed" from="createGameButton" to="." method="_on_createGameButton_pressed"]
 [connection signal="pressed" from="joinLobby/joinGame" to="." method="_on_joinGame_pressed"]
 [connection signal="focus_entered" from="joinLobby/enterLobbyCode" to="." method="_on_enterLobbyCode_focus_entered"]
