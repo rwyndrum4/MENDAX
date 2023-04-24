@@ -94,6 +94,7 @@ func _on_Start_pressed():
 		delete_player_obj(player['player_obj'],player['text_obj'])
 	if ServerConnection.match_exists() and ServerConnection.get_server_status():
 		if num_players == 1:
+			ServerConnection._player_num = 1
 			GlobalSignals.emit_signal(
 				"exportEventMessage",
 				"Disconnecting from match, single player mode started",
@@ -107,9 +108,11 @@ func _on_Start_pressed():
 		else:
 			yield(ServerConnection.leave_general_chat(), "completed")
 	else:
+		ServerConnection._player_num = 1
 		Global.player_names["1"] = Save.game_data.username
 	#change scene to start area
 	GlobalSignals.emit_signal("show_money_text", true)
+	GlobalSignals.emit_signal("money_screen_val")
 	GameLoot.init_players(len(Global.player_names))
 	Global.stars_last_frame = $Stars.frame
 	SceneTrans.change_scene(Global.scenes.START_AREA)
@@ -224,6 +227,7 @@ func getRandAlphInd(rng):
 """
 func initialize_menu():
 	$Stars.play("default")
+	GlobalSignals.emit_signal("show_money_text", false)
 	#Grab focus on start button so keys can be used to navigate buttons
 	startButton.grab_focus()
 	#reset any online stuff if they came from a previous game
@@ -333,6 +337,7 @@ func despawn_character(player_name:String):
 */
 """
 func _on_createGameButton_pressed():
+	startButton.grab_focus()
 	if ServerConnection.match_exists():
 		#leave the match if the game is alredy created
 		game_already_created()
@@ -401,6 +406,7 @@ func _on_enterLobbyCode_focus_entered():
 */
 """
 func _on_enterLobbyCode_text_entered(new_text):
+	startButton.grab_focus()
 	var code = new_text.to_upper()
 	if len(code) != 4:
 		GlobalSignals.emit_signal("exportEventMessage","Invalid code","pink")
@@ -578,3 +584,9 @@ func _button_down():
 
 func _on_lobbyCode_mouse_entered():
 	pass # Replace with function body.
+
+func _on_HighScores_pressed():
+	var h_scn = load("res://Scenes/mainMenu/HighScores.tscn").instance()
+	add_child(h_scn)
+	h_scn.popup_centered()
+	$HighScores.release_focus()

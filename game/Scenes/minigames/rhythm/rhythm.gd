@@ -373,6 +373,7 @@ func _on_Conductor_measure(measure_position):
 """
 func _on_Conductor_beat(beat_position):
 	_song_position_in_beats = beat_position
+	#If done with song, print song complete/full combo
 	if _song_position_in_beats == 410 and _never_missed:
 		full_combo.start_ani(true)
 	elif _song_position_in_beats == 410 and (not _never_missed):
@@ -391,28 +392,27 @@ func end_rhythm_game():
 	var results = get_sorted_results()
 	#Giving players money based on results
 	var ctr = 1
+	#Giving players coins dependent on their placement
 	for arr in results:
 		var n = Global.get_player_num(arr[0])
 		var score = (5 - ctr) * 5
 		GameLoot.add_to_coin(n,score)
-		var total_coin = GameLoot.get_coin_val(n)
-		GlobalSignals.emit_signal("money_screen_val", total_coin)
-		if arr[0] == Save.game_data.username:
-			PlayerInventory.add_item("Coin", score)
 		ctr += 1
-	#Load ending scene
+	#Load ending scene with results
 	var end_screen:Popup = load("res://Scenes/minigames/rhythm/endScreen.tscn").instance()
 	$Frame.add_child(end_screen)
 	end_screen.add_results(results)
 	end_screen.popup_centered()
-	var wait_timer_look_leaderboard = Timer.new()
 	full_combo.hide()
-	add_child(wait_timer_look_leaderboard)
-	wait_timer_look_leaderboard.wait_time = 6
-	wait_timer_look_leaderboard.one_shot = true
-	wait_timer_look_leaderboard.start()
-	yield(wait_timer_look_leaderboard, "timeout")
-	wait_timer_look_leaderboard.queue_free()
+	#Timer to look at results
+	var leaderbrd_tmr = Timer.new()
+	add_child(leaderbrd_tmr)
+	leaderbrd_tmr.wait_time = 6
+	leaderbrd_tmr.one_shot = true
+	leaderbrd_tmr.start()
+	yield(leaderbrd_tmr, "timeout")
+	leaderbrd_tmr.queue_free()
+	#Perform final steps before going back to cave
 	GlobalSignals.emit_signal("toggleHotbar", true)
 	GlobalSignals.emit_signal("show_money_text", true)
 	if ServerConnection.match_exists() and ServerConnection.get_server_status():
@@ -425,8 +425,8 @@ func end_rhythm_game():
 * @pre Called for each beat that is called with a note
 * @post Helps spawn in the notes to the game, with you specifying which lane
 * @param lane_num -> int (lane to spawn note in),
-* note_type -> int (type of note to be spawned),
-* height -> int (height of hold_note, 0 if not specified)
+* 		 note_type -> int (type of note to be spawned),
+* 		 height -> int (height of hold_note, 0 if not specified)
 * @return None
 */
 """
@@ -454,29 +454,14 @@ func _spawn_note_fixed_note(beat_pos:int):
 		note_instance.initialize(lanes[i], FAST)
 		add_child(note_instance)
 
-"""
-/*
-* @pre None
-* @post Picks whether a normal or hold not is spawned
-* 75% chance for a normal note, 25% for a hold
-* @param None
-* @return Note Object
-*/
-"""
+#Function to generate random note, not used anymore
 func gen_rand_note() -> Object:
 	if (randi() % 100) > 25:
 		return note
 	else:
 		return hold_note
 
-"""
-/*
-* @pre Called for each beat that is called with a note
-* @post Helps spawn in the notes to the game
-* @param to_spawn -> int (number of notes to spawn)
-* @return None
-*/
-"""
+#Function to spawn random notes, not used anymore
 func _spawn_notes_random(to_spawn: int):
 	var local_note = gen_rand_note()
 	if to_spawn > 0:

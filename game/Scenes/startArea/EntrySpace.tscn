@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=2]
+[gd_scene load_steps=60 format=2]
 
 [ext_resource path="res://Scenes/startArea/worldMap.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Scenes/player/player.tscn" type="PackedScene" id=2]
@@ -21,10 +21,14 @@
 [ext_resource path="res://Assets/mist/frame0018.png" type="Texture" id=19]
 [ext_resource path="res://Assets/Silver.ttf" type="DynamicFontData" id=20]
 [ext_resource path="res://Assets/mist/frame0019.png" type="Texture" id=21]
+[ext_resource path="res://Scenes/startArea/teleporters.gd" type="Script" id=22]
+[ext_resource path="res://Assets/teleporter.png" type="Texture" id=23]
 [ext_resource path="res://Assets/mist/frame0006.png" type="Texture" id=24]
 [ext_resource path="res://Assets/mist/frame0020.png" type="Texture" id=25]
+[ext_resource path="res://Assets/cave_map.png" type="Texture" id=26]
 [ext_resource path="res://Assets/mist/frame0007.png" type="Texture" id=27]
 [ext_resource path="res://Assets/mist/frame0009.png" type="Texture" id=28]
+[ext_resource path="res://Scenes/startArea/miniMap.gd" type="Script" id=29]
 [ext_resource path="res://Assets/mist/frame0011.png" type="Texture" id=31]
 [ext_resource path="res://Assets/mist/frame0001.png" type="Texture" id=36]
 [ext_resource path="res://Assets/mist/frame0016.png" type="Texture" id=37]
@@ -108,6 +112,8 @@ radius = 425.0
 size = 24
 font_data = ExtResource( 17 )
 
+[sub_resource type="CircleShape2D" id=22]
+
 [node name="EntrySpace" type="Control"]
 script = ExtResource( 4 )
 
@@ -169,6 +175,19 @@ frame = 4
 playing = true
 
 [node name="GUI" type="CanvasLayer" parent="."]
+
+[node name="miniMap" type="Sprite" parent="GUI"]
+modulate = Color( 1, 1, 1, 0.392157 )
+position = Vector2( 1091, 154 )
+scale = Vector2( 5, 5 )
+texture = ExtResource( 26 )
+script = ExtResource( 29 )
+
+[node name="p_indicator" type="ColorRect" parent="GUI/miniMap"]
+margin_right = 40.0
+margin_bottom = 40.0
+rect_scale = Vector2( 0.05, 0.05 )
+color = Color( 0.886275, 0.509804, 0.145098, 1 )
 
 [node name="Timer" type="Timer" parent="GUI"]
 
@@ -403,6 +422,50 @@ text = "Press E to Get Rid of Invulnerability!
 align = 1
 valign = 1
 
+[node name="well2" type="Area2D" parent="."]
+position = Vector2( -6472, 5016 )
+collision_layer = 4
+
+[node name="circle" type="CollisionShape2D" parent="well2"]
+shape = SubResource( 19 )
+
+[node name="Label" type="Label" parent="well2"]
+margin_left = -205.288
+margin_top = -44.5889
+margin_right = 213.712
+margin_bottom = 63.4111
+theme = SubResource( 17 )
+custom_fonts/font = SubResource( 18 )
+text = "Press E to Get Rid of Invulnerability!
+"
+align = 1
+valign = 1
+
+[node name="teleporters" type="Node" parent="."]
+script = ExtResource( 22 )
+
+[node name="right_side_tp" type="Area2D" parent="teleporters"]
+position = Vector2( 3024, 2434 )
+scale = Vector2( 7, 7 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="teleporters/right_side_tp"]
+shape = SubResource( 22 )
+
+[node name="Sprite" type="Sprite" parent="teleporters/right_side_tp"]
+scale = Vector2( 0.2, 0.2 )
+texture = ExtResource( 23 )
+
+[node name="left_side_tp" type="Area2D" parent="teleporters"]
+position = Vector2( -7349, 6883 )
+scale = Vector2( 7, 7 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="teleporters/left_side_tp"]
+shape = SubResource( 22 )
+
+[node name="Sprite" type="Sprite" parent="teleporters/left_side_tp"]
+scale = Vector2( 0.2, 0.2 )
+texture = ExtResource( 23 )
+
 [connection signal="timeout" from="GUI/Timer" to="." method="_on_Timer_timeout"]
 [connection signal="body_entered" from="exitCaveArea" to="." method="_on_exitCaveArea_body_entered"]
 [connection signal="body_exited" from="exitCaveArea" to="." method="_on_exitCaveArea_body_exited"]
@@ -415,3 +478,7 @@ valign = 1
 [connection signal="body_entered" from="pitfallArea" to="." method="_on_pitfallArea_body_entered"]
 [connection signal="body_entered" from="well" to="." method="_on_well_body_entered"]
 [connection signal="body_exited" from="well" to="." method="_on_well_body_exited"]
+[connection signal="body_entered" from="well2" to="." method="_on_well_body_entered"]
+[connection signal="body_exited" from="well2" to="." method="_on_well_body_exited"]
+[connection signal="area_entered" from="teleporters/right_side_tp" to="teleporters" method="_on_right_side_tp_area_entered"]
+[connection signal="area_entered" from="teleporters/left_side_tp" to="teleporters" method="_on_left_side_tp_area_entered"]

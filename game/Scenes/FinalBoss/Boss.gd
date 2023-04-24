@@ -53,7 +53,7 @@ var boulder = preload("res://Scenes/BossAttacks/Boulder.tscn")
 var atkWarningAnimation = preload("res://Scenes/BossAttacks/atkWarning.tscn")
 
 #Scene Objects
-onready var healthbar = $ProgressBar
+onready var healthbar = $GUI/ProgressBar
 onready var bossBox = $MyHurtBox/hitbox
 onready var auraShield = $aura_shield
 
@@ -64,6 +64,7 @@ onready var auraShield = $aura_shield
 * @return None
 """
 func _ready():
+	set_meta("boss", "final_boss")
 	#Set initial position of boss based on past experiences
 	var c = _random_numbers[Global._boss_tp_counter]
 	position = _pos_arr[c][0]
