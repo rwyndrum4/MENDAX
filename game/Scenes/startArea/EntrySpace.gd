@@ -1180,7 +1180,7 @@ func _on_shop_body_entered(body):
 func _on_shop_body_exited(body):
 	if "Player" in body.name:
 		shopLabeled.visible = false
-		in_well = false
+		in_shop = false
 
 """
 /*
