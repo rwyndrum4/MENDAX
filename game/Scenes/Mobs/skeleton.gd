@@ -42,7 +42,7 @@ var BASE_ACCELERATION = 500
 */
 """
 func _ready():
-	
+	set_meta("enemy_name","Skeleton")
 	_has_spawned = true
 	if _leveled_up:
 		level_up()

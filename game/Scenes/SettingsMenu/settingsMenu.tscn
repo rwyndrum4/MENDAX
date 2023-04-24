@@ -305,7 +305,7 @@ margin_bottom = 50.0
 text = "Change Username"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="SettingsTabs/Gameplay/GameplaySettings/audioSettings"]
-margin_left = 120.0
+margin_left = 480.0
 margin_top = 31.0
 margin_right = 1222.0
 margin_bottom = 55.0
@@ -314,6 +314,37 @@ margin_bottom = 55.0
 margin_right = 250.0
 margin_bottom = 24.0
 rect_min_size = Vector2( 250, 0 )
+
+[node name="changeIP" type="Label" parent="SettingsTabs/Gameplay/GameplaySettings/audioSettings"]
+margin_right = 40.0
+margin_bottom = 14.0
+text = "Server IP"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="SettingsTabs/Gameplay/GameplaySettings/audioSettings"]
+margin_left = 480.0
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="serverIpInput" type="LineEdit" parent="SettingsTabs/Gameplay/GameplaySettings/audioSettings/HBoxContainer2"]
+margin_right = 250.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 250, 0 )
+
+[node name="ServerPass" type="Label" parent="SettingsTabs/Gameplay/GameplaySettings/audioSettings"]
+margin_right = 40.0
+margin_bottom = 14.0
+text = "Server Password"
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="SettingsTabs/Gameplay/GameplaySettings/audioSettings"]
+margin_left = 480.0
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="serverPassw" type="LineEdit" parent="SettingsTabs/Gameplay/GameplaySettings/audioSettings/HBoxContainer3"]
+margin_right = 250.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 250, 0 )
+secret = true
 
 [node name="Exit" type="Tabs" parent="SettingsTabs"]
 visible = false
@@ -356,5 +387,11 @@ text = "Quit Game"
 [connection signal="focus_entered" from="SettingsTabs/Gameplay/GameplaySettings/audioSettings/HBoxContainer/usernameInput" to="." method="_on_usernameInput_focus_entered"]
 [connection signal="focus_exited" from="SettingsTabs/Gameplay/GameplaySettings/audioSettings/HBoxContainer/usernameInput" to="." method="_on_usernameInput_focus_exited"]
 [connection signal="text_entered" from="SettingsTabs/Gameplay/GameplaySettings/audioSettings/HBoxContainer/usernameInput" to="." method="_on_usernameInput_text_entered"]
+[connection signal="focus_entered" from="SettingsTabs/Gameplay/GameplaySettings/audioSettings/HBoxContainer2/serverIpInput" to="." method="_on_serverIpInput_focus_entered"]
+[connection signal="focus_exited" from="SettingsTabs/Gameplay/GameplaySettings/audioSettings/HBoxContainer2/serverIpInput" to="." method="_on_serverIpInput_focus_exited"]
+[connection signal="text_entered" from="SettingsTabs/Gameplay/GameplaySettings/audioSettings/HBoxContainer2/serverIpInput" to="." method="_on_serverIpInput_text_entered"]
+[connection signal="focus_entered" from="SettingsTabs/Gameplay/GameplaySettings/audioSettings/HBoxContainer3/serverPassw" to="." method="_on_serverPassw_focus_entered"]
+[connection signal="focus_exited" from="SettingsTabs/Gameplay/GameplaySettings/audioSettings/HBoxContainer3/serverPassw" to="." method="_on_serverPassw_focus_exited"]
+[connection signal="text_entered" from="SettingsTabs/Gameplay/GameplaySettings/audioSettings/HBoxContainer3/serverPassw" to="." method="_on_serverPassw_text_entered"]
 [connection signal="pressed" from="SettingsTabs/Exit/exitSettings/GridContainer/mainMenuButton" to="." method="_on_mainMenuButton_pressed"]
 [connection signal="pressed" from="SettingsTabs/Exit/exitSettings/GridContainer/quitButton" to="." method="_on_quitButton_pressed"]

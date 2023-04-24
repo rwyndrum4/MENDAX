@@ -10,6 +10,7 @@
 [ext_resource path="res://Assets/tiles/TilesCorrected/WallTile_Tilt_Vert.png" type="Texture" id=11]
 [ext_resource path="res://Assets/tiles/TilesCorrected/CornerTile_A.png" type="Texture" id=14]
 [ext_resource path="res://Assets/tiles/TilesCorrected/CornerTile_B.png" type="Texture" id=15]
+[ext_resource path="res://Assets/tiles/TilesCorrected/Well3x3.png" type="Texture" id=16]
 
 [node name="Node2D" type="Control"]
 margin_left = -8.0
@@ -1872,74 +1873,12 @@ margin_right = 864.0
 margin_bottom = 864.0
 texture = ExtResource( 3 )
 
-[node name="Ground3x3_11" type="GridContainer" parent="."]
-margin_left = 576.0
-margin_top = 3431.0
-margin_right = 1440.0
-margin_bottom = 4295.0
-custom_constants/vseparation = 0
-custom_constants/hseparation = 0
-columns = 3
-__meta__ = {
-"_edit_group_": true
-}
-
-[node name="1_1" type="TextureRect" parent="Ground3x3_11"]
-margin_right = 288.0
-margin_bottom = 288.0
-texture = ExtResource( 3 )
-
-[node name="1_2" type="TextureRect" parent="Ground3x3_11"]
-margin_left = 288.0
-margin_right = 576.0
-margin_bottom = 288.0
-texture = ExtResource( 3 )
-
-[node name="1_3" type="TextureRect" parent="Ground3x3_11"]
-margin_left = 576.0
-margin_right = 864.0
-margin_bottom = 288.0
-texture = ExtResource( 3 )
-
-[node name="2_1" type="TextureRect" parent="Ground3x3_11"]
-margin_top = 288.0
-margin_right = 288.0
-margin_bottom = 576.0
-texture = ExtResource( 3 )
-
-[node name="2_2" type="TextureRect" parent="Ground3x3_11"]
-margin_left = 288.0
-margin_top = 288.0
-margin_right = 576.0
-margin_bottom = 576.0
-texture = ExtResource( 3 )
-
-[node name="2_3" type="TextureRect" parent="Ground3x3_11"]
-margin_left = 576.0
-margin_top = 288.0
-margin_right = 864.0
-margin_bottom = 576.0
-texture = ExtResource( 3 )
-
-[node name="3_1" type="TextureRect" parent="Ground3x3_11"]
-margin_top = 576.0
-margin_right = 288.0
-margin_bottom = 864.0
-texture = ExtResource( 3 )
-
-[node name="3_2" type="TextureRect" parent="Ground3x3_11"]
-margin_left = 288.0
-margin_top = 576.0
-margin_right = 576.0
-margin_bottom = 864.0
-texture = ExtResource( 3 )
-
-[node name="3_3" type="TextureRect" parent="Ground3x3_11"]
-margin_left = 576.0
-margin_top = 576.0
-margin_right = 864.0
-margin_bottom = 864.0
-texture = ExtResource( 3 )
+[node name="Well3x3" type="TextureRect" parent="."]
+margin_left = 576.935
+margin_top = 3431.84
+margin_right = 1440.93
+margin_bottom = 4295.84
+texture = ExtResource( 16 )
 
 [node name="Ground3x3_10" type="GridContainer" parent="."]
 margin_left = 2881.0
@@ -2848,3 +2787,6 @@ texture = ExtResource( 2 )
 texture_scale = 3.0
 color = Color( 0.0470588, 0.917647, 0.854902, 1 )
 energy = 0.4
+[node name="well" type="CollisionPolygon2D" parent="colliders"]
+position = Vector2( 287.922, -288.078 )
+polygon = PoolVector2Array( 392, 4152, 408, 4040, 472, 3944, 544, 3880, 640, 3840, 712, 3832, 808, 3840, 904, 3888, 968, 3936, 1024, 4016, 1056, 4128, 1048, 4232, 1008, 4328, 944, 4408, 872, 4456, 808, 4480, 744, 4488, 640, 4480, 560, 4448, 496, 4400, 448, 4344, 424, 4304, 400, 4240 )
