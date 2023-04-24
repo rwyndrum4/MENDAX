@@ -227,6 +227,7 @@ func getRandAlphInd(rng):
 """
 func initialize_menu():
 	$Stars.play("default")
+	GlobalSignals.emit_signal("show_money_text", false)
 	#Grab focus on start button so keys can be used to navigate buttons
 	startButton.grab_focus()
 	#reset any online stuff if they came from a previous game
