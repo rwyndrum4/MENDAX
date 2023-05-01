@@ -27,7 +27,6 @@ onready var torchlight = $light
 # Member Variables
 var isInverted = false
 onready var current_powerup = "default"
-var speed_ticks
 var speed_wait_period
 var luck_steps
 var reach_light_growing
@@ -181,16 +180,6 @@ func _physics_process(delta):
 */
 """
 func _process(_delta):
-	if current_powerup == "speed":
-		speed_ticks+=1
-		if speed_ticks == 8:
-			$PowerupIndicator.energy = 2
-			var rng = RandomNumberGenerator.new()
-			rng.randomize()
-			speed_wait_period = rng.randi_range(0, 80)
-		elif speed_ticks == 20 + speed_wait_period:
-			$PowerupIndicator.energy = 1
-			speed_ticks = 0
 	if current_powerup == "reach":
 		if reach_light_growing:
 			$PowerupIndicator.texture_scale = $PowerupIndicator.texture_scale + 0.004
@@ -413,7 +402,6 @@ func toggle_powerup(powerup):
 	elif powerup == "speed":
 		ACCELERATION = 40000
 		MAX_SPEED = 750
-		speed_ticks = 0
 		speed_wait_period = 0
 		$PowerupIndicator.energy = 1
 		$PowerupIndicator.show()
